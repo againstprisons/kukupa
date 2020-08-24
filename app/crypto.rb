@@ -137,11 +137,11 @@ module Kukupa::Crypto
     #####
 
     def generate_token_long
-      return Kukupa::Utils.bin_to_hex(RbNaCl::Random.random_bytes(TOKEN_LENGTH))
+      return Kukupa::Utils.bin_to_hex(RbNaCl::Random.random_bytes(TOKEN_LENGTH_LONG))
     end
 
     def generate_token_short
-      b = Base32.encode(RbNaCl::Random.random_bytes(TOKEN_LENGTH))
+      b = Base32.encode(RbNaCl::Random.random_bytes(TOKEN_LENGTH_LONG))
       b[0..(TOKEN_LENGTH_SHORT - 1)].downcase
     end
   end

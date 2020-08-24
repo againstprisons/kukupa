@@ -1,6 +1,6 @@
 module Kukupa::Helpers::CsrfHelpers
   def csrf_set!
-    session[:csrf] ||= Kukupa::Crypto.generate_token
+    session[:csrf] ||= Kukupa::Crypto.generate_token_long
     response.set_cookie('authenticity_token', {
       value: session[:csrf],
       expired: Time.now + (60 * 60 * 24 * 30), # 30 days
