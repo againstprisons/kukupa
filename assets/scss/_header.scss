@@ -47,6 +47,7 @@
       border-bottom: 0px solid transparent;
 
       @media screen and (min-width: $responsive_width) {
+        display: inline-block;
         margin: 0;
         padding: 0 $body_header_margin;
         height: calc(#{$body_header_height} + #{$body_header_border_bottom});
