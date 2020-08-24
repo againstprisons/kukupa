@@ -5,38 +5,59 @@
   align-items: baseline;
   width: 100%;
 
-  height: $body_header_height;
+  min-height: $body_header_height;
   background: $body_header_background;
   color: $body_header_foreground;
 
   .body-header-section {
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: column wrap;
     justify-content: flex-start;
     align-items: baseline;
+
+    width: 100%;
+
+    @media screen and (min-width: $responsive_width) {
+      width: auto;
+      flex-flow: row wrap;
+    }
   }
 
   .body-header-nav-list {
-    display: flex;
+    display: block;
     list-style: none outside none;
 
+    width: 100%;
     margin: 0;
     padding: 0;
 
+    @media screen and (min-width: $responsive_width) {
+      width: auto;
+    }
+
     li {
-      display: inline-block;
       list-style: none outside none;
 
-      margin: 0;
-      padding: 0 1rem;
+      display: block;
+      height: auto;
+      line-height: auto;
+      padding: $body_header_small_margin;
 
-      height: calc($body_header_height + $body_header_border_bottom);
-      line-height: $body_header_height;
+      border-left: $body_header_border_left solid transparent;
+      border-bottom: 0px solid transparent;
 
-      border-bottom: $body_header_border_bottom solid transparent;
+      @media screen and (min-width: $responsive_width) {
+        margin: 0;
+        padding: 0 $body_header_margin;
+        height: calc(#{$body_header_height} + #{$body_header_border_bottom});
+        line-height: $body_header_height;
+
+        border-left: 0px solid transparent;
+        border-bottom: $body_header_border_bottom solid transparent;
+      }
 
       &.current {
-        border-bottom-color: $body_header_accent;
+        border-color: $body_header_accent;
       }
 
       &:focus, &:hover {
@@ -56,7 +77,17 @@
 }
 
 .body-header-auth {
-  margin: 0 1rem;
+  margin: $body_header_small_margin;
+
+  border-left: $body_header_border_left solid transparent;
+  border-bottom: 0px solid transparent;
+
+  @media screen and (min-width: $responsive_width) {
+    margin: 0 $body_header_margin;
+
+    border-left: 0px solid transparent;
+    border-bottom: $body_header_border_bottom solid transparent;
+  }
 
   a {
     color: $body_header_foreground;
