@@ -1,0 +1,19 @@
+- classes ||= []
+.editor-container{:'data-editor-name' => editor_name, :class => classes}
+  .editor-messages
+    .editor-message-loading.message.message-warning
+      %i.fa.fa-fw.fa-spin.fa-spinner= ""
+      = t(:'editor/loading')
+
+    .editor-message-error.message.message-error{:style => 'display:none'}
+      %i.fa.fa-warning= ""
+      = t(:'editor/failed')
+
+  %label{:for => editor_name, :'data-editor-name' => editor_name}
+    = editor_label
+
+  %textarea.rich-editor{:name => editor_name, :id => editor_name}
+    - if defined?(editor_data) && editor_data
+      &= editor_data
+    - else 
+      = ""

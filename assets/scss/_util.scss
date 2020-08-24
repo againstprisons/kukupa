@@ -1,0 +1,40 @@
+.x-margin {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.y-margin {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.xy-margin {
+  @extend .x-margin;
+  @extend .y-margin;
+}
+
+.center {
+  text-align: center;
+}
+
+.inline {
+  display: inline-block;
+}
+
+.inline-list {
+  display: block;
+  list-style: none outside none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    display: inline-block;
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+
+    &:not(:last-child):after {
+      content: ' \00b7 ';
+    }
+  }
+}

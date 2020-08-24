@@ -1,0 +1,11 @@
+- if Kukupa.languages.count > 1
+  %form{:method => "POST", :action => "/language"}
+    %input{:type => 'hidden', :name => '_csrf', :value => session[:csrf]}
+
+    %select{:name => "language"}
+      - Kukupa.languages.each do |k, v|
+        %option{value: k, selected: (k == current_language ? "selected" : false)}
+          = v[:meta_description]
+
+    %button.pure-button{:type => "submit"}
+      = t :'language/change'

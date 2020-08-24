@@ -1,0 +1,10 @@
+@import 'variables';
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+@import 'body';
+@import 'midsplash';
+@import 'footer';
+@import 'util';

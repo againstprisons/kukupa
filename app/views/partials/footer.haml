@@ -1,0 +1,11 @@
+%footer.page-footer
+  %p
+    %ul.inline-list
+      %li
+        %span= t(:powered_by_kukupa)
+
+      - if Kukupa.app_config["display-version"]
+        %li
+          %span= Kukupa.version
+
+  = haml :'partials/language_switcher'

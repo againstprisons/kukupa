@@ -1,0 +1,8 @@
+preload:
+  - ApplicationController
+
+controllers:
+  - path: /static
+    controller: StaticController
+  - path: /
+    controller: IndexController

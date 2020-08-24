@@ -1,0 +1,14 @@
+!!!html
+%html
+  %head
+    = haml :'partials/layout_head', layout: false, locals: {title: title}
+
+  %body
+    = haml :'partials/header', layout: false
+
+    .body-container
+      = render_flashes unless defined?(no_flash) && no_flash
+      = yield
+
+    = haml :'partials/footer', layout: false
+    %script{src: '/static/index.bundle.js'}

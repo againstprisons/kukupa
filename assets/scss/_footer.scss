@@ -1,0 +1,21 @@
+.page-footer {
+  width: 100%;
+  padding: $body_footer_padding;
+
+  text-align: center;
+  font-size: $body_footer_font_size;
+
+  span {
+    color: $body_footer_color;
+
+    a {
+      color: $body_footer_color;
+      text-decoration: underline;
+
+      &:focus, &:hover {
+        text-decoration: none;
+        border-bottom: 1px solid $body_footer_color;
+      }
+    }
+  }
+}

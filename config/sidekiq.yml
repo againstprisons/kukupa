@@ -1,0 +1,4 @@
+:schedule:
+  email_queue_send:
+    cron: '0 * * * * *'
+    class: "Kukupa::Workers::EmailQueueSendWorker"

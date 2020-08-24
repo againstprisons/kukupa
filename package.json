@@ -1,0 +1,21 @@
+{
+  "name": "kukupa",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "webpack"
+  },
+  "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^19.0.0",
+    "font-awesome": "^4.7.0",
+    "purecss": "^1.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "babel-loader": "^8.0.6",
+    "terser-webpack-plugin": "^1.4.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  }
+}

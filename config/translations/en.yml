@@ -1,0 +1,78 @@
+:'meta_description': "English"
+
+# Languages
+:'language/change': "Change language"
+:'language/invalid': "The chosen language was not found."
+
+# Generic actions
+:'back': "Back"
+:'change': "Change"
+:'submit': "Submit"
+:'edit': "Edit"
+:'save_changes': "Save changes"
+:'search': "Search"
+:'search_term': "Search term"
+:'new_search': "New search"
+:'download': "Download"
+:'upload': "Upload"
+:'view': "View"
+
+# Fields
+:'user_id': "User ID"
+:'email_address': "Email address"
+:'email_address/change': "Change email address"
+:'password': "Password"
+:'password/confirm': "Password (again, to confirm)"
+:'password/current': "Current password"
+:'password/new': "New password"
+:'password/new/confirm': "New password (again, to confirm)"
+:'password/change': "Change password"
+:'name': "Name"
+:'prisoner_number': "Prisoner number"
+:'prison': "Prison"
+:'prison/unknown': "Unknown prison"
+:'birthday': "Birthday"
+:'send_correspondence': "Send correspondence"
+:'release_date': "Expected release date"
+:'creation': "Creation date"
+:'mfa/enabled_query': "MFA enabled?"
+:'mfa/requires_query': "Requires multi-factor authentication?"
+:'bool/yes': "yes"
+:'bool/no': "no"
+:'enabled/yes': "enabled"
+:'enabled/no': "disabled"
+:'role': "Role"
+:'unknown': "(unknown)"
+:'unconfirmed': "(unconfirmed)"
+
+# Some generic stuff
+:'required_field_missing': "A required field was not provided."
+:'invalid_action': "The provided action was invalid."
+
+# Errors
+:'errors/not_found/title': "Page not found"
+:'errors/not_found/content': "The page you have requested could not be found."
+:'errors/not_found/not_logged_in': "You may be seeing this error because you're not logged in. Click the button below to log in."
+:'errors/not_found/back_to_home': "Return to the home page"
+:'errors/maintenance/title': "Maintenance"
+:'errors/maintenance/content': "Sorry, <%= site_name %> is down for maintenance. Please check back later."
+:'errors/maintenance/admin_login_link': "Site administrators can log in by clicking here."
+:'errors/internal_server_error/title': "Internal server error"
+:'errors/internal_server_error/content': "Something went wrong while processing your request. Please contact the site administrator and tell them about this, including what you were trying to do that lead you to this error."
+
+# Rich text editor warnings
+:'editor/loading': "Please wait while we load the text editor. If you see this message for more than a few seconds, try refreshing the page."
+:'editor/failed': "Failed to load the text editor. Any text you enter may not be saved correctly. Refresh the page to try loading the editor again."
+
+# Maintenance
+:'maintenance/warning': "Maintenance mode is enabled!"
+
+# Index
+:'index/title': "Welcome"
+:'index/content/one': "This is <%= e(site_name) %>, the <%= e(org_name) %> advocacy portal."
+
+# Authentication - log in
+:'auth/login/title': "Log in"
+
+# Miscellaneous things
+:'powered_by_kukupa': "<%= site_name %> is powered by <a href=\"https://gitlab.com/againstprisons/kukupa\">Kūkupa</a>"

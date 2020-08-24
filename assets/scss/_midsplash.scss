@@ -1,0 +1,29 @@
+.midsplash-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  margin: 1rem 0;
+
+  .midsplash {
+    margin: 1rem;
+    padding: 1rem;
+
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.375);
+
+    h1 {
+      margin: 0 0 1rem 0;
+      padding: 0;
+
+      border-bottom: 1px solid #000;
+    }
+
+    .button {
+      width: 100%;
+    }
+  }
+}
