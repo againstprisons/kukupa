@@ -1,0 +1,11 @@
+.bundle/
+vendor/bundle/
+.ruby-version
+.env
+.powenv
+tmp/
+.sass[-_]cache/
+node_modules/
+config/certs/*
+!config/certs/.keep
+cargo_target/
