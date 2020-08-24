@@ -22,9 +22,8 @@ module Kukupa::Helpers::UserHelpers
     return nil unless logged_in?
     u = current_user
 
-    name = u.get_name.map{|x| x == "" ? nil : x}.compact
-    unless name.empty?
-      return "#{name.join(" ")} (#{u.email})"
+    unless u.name.empty?
+      return "#{u.name} (#{u.email})"
     end
 
     u.email

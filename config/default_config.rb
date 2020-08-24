@@ -34,6 +34,10 @@ module Kukupa
       :type => :text,
       :default => 'site-name-brackets',
     },
+    "header-logo-url" => {
+      :type => :text,
+      :default => '',
+    }
   }
 
   APP_CONFIG_DEPRECATED_ENTRIES = {

@@ -74,5 +74,8 @@
 # Authentication - log in
 :'auth/login/title': "Log in"
 
+# Authentication - log out
+:'auth/logout/title': "Log out"
+
 # Miscellaneous things
 :'powered_by_kukupa': "<%= site_name %> is powered by <a href=\"https://gitlab.com/againstprisons/kukupa\">Kūkupa</a>"
