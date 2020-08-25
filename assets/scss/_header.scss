@@ -22,13 +22,16 @@
     display: flex;
     flex-flow: column wrap;
     justify-content: flex-start;
-    align-items: baseline;
+    align-items: flex-start;
 
     width: 100%;
 
     @media screen and (min-width: $responsive_width) {
       width: auto;
       flex-flow: row wrap;
+
+      justify-content: flex-start;
+      align-items: baseline;
     }
   }
 
@@ -36,7 +39,7 @@
     display: flex;
     flex-flow: column wrap;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
     list-style: none outside none;
 
     width: 100%;
@@ -45,6 +48,8 @@
 
     @media screen and (min-width: $responsive_width) {
       flex-flow: row wrap;
+      align-items: center;
+
       width: auto;
     }
 
@@ -63,7 +68,7 @@
         display: inline-block;
         margin: 0;
         padding: 0 $body_header_margin;
-        height: calc(#{$body_header_height} + #{$body_header_border_bottom});
+        height: $body_header_height;
         line-height: $body_header_height;
 
         border-left: 0px solid transparent;
