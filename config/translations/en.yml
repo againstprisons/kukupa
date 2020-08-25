@@ -81,5 +81,9 @@
 :'auth/logout/title': "Log out"
 :'auth/logout/success': "You have successfully logged out."
 
+# Dashboard
+:'dashboard/title': "Dashboard"
+:'dashboard/content/welcome': "Welcome<% unless user_name.nil? %>, <%= e(user_name) %><% end %>!"
+
 # Miscellaneous things
 :'powered_by_kukupa': "<%= site_name %> is powered by <a href=\"https://gitlab.com/againstprisons/kukupa\">Kūkupa</a>"
