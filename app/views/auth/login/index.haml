@@ -1,0 +1,16 @@
+.midsplash-container
+  .midsplash.login-index
+    %h1= title
+
+    %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+
+      %label{for: 'email'}= t(:'email_address')
+      %input#email{name: 'email', type: 'email', required: true, placeholder: t(:'email_address')}
+
+      %label{for: 'password'}= t(:'password')
+      %input#password{name: 'password', type: 'password', required: true, placeholder: t(:'password')}
+
+      %button.pure-button.button.button-primary{type: 'submit'}
+        %i.fa.fa-sign-in= ""
+        = t(:'auth/login/submit')

@@ -2,6 +2,11 @@ preload:
   - ApplicationController
 
 controllers:
+  - path: /auth/logout
+    controller: AuthLogoutController
+  - path: /auth
+    controller: AuthLoginController
+
   - path: /static
     controller: StaticController
   - path: /
