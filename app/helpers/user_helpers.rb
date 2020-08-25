@@ -23,7 +23,7 @@ module Kukupa::Helpers::UserHelpers
     u = current_user
 
     unless u.name.empty?
-      return "#{u.name} (#{u.email})"
+      return u.decrypt(:name)
     end
 
     u.email

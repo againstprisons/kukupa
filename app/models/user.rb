@@ -16,7 +16,7 @@ class Kukupa::Models::User < Sequel::Model
   end
 
   def login!
-    token = Kukupa::Models::Token.generate
+    token = Kukupa::Models::Token.generate_long
     token.user = self
     token.use = "session"
     token.save
