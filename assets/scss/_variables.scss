@@ -1,4 +1,7 @@
 $responsive_width: 58rem;
+$color_background: #fff;
+$color_foreground: #000;
+$color_foreground_dimmed: #888;
 $color_accent: #0aa;
 
 $symbolic_success_background: #0b0;
@@ -24,7 +27,7 @@ $body_header_margin: 1rem;
 $body_container_width: $responsive_width;
 $body_container_padding: 1rem;
 
-$body_footer_color: #888;
+$body_footer_color: $color_foreground_dimmed;
 $body_footer_font_size: 0.75rem;
 $body_footer_padding: 1rem;
 

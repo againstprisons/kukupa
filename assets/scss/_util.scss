@@ -38,3 +38,14 @@
     }
   }
 }
+
+.block-list {
+  .block-form {
+    display: block;
+
+    input, .button {
+      display: inline-block;
+      width: auto !important;
+    }
+  }
+}
