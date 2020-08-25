@@ -1,19 +1,19 @@
 .body-header
   .body-header-section
     %nav.body-header-nav
-      %ul.body-header-nav-list
-        %li
-          %a.body-header-brand{href: '/'}
+      %ul.body-header-nav-list><
+        %li><
+          %a.body-header-brand{href: '/'}><
             - header_logo_url = Kukupa.app_config['header-logo-url']
             - if header_logo_url.nil? || header_logo_url&.empty?
               %strong
                 = site_name
             - else
-              %img{src: header_logo-url, alt: site_name}
+              %img{src: header_logo_url, alt: site_name}
 
         - navbar_items.each do |item|
-          %li{class: item[:selected]}
-            %a{href: item[:link]}
+          %li{class: item[:selected]}><
+            %a{href: item[:link]}><
               &= item[:text]
 
   .body-header-section
