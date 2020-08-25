@@ -18,10 +18,6 @@ module Kukupa
       :type => :bool,
       :default => false,
     },
-    "signups" => {
-      :type => :bool,
-      :default => false,
-    },
     "email-from" => {
       :type => :text,
       :default => 'advocacy@example.com',
