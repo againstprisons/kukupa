@@ -1,0 +1,47 @@
+.system-admin-configuration-keyvalue-list
+  %h1= title
+
+  %a.pure-button.button{:href => '/system/config'}
+    %i.fa.fa-chevron-left
+    = t(:'back')
+
+  %form.pure-form.pure-form-stacked.form-main{:method => 'POST'}
+    %input{:type => 'hidden', :name => '_csrf', :value => session[:csrf]}
+    %h1= t(:'system/config/edit/section_title')
+
+    - if deprecated
+      .message.message-warning
+        = succeed ': ' do
+          = t(:'system/config/deprecated/message', :dep_in => deprecated[:in])
+        %span
+          &= deprecated[:reason]
+
+    %label{:for => 'type'}= t(:'system/config/edit/type')
+    %select#type{:name => 'type', :required => true}
+      %option{:value => 'bool', :selected => (type == "bool")}
+        = t(:'system/config/edit/type/bool')
+      %option{:value => 'text', :selected => (type == "text")}
+        = t(:'system/config/edit/type/text')
+      %option{:value => 'number', :selected => (type == "number")}
+        = t(:'system/config/edit/type/number')
+      %option{:value => 'json', :selected => (type == "json")}
+        = t(:'system/config/edit/type/json')
+
+    %label{:for => 'value'}= t(:'system/config/edit/value')
+    %input#value{:name => 'value', :required => true, :value => value}
+
+    %button.pure-button.button.button-primary{:type => 'submit'}
+      %i.fa.fa-pencil= ""
+      = t(:'system/config/edit/submit')
+
+  - unless is_new
+    %form.pure-form.pure-form-stacked.form-main{:method => 'POST', :action => delete_url}
+      %input{:type => 'hidden', :name => '_csrf', :value => session[:csrf]}
+      %h1= t(:'system/config/delete/section_title')
+
+      %label{:for => 'delete_confirm'}= t(:'system/config/delete/confirm')
+      %input#delete_confirm{:name => 'confirm', :type => 'text', :required => true}
+
+      %button.pure-button.button.button-error{:type => 'submit'}
+        %i.fa.fa-trash= ""
+        = t(:'system/config/delete/submit')

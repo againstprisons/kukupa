@@ -1,0 +1,49 @@
+#system-admin-config-index
+  %h1= title
+
+  - if has_deprecated
+    .message.message-warning
+      = succeed ' ' do
+        = t(:'system/config/deprecated/one_or_more')
+
+      %span.badge
+        %i.fa.fa-exclamation-circle= ""
+        = t(:'system/config/deprecated/badge', :dep_in => Kukupa::VERSION)
+
+  .form-main
+    %h1= t(:'system/config/keys/section_title')
+
+    %ul.block-list
+      - entries.each do |k, v|
+        %li
+          .cfgkvlist-name
+            %strong
+              &= k
+
+            = surround '(', ')' do
+              &= v[:type]
+
+            - if v[:deprecated]
+              %span.badge
+                %i.fa.fa-exclamation-circle= ""
+                = t(:'system/config/deprecated/badge', :dep_in => v[:deprecated][:in])
+
+          .cfgkvlist-value
+            %code.code-line
+              &= v[:value]
+
+          - if can_edit
+            .block-form.cfgkvlist-form
+              %a.block-button.pure-button.button{:href => v[:edit_link], :title => t(:edit)}
+                %i.fa.fa-pencil= ""
+                = t(:'system/config/keys/actions/edit')
+
+  %form.pure-form.pure-form-stacked.form-main{:method => "GET", :action => url("/system/config/-/new-key")}
+    %h1= t(:'system/config/new_key/section_title')
+
+    %label{:for => 'key_name'}= t(:'system/config/new_key/key_name')
+    %input#key_name{:name => 'key', :type => 'text', :required => true, :placeholder => t(:'system/config/new_key/key_name')}
+
+    %button.pure-button.button.button-primary{:type => 'submit'}
+      %i.fa.fa-plus
+      = t(:'system/config/new_key/submit')

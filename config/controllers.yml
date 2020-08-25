@@ -8,6 +8,8 @@ controllers:
   - path: /auth
     controller: AuthLoginController
 
+  - path: /system/config
+    controller: SystemConfigurationController
   - path: /system
     controller: SystemDashboardController
 
