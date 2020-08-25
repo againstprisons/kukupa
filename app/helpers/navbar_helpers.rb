@@ -8,6 +8,14 @@ module Kukupa::Helpers::NavbarHelpers
       :selected => current?('/dashboard'),
     }
 
+    if has_role?('system:access')
+      items << {
+        :link => '/system',
+        :text => t(:'system/index/title'),
+        :selected => current_prefix?('/system'),
+      }
+    end
+
     items
   end
 

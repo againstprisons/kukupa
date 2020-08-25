@@ -1,5 +1,6 @@
 preload:
   - ApplicationController
+  - SystemController
 
 controllers:
   - path: /auth/logout
@@ -7,6 +8,8 @@ controllers:
   - path: /auth
     controller: AuthLoginController
 
+  - path: /system
+    controller: SystemDashboardController
 
   - path: /dashboard
     controller: DashboardController
