@@ -1,5 +1,5 @@
 - if Kukupa.languages.count > 1
-  %form{:method => "POST", :action => "/language"}
+  %form{:method => "POST", :action => "/-/language"}
     %input{:type => 'hidden', :name => '_csrf', :value => session[:csrf]}
 
     %select{:name => "language"}

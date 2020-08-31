@@ -20,6 +20,10 @@ controllers:
 
   - path: /dashboard
     controller: DashboardController
+
+  - path: /-/language
+    controller: DashLanguageController
+
   - path: /static
     controller: StaticController
   - path: /
