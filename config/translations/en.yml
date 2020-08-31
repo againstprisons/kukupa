@@ -76,6 +76,7 @@
 :'auth/login/submit': "Log in"
 :'auth/login/success': "Welcome<% unless user_name.nil? %>, <%= e(user_name) %><% end %>! You have successfully logged in."
 :'auth/login/errors/invalid': "Invalid email address or password."
+:'auth/login/to_signup': "Have an invite code? Sign up here."
 
 # Authentication - log out
 :'auth/logout/title': "Log out"

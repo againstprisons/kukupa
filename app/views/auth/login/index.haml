@@ -14,3 +14,8 @@
       %button.pure-button.button.button-primary{type: 'submit'}
         %i.fa.fa-sign-in= ""
         = t(:'auth/login/submit')
+
+    .page-footer
+      %span
+        %a{href: url('/auth/signup')}
+          = t(:'auth/login/to_signup')

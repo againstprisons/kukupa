@@ -1,9 +1,11 @@
 .page-footer {
   width: 100%;
-  padding: $body_footer_padding;
-
   text-align: center;
   font-size: $body_footer_font_size;
+
+  &.page-footer--pad {
+    padding: $body_footer_padding;
+  }
 
   span {
     color: $body_footer_color;
