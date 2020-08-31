@@ -1,5 +1,6 @@
 class Kukupa::Controllers::SystemDashboardController < Kukupa::Controllers::SystemController
   add_route :get, '/'
+  add_route :post, '/act/invite', method: :invite
 
   def before
     return halt 404 unless logged_in?
@@ -14,5 +15,17 @@ class Kukupa::Controllers::SystemDashboardController < Kukupa::Controllers::Syst
         title: @title,
       })
     end
+  end
+
+  def invite
+    return halt 404 unless has_role?('system:generate_invite')
+
+    @token = Kukupa::Models::Token.generate_short
+    @token.use = 'invite'
+    @token.save
+    @token_display = @token.token.split('').each_slice(4).map(&:join).join('-')
+
+    flash :success, t(:'system/index/actions/invite/success', invite: @token_display)
+    redirect back
   end
 end

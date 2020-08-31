@@ -87,6 +87,9 @@
 
 # System admin - dashboard
 :'system/index/title': "System admin"
+:'system/index/actions/section_title': "Actions"
+:'system/index/actions/invite': "Generate invite code"
+:'system/index/actions/invite/success': "Generated invite: <%= e(invite) %>"
 
 # System admin - Configuration
 :'system/config/title': "Configuration"

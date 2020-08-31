@@ -1,2 +1,11 @@
 #system-admin-index
   %h1= title
+
+  .form-main
+    %h1= t(:'system/index/actions/section_title')
+
+    %form.pure-form.pure-form-stacked{method: 'POST', action: to('/system/act/invite')}
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+      %button.pure-button.button{type: 'submit'}
+        %i.fa.fa-user-o= ""
+        = t(:'system/index/actions/invite')
