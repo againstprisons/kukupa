@@ -2,10 +2,12 @@ class Kukupa::Controllers::SystemConfigurationController < Kukupa::Controllers::
   include Kukupa::Helpers::SystemConfigurationHelpers
 
   add_route :get, "/"
-  add_route :get, "/-/new-key", :method => :new_key
-  add_route :get, "/:key", :method => :key_edit
-  add_route :post, "/:key", :method => :key_edit
-  add_route :post, "/:key/delete", :method => :key_delete
+  add_route :get, "/-/refresh", method: :refresh
+  add_route :post, "/-/refresh", method: :refresh
+  add_route :get, "/-/new-key", method: :new_key
+  add_route :get, "/:key", method: :key_edit
+  add_route :post, "/:key", method: :key_edit
+  add_route :post, "/:key/delete", method: :key_delete
 
   def before
     return halt 404 unless logged_in?
@@ -23,6 +25,61 @@ class Kukupa::Controllers::SystemConfigurationController < Kukupa::Controllers::
         entries: @entries,
         has_deprecated: @has_deprecated,
         can_edit: has_role?("system:config:edit"),
+      })
+    end
+  end
+
+  def refresh
+    return halt 404 unless has_role?("system:config:refresh")
+    @title = t(:'system/config/refresh/title')
+
+    if request.get?
+      # do initial dry run
+      output = Kukupa.app_config_refresh(dry: true)
+
+      return haml(:'system/layout', locals: {title: @title}) do
+        haml(:'system/config/refresh', layout: false, locals: {
+          title: @title,
+          output: output,
+          has_warnings: output.map{|x| x[:warnings].count.positive?}.any?,
+          dry_run: true,
+        })
+      end
+    end
+
+    ## if we get here, this is a POST request ##
+
+    # clear banner
+    session.delete(:we_changed_app_config)
+
+    # enable maintenance mode
+    maint_cfg = Kukupa::Models::Config.where(key: 'maintenance').first
+    unless maint_cfg
+      maint_cfg = Kukupa::Models::Config.new(key: 'maintenance', type: 'bool', value: 'no')
+    end
+    maint_enabled = maint_cfg.value == 'yes'
+    maint_cfg.value = 'yes'
+    maint_cfg.save
+
+    # refresh
+    output = Kukupa.app_config_refresh()
+
+    # disable maintenance mode if it wasn't already enabled
+    unless maint_enabled
+      maint_cfg.value = 'no'
+      maint_cfg.save
+    end
+
+    if Kukupa::ServerUtils.app_server_has_multiple_workers?
+      Kukupa::ServerUtils.app_server_restart!
+    end
+
+    return haml(:'system/layout', locals: {title: @title}) do
+      haml(:'system/config/refresh', layout: false, locals: {
+        title: @title,
+        output: output,
+        has_warnings: output.map{|x| x[:warnings].count.positive?}.any?,
+        dry_run: false,
       })
     end
   end

@@ -1,0 +1,48 @@
+#system-admin-config-refresh
+  %h1= title
+
+  %a.pure-button.button{href: url('/system/config')}
+    %i.fa.fa-chevron-left= ""
+    = t :back
+
+  - unless dry_run
+    .message.message-success
+      - if Kukupa::ServerUtils.app_server_has_multiple_workers?
+        = t(:'system/config/refresh/success/restarting')
+      - else
+        = t(:'system/config/refresh/success')
+
+  .form-main
+    %h1= t(:'system/config/refresh/parse/section_title')
+    %p= t(:'system/config/refresh/parse/content')
+
+    - if has_warnings
+      .message.message-error= t(:'system/config/refresh/parse/warning')
+
+    %ul.block-list
+      - output.each do |v|
+        %li
+          .y-margin
+            - if v[:warnings].count.zero?
+              %i.fa.fa-check= ""
+            - else
+              %i.fa.fa-warning= ""
+
+            %code.code-line
+              &= v[:key]
+
+            - if v[:warnings].count.positive?
+              %ul.block-list
+                - v[:warnings].each do |warning|
+                  %li
+                    .y-margin
+                      %code.code-line
+                        &= warning
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+    %h1= t(:'system/config/refresh/perform/section_title')
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-refresh= ""
+      = t(:'system/config/refresh/perform/submit')
