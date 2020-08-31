@@ -1,12 +1,12 @@
 .system-admin-container
   %ul.system-admin-nav.subpage-nav><
     %li{class: current?('/system')}><
-      %a{href: '/system'}
+      %a{href: url('/system')}
         = t(:'system/index/title')
 
     - if has_role?('system:config:access')
       %li{class: current_prefix?('/system/config')}><
-        %a{href: '/system/config'}
+        %a{href: url('/system/config')}
           = t(:'system/config/title')
 
   = yield
