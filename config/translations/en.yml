@@ -20,6 +20,8 @@
 # Fields
 :'user_id': "User ID"
 :'email_address': "Email address"
+:'email_address/current': "Current email address"
+:'email_address/new': "New email address"
 :'email_address/change': "Change email address"
 :'password': "Password"
 :'password/confirm': "Password (again, to confirm)"
@@ -48,6 +50,7 @@
 # Some generic stuff
 :'required_field_missing': "A required field was not provided."
 :'invalid_action': "The provided action was invalid."
+:'must_log_in': "You must log in to perform this action."
 
 # Errors
 :'errors/not_found/title': "Page not found"
@@ -97,6 +100,24 @@
 # Dashboard
 :'dashboard/title': "Dashboard"
 :'dashboard/content/welcome': "Welcome<% unless user_name.nil? %>, <%= e(user_name) %><% end %>!"
+
+# User settings
+:'usersettings/title': "User settings"
+:'usersettings/change_name/section_title': "Change your name"
+:'usersettings/change_name/submit': "Change name"
+:'usersettings/change_name/success': "Successfully changed your name to <%= e(name) %>."
+:'usersettings/change_email/section_title': "Change your email address"
+:'usersettings/change_email/submit': "Change email address"
+:'usersettings/change_email/success': "Successfully changed your email address."
+:'usersettings/change_email/errors/email_exists': "An account already exists with this email address."
+:'usersettings/change_password/section_title': "Change your password"
+:'usersettings/change_password/submit': "Change password"
+:'usersettings/change_password/success': "Successfully changed your password."
+:'usersettings/change_password/errors/invalid_password': "Your password was incorrect. Please try again."
+:'usersettings/change_password/errors/passwords_dont_match': "The provided passwords do not match. Please try again."
+
+# User settings - multi-factor authentication
+:'usersettings/mfa/title': "Multi-factor authentication"
 
 # System admin - dashboard
 :'system/index/title': "System admin"

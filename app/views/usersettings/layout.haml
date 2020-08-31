@@ -1,0 +1,11 @@
+.usersettings-container
+  %ul.usersettings-nav.subpage-nav><
+    %li{class: current?('/user')}><
+      %a{href: url('/user')}
+        = t(:'usersettings/title')
+
+      %li{class: current_prefix?('/user/mfa')}><
+        %a{href: url('/user/mfa')}
+          = t(:'usersettings/mfa/title')
+
+  = yield

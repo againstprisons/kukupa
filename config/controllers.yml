@@ -10,6 +10,9 @@ controllers:
   - path: /auth
     controller: AuthLoginController
 
+  - path: /user
+    controller: UserSettingsController
+
   - path: /system/config
     controller: SystemConfigurationController
   - path: /system
