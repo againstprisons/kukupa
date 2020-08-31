@@ -3,7 +3,7 @@
     %nav.body-header-nav
       %ul.body-header-nav-list><
         %li><
-          %a.body-header-brand{href: '/'}><
+          %a.body-header-brand{href: url('/')}><
             - header_logo_url = Kukupa.app_config['header-logo-url']
             - if header_logo_url.nil? || header_logo_url&.empty?
               %strong
@@ -17,16 +17,18 @@
               &= item[:text]
 
   .body-header-section
-    .body-header-auth
-      - if logged_in?
-        %ul.inline-list
-          %li
-            %span
+    %nav.body-header-nav
+      %ul.body-header-nav-list><
+        - if logged_in?
+          %li{class: current?('/user')}><
+            %a{href: url('/user')}><
               &= current_user_name_or_email
-          %li
-            %a{href: '/auth/logout'}
+
+          %li><
+            %a{href: url('/auth/logout')}><
               = t(:'auth/logout/title')
 
-      - else
-        %a{href: '/auth'}
-          = t(:'auth/login/title')
+        - else
+          %li{class: current?('/auth')}><
+            %a{href: url('/auth')}><
+              = t(:'auth/login/title')
