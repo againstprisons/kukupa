@@ -1,0 +1,15 @@
+.midsplash-container
+  .midsplash.signup-no-token
+    %h1= title
+
+    - if has_token && token.nil?
+      .message.message-warning
+        = t(:'auth/signup/no_token/errors/invalid_token')
+
+    %form.pure-form.pure-form-stacked.form-main{method: 'GET'}
+      %label{for: 'token'}= t(:'auth/signup/no_token/token')
+      %input#token{name: 'token', type: 'text', required: true, placeholder: t(:'auth/signup/no_token/token')}
+
+      %button.pure-button.button.button-primary{type: 'submit'}
+        %i.fa.fa-arrow-right= ""
+        = t(:'auth/signup/no_token/submit')

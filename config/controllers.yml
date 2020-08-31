@@ -3,6 +3,8 @@ preload:
   - SystemController
 
 controllers:
+  - path: /auth/signup
+    controller: AuthSignupController
   - path: /auth/logout
     controller: AuthLogoutController
   - path: /auth

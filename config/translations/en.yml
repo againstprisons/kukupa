@@ -81,6 +81,18 @@
 :'auth/logout/title': "Log out"
 :'auth/logout/success': "You have successfully logged out."
 
+# Authentication - sign up
+:'auth/signup/title': "Sign up"
+:'auth/signup/no_token/title': "Sign up"
+:'auth/signup/no_token/content': "To sign up, enter your invite code below."
+:'auth/signup/no_token/token': "Invite code"
+:'auth/signup/no_token/submit': "Continue"
+:'auth/signup/no_token/errors/invalid_token': "The provided invite code was not valid."
+:'auth/signup/submit': "Sign up"
+:'auth/signup/success': "You have successfully signed up to <%= e(site_name) %>. You can now log in."
+:'auth/signup/errors/email_exists': "An account with that email address already exists."
+:'auth/signup/errors/passwords_dont_match': "The provided passwords do not match. Please try again."
+
 # Dashboard
 :'dashboard/title': "Dashboard"
 :'dashboard/content/welcome': "Welcome<% unless user_name.nil? %>, <%= e(user_name) %><% end %>!"
