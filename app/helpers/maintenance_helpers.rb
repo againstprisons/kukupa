@@ -15,7 +15,7 @@ module Kukupa::Helpers::MaintenanceHelpers
   end
 
   def maintenance_render
-    haml(:'maintenance', :layout => :layout_minimal, :locals => {
+    haml(:'errors/maintenance', :layout => :layout_minimal, :locals => {
       :title => t(:'errors/maintenance/title'),
       :no_flash => true,
     })

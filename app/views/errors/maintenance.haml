@@ -1,0 +1,11 @@
+.midsplash-container
+  .midsplash.maintenance
+    %h1= title
+    %p.center
+      = t(:'errors/maintenance/content')
+
+    - unless logged_in?
+      .page-footer
+        %span
+          %a{href: url('/auth')}
+            = t(:'errors/maintenance/admin_login_link')
