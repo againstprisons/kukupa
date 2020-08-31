@@ -109,6 +109,8 @@
 :'system/config/deprecated/one_or_more': "One or more configuration keys currently in the database have been marked as deprecated. These entries will appear with a badge beside them that looks like the following:"
 :'system/config/deprecated/badge': "Deprecated<% unless dep_in.nil? %>: v<%= e(dep_in) %><% end %>"
 :'system/config/deprecated/message': "This configuration key was deprecated in <% if dep_in.nil? %>an unspecified version<% else %>v<%= e(dep_in) %><% end %>"
+:'system/config/actions/section_title': "Actions"
+:'system/config/actions/refresh': "Refresh application configuration"
 :'system/config/keys/section_title': "Existing keys"
 :'system/config/keys/actions/edit': "Edit"
 :'system/config/new_key/section_title': "New key"
