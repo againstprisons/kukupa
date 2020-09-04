@@ -1,0 +1,39 @@
+#system-admin-roles-index
+  %h1= title
+
+  .pure-g
+    .pure-u-1.pure-u-md-1-2
+      %form.pure-form.pure-form-stacked.form-main.x-margin{method: "GET", action: url('/system/roles/search')}
+        %h1= t(:'system/roles/search_by_email/section_title')
+        %input{type: 'hidden', name: 'type', value: 'email'}
+
+        %label{for: 'email'}= t(:'email_address')
+        %input#email{name: 'value', type: 'email', required: true, placeholder: t(:'email_address')}
+
+        %button.pure-button.button{type: 'submit'}
+          %i.fa.fa-search= ""
+          = t(:'system/roles/search_by_email/submit')
+
+    .pure-u-1.pure-u-md-1-2
+      %form.pure-form.pure-form-stacked.form-main.x-margin{method: "GET", action: url('/system/roles/search')}
+        %h1= t(:'system/roles/search_by_uid/section_title')
+        %input{type: 'hidden', name: 'type', value: 'uid'}
+
+        %label{for: 'userid'}= t(:'user_id')
+        %input#userid{name: 'value', type: 'text', required: true, placeholder: t(:'user_id')}
+
+        %button.pure-button.button{type: 'submit'}
+          %i.fa.fa-search= ""
+          = t(:'system/roles/search_by_uid/submit')
+
+    .pure-u-1.pure-u-md-1-2
+      %form.pure-form.pure-form-stacked.form-main.x-margin{method: "GET", action: url('/system/roles/search')}
+        %h1= t(:'system/roles/search_by_role/section_title')
+        %input{type: 'hidden', name: 'type', value: 'role'}
+
+        %label{for: 'role'}= t(:'role')
+        %input#role{name: 'value', type: 'text', required: true, placeholder: t(:'role')}
+
+        %button.pure-button.button{type: 'submit'}
+          %i.fa.fa-search= ""
+          = t(:'system/roles/search_by_role/submit')

@@ -13,6 +13,8 @@ controllers:
   - path: /user
     controller: UserSettingsController
 
+  - path: /system/roles
+    controller: SystemRolesController
   - path: /system/config
     controller: SystemConfigurationController
   - path: /system

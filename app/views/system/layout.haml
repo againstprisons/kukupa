@@ -9,4 +9,9 @@
         %a{href: url('/system/config')}
           = t(:'system/config/title')
 
+    - if has_role?('system:roles:access')
+      %li{class: current_prefix?('/system/roles')}><
+        %a{href: url('/system/roles')}
+          = t(:'system/roles/title')
+
   = yield

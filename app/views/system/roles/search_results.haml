@@ -1,0 +1,49 @@
+#system-admin-roles-search-results
+  %h1= title
+
+  %p
+    %strong
+      = succeed ': ' do
+        = t(:'system/roles/search_results/description')
+
+    %span.sysadm-roleres-query
+      = query_friendly
+
+  %a.pure-button.button{href: url('/system/roles')}
+    %i.fa.fa-search= ""
+    = t(:'system/roles/search_results/new_search')
+
+  .form-main
+    %h1= t(:'system/roles/search_results/title')
+
+    - if users.empty?
+      %p= t(:'system/roles/search_results/no_items')
+
+    %ul.block-list
+      - users.each do |u|
+        %li
+          .sysadm-roleres-user
+            %strong
+              &= u[:name]
+
+            = surround '(', ')' do
+              uid:
+              &= u[:user].id
+
+          .sysadm-roleres-roles
+            %ul.block-list
+              - if u[:roles].empty?
+                %li
+                  = t(:'system/roles/search_results/item/no_roles')
+
+              - u[:roles].each do |role|
+                %li
+                  &= role.role
+
+          %form.block-form.sysadm-roleres-edit{method: 'GET', action: url('/system/roles/edit')}
+            %input{type: 'hidden', name: 'uid', value: u[:user].id}
+            %input{type: 'hidden', name: 'back', value: this_search_url}
+
+            %button.pure-button.button{type: 'submit'}
+              %i.fa.fa-pencil= ""
+              = t(:'system/roles/search_results/item/actions/modify')
