@@ -1,0 +1,21 @@
+#usersettings-mfa-recovery
+  %h1= title
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+
+    - if mfa[:has_recovery]
+      %h1= t(:'usersettings/mfa/recovery/has_recovery/section_title')
+      %p= t(:'usersettings/mfa/recovery/has_recovery/content')
+
+      %button.pure-button.button.button-primary{type: 'submit'}
+        %i.fa.fa-refresh= ""
+        = t(:'usersettings/mfa/recovery/has_recovery/submit')
+
+    - else
+      %h1= t(:'usersettings/mfa/recovery/no_recovery/section_title')
+      %p= t(:'usersettings/mfa/recovery/no_recovery/content')
+
+      %button.pure-button.button.button-primary{type: 'submit'}
+        %i.fa.fa-refresh= ""
+        = t(:'usersettings/mfa/recovery/no_recovery/submit')

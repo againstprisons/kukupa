@@ -1,0 +1,20 @@
+.midsplash-container
+  .midsplash.mfa-recovery-view
+    %h1= title
+
+    .form-main
+      %p= t(:'usersettings/mfa/recovery/view/content')
+
+      %ul.block-list
+        - codes.each do |code|
+          %li
+            %code.code-line
+              &= code[:display]
+
+      %a.pure-button.button{href: 'javascript:window.print()'}
+        %i.fa.fa-print= ""
+        = t(:'usersettings/mfa/recovery/view/print')
+
+      %a.pure-button.button{href: url('/user/mfa')}
+        %i.fa.fa-chevron-left= ""
+        = t(:'usersettings/mfa/recovery/view/return')

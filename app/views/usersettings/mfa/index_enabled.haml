@@ -11,6 +11,20 @@
           %i.fa.fa-mobile= ""
           = t(:'usersettings/mfa/enabled/totp/submit')
 
+    .pure-u-1.pure-u-md-1-2
+      .form-main.x-margin
+        %h1= t(:'usersettings/mfa/enabled/recovery/section_title')
+
+        - unless mfa[:has_recovery]
+          .message.message-warning
+            = t(:'usersettings/mfa/enabled/recovery/no_recovery')
+
+        %p= t(:'usersettings/mfa/enabled/recovery/content')
+
+        %a.pure-button.button{href: url('/user/mfa/recovery')}
+          %i.fa.fa-file-text-o= ""
+          = t(:'usersettings/mfa/enabled/recovery/submit')
+
   .form-main.x-margin
     %h1= t(:'usersettings/mfa/enabled/disable/section_title')
 

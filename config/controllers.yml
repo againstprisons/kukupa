@@ -12,6 +12,8 @@ controllers:
   - path: /auth
     controller: AuthLoginController
 
+  - path: /user/mfa/recovery
+    controller: UserSettingsMfaRecoveryController
   - path: /user/mfa/totp
     controller: UserSettingsMfaTotpController
   - path: /user/mfa
