@@ -1,0 +1,25 @@
+%h1= title
+
+.form-main
+  %h1= t(:'case/index/cases/section_title')
+
+  - if cases.empty?
+    %p= t(:'case/index/cases/no_cases')
+
+  %ul.block-list
+    - cases.each do |c|
+      %li
+        %ul.inline-list
+          %li
+            %a{href: c[:url]}
+              &= c[:name]
+
+          %li
+            - if c[:advocate]
+              = succeed ': ' do
+                = t(:'advocate')
+
+              &= c[:advocate_name]
+
+            - else
+              = t(:'advocate/none_assigned')

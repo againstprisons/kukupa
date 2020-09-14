@@ -1,5 +1,6 @@
 preload:
   - ApplicationController
+  - CaseController
   - SystemController
 
 controllers:
@@ -20,6 +21,9 @@ controllers:
     controller: UserSettingsMfaController
   - path: /user
     controller: UserSettingsController
+
+  - path: /case
+    controller: CaseIndexController
 
   - path: /system/roles
     controller: SystemRolesController

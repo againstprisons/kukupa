@@ -44,6 +44,8 @@
 :'enabled/yes': "enabled"
 :'enabled/no': "disabled"
 :'role': "Role"
+:'advocate': "Advocate"
+:'advocate/none_assigned': "No advocate assigned"
 :'unknown': "(unknown)"
 :'unconfirmed': "(unconfirmed)"
 
@@ -110,6 +112,11 @@
 :'dashboard/content/welcome': "Welcome<% unless user_name.nil? %>, <%= e(user_name) %><% end %>!"
 :'dashboard/cases/section_title': "Assigned cases"
 :'dashboard/cases/no_cases': "You are not assigned to any cases."
+
+# Cases - index
+:'case/index/title': "Cases"
+:'case/index/cases/no_cases': "No cases."
+:'case/index/cases/section_title': "Cases available to me"
 
 # User settings
 :'usersettings/title': "User settings"

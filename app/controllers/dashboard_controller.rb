@@ -12,7 +12,7 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
     @user_name = @user.decrypt(:name)
     @user_name = nil if @user_name.nil? || @user_name&.empty?
     @my_cases = Kukupa::Models::Case.where(assigned_advocate: @user.id).map do |c|
-      url = Addressable::URI.parse(url("/case/#{c.id}"))
+      url = Addressable::URI.parse(url("/case/view/#{c.id}"))
 
       {
         :case => c,

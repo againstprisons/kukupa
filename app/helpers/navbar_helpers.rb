@@ -2,6 +2,12 @@ module Kukupa::Helpers::NavbarHelpers
   def navbar_items_logged_in
     items = []
 
+    items << {
+      link: url('/case'),
+      text: t(:'case/index/title'),
+      selected: current_prefix?('/case'),
+    }
+
     if has_role?('system:access')
       items << {
         :link => url('/system'),
