@@ -128,6 +128,11 @@ class Kukupa::Controllers::SystemRolesController < Kukupa::Controllers::SystemCo
       back.query_values = {back: request.params['back']}
     end
 
+    unless @user.totp_enabled
+      flash :error, t(:'system/roles/edit/add/errors/no_mfa')
+      return redirect back.to_s
+    end
+
     role = request.params['role']&.strip&.downcase
     if Kukupa::Models::UserRole.where(role: role, user_id: @user.id).count.positive?
       flash :error, t(:'system/roles/edit/add/errors/has_role', role: role)

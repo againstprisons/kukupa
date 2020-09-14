@@ -40,14 +40,19 @@
   %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: url('/system/roles/edit/-/add')}
     %h1= t(:'system/roles/edit/add/section_title')
 
+    - unless user.totp_enabled
+      .message.message-warning
+        = t(:'system/roles/edit/add/errors/no_mfa')
+
     %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
     %input{type: 'hidden', name: 'uid', value: user.id}
     - if query_back
       %input{type: 'hidden', name: 'back', value: query_back}
 
-    %label{for: 'role-add'}= t(:'system/roles/edit/add/role')
-    %input#role-add{type: 'text', name: 'role', required: true, placeholder: t(:'system/roles/edit/add/role')}
+    - if user.totp_enabled
+      %label{for: 'role-add'}= t(:'system/roles/edit/add/role')
+      %input#role-add{type: 'text', name: 'role', required: true, placeholder: t(:'system/roles/edit/add/role')}
 
-    %button.pure-button.button.button-primary{type: 'submit'}
-      %i.fa.fa-plus= ""
-      = t(:'system/roles/edit/add/submit')
+      %button.pure-button.button.button-primary{type: 'submit'}
+        %i.fa.fa-plus= ""
+        = t(:'system/roles/edit/add/submit')

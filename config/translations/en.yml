@@ -233,6 +233,7 @@
 :'system/roles/edit/add/submit': "Add role"
 :'system/roles/edit/add/success': "Successfully added role <code><%= e(role) %></code> as UserRole ID <%= e(ur) %>."
 :'system/roles/edit/add/errors/has_role': "This user already has the role <code><%= e(role) %></code>!"
+:'system/roles/edit/add/errors/no_mfa': "This user does not have multi-factor authentication enabled, roles can not be assigned."
 :'system/roles/edit/remove/success': "Successfully removed role <code><%= e(role) %></code> (UserRole ID <%= e(ur) %>)."
 :'system/roles/edit/remove/errors/invalid_rid': "Form submission had an invalid role ID. Please try again."
 
