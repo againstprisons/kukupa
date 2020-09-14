@@ -56,7 +56,7 @@ module Kukupa::Crypto
     memoize :get_encryption_key
 
     def decrypt(table, column, row, data, opts = {})
-      return "" unless data
+      return nil unless data
 
       encoding = opts[:encoding] || Encoding::UTF_8
       data = Kukupa::Utils.hex_to_bin(data)
