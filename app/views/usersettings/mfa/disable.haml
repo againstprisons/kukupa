@@ -1,0 +1,19 @@
+.midsplash-container
+  .midsplash.mfa-disable
+    %h1= title
+
+    %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+
+      %p= t(:'usersettings/mfa/disable/content')
+
+      %label{for: 'password'}= t(:'password')
+      %input#password{name: 'password', type: 'password', required: true, placeholder: t(:'password')}
+
+      %button.pure-button.button.button-error{type: 'submit'}
+        %i.fa.fa-times= ""
+        = t(:'usersettings/mfa/disable/submit')
+
+      %a.pure-button.button.button-primary{href: url("/user/mfa")}
+        %i.fa.fa-chevron-left= ""
+        = t(:'usersettings/mfa/disable/cancel')

@@ -10,3 +10,16 @@
         %a.pure-button.button{href: url('/user/mfa/totp')}
           %i.fa.fa-mobile= ""
           = t(:'usersettings/mfa/enabled/totp/submit')
+
+  .form-main.x-margin
+    %h1= t(:'usersettings/mfa/enabled/disable/section_title')
+
+    - if mfa[:has_roles]
+      %p= t(:'usersettings/mfa/enabled/disable/has_roles')
+
+    - else
+      %p= t(:'usersettings/mfa/enabled/disable/content')
+
+      %a.pure-button.button{href: url('/user/mfa/disable')}
+        %i.fa.fa-times= ""
+        = t(:'usersettings/mfa/enabled/disable/submit')

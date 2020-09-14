@@ -143,6 +143,15 @@
 :'usersettings/mfa/totp/success': "Successfully enabled app-based multi-factor authentication!"
 :'usersettings/mfa/totp/errors/invalid_code': "The provided verification code was not valid. Please try again. If you continue to see this message, please check that the time on your device is accurate."
 
+# User settings - MFA disable
+:'usersettings/mfa/disable/title': "Disable multi-factor authentication"
+:'usersettings/mfa/disable/content': "To disable multi-factor authentication on your account, enter your password below, and click \"<%= t(:'usersettings/mfa/disable/submit') %>\"."
+:'usersettings/mfa/disable/submit': "Disable multi-factor authentication"
+:'usersettings/mfa/disable/cancel': "Cancel and return to MFA settings"
+:'usersettings/mfa/disable/success': "Successfully disabled multi-factor authentication."
+:'usersettings/mfa/disable/errors/has_roles': "You can not disable multi-factor authentication as your account has permissions granted that require it to be enabled."
+:'usersettings/mfa/disable/errors/password_incorrect': "Your password was incorrect. Please try again."
+
 # System admin - dashboard
 :'system/index/title': "System admin"
 :'system/index/actions/section_title': "Actions"
