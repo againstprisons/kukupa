@@ -108,6 +108,8 @@
 # Dashboard
 :'dashboard/title': "Dashboard"
 :'dashboard/content/welcome': "Welcome<% unless user_name.nil? %>, <%= e(user_name) %><% end %>!"
+:'dashboard/cases/section_title': "Assigned cases"
+:'dashboard/cases/no_cases': "You are not assigned to any cases."
 
 # User settings
 :'usersettings/title': "User settings"
@@ -163,7 +165,6 @@
 :'usersettings/mfa/recovery/view/content': "Shown below are your new recovery codes. Please write these down, or print this page, and store the codes in a safe place. You will only be able to see these codes once."
 :'usersettings/mfa/recovery/view/print': "Print recovery codes"
 :'usersettings/mfa/recovery/view/return': "Return to MFA settings"
-
 
 # User settings - MFA disable
 :'usersettings/mfa/disable/title': "Disable multi-factor authentication"

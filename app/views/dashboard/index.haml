@@ -1,2 +1,14 @@
 %h1= title
 %p= t(:'dashboard/content/welcome', user_name: user[:name])
+
+.form-main
+  %h1= t(:'dashboard/cases/section_title')
+
+  - if cases.empty?
+    %p= t(:'dashboard/cases/no_cases')
+
+  %ul.block-list
+    - cases.each do |c|
+      %li
+        %a{href: c[:url]}
+          &= c[:name]
