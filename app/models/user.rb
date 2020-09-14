@@ -4,6 +4,21 @@ class Kukupa::Models::User < Sequel::Model
   one_to_many :user_roles
   one_to_many :tokens
 
+  def mfa_data
+    recovery_tokens = Kukupa::Models::Token.where(
+      user_id: self.id,
+      use: 'mfa_recovery',
+      valid: true,
+    )
+
+    {
+      enabled: self.totp_enabled,
+      has_key: false, # TODO: add U2F / WebAuthn support
+      has_recovery: recovery_tokens.count.positive?,
+      has_roles: self.user_roles.count.positive?,
+    }
+  end
+
   def password=(pw)
     self.password_hash = Kukupa::Crypto.password_hash(pw)
   end
@@ -29,7 +44,12 @@ class Kukupa::Models::User < Sequel::Model
   end
 
   def invalidate_tokens_except!(token)
-    to_invalidate = self.tokens
+    to_invalidate = Kukupa::Models::Token.where(
+      user_id: self.id,
+      use: 'session',
+      valid: true,
+    ).all
+
     unless token.nil?
       token = token.token if token.respond_to?(:token)
       to_invalidate.reject!{|x| x.token == token}

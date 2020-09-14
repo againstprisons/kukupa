@@ -1,0 +1,10 @@
+#usersettings-mfa-index{'data-mfa-enabled': user.totp_enabled}
+  %h1= title
+
+  %p
+    = t(:'usersettings/mfa/disabled/content')
+
+  %p
+    %a.pure-button.button.button-primary{href: url('/user/mfa/totp')}
+      %i.fa.fa-key= ""
+      = t(:'usersettings/mfa/disabled/enable')

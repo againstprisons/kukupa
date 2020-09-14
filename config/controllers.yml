@@ -10,6 +10,10 @@ controllers:
   - path: /auth
     controller: AuthLoginController
 
+  - path: /user/mfa/totp
+    controller: UserSettingsMfaTotpController
+  - path: /user/mfa
+    controller: UserSettingsMfaController
   - path: /user
     controller: UserSettingsController
 

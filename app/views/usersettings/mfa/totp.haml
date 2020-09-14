@@ -1,0 +1,24 @@
+.midsplash-container
+  .midsplash.mfa-setup-totp
+    %h1= title
+
+    %form.pure-form.pure-form-stacked.form-main{method: "POST"}
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+
+      %p= t(:'usersettings/mfa/totp/content/one')
+      %p= t(:'usersettings/mfa/totp/content/two')
+      %p= t(:'usersettings/mfa/totp/content/three', secret: totp[:secret])
+
+      %p.center
+        %img{src: totp[:qrcode], style: 'margin:1rem;width:100%;max-width:400px'}
+
+      %label{for: 'totp-code'}= t(:'usersettings/mfa/totp/code')
+      %input#totp-code{type: 'text', name: 'code', required: true, placeholder: '123456', autofocus: true, autocomplete: 'one-time-code'}
+
+      %button.pure-button.button.button-primary{type: 'submit'}
+        %i.fa.fa-check= ""
+        = t(:'usersettings/mfa/totp/submit')
+
+      %a.pure-button.button{href: url('/user/mfa')}
+        %i.fa.fa-chevron-left= ""
+        = t(:'usersettings/mfa/totp/cancel')

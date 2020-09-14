@@ -1,0 +1,12 @@
+#usersettings-mfa-index{'data-mfa-enabled': user.totp_enabled}
+  %h1= title
+
+  .pure-g
+    .pure-u-1.pure-u-md-1-2
+      .form-main.x-margin
+        %h1= t(:'usersettings/mfa/enabled/totp/section_title')
+        %p= t(:'usersettings/mfa/enabled/totp/content')
+
+        %a.pure-button.button{href: url('/user/mfa/totp')}
+          %i.fa.fa-mobile= ""
+          = t(:'usersettings/mfa/enabled/totp/submit')

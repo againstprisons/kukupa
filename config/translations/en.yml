@@ -118,6 +118,30 @@
 
 # User settings - multi-factor authentication
 :'usersettings/mfa/title': "Multi-factor authentication"
+:'usersettings/mfa/disabled/content': "Multi-factor authentication for your account is currently disabled."
+:'usersettings/mfa/disabled/enable': "Enable multi-factor authentication"
+:'usersettings/mfa/enabled/totp/section_title': "App-based MFA"
+:'usersettings/mfa/enabled/totp/content': "To set up app-based multi-factor authentication again, click \"<%= t(:'usersettings/mfa/enabled/totp/submit') %>\" below. This will invalidate the codes produced by your previous authenticator app."
+:'usersettings/mfa/enabled/totp/submit': "Set up app-based MFA"
+:'usersettings/mfa/enabled/recovery/section_title': "Recovery codes"
+:'usersettings/mfa/enabled/recovery/no_recovery': "You have not viewed your recovery codes. We recommend that you do this as soon as possible."
+:'usersettings/mfa/enabled/recovery/content': "Recovery codes are the only way to regain access to your <%= e(site_name) %> account if you lose access to your MFA device(s)."
+:'usersettings/mfa/enabled/recovery/submit': "View recovery codes"
+:'usersettings/mfa/enabled/disable/section_title': "Disable multi-factor authentication"
+:'usersettings/mfa/enabled/disable/has_roles': "You can not disable multi-factor authentication as your account has permissions granted that require it to be enabled."
+:'usersettings/mfa/enabled/disable/content': "To disable multi-factor authentication, click the button below."
+:'usersettings/mfa/enabled/disable/submit': "Disable multi-factor authentication"
+
+# User settings - TOTP MFA
+:'usersettings/mfa/totp/title': "Enable app-based MFA"
+:'usersettings/mfa/totp/content/one': "To enable app-based multi-factor authentication, you will need an authenticator app such as Google Authenticator. You can get authenticator apps from your device's App Store."
+:'usersettings/mfa/totp/content/two': "Scan the QR code below in the \"Add account\" part of your authenticator app. Your authenticator application will give you a 6 digit code, which changes every 30 seconds. To log in to <%= e(site_name) %> after enabling app-based multi-factor authentication, you will need the code provided by your authenticator app."
+:'usersettings/mfa/totp/content/three': " If you can't scan the QR code, you can select \"Manual entry\" (or similar) in your authenticator app and type in the following key: <code><%= e(secret) %></code>."
+:'usersettings/mfa/totp/code': "Enter the verification code given to you by your authenticator app:"
+:'usersettings/mfa/totp/submit': "Check verification code"
+:'usersettings/mfa/totp/cancel': "Cancel and return to MFA settings"
+:'usersettings/mfa/totp/success': "Successfully enabled app-based multi-factor authentication!"
+:'usersettings/mfa/totp/errors/invalid_code': "The provided verification code was not valid. Please try again. If you continue to see this message, please check that the time on your device is accurate."
 
 # System admin - dashboard
 :'system/index/title': "System admin"

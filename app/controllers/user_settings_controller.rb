@@ -13,7 +13,7 @@ class Kukupa::Controllers::UserSettingsController < Kukupa::Controllers::Applica
     @user = current_user
 
     haml :'usersettings/layout', locals: {title: @title} do
-      haml :'usersettings/index', locals: {
+      haml :'usersettings/index', layout: false, locals: {
         title: @title,
         user: {
           user: @user,
