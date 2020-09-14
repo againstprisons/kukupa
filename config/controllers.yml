@@ -23,6 +23,12 @@ controllers:
 
   - path: /-/language
     controller: DashLanguageController
+  - path: /-/debug
+    controller: DashDebugController
+    only:
+      env:
+        - development
+        - test
 
   - path: /static
     controller: StaticController

@@ -25,6 +25,13 @@ module Kukupa::Controllers
 
     # Load in all the other controllers
     active_controllers.each do |c|
+      if c[:only]&.key?(:env)
+        envs = [c[:only][:env]].flatten
+        if envs.map{|e| ENV['RACK_ENV'] == e}.none?
+          next
+        end
+      end
+
       cname = Kukupa::Utils.camel_case_to_snake_case(c[:controller])
       require File.join(Kukupa.root, "app", "controllers", cname)
     end

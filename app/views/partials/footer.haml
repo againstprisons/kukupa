@@ -8,4 +8,7 @@
         %li
           %span= Kukupa.version
 
-  = haml :'partials/language_switcher'
+  = haml :'partials/language_switcher', layout: false
+
+  - if settings.development?
+    = haml :'partials/footer_debug_options', layout: false
