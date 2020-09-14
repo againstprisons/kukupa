@@ -19,6 +19,13 @@ class Kukupa::Models::User < Sequel::Model
     }
   end
 
+  def mfa_totp_instance
+    ROTP::TOTP.new(
+      self.decrypt(:totp_secret),
+      issuer: Kukupa.app_config['site-name']
+    )
+  end
+
   def password=(pw)
     self.password_hash = Kukupa::Crypto.password_hash(pw)
   end

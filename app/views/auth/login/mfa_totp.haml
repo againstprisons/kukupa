@@ -1,0 +1,15 @@
+.midsplash-container
+  .midsplash.login-mfa-totp
+    %h1= title
+
+    %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+
+      %p= t(:'auth/login/mfa/totp/content')
+
+      %label.sr-only{for: 'totp-code'}= t(:'auth/login/mfa/totp/code')
+      %input#totp-code{type: 'text', name: 'code', required: true, placeholder: '123456', autofocus: true, autocomplete: 'one-time-code'}
+
+      %button.pure-button.button.button-primary{type: 'submit'}
+        %i.fa.fa-sign-in= ""
+        = t(:'auth/login/mfa/totp/submit')

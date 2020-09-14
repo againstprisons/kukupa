@@ -44,10 +44,10 @@ class Kukupa::Controllers::AuthLoginController < Kukupa::Controllers::Applicatio
       return redirect request.path
     end
 
-    # if user.totp_enabled
-    #   session[:twofactor_uid] = user.id
-    #   return redirect to("/auth/mfa/totp")
-    # end
+    if user.totp_enabled
+      session[:twofactor_uid] = user.id
+      return redirect to("/auth/mfa/totp")
+    end
 
     # if we get here, user has successfully logged in
     token = user.login!
