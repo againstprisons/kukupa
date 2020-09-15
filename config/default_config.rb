@@ -33,7 +33,11 @@ module Kukupa
     "header-logo-url" => {
       :type => :text,
       :default => '',
-    }
+    },
+    "fund-max-spend-per-case-year" => {
+      :type => :number,
+      :default => 100,
+    },
   }
 
   APP_CONFIG_DEPRECATED_ENTRIES = {
