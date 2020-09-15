@@ -8,7 +8,7 @@ class Kukupa::Controllers::CaseIndexController < Kukupa::Controllers::CaseContro
 
   def index
     @all_cases = Kukupa::Models::Case.map do |c|
-      url = Addressable::URI.parse(url("/case/view/#{c.id}"))
+      url = Addressable::URI.parse(url("/case/#{c.id}/view"))
       advocate = Kukupa::Models::User[c.assigned_advocate]
 
       {
