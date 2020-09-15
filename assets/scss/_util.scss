@@ -21,6 +21,14 @@
   display: inline-block;
 }
 
+.inline-form {
+  display: inline-block;
+
+  .button {
+    width: auto !important;
+  }
+}
+
 .inline-list {
   display: block;
   list-style: none outside none;

@@ -1,0 +1,22 @@
+.case-view-spendmeter {
+  position: relative;
+  width: 100%;
+  height: $case_view_spendmeter_height;
+  background: $case_view_spendmeter_background;
+  border: 1px solid $case_view_spendmeter_border;
+  border-radius: $case_view_spendmeter_border_radius;
+
+  .case-view-spendmeter-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+
+    padding: 0.125rem 0.25rem;
+    text-align: right;
+
+    background: $case_view_spendmeter_foreground;
+    color: $case_view_spendmeter_text;
+    border-radius: $case_view_spendmeter_border_radius;
+  }
+}

@@ -118,6 +118,13 @@
 :'case/index/cases/no_cases': "No cases."
 :'case/index/cases/section_title': "Cases available to me"
 
+# Cases - view
+:'case/view/title': "Case: <%= e(name) %>"
+:'case/view/actions/send_mail': "Send mail"
+:'case/view/actions/edit': "Edit case"
+:'case/view/spend_summary/section_title': "Spending summary"
+:'case/view/spend_summary/content': "Spending so far this year for this case: <%= e(sprintf('$%.02f', amount)) %>"
+
 # User settings
 :'usersettings/title': "User settings"
 :'usersettings/change_name/section_title': "Change your name"
