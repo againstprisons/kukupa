@@ -57,3 +57,25 @@
     }
   }
 }
+
+blockquote {
+  position: relative;
+  margin-left: $blockquote_left_margin;
+  padding-left: $blockquote_left_margin;
+  border-left: $blockquote_left_border;
+
+  &:not(.blockquote-plain) {
+    border-left-color: transparent;
+
+    &:before {
+      position: absolute;
+      top: 0;
+      left: -#{$blockquote_left_margin / 2};
+
+      color: $blockquote_quote_color;
+      font-family: "FontAwesome";
+      font-size: 1.25em;
+      content: "\f10d";
+    }
+  }
+}

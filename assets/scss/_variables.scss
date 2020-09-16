@@ -39,3 +39,7 @@ $case_view_spendmeter_background: #fff;
 $case_view_spendmeter_foreground: $color_accent;
 $case_view_spendmeter_border: #000;
 $case_view_spendmeter_border_radius: 4px;
+
+$blockquote_quote_color: $color_foreground_dimmed;
+$blockquote_left_margin: 1em;
+$blockquote_left_border: 6px solid $blockquote_quote_color;
