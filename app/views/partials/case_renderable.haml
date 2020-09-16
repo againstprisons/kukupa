@@ -1,0 +1,67 @@
+- if rb[:type] == :case_note
+  .caserenderable-container{'data-rb-type': rb[:type]}
+    .caserenderable-header
+      %span.caserenderable-header-author
+        %i.fa.fa-file-o= ""
+        - if rb[:author].nil?
+          - if rb[:case_note].is_outside_request
+            = t(:'case_renderable/note/author/outside_request')
+          - else
+            = t(:'case_renderable/note/author/unknown')
+        - else
+          = succeed ': ' do
+            = t(:'case_renderable/note/author')
+          %strong
+            &= rb[:author]&.decrypt(:name)
+
+      %ul.inline-list
+        %li
+          = t(:'case_renderable/creation', ts: rb[:creation])
+
+        - rb[:actions]&.each do |link|
+          %li.case-renderable-action
+            %a{href: link[:url]}
+              %i.fa{class: link[:fa_icon]}= ""
+
+    .caserenderable-content
+      = rb[:content]
+
+- if rb[:type] == :spend
+  .caserenderable-container{'data-rb-type': rb[:type]}
+    .caserenderable-header
+      %ul.inline-list
+        %li
+          %i.fa.fa-dollar= ""
+          = t(:'case_renderable/spend/content', amount: rb[:amount])
+
+      %ul.inline-list
+        %li
+          = t(:'case_renderable/creation', ts: rb[:creation])
+
+        - rb[:actions]&.each do |link|
+          %li.case-renderable-action
+            %a{href: link[:url]}
+              %i.fa{class: link[:fa_icon]}= ""
+
+    .caserenderable-content
+      %ul.inline-list
+        %li
+          = succeed ': ' do
+            = t(:'case_renderable/spend/author')
+          %strong
+            &= rb[:author]&.decrypt(:name)
+
+        - if rb[:approver]
+          - if rb[:approver].id != rb[:author].id
+            %li
+              = succeed ': ' do
+                = t(:'case_renderable/spend/approver')
+              %strong
+                &= rb[:approver]&.decrypt(:name)
+
+        - else
+          %li
+            = t(:'case_renderable/spend/unapproved')
+
+      %blockquote
+        = rb[:notes]

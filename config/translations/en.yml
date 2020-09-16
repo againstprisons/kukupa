@@ -69,6 +69,16 @@
 :'editor/loading': "Please wait while we load the text editor. If you see this message for more than a few seconds, try refreshing the page."
 :'editor/failed': "Failed to load the text editor. Any text you enter may not be saved correctly. Refresh the page to try loading the editor again."
 
+# Case renderables
+:'case_renderable/creation': "<%= e(ts.strftime('%A, %B %e, %Y at %l:%M %P')) %>"
+:'case_renderable/note/author': "Author"
+:'case_renderable/note/author/outside_request': "Outside request"
+:'case_renderable/note/author/unknown': "Author unknown"
+:'case_renderable/spend/content': "Fund spending of <code><%= e(sprintf('$%.02f', amount)) %></code>"
+:'case_renderable/spend/author': "Added by"
+:'case_renderable/spend/approver': "Approved by"
+:'case_renderable/spend/unapproved': "Currently unapproved"
+
 # Maintenance
 :'maintenance/warning': "Maintenance mode is enabled!"
 
@@ -120,10 +130,14 @@
 
 # Cases - view
 :'case/view/title': "Case: <%= e(name) %>"
+:'case/view/actions/add_note': "Add note"
+:'case/view/actions/add_spend': "Add spend"
 :'case/view/actions/send_mail': "Send mail"
 :'case/view/actions/edit': "Edit case"
+:'case/view/actions/to_end_of_entries': "Jump to end"
 :'case/view/spend_summary/section_title': "Spending summary"
 :'case/view/spend_summary/content': "Approved spending so far this year for this case: <%= e(sprintf('$%.02f', amount)) %>"
+:'case/view/entries/section_title': "Notes"
 
 # User settings
 :'usersettings/title': "User settings"

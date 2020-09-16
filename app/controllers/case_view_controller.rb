@@ -1,6 +1,8 @@
 class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseController
   add_route :get, '/'
 
+  include Kukupa::Helpers::CaseViewHelpers
+
   def before
     return halt 404 unless logged_in?
     @user = current_user
@@ -15,6 +17,7 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
 
     @case_name = @case.get_name
     @title = t(:'case/view/title', name: @case_name)
+    @renderables = get_renderables(@case)
 
     @spend_year = Kukupa::Models::CaseSpendYear
       .get_case_year(@case, DateTime.now)
@@ -29,6 +32,7 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
       title: @title,
       case_obj: @case,
       case_name: @case_name,
+      renderables: @renderables,
       spend_year: @spend_year,
       spend_year_percent: @spend_year_percent,
     })

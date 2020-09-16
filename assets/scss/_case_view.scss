@@ -20,3 +20,48 @@
     border-radius: $case_view_spendmeter_border_radius;
   }
 }
+
+.caserenderable-container {
+  border: 1px solid $case_renderable_border;
+  border-radius: $case_renderable_border_radius;
+  background: $case_renderable_background;
+  color: $case_renderable_foreground;
+
+  margin: 1rem 0;
+
+  .caserenderable-header {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    @media screen and (min-width: $responsive_width) {
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    background: $case_renderable_header_background;
+    color: $case_renderable_header_foreground;
+
+    border-bottom: 1px solid $case_renderable_header_border;
+    border-top-left-radius: $case_renderable_border_radius;
+    border-top-right-radius: $case_renderable_border_radius;
+
+    padding: 0.25rem 0.5rem;
+
+    .case-renderable-action {
+      a {
+        color: $case_renderable_header_foreground;
+        text-decoration: none;
+
+        &:focus, &:hover {
+          color: $color_accent;
+        }
+      }
+    }
+  }
+
+  .caserenderable-content {
+    padding: 0.25rem 0.5rem;
+  }
+}
