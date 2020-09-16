@@ -12,6 +12,9 @@ class Kukupa::Models::CaseSpendYear < Sequel::Model
     # is a float of the spend for that year
     years = {}
     Kukupa::Models::CaseSpend.where(case: c).each do |spend|
+      # Skip unapproved spends in total
+      next if spend.approver.nil?
+
       years[spend.get_year] ||= 0.0
       years[spend.get_year] += spend.decrypt(:amount).to_f
     end

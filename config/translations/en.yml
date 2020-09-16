@@ -123,7 +123,7 @@
 :'case/view/actions/send_mail': "Send mail"
 :'case/view/actions/edit': "Edit case"
 :'case/view/spend_summary/section_title': "Spending summary"
-:'case/view/spend_summary/content': "Spending so far this year for this case: <%= e(sprintf('$%.02f', amount)) %>"
+:'case/view/spend_summary/content': "Approved spending so far this year for this case: <%= e(sprintf('$%.02f', amount)) %>"
 
 # User settings
 :'usersettings/title': "User settings"
