@@ -19,14 +19,12 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
     @title = t(:'case/view/title', name: @case_name)
     @renderables = get_renderables(@case)
 
+    @spend_year_max = Kukupa.app_config['fund-max-spend-per-case-year'].to_f
     @spend_year = Kukupa::Models::CaseSpendYear
       .get_case_year(@case, DateTime.now)
       &.decrypt(:amount)
       &.to_f || 0.0
-
-    @spend_year_percent = (
-      @spend_year / (Kukupa.app_config['fund-max-spend-per-case-year'].to_f)
-    )
+    @spend_year_percent = @spend_year / @spend_year_max
 
     return haml(:'case/view', :locals => {
       title: @title,
@@ -34,6 +32,7 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
       case_name: @case_name,
       renderables: @renderables,
       spend_year: @spend_year,
+      spend_year_max: @spend_year_max,
       spend_year_percent: @spend_year_percent,
     })
   end

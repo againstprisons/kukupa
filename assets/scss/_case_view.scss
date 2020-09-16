@@ -63,5 +63,13 @@
 
   .caserenderable-content {
     padding: 0.25rem 0.5rem;
+
+    ul:not(.inline-list) {
+      padding: 0 0 0 2rem;
+
+      li {
+        margin: 0;
+      }
+    }
   }
 }

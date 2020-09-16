@@ -136,7 +136,7 @@
 :'case/view/actions/edit': "Edit case"
 :'case/view/actions/to_end_of_entries': "Jump to end"
 :'case/view/spend_summary/section_title': "Spending summary"
-:'case/view/spend_summary/content': "Approved spending so far this year for this case: <%= e(sprintf('$%.02f', amount)) %>"
+:'case/view/spend_summary/content': "Approved spending so far this year for this case: <%= e(sprintf('$%.02f', amount)) %> of <%= e(sprintf('$%.02f', max)) %>"
 :'case/view/entries/section_title': "Notes"
 
 # User settings
