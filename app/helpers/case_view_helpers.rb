@@ -12,12 +12,23 @@ module Kukupa::Helpers::CaseViewHelpers
         },
       ]
 
+      begin
+        metadata = JSON.parse(cn.decrypt(:metadata) || '{}')
+        metadata = metadata.keys.map do |k|
+          [k.to_sym, metadata[k]]
+        end.to_h
+      rescue
+        metadata = {}
+      end
+
       items << {
         type: :case_note,
         id: "CaseNote[#{cn.id}]",
         case_note: cn,
         creation: cn.creation,
         content: cn.decrypt(:content),
+        outside_request: cn.is_outside_request,
+        metadata: metadata,
         author: Kukupa::Models::User[cn.author],
         actions: actions,
       }

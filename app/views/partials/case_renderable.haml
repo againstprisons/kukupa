@@ -25,7 +25,28 @@
               %i.fa{class: link[:fa_icon]}= ""
 
     .caserenderable-content
-      = rb[:content]
+      - if rb[:outside_request]
+        .cr-outsidereq-data
+          %ul.inline-list
+            %li
+              = succeed ': ' do
+                = t(:'case_renderable/note/outside_request/name')
+              %strong
+                &= rb[:metadata][:name]
+            %li
+              = succeed ': ' do
+                = t(:'case_renderable/note/outside_request/phone')
+              %span
+                &= rb[:metadata][:phone]
+            %li
+              = succeed ': ' do
+                = t(:'case_renderable/note/outside_request/email')
+              %span
+                &= rb[:metadata][:email]
+
+        %blockquote= rb[:content]
+      - else
+        = rb[:content]
 
 - if rb[:type] == :spend
   .caserenderable-container{'data-rb-type': rb[:type]}
