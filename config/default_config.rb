@@ -34,6 +34,14 @@ module Kukupa
       :type => :text,
       :default => '',
     },
+    "fund-min-spend" => {
+      :type => :number,
+      :default => 0,
+    },
+    "fund-max-auto-approve" => {
+      :type => :number,
+      :default => 0,
+    },
     "fund-max-spend-per-case-year" => {
       :type => :number,
       :default => 100,
