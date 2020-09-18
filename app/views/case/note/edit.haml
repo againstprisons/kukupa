@@ -1,0 +1,37 @@
+.case-note-edit{'data-case-id': case_obj.id}
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: url("/case/#{case_obj.id}/view##{note_obj.anchor}")}
+      %i.fa.fa-chevron-left= ""
+      %span
+        = t(:'back')
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'case/note/edit/edit/section_title')
+
+    - if note_obj.is_outside_request
+      .message.message-warning
+        = t(:'case/note/edit/edit/errors/outside_request')
+
+    = haml :'partials/editor', layout: false, locals: {editor_name: 'content', editor_label: t(:'case/note/edit/edit/note_field'), editor_data: note_content}
+    .y-margin= ""
+
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-pencil-square-o= ""
+      = t(:'case/note/edit/edit/submit')
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: urls[:delete]}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'case/note/edit/delete/section_title')
+
+    %label{for: 'delete-confirm'}
+      = t(:'case/note/edit/delete/confirm')
+    %input#delete-confirm{name: 'confirm', type: 'text', required: true}
+
+    %button.pure-button.button.button-error{type: 'submit'}
+      %i.fa.fa-trash= ""
+      = t(:'case/note/edit/delete/submit')
+
+.async-load{:'data-sources' => JSON.generate(['/static/editor.bundle.js'])}

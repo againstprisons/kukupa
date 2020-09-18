@@ -24,6 +24,8 @@ controllers:
 
   - path: /case/:case_id/note/add
     controller: CaseNoteAddController
+  - path: /case/:case_id/note/:note_id
+    controller: CaseNoteEditController
   - path: /case/:case_id/view
     controller: CaseViewController
   - path: /case
