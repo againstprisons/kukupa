@@ -51,7 +51,8 @@
               %span
                 &= rb[:metadata][:email]
 
-        %blockquote= rb[:content]
+        %blockquote.blockquote-fancy
+          = rb[:content]
       - else
         = rb[:content]
 
@@ -95,5 +96,5 @@
             %i.fa.fa-warning= ""
             = t(:'case_renderable/spend/unapproved')
 
-      %blockquote
+      %blockquote.blockquote-fancy
         = rb[:notes]

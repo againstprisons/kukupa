@@ -64,7 +64,7 @@ blockquote {
   padding-left: $blockquote_left_margin;
   border-left: $blockquote_left_border;
 
-  &:not(.blockquote-plain) {
+  &.blockquote-fancy {
     border-left-color: transparent;
 
     &:before {
