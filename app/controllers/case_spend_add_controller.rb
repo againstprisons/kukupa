@@ -55,12 +55,12 @@ class Kukupa::Controllers::CaseSpendAddController < Kukupa::Controllers::CaseCon
     #   - set approver to self
     #   - regenerate aggregate for this case
     if @amount <= Kukupa.app_config['fund-max-auto-approve']
-      aggregate = Kukupa::Models::CaseSpendYear.get_case_year(@case, DateTime.now)
-      if aggregate && (aggregate.decrypt(:amount).to_f + @amount) <= Kukupa.app_config['fund-max-spend-per-case-year']
+      aggregate = Kukupa::Models::CaseSpendAggregate.get_case_year_total(@case, DateTime.now)
+      if aggregate <= Kukupa.app_config['fund-max-spend-per-case-year']
         @spend.approver = @user.id
         @spend.save
 
-        Kukupa::Models::CaseSpendYear.create_aggregate_for_case(@case)
+        Kukupa::Models::CaseSpendAggregate.create_aggregate_for_case(@case)
 
         flash :success, t(:'case/spend/add/success/auto_approve', threshold: Kukupa.app_config['fund-max-auto-approve'])
         redirect url("/case/#{@case.id}/view##{@spend.anchor}")
