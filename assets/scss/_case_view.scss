@@ -81,6 +81,16 @@
       }
     }
   }
+
+  &:target {
+    .caserenderable-header {
+      background: $case_renderable_target_header_background;
+
+      .caserenderable-header-iconlink {
+        color: $case_renderable_header_foreground !important;
+      }
+    }
+  }
 }
 
 .case-note-add, .case-note-edit {
