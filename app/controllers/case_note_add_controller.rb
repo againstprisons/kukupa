@@ -43,6 +43,9 @@ class Kukupa::Controllers::CaseNoteAddController < Kukupa::Controllers::CaseCont
     @note.encrypt(:content, @content)
     @note.save
 
+    # TODO: send "new note" email to the assigned advocate for this case
+    # if the assigned advocate was not the one that created this case note
+
     # redirect back
     flash :success, t(:'case/note/add/success')
     redirect url("/case/#{@case.id}/view##{@note.anchor}")

@@ -86,6 +86,8 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
     else
       @spend.approver = nil
       @spend.save
+
+      # TODO: send "new spending request to be approved" email
     end
 
     # regenerate aggregates

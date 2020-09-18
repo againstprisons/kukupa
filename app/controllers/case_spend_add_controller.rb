@@ -65,6 +65,9 @@ class Kukupa::Controllers::CaseSpendAddController < Kukupa::Controllers::CaseCon
         flash :success, t(:'case/spend/add/success/auto_approve', threshold: Kukupa.app_config['fund-max-auto-approve'])
         redirect url("/case/#{@case.id}/view##{@spend.anchor}")
       end
+
+    else
+      # TODO: send "new spending request to be approved" email
     end
 
     # redirect back
