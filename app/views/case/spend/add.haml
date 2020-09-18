@@ -1,0 +1,24 @@
+.case-spend-add{'data-case-id': case_obj.id}
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: url("/case/#{case_obj.id}/view")}
+      %i.fa.fa-chevron-left= ""
+      %span
+        = t(:'back')
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'case/note/add/section_title')
+
+    %label{for: 'amount'}= t(:'case/spend/add/amount_field')
+    %input#amount{type: 'number', name: 'amount', required: true}
+
+    = haml :'partials/editor', layout: false, locals: {editor_name: 'content', editor_label: t(:'case/spend/add/note_field')}
+    .y-margin= ""
+
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-pencil-square-o= ""
+      = t(:'case/spend/add/submit')
+
+.async-load{:'data-sources' => JSON.generate(['/static/editor.bundle.js'])}

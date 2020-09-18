@@ -165,6 +165,17 @@
 :'case/note/edit/delete/success': "Deleted case note <%= e(note_id) %>."
 :'case/note/edit/delete/errors/no_confirm': "Refusing to delete this case note as the confirmation was not correct."
 
+# Cases - spend add
+:'case/spend/add/title': "Add case spend: <%= e(name) %>"
+:'case/spend/add/section_title': "Add case spend"
+:'case/spend/add/amount_field': "Spending amount"
+:'case/spend/add/note_field': "Note content"
+:'case/spend/add/submit': "Add spend"
+:'case/spend/add/success': "This case spending was added, and is pending approval."
+:'case/spend/add/success/auto_approve': "This case spending was added, and was automatically approved as it is under the approval threshold (<%= e(sprintf('$%.02f', threshold)) %>)."
+:'case/spend/add/errors/below_minimum': "The amount entered is below the minimum required spending amount (<%= e(sprintf('$%.02f', min)) %>)."
+:'case/spend/add/errors/no_content': "No notes were provided for this case spend."
+
 # User settings
 :'usersettings/title': "User settings"
 :'usersettings/change_name/section_title': "Change your name"

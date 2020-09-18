@@ -4,8 +4,6 @@ class Kukupa::Controllers::CaseNoteAddController < Kukupa::Controllers::CaseCont
   add_route :get, '/'
   add_route :post, '/'
 
-  include Kukupa::Helpers::CaseViewHelpers
-
   def before
     return halt 404 unless logged_in?
     @user = current_user
