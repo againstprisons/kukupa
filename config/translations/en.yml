@@ -143,6 +143,14 @@
 :'case/view/spend_summary/content': "Approved spending so far this year for this case: <%= e(sprintf('$%.02f', amount)) %> of <%= e(sprintf('$%.02f', max)) %>"
 :'case/view/entries/section_title': "Notes"
 
+# Cases - note add
+:'case/note/add/title': "Add case note: <%= e(name) %>"
+:'case/note/add/section_title': "Enter case note"
+:'case/note/add/note_field': "Note content"
+:'case/note/add/submit': "Add note"
+:'case/note/add/success': "Your case note was added."
+:'case/note/add/errors/no_content': "No content was provided for this case note."
+
 # User settings
 :'usersettings/title': "User settings"
 :'usersettings/change_name/section_title': "Change your name"
