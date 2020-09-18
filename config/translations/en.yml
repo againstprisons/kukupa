@@ -77,7 +77,7 @@
 :'case_renderable/spend/content': "Fund spending of <code><%= e(sprintf('$%.02f', amount)) %></code>"
 :'case_renderable/spend/author': "Added by"
 :'case_renderable/spend/approver': "Approved by"
-:'case_renderable/spend/unapproved': "Currently unapproved"
+:'case_renderable/spend/unapproved': "Not yet approved"
 
 # Maintenance
 :'maintenance/warning': "Maintenance mode is enabled!"

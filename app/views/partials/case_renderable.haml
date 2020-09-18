@@ -2,10 +2,7 @@
   .caserenderable-container{'data-rb-type': rb[:type]}
     .caserenderable-header
       %span.caserenderable-header-author
-        - if rb[:case_note].is_outside_request
-          %i.fa.fa-question.fa-fw= ""
-        - else
-          %i.fa.fa-file-o.fa-fw= ""
+        %i.fa.fa-fw{title: rb[:id], class: (rb[:case_note].is_outside_request ? 'fa-question' : 'fa-file-text-o')}= ""
 
         - if rb[:author].nil?
           - if rb[:case_note].is_outside_request
@@ -35,7 +32,7 @@
     .caserenderable-header
       %ul.inline-list
         %li
-          %i.fa.fa-dollar.fa-fw= ""
+          %i.fa.fa-fw{title: rb[:id], class: 'fa-dollar'}= ""
           = t(:'case_renderable/spend/content', amount: rb[:amount])
 
       %ul.inline-list

@@ -14,6 +14,7 @@ module Kukupa::Helpers::CaseViewHelpers
 
       items << {
         type: :case_note,
+        id: "CaseNote[#{cn.id}]",
         case_note: cn,
         creation: cn.creation,
         content: cn.decrypt(:content),
@@ -39,6 +40,7 @@ module Kukupa::Helpers::CaseViewHelpers
 
       items << {
         type: :spend,
+        id: "CaseSpend[#{cs.id}]",
         case_spend: cs,
         creation: cs.creation,
         amount: cs.decrypt(:amount),
