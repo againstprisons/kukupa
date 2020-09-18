@@ -71,6 +71,7 @@
 
 # Case renderables
 :'case_renderable/creation': "<%= e(ts.strftime('%A, %B %e, %Y at %l:%M %P')) %>"
+:'case_renderable/creation/edited': "(edited)"
 :'case_renderable/note/author': "Author"
 :'case_renderable/note/author/outside_request': "Outside request"
 :'case_renderable/note/author/unknown': "Author unknown"

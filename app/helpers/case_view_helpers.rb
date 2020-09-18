@@ -27,6 +27,7 @@ module Kukupa::Helpers::CaseViewHelpers
         anchor: cn.anchor,
         case_note: cn,
         creation: cn.creation,
+        edited: cn.edited,
         content: cn.decrypt(:content),
         outside_request: cn.is_outside_request,
         metadata: metadata,

@@ -19,7 +19,12 @@
 
       %ul.inline-list
         %li
-          = t(:'case_renderable/creation', ts: rb[:creation])
+          %span.case-renderable-creation
+            = t(:'case_renderable/creation', ts: rb[:creation])
+
+            - if rb[:edited]
+              %span.case-renderable-creation-edited{title: t(:'case_renderable/creation', ts: rb[:edited])}
+                = t(:'case_renderable/creation/edited')
 
         - rb[:actions]&.each do |link|
           %li.case-renderable-action
