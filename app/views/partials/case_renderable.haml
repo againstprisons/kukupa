@@ -1,8 +1,10 @@
 - if rb[:type] == :case_note
-  .caserenderable-container{'data-rb-type': rb[:type]}
+  .caserenderable-container{'data-rb-type': rb[:type], id: rb[:anchor]}
     .caserenderable-header
       %span.caserenderable-header-author
-        %i.fa.fa-fw{title: rb[:id], class: (rb[:case_note].is_outside_request ? 'fa-question' : 'fa-file-text-o')}= ""
+        %a.caserenderable-header-iconlink{href: "##{rb[:anchor]}"}
+          %i.fa.fa-fw{title: rb[:id], class: (rb[:case_note].is_outside_request ? 'fa-question' : 'fa-file-text-o')}
+            = ""
 
         - if rb[:author].nil?
           - if rb[:case_note].is_outside_request
@@ -49,12 +51,14 @@
         = rb[:content]
 
 - if rb[:type] == :spend
-  .caserenderable-container{'data-rb-type': rb[:type]}
+  .caserenderable-container{'data-rb-type': rb[:type], id: rb[:anchor]}
     .caserenderable-header
-      %ul.inline-list
-        %li
-          %i.fa.fa-fw{title: rb[:id], class: 'fa-dollar'}= ""
-          = t(:'case_renderable/spend/content', amount: rb[:amount])
+      %span.caserenderable-header-fund
+        %a.caserenderable-header-iconlink{href: "##{rb[:anchor]}"}
+          %i.fa.fa-fw{title: rb[:id], class: 'fa-dollar'}
+            = ""
+
+        = t(:'case_renderable/spend/content', amount: rb[:amount])
 
       %ul.inline-list
         %li

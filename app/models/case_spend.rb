@@ -1,4 +1,8 @@
 class Kukupa::Models::CaseSpend < Sequel::Model
+  def anchor
+    "CaseSpend-#{self.id}"
+  end
+
   def get_year
     self.creation.strftime("%Y")
   end

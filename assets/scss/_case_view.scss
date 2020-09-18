@@ -49,6 +49,15 @@
 
     padding: 0.25rem 0.5rem;
 
+    .caserenderable-header-iconlink {
+      text-decoration: none;
+      color: $case_renderable_header_foreground;
+
+      &:focus, &:hover {
+        color: $color_accent;
+      }
+    }
+
     .case-renderable-action {
       a {
         color: $case_renderable_header_foreground;
