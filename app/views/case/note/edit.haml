@@ -8,19 +8,21 @@
         = t(:'back')
 
   %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
-    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
     %h1= t(:'case/note/edit/edit/section_title')
 
     - if note_obj.is_outside_request
       .message.message-warning
         = t(:'case/note/edit/edit/errors/outside_request')
 
-    = haml :'partials/editor', layout: false, locals: {editor_name: 'content', editor_label: t(:'case/note/edit/edit/note_field'), editor_data: note_content}
-    .y-margin= ""
+    - else
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
 
-    %button.pure-button.button.button-primary{type: 'submit'}
-      %i.fa.fa-pencil-square-o= ""
-      = t(:'case/note/edit/edit/submit')
+      = haml :'partials/editor', layout: false, locals: {editor_name: 'content', editor_label: t(:'case/note/edit/edit/note_field'), editor_data: note_content}
+      .y-margin= ""
+
+      %button.pure-button.button.button-primary{type: 'submit'}
+        %i.fa.fa-pencil-square-o= ""
+        = t(:'case/note/edit/edit/submit')
 
   %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: urls[:delete]}
     %input{type: 'hidden', name: '_csrf', value: session[:csrf]}

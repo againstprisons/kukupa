@@ -176,6 +176,22 @@
 :'case/spend/add/errors/below_minimum': "The amount entered is below the minimum required spending amount (<%= e(sprintf('$%.02f', min)) %>)."
 :'case/spend/add/errors/no_content': "No notes were provided for this case spend."
 
+# Cases - spend edit
+:'case/spend/edit/title': "Case spend <%= e(spend_id) %>: <%= e(name) %>"
+:'case/spend/edit/edit/section_title': "Edit case spend"
+:'case/spend/edit/edit/amount_field': "Spending amount"
+:'case/spend/edit/edit/note_field': "Note content"
+:'case/spend/edit/edit/submit': "Save spend"
+:'case/spend/edit/edit/success': "Your case spend was saved."
+:'case/spend/edit/edit/errors/is_approved': "You can not edit an approved spend unless you were the one who approved it."
+:'case/spend/edit/edit/errors/no_content': "No notes were provided for this case spend."
+:'case/spend/edit/delete/section_title': "Delete case spend"
+:'case/spend/edit/delete/confirm': "To delete this case spend, enter \"DELETE\" (in all caps) into the box below, and click \"<%= t(:'case/spend/edit/delete/submit') %>\"."
+:'case/spend/edit/delete/submit': "Delete spend"
+:'case/spend/edit/delete/success': "Deleted case spend <%= e(spend_id) %>."
+:'case/spend/edit/delete/errors/is_approved': "You can not delete an approved spend unless you were the one who approved it."
+:'case/spend/edit/delete/errors/no_confirm': "Refusing to delete this case spend as the confirmation was not correct."
+
 # User settings
 :'usersettings/title': "User settings"
 :'usersettings/change_name/section_title': "Change your name"
