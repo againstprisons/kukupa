@@ -1,5 +1,11 @@
 %h1= title
 
+- if has_role?('case:create')
+  .inline-form
+    %a.pure-button.button{href: url('/case/create')}
+      %i.fa.fa-plus= ""
+      = t(:'case/create/title')
+
 - if has_role?('case:stats:view')
   .form-main
     %h1= t(:'case/index/stats/section_title')

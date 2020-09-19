@@ -1,0 +1,33 @@
+%h1= title
+
+.inline-form
+  %a.pure-button.button{href: url('/case')}
+    %i.fa.fa-chevron-left= ""
+    = t(:'back')
+
+%form.pure-form.pure-form-stacked.form-main{method: "POST"}
+  %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+  %h1= t(:'case/create/section_title')
+
+  %label{for: 'first_name'}
+    = t(:'name/first')
+    %span.badge= t(:'required')
+  %input#first_name{type: 'text', name: 'first_name', required: true, placeholder: t(:'name/first')}
+
+  %label{for: 'middle_name'}
+    = t(:'name/middle')
+  %input#middle_name{type: 'text', name: 'middle_name', required: false, placeholder: t(:'name/middle')}
+
+  %label{for: 'last_name'}
+    = t(:'name/last')
+    %span.badge= t(:'required')
+  %input#last_name{type: 'text', name: 'last_name', required: true, placeholder: t(:'name/last')}
+
+  %label{for: 'prisoner_number'}
+    = t(:'prisoner_number')
+    %span.badge= t(:'required')
+  %input#prisoner_number{type: 'text', name: 'prisoner_number', required: true, placeholder: t(:'prisoner_number')}
+
+  %button.pure-button.button.button-primary{type: 'submit'}
+    %i.fa.fa-plus= ""
+    = t(:'case/create/submit')

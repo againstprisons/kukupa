@@ -30,6 +30,9 @@
 :'password/new/confirm': "New password (again, to confirm)"
 :'password/change': "Change password"
 :'name': "Name"
+:'name/first': "First name"
+:'name/middle': "Middle name"
+:'name/last': "Last name"
 :'prisoner_number': "Prisoner number"
 :'prison': "Prison"
 :'prison/unknown': "Unknown prison"
@@ -48,6 +51,7 @@
 :'advocate/none_assigned': "No advocate assigned"
 :'unknown': "(unknown)"
 :'unconfirmed': "(unconfirmed)"
+:'required': "Required"
 
 # Some generic stuff
 :'required_field_missing': "A required field was not provided."
@@ -147,6 +151,13 @@
 :'case/index/cases/item/total_spend/year/percent': "<%= e(sprintf('%.01f%%', (amount / max) * 100)) %> of yearly max"
 :'case/index/stats/section_title': "Statistics"
 :'case/index/stats/spend_recent': "Last month, a total of <code><%= e(sprintf('$%.02f', last)) %></code> was spent from the advocacy fund. So far this month, a total of <code><%= e(sprintf('$%.02f', current)) %></code> has been spent."
+
+# Cases - create
+:'case/create/title': "Create case"
+:'case/create/section_title': "Case details"
+:'case/create/submit': "Create case"
+:'case/create/success': "Successfully created case as ID <code><%= e(case_id) %></code>."
+:'case/create/errors/prn_exists': "The prisoner number you have entered is already in use by a case."
 
 # Cases - view
 :'case/view/title': "Case: <%= e(name) %>"

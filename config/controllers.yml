@@ -32,6 +32,8 @@ controllers:
     controller: CaseNoteEditController
   - path: /case/:case_id/view
     controller: CaseViewController
+  - path: /case/create
+    controller: CaseCreateController
   - path: /case
     controller: CaseIndexController
 
