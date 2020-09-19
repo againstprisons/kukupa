@@ -24,6 +24,8 @@ controllers:
 
   - path: /case/:case_id/task/add
     controller: CaseTaskAddController
+  - path: /case/:case_id/task/:task_id
+    controller: CaseTaskEditController
   - path: /case/:case_id/spend/add
     controller: CaseSpendAddController
   - path: /case/:case_id/spend/:spend_id

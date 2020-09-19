@@ -245,6 +245,14 @@
 :'case/task/add/success': "Successfully created task."
 :'case/task/add/errors/no_content': "No task description was provided."
 :'case/task/add/errors/invalid_user': "The form submission included a task assignee that does not have permission to access this case, or does not exist. Please try again."
+:'case/task/edit/title': "Task <%= e(task_id) %>: <%= e(name) %>"
+:'case/task/edit/edit/section_title': "Task details"
+:'case/task/edit/edit/content_field': "Task description"
+:'case/task/edit/edit/assignee_field': "Task assignee"
+:'case/task/edit/edit/submit': "Edit task"
+:'case/task/edit/edit/success': "Successfully edited task."
+:'case/task/edit/edit/errors/no_content': "No task description was provided."
+:'case/task/edit/edit/errors/invalid_user': "The form submission included a task assignee that does not have permission to access this case, or does not exist. Please try again."
 
 # User settings
 :'usersettings/title': "User settings"
