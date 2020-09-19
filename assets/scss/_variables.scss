@@ -1,8 +1,10 @@
 $responsive_width: 58rem;
 $color_background: #fff;
+$color_background_dimmed: #f0f0f0;
 $color_foreground: #000;
-$color_foreground_dimmed: #888;
+$color_foreground_dimmed: #606060;
 $color_accent: #0aa;
+$color_highlight: #bff;
 
 $symbolic_success_background: #0b0;
 $symbolic_success_foreground: #dfb;
@@ -31,9 +33,9 @@ $body_footer_color: $color_foreground_dimmed;
 $body_footer_font_size: 0.75rem;
 $body_footer_padding: 1rem;
 
-$badge_foreground: #777;
-$badge_background: #f2f2f2;
-$badge_border: #ccc;
+$badge_foreground: $color_foreground_dimmed;
+$badge_background: $color_background_dimmed;
+$badge_border: $color_foreground_dimmed;
 
 $midsplash_width: 32rem;
 
@@ -44,14 +46,14 @@ $case_view_spendmeter_foreground: $color_accent;
 $case_view_spendmeter_border: #000;
 $case_view_spendmeter_border_radius: 4px;
 
-$case_renderable_background: #fff;
-$case_renderable_foreground: #000;
-$case_renderable_border: #000;
+$case_renderable_background: $color_background;
+$case_renderable_foreground: $color_foreground;
+$case_renderable_border: $color_foreground;
 $case_renderable_border_radius: 4px;
-$case_renderable_target_header_background: lighten($color_accent, 50%);
-$case_renderable_header_background: #f0f0f0;
-$case_renderable_header_foreground: #000;
-$case_renderable_header_border: #000;
+$case_renderable_target_header_background: $color_highlight;
+$case_renderable_header_background: $color_background_dimmed;
+$case_renderable_header_foreground: $color_foreground;
+$case_renderable_header_border: $color_foreground_dimmed;
 
 $blockquote_quote_color: $color_foreground_dimmed;
 $blockquote_left_margin: 1em;
