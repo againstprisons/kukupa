@@ -253,6 +253,11 @@
 :'case/task/edit/edit/success': "Successfully edited task."
 :'case/task/edit/edit/errors/no_content': "No task description was provided."
 :'case/task/edit/edit/errors/invalid_user': "The form submission included a task assignee that does not have permission to access this case, or does not exist. Please try again."
+:'case/task/edit/complete/section_title': "Mark task completed"
+:'case/task/edit/complete/content': "Click the \"<%= t(:'case/task/edit/complete/submit') %>\" button below to mark the task as completed by you."
+:'case/task/edit/complete/submit': "Mark as completed"
+:'case/task/edit/complete/success': "Task <%= e(task_id) %> marked as complete at <%= t(:'case_renderable/creation', ts: ts) %>."
+:'case/task/edit/complete/errors/already_complete': "This task has already been marked as complete."
 
 # User settings
 :'usersettings/title': "User settings"

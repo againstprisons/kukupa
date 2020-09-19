@@ -27,3 +27,14 @@
     %button.pure-button.button.button-primary{type: 'submit'}
       %i.fa.fa-pencil-square-o= ""
       = t(:'case/note/edit/edit/submit')
+
+  - if task_obj.completion.nil?
+    %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: urls[:complete]}
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+      %h1= t(:'case/task/edit/complete/section_title')
+
+      %p= t(:'case/task/edit/complete/content')
+
+      %button.pure-button.button.button-success{type: 'submit'}
+        %i.fa.fa-check= ""
+        = t(:'case/task/edit/complete/submit')
