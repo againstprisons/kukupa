@@ -30,11 +30,35 @@
 
   - if task_obj.completion.nil?
     %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: urls[:complete]}
-      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
       %h1= t(:'case/task/edit/complete/section_title')
 
-      %p= t(:'case/task/edit/complete/content')
+      - if current_user.id == task_obj.assigned_to || current_user.id == task_obj.author
+        %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
 
-      %button.pure-button.button.button-success{type: 'submit'}
-        %i.fa.fa-check= ""
-        = t(:'case/task/edit/complete/submit')
+        %p= t(:'case/task/edit/complete/content')
+
+        %button.pure-button.button.button-success{type: 'submit'}
+          %i.fa.fa-check= ""
+          = t(:'case/task/edit/complete/submit')
+
+      - else
+        .message.message-error
+          = t(:'case/task/edit/complete/errors/not_author')
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: urls[:delete]}
+    %h1= t(:'case/task/edit/delete/section_title')
+
+    - if current_user.id == task_obj.assigned_to || current_user.id == task_obj.author
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+
+      %label{for: 'delete-confirm'}
+        = t(:'case/task/edit/delete/confirm')
+      %input#delete-confirm{name: 'confirm', type: 'text', required: true}
+
+      %button.pure-button.button.button-error{type: 'submit'}
+        %i.fa.fa-trash= ""
+        = t(:'case/task/edit/delete/submit')
+
+    - else
+      .message.message-error
+        = t(:'case/task/edit/delete/errors/not_author')

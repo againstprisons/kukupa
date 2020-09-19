@@ -257,7 +257,14 @@
 :'case/task/edit/complete/content': "Click the \"<%= t(:'case/task/edit/complete/submit') %>\" button below to mark the task as completed by you."
 :'case/task/edit/complete/submit': "Mark as completed"
 :'case/task/edit/complete/success': "Task <%= e(task_id) %> marked as complete at <%= t(:'case_renderable/creation', ts: ts) %>."
+:'case/task/edit/complete/errors/not_author': "You can not mark a task as complete unless you are the task's author or assignee."
 :'case/task/edit/complete/errors/already_complete': "This task has already been marked as complete."
+:'case/task/edit/delete/section_title': "Delete task"
+:'case/task/edit/delete/confirm': "To delete this task, enter \"DELETE\" (in all caps) into the box below, and click \"<%= t(:'case/task/edit/delete/submit') %>\"."
+:'case/task/edit/delete/submit': "Delete task"
+:'case/task/edit/delete/success': "Deleted case task <%= e(task_id) %>."
+:'case/task/edit/delete/errors/not_author': "You can not delete a task unless you are the task's author or assignee."
+:'case/task/edit/delete/errors/no_confirm': "Refusing to delete this case spend as the confirmation was not correct."
 
 # User settings
 :'usersettings/title': "User settings"

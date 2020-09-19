@@ -2,6 +2,7 @@ class Kukupa::Controllers::CaseTaskEditController < Kukupa::Controllers::CaseCon
   add_route :get, '/'
   add_route :post, '/'
   add_route :post, '/complete', method: :complete
+  add_route :post, '/delete', method: :delete
 
   include Kukupa::Helpers::CaseHelpers
 
@@ -28,6 +29,7 @@ class Kukupa::Controllers::CaseTaskEditController < Kukupa::Controllers::CaseCon
     if request.get?
       return haml(:'case/task/edit', :locals => {
         title: @title,
+        current_user: @user,
         case_obj: @case,
         case_name: @case_name,
         case_accessors: @accessors,
@@ -36,6 +38,7 @@ class Kukupa::Controllers::CaseTaskEditController < Kukupa::Controllers::CaseCon
         task_content: @task.decrypt(:content),
         urls: {
           complete: url("/case/#{@case.id}/task/#{@task.id}/complete"),
+          delete: url("/case/#{@case.id}/task/#{@task.id}/delete"),
         },
       })
     end
@@ -90,6 +93,11 @@ class Kukupa::Controllers::CaseTaskEditController < Kukupa::Controllers::CaseCon
     return halt 404 unless @task
     return halt 404 unless @task.case == @case.id
 
+    unless @user.id == @task.assigned_to || @user.id == @task.author
+      flash :error, t(:'case/task/edit/complete/errors/not_author')
+      return redirect url("/case/#{@case.id}/task/#{@task.id}")
+    end
+
     unless @task.completion.nil?
       flash :error, t(:'case/task/edit/complete/errors/already_complete')
       return redirect url("/case/#{@case.id}/task/#{@task.id}")
@@ -108,7 +116,43 @@ class Kukupa::Controllers::CaseTaskEditController < Kukupa::Controllers::CaseCon
     update_entry.encrypt(:update_type, 'complete')
     update_entry.save
 
+    # TODO: send "task complete" email to this task's author and assignee
+    # if the author or assignee is not the user completing the task
+
     flash :success, t(:'case/task/edit/complete/success', task_id: @task.id, ts: update_entry.creation)
     redirect url("/case/#{@case.id}/view##{update_entry.anchor}")
+  end
+
+  def delete(cid, tid)
+    @case = Kukupa::Models::Case[cid.to_i]
+    return halt 404 unless @case
+    unless has_role?('case:view_all')
+      return halt 404 unless @case.assigned_advocate == @user.id
+    end
+
+    @task = Kukupa::Models::CaseTask[tid.to_i]
+    return halt 404 unless @task
+    return halt 404 unless @task.case == @case.id
+
+    unless @user.id == @task.assigned_to || @user.id == @task.author
+      flash :error, t(:'case/task/edit/delete/errors/not_author')
+      return redirect url("/case/#{@case.id}/task/#{@task.id}")
+    end
+
+    unless request.params['confirm']&.strip == "DELETE"
+      flash :error, t(:'case/task/edit/delete/errors/no_confirm')
+      return redirect url("/case/#{@case.id}/task/#{@task.id}")
+    end
+
+    # TODO: send "task deleted" email to this task's author and assignee
+    # if the author or assignee is not the user deleting the task
+
+    # perform deletion
+    Kukupa::Models::CaseTaskUpdate.where(task: @task.id).delete
+    @task.delete
+
+    # redirect back
+    flash :success, t(:'case/task/edit/delete/success', task_id: @task.id)
+    redirect url("/case/#{@case.id}/view")
   end
 end
