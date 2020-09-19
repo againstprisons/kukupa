@@ -1,16 +1,7 @@
 .case-view{'data-case-id': case_obj.id}
   %h1= title
 
-  .case-view-actions.inline-form
-    %a.pure-button.button{href: url("/case/#{case_obj.id}/mail")}
-      %i.fa.fa-envelope-o= ""
-      %span
-        = t(:'case/view/actions/send_mail')
-
-    %a.pure-button.button{href: url("/case/#{case_obj.id}/edit")}
-      %i.fa.fa-gear= ""
-      %span
-        = t(:'case/view/actions/edit')
+  = haml :'partials/case_header', layout: false, locals: {caseid: case_obj.id}
 
   .form-main
     %h1= t(:'case/view/spend_summary/section_title')

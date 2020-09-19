@@ -1,0 +1,12 @@
+%ul.case-nav.subpage-nav><
+  %li{class: current?("/case/#{caseid}/view")}><
+    %a{href: url("/case/#{caseid}/view")}
+      = t(:'case/nav/view')
+
+  %li{class: current?("/case/#{caseid}/edit")}><
+    %a{href: url("/case/#{caseid}/edit")}
+      = t(:'case/nav/edit')
+
+  %li{class: current?("/case/#{caseid}/mail")}><
+    %a{href: url("/case/#{caseid}/mail")}
+      = t(:'case/nav/mail')
