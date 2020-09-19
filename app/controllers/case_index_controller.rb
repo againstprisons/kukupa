@@ -1,5 +1,9 @@
+require 'chronic'
+
 class Kukupa::Controllers::CaseIndexController < Kukupa::Controllers::CaseController
   add_route :get, '/'
+
+  include Kukupa::Helpers::CaseIndexHelpers
 
   def before
     return halt 404 unless logged_in?
@@ -7,31 +11,31 @@ class Kukupa::Controllers::CaseIndexController < Kukupa::Controllers::CaseContro
   end
 
   def index
-    @all_cases = Kukupa::Models::Case.map do |c|
-      url = Addressable::URI.parse(url("/case/#{c.id}/view"))
-      advocate = Kukupa::Models::User[c.assigned_advocate]
+    @all_cases = case_index_get_cases(
+      view_all: has_role?('case:view_all'),
+    )
 
-      {
-        :case => c,
-        :name => c.get_name,
-        :url => url.to_s,
-        :advocate => advocate,
-        :advocate_name => advocate&.decrypt(:name),
-        :mine => c.assigned_advocate == @user.id,
+    # if we have 'case:stats:view' permission:
+    #   - show total spending for last month
+    #   - show total spending for this month
+    if has_role?('case:stats:view')
+      # TODO: don't use chronic here
+      @last_month_spend = Kukupa::Models::CaseSpendAggregate.get_month_total(Chronic.parse('last month'))
+      @this_month_spend = Kukupa::Models::CaseSpendAggregate.get_month_total(DateTime.now)
+
+      @stats = {
+        spend: {
+          last: @last_month_spend,
+          current: @this_month_spend,
+        },
       }
-    end
-
-    @all_cases.sort! { |a, b| a[:mine] <=> b[:mine] }
-
-    # only let admins see all cases by rejecting anything that isn't :mine
-    unless has_role?('case:view_all')
-      @all_cases.reject! { |x| !x[:mine] }
     end
 
     @title = t(:'case/index/title')
     return haml(:'case/index', :locals => {
       title: @title,
       cases: @all_cases,
+      stats: @stats,
     })
   end
 end

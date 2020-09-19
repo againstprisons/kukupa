@@ -1,5 +1,11 @@
 %h1= title
 
+- if has_role?('case:stats:view')
+  .form-main
+    %h1= t(:'case/index/stats/section_title')
+
+    %p= t(:'case/index/stats/spend_recent', stats[:spend])
+
 .form-main
   %h1= t(:'case/index/cases/section_title')
 
@@ -15,11 +21,84 @@
               &= c[:name]
 
           %li
-            - if c[:advocate]
+            - if c[:advocate][:id].positive?
               = succeed ': ' do
                 = t(:'advocate')
 
-              &= c[:advocate_name]
+              %strong{title: "User[#{c[:advocate][:id]}]"}
+                &= c[:advocate][:name]
 
             - else
               = t(:'advocate/none_assigned')
+
+        %ul
+          %li
+            - if c[:last_note]
+              = succeed ': ' do
+                = t(:'case/index/cases/item/last_note')
+
+              %time{datetime: c[:last_note][:creation].strftime("%Y-%m-%d %H:%M")}
+                = t(:'case_renderable/creation', ts: c[:last_note][:creation])
+
+              %span{title: "User[#{c[:last_note][:advocate][:id]}]"}
+                = t(:'case/index/cases/item/last_note/author', name: c[:last_note][:advocate][:name])
+
+            - else
+              = t(:'case/index/cases/item/last_note/none')
+
+          %li
+            - if c[:last_spend]
+              = succeed ': ' do
+                = t(:'case/index/cases/item/last_spend')
+
+              %time{datetime: c[:last_spend][:creation].strftime("%Y-%m-%d %H:%M")}
+                = t(:'case_renderable/creation', ts: c[:last_spend][:creation])
+
+              %span{title: "User[#{c[:last_spend][:author][:id]}]"}
+                = t(:'case/index/cases/item/last_spend/author', name: c[:last_spend][:author][:name])
+
+              - if c[:last_spend][:author][:id] != c[:last_spend][:approver][:id]
+                %span{title: "User[#{c[:last_spend][:approver][:id]}]"}
+                = t(:'case/index/cases/item/last_spend/approver', name: c[:last_spend][:approver][:name])
+
+              %span{title: c[:last_spend][:fid]}
+                = surround '(' ,')' do
+                  = t(:'case_renderable/spend/amount', amount: c[:last_spend][:amount])
+
+            - else
+              = t(:'case/index/cases/item/last_spend/none')
+
+          - if c[:last_unapproved_spend]
+            %li
+              = succeed ': ' do
+                = t(:'case/index/cases/item/last_unapproved_spend')
+
+              %time{datetime: c[:last_unapproved_spend][:creation].strftime("%Y-%m-%d %H:%M")}
+                = t(:'case_renderable/creation', ts: c[:last_unapproved_spend][:creation])
+
+              %span{title: "User[#{c[:last_spend][:author][:id]}]"}
+                = t(:'case/index/cases/item/last_unapproved_spend/author', name: c[:last_unapproved_spend][:author][:name])
+
+              %span{title: c[:last_unapproved_spend][:fid]}
+                = surround '(' ,')' do
+                  = t(:'case_renderable/spend/amount', amount: c[:last_unapproved_spend][:amount])
+
+          %li
+            %span
+              = succeed ': ' do
+                = t(:'case/index/cases/item/total_spend')
+
+            %ul
+              %li
+                = succeed ': ' do
+                  = t(:'case/index/cases/item/total_spend/month')
+                = t(:'case_renderable/spend/amount', amount: c[:total_spend][:month][:amount])
+
+              %li
+                = succeed ': ' do
+                  = t(:'case/index/cases/item/total_spend/year')
+
+                = t(:'case_renderable/spend/amount', amount: c[:total_spend][:year][:amount])
+                = surround '(', ')' do
+                  = t(:'case/index/cases/item/total_spend/year/percent', c[:total_spend][:year])
+
