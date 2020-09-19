@@ -3,6 +3,11 @@
 
   = haml :'partials/case_header', layout: false, locals: {caseid: case_obj.id}
 
+  - if case_obj.assigned_advocate.nil?
+    .message.message-warning
+      %i.fa.fa-warning= ""
+      = t(:'case/view/no_advocate_assigned')
+
   .form-main
     %h1= t(:'case/view/spend_summary/section_title')
 

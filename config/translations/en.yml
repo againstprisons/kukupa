@@ -166,6 +166,7 @@
 
 # Cases - view
 :'case/view/title': "Case: <%= e(name) %>"
+:'case/view/no_advocate_assigned': "This case does not have an assigned advocate, so only admins will be able to see it. You can assign an advocate to this case under the \"<%= t(:'case/nav/edit') %>\" section of this case profile."
 :'case/view/actions/add_note': "Add note"
 :'case/view/actions/add_spend': "Add spend"
 :'case/view/actions/to_end_of_entries': "Jump to end"
