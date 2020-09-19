@@ -9,13 +9,21 @@
         - if rb[:author].nil?
           - if rb[:case_note].is_outside_request
             = t(:'case_renderable/note/author/outside_request')
+
           - else
             = t(:'case_renderable/note/author/unknown')
+
         - else
           = succeed ': ' do
             = t(:'case_renderable/note/author')
+
           %strong{title: "User[#{rb[:author][:id]}]"}
             &= rb[:author][:name]
+
+          - if rb[:author][:me]
+            %span.badge
+              %i.fa.fa-user-o= ""
+              = t(:'thats_you')
 
       %ul.inline-list
         %li
@@ -53,6 +61,7 @@
 
         %blockquote.blockquote-fancy
           = rb[:content]
+
       - else
         = rb[:content]
 
@@ -88,13 +97,24 @@
           %strong{title: "User[#{rb[:author][:id]}]"}
             &= rb[:author][:name]
 
+          - if rb[:author][:me]
+            %span.badge
+              %i.fa.fa-user-o= ""
+              = t(:'thats_you')
+
         - if rb[:approver][:id].positive?
           - if rb[:approver][:id] != rb[:author][:id]
             %li
               = succeed ': ' do
                 = t(:'case_renderable/spend/approver')
+
               %strong{title: "User[#{rb[:approver][:id]}]"}
                 &= rb[:approver][:name]
+
+              - if rb[:approver][:me]
+                %span.badge
+                  %i.fa.fa-user-o= ""
+                  = t(:'thats_you')
 
         - else
           %li
