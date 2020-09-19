@@ -6,8 +6,8 @@
           %i.fa.fa-fw{title: rb[:id], class: (rb[:case_note].is_outside_request ? 'fa-question' : 'fa-file-text-o')}
             = ""
 
-        - if rb[:author].nil?
-          - if rb[:case_note].is_outside_request
+        - if rb[:author][:id].zero?
+          - if rb[:outside_request]
             = t(:'case_renderable/note/author/outside_request')
 
           - else
