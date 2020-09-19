@@ -34,6 +34,11 @@
               %strong{title: "User[#{c[:advocate][:id]}]"}
                 &= c[:advocate][:name]
 
+              - if c[:mine]
+                %span.badge
+                  %i.fa.fa-user-o= ""
+                  = t(:'thats_you')
+
             - else
               %i.fa.fa-warning= ""
               = t(:'advocate/none_assigned')

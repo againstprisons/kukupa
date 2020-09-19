@@ -49,6 +49,7 @@
 :'role': "Role"
 :'advocate': "Advocate"
 :'advocate/none_assigned': "No advocate assigned"
+:'thats_you': "It's you!"
 :'unknown': "(unknown)"
 :'unconfirmed': "(unconfirmed)"
 :'required': "Required"
