@@ -41,6 +41,10 @@
           = t(:'case/view/actions/add_spend')
 
     .case-view-renderables
+      - if renderables.empty?
+        .message.message-warning
+          = t(:'case/view/entries/no_entries')
+
       - renderables.each do |rb|
         = haml :'partials/case_renderable', layout: false, locals: {rb: rb}
 
