@@ -2,6 +2,8 @@ class Kukupa::Controllers::CaseCreateController < Kukupa::Controllers::CaseContr
   add_route :get, '/'
   add_route :post, '/'
 
+  include Kukupa::Helpers::CaseHelpers
+
   def before
     return halt 404 unless logged_in?
     return halt 404 unless has_role?('case:create')

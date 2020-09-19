@@ -1,17 +1,4 @@
 module Kukupa::Helpers::CaseIndexHelpers
-  def case_index_populate_advocate(advocates, uid)
-    unless advocates.key?(uid.to_s)
-      adv = Kukupa::Models::User[uid.to_i]
-      advocates[uid.to_s] ||= {
-        obj: adv,
-        id: adv&.id || 0,
-        name: adv&.decrypt(:name) || t(:'unknown'),
-      }
-    end
-
-    advocates
-  end
-
   def case_index_get_cases(opts = {})
     cuser = current_user
     advocates = {}
@@ -40,7 +27,7 @@ module Kukupa::Helpers::CaseIndexHelpers
 
     # get advocate details
     cases.map! do |c|
-      advocates = case_index_populate_advocate(advocates, c[:obj].assigned_advocate)
+      advocates = case_populate_advocate(advocates, c[:obj].assigned_advocate)
       c[:advocate] = advocates[c[:obj].assigned_advocate.to_s]
 
       c
@@ -72,7 +59,7 @@ module Kukupa::Helpers::CaseIndexHelpers
         .first
 
       if last_note
-        advocates = case_index_populate_advocate(advocates, last_note.author)
+        advocates = case_populate_advocate(advocates, last_note.author)
         c[:last_note] = {
           creation: last_note.creation,
           advocate: advocates[last_note.author.to_s],
@@ -91,8 +78,8 @@ module Kukupa::Helpers::CaseIndexHelpers
         .first
 
       if last_spend
-        advocates = case_index_populate_advocate(advocates, last_spend.author)
-        advocates = case_index_populate_advocate(advocates, last_spend.approver)
+        advocates = case_populate_advocate(advocates, last_spend.author)
+        advocates = case_populate_advocate(advocates, last_spend.approver)
 
         c[:last_spend] = {
           fid: "CaseSpend[#{last_spend.id}]",
@@ -114,7 +101,7 @@ module Kukupa::Helpers::CaseIndexHelpers
         .first
 
       if last_spend
-        advocates = case_index_populate_advocate(advocates, last_spend.author)
+        advocates = case_populate_advocate(advocates, last_spend.author)
 
         c[:last_unapproved_spend] = {
           fid: "CaseSpend[#{last_spend.id}]",

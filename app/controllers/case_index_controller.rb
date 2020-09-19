@@ -3,6 +3,7 @@ require 'chronic'
 class Kukupa::Controllers::CaseIndexController < Kukupa::Controllers::CaseController
   add_route :get, '/'
 
+  include Kukupa::Helpers::CaseHelpers
   include Kukupa::Helpers::CaseIndexHelpers
 
   def before

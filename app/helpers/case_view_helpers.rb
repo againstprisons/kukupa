@@ -2,6 +2,9 @@ module Kukupa::Helpers::CaseViewHelpers
   def get_renderables(c)
     c = c.id if c.respond_to?(:id)
 
+    cuser = current_user
+    advocates = {}
+
     items = []
 
     Kukupa::Models::CaseNote.where(case: c).map do |cn|
@@ -21,6 +24,8 @@ module Kukupa::Helpers::CaseViewHelpers
         metadata = {}
       end
 
+      advocates = case_populate_advocate(advocates, cn.author)
+
       items << {
         type: :case_note,
         id: "CaseNote[#{cn.id}]",
@@ -31,7 +36,7 @@ module Kukupa::Helpers::CaseViewHelpers
         content: cn.decrypt(:content),
         outside_request: cn.is_outside_request,
         metadata: metadata,
-        author: Kukupa::Models::User[cn.author],
+        author: advocates[cn.author.to_s],
         actions: actions,
       }
     end
@@ -51,6 +56,9 @@ module Kukupa::Helpers::CaseViewHelpers
         })
       end
 
+      advocates = case_populate_advocate(advocates, cs.author)
+      advocates = case_populate_advocate(advocates, cs.approver)
+
       items << {
         type: :spend,
         id: "CaseSpend[#{cs.id}]",
@@ -59,8 +67,8 @@ module Kukupa::Helpers::CaseViewHelpers
         creation: cs.creation,
         amount: cs.decrypt(:amount),
         notes: cs.decrypt(:notes),
-        author: Kukupa::Models::User[cs.author],
-        approver: Kukupa::Models::User[cs.approver],
+        author: advocates[cs.author.to_s],
+        approver: advocates[cs.approver.to_s],
         actions: actions,
       }
     end

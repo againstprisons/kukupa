@@ -1,6 +1,7 @@
 class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseController
   add_route :get, '/'
 
+  include Kukupa::Helpers::CaseHelpers
   include Kukupa::Helpers::CaseViewHelpers
 
   def before

@@ -14,8 +14,8 @@
         - else
           = succeed ': ' do
             = t(:'case_renderable/note/author')
-          %strong
-            &= rb[:author]&.decrypt(:name)
+          %strong{title: "User[#{rb[:author][:id]}]"}
+            &= rb[:author][:name]
 
       %ul.inline-list
         %li
@@ -84,16 +84,17 @@
         %li
           = succeed ': ' do
             = t(:'case_renderable/spend/author')
-          %strong
-            &= rb[:author]&.decrypt(:name)
 
-        - if rb[:approver]
-          - if rb[:approver].id != rb[:author].id
+          %strong{title: "User[#{rb[:author][:id]}]"}
+            &= rb[:author][:name]
+
+        - if rb[:approver][:id].positive?
+          - if rb[:approver][:id] != rb[:author][:id]
             %li
               = succeed ': ' do
                 = t(:'case_renderable/spend/approver')
-              %strong
-                &= rb[:approver]&.decrypt(:name)
+              %strong{title: "User[#{rb[:approver][:id]}]"}
+                &= rb[:approver][:name]
 
         - else
           %li
