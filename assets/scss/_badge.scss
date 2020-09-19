@@ -1,0 +1,12 @@
+.badge {
+  display: inline-block;
+  padding: .125em .25em;
+  font-size: 0.8em;
+  vertical-align: baseline;
+
+  background: $badge_background;
+  color: $badge_foreground;
+
+  border: 1px solid $badge_border;
+  border-radius: .25em;
+}

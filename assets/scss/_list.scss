@@ -1,0 +1,28 @@
+.inline-list {
+  display: block;
+  list-style: none outside none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    display: inline-block;
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+
+    &:not(:last-child):after {
+      content: ' \00b7 ';
+    }
+  }
+}
+
+.block-list {
+  .block-form {
+    display: block;
+
+    input, .button {
+      display: inline-block;
+      width: auto !important;
+    }
+  }
+}
