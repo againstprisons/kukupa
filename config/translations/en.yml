@@ -236,6 +236,16 @@
 :'case/spend/edit/delete/errors/is_approved': "You can not delete an approved spend unless you were the one who approved it."
 :'case/spend/edit/delete/errors/no_confirm': "Refusing to delete this case spend as the confirmation was not correct."
 
+# Cases - task add
+:'case/task/add/title': "Add task: <%= e(name) %>"
+:'case/task/add/section_title': "New task details"
+:'case/task/add/content_field': "Task description"
+:'case/task/add/assignee_field': "Task assignee"
+:'case/task/add/submit': "Create task"
+:'case/task/add/success': "Successfully created task."
+:'case/task/add/errors/no_content': "No task description was provided."
+:'case/task/add/errors/invalid_user': "The form submission included a task assignee that does not have permission to access this case, or does not exist. Please try again."
+
 # User settings
 :'usersettings/title': "User settings"
 :'usersettings/change_name/section_title': "Change your name"

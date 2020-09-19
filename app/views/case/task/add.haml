@@ -1,0 +1,29 @@
+.case-task-add{'data-case-id': case_obj.id}
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: url("/case/#{case_obj.id}/view")}
+      %i.fa.fa-chevron-left= ""
+      %span
+        = t(:'back')
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'case/task/add/section_title')
+
+    %label{for: 'description'}= t(:'case/task/add/content_field')
+    %input#description{name: 'content', type: 'text', required: true, placeholder: t(:'case/task/add/content_field')}
+
+    %label{for: 'assignee'}= t(:'case/task/add/assignee_field')
+    %select#assignee{name: 'assignee', required: true}
+      - case_accessors.each do |u|
+        %option{value: u[:id], selected: u[:me]}
+          &= u[:name]
+
+          = surround ' (', ') ' do
+            ID
+            &= u[:id]
+
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-pencil-square-o= ""
+      = t(:'case/note/add/submit')
