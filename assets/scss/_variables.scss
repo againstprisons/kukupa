@@ -1,10 +1,12 @@
 $responsive_width: 58rem;
+$midsplash_width: 48rem;
+
 $color_background: #fff;
 $color_background_dimmed: #f0f0f0;
 $color_foreground: #000;
 $color_foreground_dimmed: #606060;
 $color_accent: #0aa;
-$color_highlight: #bff;
+$color_highlight: #aee;
 
 $symbolic_success_background: #0b0;
 $symbolic_success_foreground: #dfb;
@@ -36,8 +38,6 @@ $body_footer_padding: 1rem;
 $badge_foreground: $color_foreground_dimmed;
 $badge_background: $color_background_dimmed;
 $badge_border: $color_foreground_dimmed;
-
-$midsplash_width: 32rem;
 
 $case_view_spendmeter_height: 1.5rem;
 $case_view_spendmeter_text: #fff;
