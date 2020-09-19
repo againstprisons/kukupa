@@ -19,6 +19,7 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
     @case_name = @case.get_name
     @title = t(:'case/view/title', name: @case_name)
     @renderables = get_renderables(@case)
+    @tasks = get_tasks(@case)
 
     @spend_year_max = Kukupa.app_config['fund-max-spend-per-case-year'].to_f
     @spend_year = Kukupa::Models::CaseSpendAggregate.get_case_year_total(@case, DateTime.now)
@@ -29,6 +30,7 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
       case_obj: @case,
       case_name: @case_name,
       renderables: @renderables,
+      tasks: @tasks,
       spend_year: @spend_year,
       spend_year_max: @spend_year_max,
       spend_year_percent: @spend_year_percent,

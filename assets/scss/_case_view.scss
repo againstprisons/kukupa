@@ -21,6 +21,17 @@
   }
 }
 
+.case-view-tasks {
+  .case-view-task-editlink {
+    color: $case_renderable_header_foreground;
+    text-decoration: none;
+
+    &:focus, &:hover {
+      color: $color_accent;
+    }
+  }
+}
+
 .caserenderable-container {
   border: 1px solid $case_renderable_border;
   border-radius: $case_renderable_border_radius;

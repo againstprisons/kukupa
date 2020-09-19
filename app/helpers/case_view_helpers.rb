@@ -1,4 +1,26 @@
 module Kukupa::Helpers::CaseViewHelpers
+  def get_tasks(c)
+    c = c.id if c.respond_to?(:id)
+    advocates = {}
+
+    tasks = Kukupa::Models::CaseTask.where(case: c, completion: nil).map do |ct|
+      advocates = case_populate_advocate(advocates, ct.author)
+      advocates = case_populate_advocate(advocates, ct.assigned_to)
+
+      {
+        id: "CaseTask[#{ct.id}]",
+        url: url("/case/#{c}/task/#{ct.id}"),
+        anchor: ct.anchor,
+        creation: ct.creation,
+        content: ct.decrypt(:content),
+        author: advocates[ct.author.to_s],
+        assigned_to: advocates[ct.assigned_to.to_s],
+      }
+    end
+
+    tasks.sort { |a, b| b[:creation] <=> a[:creation] }
+  end
+
   def get_renderables(c)
     c = c.id if c.respond_to?(:id)
 
@@ -7,7 +29,7 @@ module Kukupa::Helpers::CaseViewHelpers
 
     items = []
 
-    Kukupa::Models::CaseNote.where(case: c).map do |cn|
+    Kukupa::Models::CaseNote.where(case: c).each do |cn|
       actions =  [
         {
           url: url("/case/#{c}/note/#{cn.id}"),
@@ -41,7 +63,7 @@ module Kukupa::Helpers::CaseViewHelpers
       }
     end
 
-    Kukupa::Models::CaseSpend.where(case: c).map do |cs|
+    Kukupa::Models::CaseSpend.where(case: c).each do |cs|
       actions =  [
         {
           url: url("/case/#{c}/spend/#{cs.id}"),
@@ -71,6 +93,63 @@ module Kukupa::Helpers::CaseViewHelpers
         approver: advocates[cs.approver.to_s],
         actions: actions,
       }
+    end
+
+    Kukupa::Models::CaseTask.where(case: c).each do |ct|
+      advocates = case_populate_advocate(advocates, ct.author)
+      advocates = case_populate_advocate(advocates, ct.assigned_to)
+
+      child_actions = [
+        {
+          url: "##{ct.anchor}",
+          fa_icon: 'fa-external-link',
+        }
+      ]
+
+      actions =  [
+        {
+          url: url("/case/#{c}/task/#{ct.id}"),
+          fa_icon: 'fa-gear',
+        },
+      ]
+
+      parent = {
+        type: :task,
+        id: "CaseTask[#{ct.id}]",
+        anchor: ct.anchor,
+        creation: ct.creation,
+        content: ct.decrypt(:content),
+        author: advocates[ct.author.to_s],
+        assigned_to: advocates[ct.assigned_to.to_s],
+        actions: actions,
+      }
+
+      Kukupa::Models::CaseTaskUpdate.where(task: ct.id).each do |ctu|
+        advocates = case_populate_advocate(advocates, ctu.author)
+
+        update_type = ctu.decrypt(:update_type)&.strip&.downcase&.to_sym
+        update_data = JSON.parse(ctu.data.nil?() ? '{}' : ctu.decrypt(:data))
+        update = {type: update_type}
+
+        if update_type == :assign
+          advocates = case_populate_advocate(advocates, update_data['to'])
+          update[:to] = advocates[update_data['to'].to_s]
+        end
+
+        items << {
+          type: :task_update,
+          id: "CaseTaskUpdate[#{ctu.id}]",
+          anchor: ctu.anchor,
+          creation: ctu.creation,
+          author: advocates[ctu.author.to_s],
+          update: update,
+          content: parent[:content],
+          parent: parent,
+          actions: child_actions,
+        }
+      end
+
+      items << parent
     end
 
     items.sort { |a, b| b[:creation] <=> a[:creation] }

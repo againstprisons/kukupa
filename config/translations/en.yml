@@ -88,6 +88,10 @@
 :'case_renderable/spend/author': "Added by"
 :'case_renderable/spend/approver': "Approved by"
 :'case_renderable/spend/unapproved': "Not yet approved"
+:'case_renderable/task/author': "Task added by"
+:'case_renderable/task/assigned': "Assigned to"
+:'case_renderable/task/update/assign': "Task reassigned by"
+:'case_renderable/task/update/complete': "Task completed by"
 
 # Maintenance
 :'maintenance/warning': "Maintenance mode is enabled!"
@@ -170,10 +174,16 @@
 :'case/view/no_advocate_assigned': "This case does not have an assigned advocate, so only admins will be able to see it. You can assign an advocate to this case under the \"<%= t(:'case/nav/edit') %>\" section of this case profile."
 :'case/view/actions/add_note': "Add note"
 :'case/view/actions/add_spend': "Add spend"
+:'case/view/actions/add_task': "Add task"
 :'case/view/actions/to_end_of_entries': "Jump to end"
 :'case/view/actions/to_start_of_entries': "Jump to start"
 :'case/view/spend_summary/section_title': "Spending summary"
 :'case/view/spend_summary/content': "Approved spending so far this year for this case: <code><%= e(sprintf('$%.02f', amount)) %></code> of <code><%= e(sprintf('$%.02f', max)) %></code>"
+:'case/view/tasks/section_title': "Current tasks"
+:'case/view/tasks/no_tasks': "There are no open tasks for this case."
+:'case/view/tasks/item/added': "Added"
+:'case/view/tasks/item/edit': "Edit task"
+:'case/view/tasks/item/jump_to_log': "Jump to log entry for this task"
 :'case/view/entries/section_title': "Notes"
 :'case/view/entries/no_entries': "There are no entries for this case yet."
 

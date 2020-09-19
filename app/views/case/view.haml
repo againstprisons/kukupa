@@ -17,6 +17,69 @@
 
     %p= t(:'case/view/spend_summary/content', amount: spend_year, max: spend_year_max)
 
+  .form-main#case-view-tasks
+    %h1= t(:'case/view/tasks/section_title')
+
+    - if tasks.empty?
+      .message.message-warning
+        = t(:'case/view/tasks/no_tasks')
+
+    %ul.case-view-tasks
+      - tasks.each do |t|
+        %li
+          %ul.inline-list
+            %li
+              &= t[:content]
+
+            %li
+              %a.case-view-task-editlink{href: t[:url]}
+                %i.fa.fa-gear= ""
+                %span.sr-only
+                  = t(:'case/view/tasks/item/edit')
+
+            %li
+              %a.case-view-task-editlink{href: "##{t[:anchor]}"}
+                %i.fa.fa-external-link= ""
+                %span.sr-only
+                  = t(:'case/view/tasks/item/jump_to_log')
+
+          %ul
+            %li
+              %ul.inline-list
+                %li
+                  = succeed ': ' do
+                    = t(:'case_renderable/task/author')
+
+                  %span.case-task-author
+                    %strong{title: "User[#{t[:author][:id]}]"}
+                      &= t[:author][:name]
+
+                    - if t[:author][:me]
+                      %span.badge
+                        %i.fa.fa-user-o= ""
+                        = t(:'thats_you')
+
+                %li
+                  = succeed ': ' do
+                    = t(:'case_renderable/task/assigned')
+
+                  %span.case-task-assigned
+                    %strong{title: "User[#{t[:assigned_to][:id]}]"}
+                      &= t[:assigned_to][:name]
+
+                    - if t[:assigned_to][:me]
+                      %span.badge
+                        %i.fa.fa-user-o= ""
+                        = t(:'thats_you')
+
+            %li
+              %ul.inline-list
+                %li
+                  = succeed ': ' do
+                    = t(:'case/view/tasks/item/added')
+
+                  = t(:'case_renderable/creation', ts: t[:creation])
+
   .form-main#case-view-renderables
     %h1= t(:'case/view/entries/section_title')
 
@@ -35,6 +98,11 @@
         %i.fa.fa-dollar= ""
         %span
           = t(:'case/view/actions/add_spend')
+
+      %a.pure-button.button{href: url("/case/#{case_obj.id}/task/add")}
+        %i.fa.fa-check-square-o= ""
+        %span
+          = t(:'case/view/actions/add_task')
 
     .case-view-renderables
       - if renderables.empty?
