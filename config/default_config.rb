@@ -34,6 +34,10 @@ module Kukupa
       :type => :text,
       :default => '',
     },
+    "invite-expiry" => {
+      :type => :text,
+      :default => 'in 72 hours',
+    },
     "fund-min-spend" => {
       :type => :number,
       :default => 0,

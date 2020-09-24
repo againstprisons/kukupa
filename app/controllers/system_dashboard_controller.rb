@@ -22,10 +22,11 @@ class Kukupa::Controllers::SystemDashboardController < Kukupa::Controllers::Syst
 
     @token = Kukupa::Models::Token.generate_short
     @token.use = 'invite'
+    @token.expiry = Chronic.parse(Kukupa.app_config['invite-expiry'])
     @token.save
     @token_display = @token.token.split('').each_slice(4).map(&:join).join('-')
 
-    flash :success, t(:'system/index/actions/invite/success', invite: @token_display)
+    flash :success, t(:'system/index/actions/invite/success', invite: @token_display, expiry: @token.expiry)
     redirect back
   end
 end
