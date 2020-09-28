@@ -46,7 +46,7 @@ class Kukupa::Controllers::CaseSpendApproveController < Kukupa::Controllers::Cas
       return redirect request.path
     end
 
-    @spend.approved = DateTime.now
+    @spend.approved = Time.now.utc
     @spend.approver = @user.id
     @spend.save
 

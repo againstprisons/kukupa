@@ -54,7 +54,7 @@ class Kukupa::Controllers::CaseNoteEditController < Kukupa::Controllers::CaseCon
     @content = Sanitize.fragment(@content, Sanitize::Config::RELAXED)
 
     # save
-    @note.edited = DateTime.now
+    @note.edited = Time.now.utc
     @note.encrypt(:content, @content)
     @note.save
 
