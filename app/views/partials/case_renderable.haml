@@ -124,6 +124,43 @@
       %blockquote.blockquote-fancy
         = rb[:notes]
 
+- if rb[:type] == :spend_approve
+  .caserenderable-container{'data-rb-type': rb[:type], id: rb[:anchor]}
+    .caserenderable-header
+      %span.caserenderable-header-fund
+        %a.caserenderable-header-iconlink{href: "##{rb[:anchor]}"}
+          %i.fa.fa-fw{title: rb[:id], class: 'fa-dollar'}
+            = ""
+
+        = succeed ': ' do
+          = t(:'case_renderable/spend/approve/content')
+
+        %span
+          = t(:'case_renderable/spend/amount', amount: rb[:amount])
+
+      %ul.inline-list
+        %li
+          = t(:'case_renderable/creation', ts: rb[:creation])
+
+        - rb[:actions]&.each do |link|
+          %li.case-renderable-action
+            %a{href: link[:url]}
+              %i.fa{class: link[:fa_icon]}= ""
+
+    .caserenderable-content
+      %ul.inline-list
+        %li
+          = succeed ': ' do
+            = t(:'case_renderable/spend/approve/author')
+
+          %strong{title: "User[#{rb[:author][:id]}]"}
+            &= rb[:author][:name]
+
+          - if rb[:author][:me]
+            %span.badge
+              %i.fa.fa-user-o= ""
+              = t(:'thats_you')
+
 - if rb[:type] == :task
   .caserenderable-container{'data-rb-type': rb[:type], id: rb[:anchor]}
     .caserenderable-header

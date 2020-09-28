@@ -81,6 +81,26 @@ module Kukupa::Helpers::CaseViewHelpers
       advocates = case_populate_advocate(advocates, cs.author)
       advocates = case_populate_advocate(advocates, cs.approver)
 
+      unless cs.approved.nil?
+        approve_actions = [
+          {
+            url: "##{cs.anchor}",
+            fa_icon: 'fa-external-link',
+          }
+        ]
+
+        items << {
+          type: :spend_approve,
+          id: "CaseSpend[#{cs.id}]",
+          anchor: "Approve-#{cs.anchor}",
+          case_spend: cs,
+          creation: cs.approved,
+          amount: cs.decrypt(:amount),
+          author: advocates[cs.approver.to_s],
+          actions: approve_actions,
+        }
+      end
+
       items << {
         type: :spend,
         id: "CaseSpend[#{cs.id}]",
