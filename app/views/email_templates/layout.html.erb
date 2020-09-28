@@ -1,0 +1,24 @@
+<style>
+*, *:before, *:after { box-sizing: border-box; }
+a { color: inherit; text-decoration: underline; }
+a:hover, a:focus { text-decoration: none; }
+h1, h2, h3, h4, h5, h6 { padding: 0; margin: 0.5em auto 0 auto; text-align: center; }
+</style>
+
+<body style="font-family: sans-serif; margin: 0; padding: 0">
+	<div style="max-width: 48em; padding: 1em; margin: 0 auto">
+		<%= yield %>
+
+		<div style="color: #888; margin: 1em 0; border-top: 2px solid #888; text-align: center; font-size: 0.75em;">
+			<p>
+				This is an automated email from
+				<a href="<%= base_url %>"><%= site_name %></a>
+				on behalf of <%= org_name %>.
+			</p>
+			<p>
+				Please do not reply to this email address as all responses are
+				directed to an unattended mailbox.
+			</p>
+		</div>
+	</div>
+</body>

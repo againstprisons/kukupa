@@ -9,3 +9,9 @@
       %button.pure-button.button{type: 'submit'}
         %i.fa.fa-user-o= ""
         = t(:'system/index/actions/invite')
+
+    %form.pure-form.pure-form-stacked{method: 'POST', action: to('/system/act/test-email')}
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+      %button.pure-button.button{type: 'submit'}
+        %i.fa.fa-envelope-o= ""
+        = t(:'system/index/actions/test_email')

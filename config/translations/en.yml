@@ -348,7 +348,9 @@
 :'system/index/title': "System admin"
 :'system/index/actions/section_title': "Actions"
 :'system/index/actions/invite': "Generate invite code"
-:'system/index/actions/invite/success': "Generated invite: <%= e(invite) %> (expires: <%= e(expiry.strftime('%B %e, %Y at %l:%M %P')) %>)"
+:'system/index/actions/invite/success': "Generated invite: <code><%= e(invite) %></code> (expires: <%= e(expiry.strftime('%B %e, %Y at %l:%M %P')) %>)"
+:'system/index/actions/test_email': "Send test email"
+:'system/index/actions/test_email/success': "Successfully queued test email with ID <code><%= e(qid) %></code>."
 
 # System admin - Configuration
 :'system/config/title': "Configuration"
