@@ -1,0 +1,13 @@
+Hello,
+
+A case spend of <%= e(sprintf('$%.02f', amount)) %>
+in the case for <%= e(case_obj.get_name) %>
+has been approved by <%= e(approver.decrypt(:name)) %>.
+
+The spend was added by <%= e(author.decrypt(:name)) %>,
+and the note for this spend is:
+
+> <%= e(content) %>
+
+To view this case, visit:
+<%= e(case_url) %>

@@ -1,0 +1,17 @@
+<p>Hello,</p>
+
+<p>
+  A case spend request of <%= e(sprintf('$%.02f', amount)) %>
+  in the case for <%= e(case_obj.get_name) %>
+  has been added by <em><%= e(author.decrypt(:name)) %></em>.
+</p>
+
+<p>
+  The note for this spend is:
+  <blockquote><%= content %></blockquote>
+</p>
+
+<p>
+  To view this case, visit:
+  <a href="<%= e(case_url) %>"><%= e(case_url) %></a>
+</p>

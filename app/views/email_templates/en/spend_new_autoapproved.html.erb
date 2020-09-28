@@ -1,0 +1,23 @@
+<p>Hello,</p>
+
+<p>
+  A case spend of <%= e(sprintf('$%.02f', amount)) %>
+  in the case for <%= e(case_obj.get_name) %>
+  has been added by <em><%= e(author.decrypt(:name)) %></em>.
+</p>
+
+<p>
+  The note for this spend is:
+  <blockquote><%= content %></blockquote>
+</p>
+
+<p>
+  This spend has been automatically approved,
+  as it is under the automatic approval threshold
+  of <%= e(sprintf('$%.02f', app_config['fund-max-auto-approve'].to_f)) %>.
+</p>
+
+<p>
+  To view this case, visit:
+  <a href="<%= e(case_url) %>"><%= e(case_url) %></a>
+</p>

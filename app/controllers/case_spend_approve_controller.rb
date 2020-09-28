@@ -24,6 +24,9 @@ class Kukupa::Controllers::CaseSpendApproveController < Kukupa::Controllers::Cas
     end
 
     @case_name = @case.get_name
+    @content = @spend.decrypt(:notes)
+    @amount = @spend.decrypt(:amount).to_f
+    @author = Kukupa::Models::User[@spend.author]
     @title = t(:'case/spend/approve/title', name: @case_name, spend_id: @spend.id)
 
     if request.get?
@@ -32,10 +35,10 @@ class Kukupa::Controllers::CaseSpendApproveController < Kukupa::Controllers::Cas
         case_obj: @case,
         case_name: @case_name,
         spend_obj: @spend,
-        spend_notes: @spend.decrypt(:notes),
-        spend_amount: @spend.decrypt(:amount).to_f,
-        spend_author: Kukupa::Models::User[@spend.author],
-        spend_author_self: @spend.author == @user.id,
+        spend_notes: @content,
+        spend_amount: @amount,
+        spend_author: @author,
+        spend_author_self: @author.id == @user.id,
       })
     end
 
@@ -47,8 +50,33 @@ class Kukupa::Controllers::CaseSpendApproveController < Kukupa::Controllers::Cas
     @spend.approver = @user.id
     @spend.save
 
-    # TODO: send email to spend author and case assigned advocate
+    # send email to spend author and case assigned advocate
     # saying the spend has been approved
+    to_email = [@spend.author, @case.assigned_advocate].uniq
+    to_email.reject! { |x| x == @user.id }
+    unless to_email.empty?
+      case_url = Addressable::URI.parse(Kukupa.app_config['base-url'])
+      case_url += "/case/#{@case.id}/view"
+
+      @email = Kukupa::Models::EmailQueue.new_from_template("spend_approved", {
+        case_obj: @case,
+        case_url: case_url.to_s,
+        spend_obj: @spend,
+        content: @content,
+        amount: @amount,
+        author: @author,
+        approver: @user,
+      })
+
+      @email.encrypt(:subject, "Spend approved") # TODO: tl this
+      @email.encrypt(:recipients, JSON.generate({
+        "mode": "list_uids",
+        "uids": to_email,
+      }))
+
+      @email.queue_status = 'queued'
+      @email.save
+    end
 
     flash :success, t(:'case/spend/approve/success', spend_id: @spend.id, amount: @spend.decrypt(:amount).to_f)
     return redirect url("/case/#{@case.id}/view")
