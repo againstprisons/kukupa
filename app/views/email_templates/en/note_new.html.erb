@@ -1,0 +1,12 @@
+<p>Hello,</p>
+
+<p>
+  A new case note has been added by 
+  <em><%= e(author.decrypt(:name)) %></em>
+  in the case for <%= e(case_obj.get_name) %>.
+</p>
+
+<p>
+  To view this case note, visit:
+  <a href="<%= e(note_url) %>"><%= e(note_url) %></a>
+</p>
