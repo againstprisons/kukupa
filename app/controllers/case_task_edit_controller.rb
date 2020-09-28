@@ -69,7 +69,28 @@ class Kukupa::Controllers::CaseTaskEditController < Kukupa::Controllers::CaseCon
       update_entry.encrypt(:data, JSON.generate(to: @assignee.id))
       update_entry.save
 
-      # TODO: if assignee changing, send "new task" email to the new assignee
+      # if assignee changing, send "new task" email to the new assignee
+      case_url = Addressable::URI.parse(Kukupa.app_config['base-url'])
+      case_url += "/case/#{@case.id}/view"
+
+      @email = Kukupa::Models::EmailQueue.new_from_template("task_new", {
+        case_obj: @case,
+        case_url: case_url.to_s,
+        task_obj: @task,
+        content: @content,
+        assignee: @assignee,
+      })
+
+      @email.encrypt(:subject, "New task assigned to you") # TODO: tl this
+      @email.encrypt(:recipients, JSON.generate({
+        "mode": "list_uids",
+        "uids": [
+          @assignee.id,
+        ],
+      }))
+
+      @email.queue_status = 'queued'
+      @email.save
     end
 
     # save task

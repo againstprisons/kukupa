@@ -1,0 +1,12 @@
+<p>Hello, <%= e(assignee.decrypt(:name)) %>!</p>
+<p>A new task has been assigned to you on <%= site_name %> in the case for <%= e(case_obj.get_name) %>.</p>
+
+<p>
+  Task description:
+  <blockquote><%= content %></blockquote>
+</p>
+
+<p>
+  To view this case, visit:
+  <a href="<%= e(case_url) %>"><%= e(case_url) %></a>
+</p>

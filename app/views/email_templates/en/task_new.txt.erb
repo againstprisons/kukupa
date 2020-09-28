@@ -1,0 +1,10 @@
+Hello, <%= e(assignee.decrypt(:name)) %>!
+
+A new task has been assigned to you on <%= site_name %>
+in the case for <%= e(case_obj.get_name) %>.
+
+Task description:
+> <%= e(content) %>
+
+To view this case, visit:
+<%= e(case_url) %>
