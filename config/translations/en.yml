@@ -88,6 +88,8 @@
 :'case_renderable/spend/author': "Added by"
 :'case_renderable/spend/approver': "Approved by"
 :'case_renderable/spend/unapproved': "Not yet approved"
+:'case_renderable/spend/approve/content': "Approved fund spending of"
+:'case_renderable/spend/approve/author': "Approved by"
 :'case_renderable/task/author': "Task added by"
 :'case_renderable/task/assigned': "Assigned to"
 :'case_renderable/task/update/assign': "Task reassigned by"
@@ -235,6 +237,18 @@
 :'case/spend/edit/delete/success': "Deleted case spend <%= e(spend_id) %>."
 :'case/spend/edit/delete/errors/is_approved': "You can not delete an approved spend unless you were the one who approved it."
 :'case/spend/edit/delete/errors/no_confirm': "Refusing to delete this case spend as the confirmation was not correct."
+
+# Cases - spend approve
+:'case/spend/approve/title': "Approve case spend <%= e(spend_id) %>: <%= e(name) %>"
+:'case/spend/approve/details/section_title': "Spend details"
+:'case/spend/approve/details/amount': "Spending amount"
+:'case/spend/approve/details/author': "Spend author"
+:'case/spend/approve/details/note': "Spend notes"
+:'case/spend/approve/approve/section_title': "Approve case spend"
+:'case/spend/approve/approve/content': "To approve this case spend, click the \"<%= t(:'case/spend/approve/approve/submit') %>\" button below."
+:'case/spend/approve/approve/submit': "Approve case spend"
+:'case/spend/approve/success': "Successfully approved case spend <%= e(spend_id) %> for <%= t(:'case_renderable/spend/amount', amount: amount) %>."
+:'case/spend/approve/errors/already_approved': "This case spend has already been approved."
 
 # Cases - task add
 :'case/task/add/title': "Add task: <%= e(name) %>"

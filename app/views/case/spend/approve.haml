@@ -1,0 +1,44 @@
+.case-note-edit{'data-case-id': case_obj.id}
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: url("/case/#{case_obj.id}/view##{spend_obj.anchor}")}
+      %i.fa.fa-chevron-left= ""
+      %span
+        = t(:'back')
+
+  .form-main
+    %h1= t(:'case/spend/approve/details/section_title')
+
+    %ul
+      %li
+        = succeed ": " do
+          = t(:'case/spend/approve/details/author')
+        %span
+          = spend_author.decrypt(:name)
+
+      %li
+        = succeed ': ' do
+          = t(:'case/spend/approve/details/amount')
+        %span
+          = t(:'case_renderable/spend/amount', amount: spend_amount)
+
+      %li
+        = succeed ': ' do
+          = t(:'case/spend/approve/details/note')
+
+        %blockquote.blockquote-fancy
+          = spend_notes
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+    %h1= t(:'case/spend/approve/approve/section_title')
+
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %input{type: 'hidden', name: 'approve', value: '1'}
+
+    %p= t(:'case/spend/approve/approve/content')
+
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-check= ""
+      = t(:'case/spend/approve/approve/submit')
+

@@ -28,6 +28,8 @@ controllers:
     controller: CaseTaskEditController
   - path: /case/:case_id/spend/add
     controller: CaseSpendAddController
+  - path: /case/:case_id/spend/:spend_id/approve
+    controller: CaseSpendApproveController
   - path: /case/:case_id/spend/:spend_id
     controller: CaseSpendEditController
   - path: /case/:case_id/note/add
