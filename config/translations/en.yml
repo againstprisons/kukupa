@@ -442,6 +442,27 @@
 :'system/worker/errors/invalid_worker': "Invalid worker specified in form submission."
 :'system/worker/errors/invalid_data': "Invalid worker data specified in form submission."
 
+# System admin - API key management
+:'system/apikey/title': "API keys"
+:'system/apikey/list/section_title': "Your API keys"
+:'system/apikey/list/no_keys': "You have no API keys."
+:'system/apikey/list/item/name': "Name"
+:'system/apikey/list/item/creation': "Created"
+:'system/apikey/list/item/expiry': "Expiry"
+:'system/apikey/list/item/expiry/never': "never"
+:'system/apikey/list/item/invalid/expired': "Key expired!"
+:'system/apikey/list/item/invalid/revoked': "Key revoked!"
+:'system/apikey/list/item/actions/revoke': "Revoke"
+:'system/apikey/create/section_title': "Create API key"
+:'system/apikey/create/name': "Name"
+:'system/apikey/create/expiry': "Expiry"
+:'system/apikey/create/expiry/never': "never"
+:'system/apikey/create/submit': "Create API key"
+:'system/apikey/create/success': "The API key for <%= e(name) %> is: <code><%= e(token) %></code>. You will only see this once, so note it down."
+:'system/apikey/create/warnings/invalid_expiry': "Couldn't parse the expiry <code><%= e(expiry.inspect) %></code>, this API key will never expire."
+:'system/apikey/revoke/success': "Successfully revoked API key <%= e(name) %>."
+:'system/apikey/revoke/errors/invalid_id': "Form submission had an invalid token ID. Please try again."
+
 # System admin - debug
 :'system/debug/title': "Debugging"
 :'system/debug/version': "This site is running Kūkupa version <code><%= e(version) %></code>."

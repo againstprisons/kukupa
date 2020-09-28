@@ -47,6 +47,8 @@ controllers:
     controller: SystemDebugController
   - path: /system/worker
     controller: SystemWorkerController
+  - path: /system/apikey
+    controller: SystemApiKeyController
   - path: /system/roles
     controller: SystemRolesController
   - path: /system/config

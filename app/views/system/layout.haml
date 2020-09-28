@@ -19,6 +19,11 @@
         %a{href: url('/system/worker')}
           = t(:'system/worker/title')
 
+    - if has_role?('system:apikey:access')
+      %li{class: current_prefix?('/system/apikey')}><
+        %a{href: url('/system/apikey')}
+          = t(:'system/apikey/title')
+
     - if has_role?('system:debug')
       %li{class: current_prefix?('/system/debug')}><
         %a{href: url('/system/debug')}

@@ -1,0 +1,63 @@
+#system-admin-apikey
+  %h1= title
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: to('/system/apikey/create')}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'system/apikey/create/section_title')
+
+    %label{for: 'create_name'}= t(:'system/apikey/create/name')
+    %input#create_name{type: 'text', name: 'name', required: true, placeholder: t(:'system/apikey/create/name')}
+
+    %label{for: 'create_expiry'}= t(:'system/apikey/create/expiry')
+    %input#create_expiry{type: 'text', name: 'expiry', required: false, placeholder: t(:'system/apikey/create/expiry/never')}
+
+    %button.pure-button.button{type: 'submit'}
+      %i.fa.fa-plus= ""
+      = t(:'system/apikey/create/submit')
+
+  .form-main
+    %h1= t(:'system/apikey/list/section_title')
+
+    - if my_apikeys.empty?
+      %p= t(:'system/apikey/list/no_keys')
+
+    %ul
+      - my_apikeys.each do |k|
+        %li
+          .system-admin-apikey-name
+            = succeed ': ' do
+              = t(:'system/apikey/list/item/name')
+            %code
+              &= k[:name]
+
+          .system-admin-apikey-creation
+            = succeed ': ' do
+              = t(:'system/apikey/list/item/creation')
+            %code
+              &= k[:creation].strftime('%Y-%m-%d %H:%M:%S %z')
+
+          .system-admin-apikey-expiry
+            = succeed ': ' do
+              = t(:'system/apikey/list/item/expiry')
+            %code
+              - if k[:expiry]
+                &= k[:expiry].strftime('%Y-%m-%d %H:%M:%S %z')
+              - else
+                = t(:'system/apikey/list/item/expiry/never')
+
+          - unless k[:valid]
+            .system-admin-apikey-validity
+              %strong
+                - if k[:expiry] && Time.now >= k[:expiry]
+                  = t(:'system/apikey/list/item/invalid/expired')
+                - else
+                  = t(:'system/apikey/list/item/invalid/revoked')
+
+          .system-admin-apikey-actions
+            - if k[:valid]
+              %form.inline-form{method: 'POST', action: to('/system/apikey/revoke')}
+                %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+                %input{type: 'hidden', name: 'tokenid', value: k[:id]}
+
+                %button.pure-button.button.button-error{type: 'submit'}
+                  = t(:'system/apikey/list/item/actions/revoke')
