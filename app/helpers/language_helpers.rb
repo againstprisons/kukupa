@@ -16,6 +16,10 @@ module Kukupa::Helpers::LanguageHelpers
     def org_name
       Kukupa.app_config['org-name']
     end
+
+    def base_url
+      Kukupa.app_config['base-url']
+    end
   end
 
   def languages

@@ -6,6 +6,10 @@ class Kukupa::Models::EmailQueue < Sequel::Model(:email_queue)
 
   include Kukupa::Helpers::EmailTemplateHelpers
 
+  class EmailData < Kukupa::Helpers::LanguageHelpers::LanguageData
+    include Kukupa::Helpers::InEmailHelpers
+  end
+
   def self.new_from_template(template, data = {})
     # TODO: allow setting language, check if template exists for given language
     # and default to Kukupa.default_language should the template not exist
@@ -15,13 +19,7 @@ class Kukupa::Models::EmailQueue < Sequel::Model(:email_queue)
     data[:layout] ||= {}
     data[:layout][:text] ||= "layout.txt.erb"
     data[:layout][:html] ||= "layout.html.erb"
-
-    # add generic data
-    data[:site_name] = Kukupa.app_config["site-name"]
-    data[:org_name] = Kukupa.app_config["org-name"]
-    data[:base_url] = Kukupa.app_config["base-url"]
-    data[:helpers] = Kukupa::Helpers::InEmailHelpers.helper_methods
-    data = OpenStruct.new(data)
+    data = EmailData.new(data)
 
     # create new EmailQueue instance
     entry = self.new(:queue_status => "preparing")

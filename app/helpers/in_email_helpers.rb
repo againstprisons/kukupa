@@ -2,14 +2,6 @@ require 'erb'
 require 'tilt'
 
 module Kukupa::Helpers::InEmailHelpers
-  module_function
-
-  def helper_methods
-    OpenStruct.new({
-      :button => self.method(:button),
-    })
-  end
-
   def button(url, text)
     styles = {
       :container => "text-align:center",
