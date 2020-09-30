@@ -1,5 +1,6 @@
 preload:
   - ApplicationController
+  - ApiController
   - CaseController
   - SystemController
 
