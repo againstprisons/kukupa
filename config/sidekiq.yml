@@ -2,3 +2,7 @@
   email_queue_send:
     cron: '0 * * * * *'
     class: "Kukupa::Workers::EmailQueueSendWorker"
+
+  task_reminder:
+    cron: '0 0 * * *'
+    class: "Kukupa::Workers::CaseTaskReminderWorker"

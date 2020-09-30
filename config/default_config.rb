@@ -50,6 +50,10 @@ module Kukupa
       :type => :number,
       :default => 100,
     },
+    "task-overdue-notify" => {
+      :type => :time_period,
+      :default => '1 month ago',
+    },
   }
 
   APP_CONFIG_DEPRECATED_ENTRIES = {

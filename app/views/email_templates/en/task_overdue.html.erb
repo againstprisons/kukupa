@@ -1,0 +1,17 @@
+<p>Hello,</p>
+
+<p>
+  A task in the case <%= e(case_obj.get_name) %>,
+  assigned to <em><%= e(assignee_name) %></em>,
+  is now overdue.
+</p>
+
+<p>
+  Task description:
+  <blockquote><%= content %></blockquote>
+</p>
+
+<p>
+  To view this case, visit:
+  <a href="<%= e(case_url) %>"><%= e(case_url) %></a>
+</p>
