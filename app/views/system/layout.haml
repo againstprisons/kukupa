@@ -19,4 +19,9 @@
         %a{href: url('/system/worker')}
           = t(:'system/worker/title')
 
+    - if has_role?('system:debug')
+      %li{class: current_prefix?('/system/debug')}><
+        %a{href: url('/system/debug')}
+          = t(:'system/debug/title')
+
   = yield

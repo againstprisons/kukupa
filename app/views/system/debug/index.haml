@@ -1,0 +1,10 @@
+#system-admin-debug
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: url('/system/debug/flashes')}
+      %i.fa.fa-flash= ""
+      = t(:'system/debug/flashes/title')
+
+  %p
+    = t(:'system/debug/version', version: Kukupa.version)

@@ -442,5 +442,12 @@
 :'system/worker/errors/invalid_worker': "Invalid worker specified in form submission."
 :'system/worker/errors/invalid_data': "Invalid worker data specified in form submission."
 
+# System admin - debug
+:'system/debug/title': "Debugging"
+:'system/debug/version': "This site is running Kūkupa version <code><%= e(version) %></code>."
+:'system/debug/flashes/title': "Test flashes"
+:'system/debug/flashes/content': "You should see examples of each flash type at the top of this page."
+:'system/debug/flashes/flash': "This is a flash of type <code><%= e(type.inspect) %></code>."
+
 # Miscellaneous things
 :'powered_by_kukupa': "<%= site_name %> is powered by <a href=\"https://gitlab.com/againstprisons/kukupa\">Kūkupa</a>"
