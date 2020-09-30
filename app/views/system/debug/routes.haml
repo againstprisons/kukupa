@@ -1,0 +1,29 @@
+#system-admin-debug-routes
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: url('/system/debug')}
+      %i.fa.fa-chevron-left= ""
+      = t(:'back')
+
+  %ul
+    - controllers.each do |ctrl|
+      %li.y-margin
+        %ul.inline-list
+          %li
+            %code
+              &= ctrl[:ctrl]
+          %li
+            %code
+              &= ctrl[:path]
+
+        %ul
+          - ctrl[:routes].keys.each do |route|
+            %li
+              %ul.inline-list
+                %li
+                  %code
+                    &= route
+                %li
+                  %code
+                    &= ctrl[:routes][route].join(', ')

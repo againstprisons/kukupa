@@ -6,5 +6,9 @@
       %i.fa.fa-flash= ""
       = t(:'system/debug/flashes/title')
 
+    %a.pure-button.button{href: url('/system/debug/routes')}
+      %i.fa.fa-link= ""
+      = t(:'system/debug/routes/title')
+
   %p
     = t(:'system/debug/version', version: Kukupa.version)

@@ -1,6 +1,9 @@
 class Kukupa::Controllers::SystemDebugController < Kukupa::Controllers::SystemController
   add_route :get, '/'
   add_route :get, '/flashes', method: :flashes
+  add_route :get, '/routes', method: :routes
+
+  include Kukupa::Helpers::SystemDebugHelpers
 
   def before
     return halt 404 unless logged_in?
@@ -27,6 +30,18 @@ class Kukupa::Controllers::SystemDebugController < Kukupa::Controllers::SystemCo
     return haml(:'system/layout', locals: {title: @title}) do
       haml(:'system/debug/flashes', layout: false, locals: {
         title: @title,
+      })
+    end
+  end
+
+  def routes
+    @title = t(:'system/debug/routes/title')
+    @controllers = debug_controller_list()
+
+    return haml(:'system/layout', locals: {title: @title}) do
+      haml(:'system/debug/routes', layout: false, locals: {
+        title: @title,
+        controllers: @controllers,
       })
     end
   end
