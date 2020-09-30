@@ -57,6 +57,9 @@ controllers:
   - path: /system
     controller: SystemDashboardController
 
+  - path: /o/request
+    controller: OutsideRequestController
+
   - path: /dashboard
     controller: DashboardController
   - path: /

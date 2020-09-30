@@ -102,6 +102,26 @@
 :'index/title': "Welcome"
 :'index/content/one': "This is <%= e(site_name) %>, the <%= e(org_name) %> advocacy portal."
 
+# Outside request
+:'outside/request/title': "Request advocacy contact"
+:'outside/request/content/one': "To request an advocacy contact for someone in prison, please fill out the form below."
+:'outside/request/requester_info/section_title': "Your details"
+:'outside/request/requester_info/field_name': "Your name"
+:'outside/request/requester_info/field_email': "Your email address"
+:'outside/request/requester_info/field_phone': "Your phone number"
+:'outside/request/prisoner_info/section_title': "Prisoner's details"
+:'outside/request/prisoner_info/field_name_first': "Prisoner's first name"
+:'outside/request/prisoner_info/field_name_last': "Prisoner's last name"
+:'outside/request/prisoner_info/field_prison': "Prison name"
+:'outside/request/prisoner_info/field_prn': "Prisoner number"
+:'outside/request/details/section_title': "Request details"
+:'outside/request/details/field_request': "Enter the details of your request"
+:'outside/request/submit': "Submit request"
+:'outside/request/errors/missing_required': "A required field was not provided. Please fill in all the fields, then try again."
+:'outside/request/complete/title': "Advocacy request submitted!"
+:'outside/request/complete/content/one': "Your request for advocacy contact has been recorded."
+:'outside/request/system_case_note_creation': "<p>This case has been created automatically by an outside request.</p><ul><li>Prison: <%= e(prison) %></li><li>Creation: <%= e(now.strftime('%Y-%m-%d %H:%M:%S')) %></li></ul>"
+
 # Authentication - log in
 :'auth/login/title': "Log in"
 :'auth/login/submit': "Log in"

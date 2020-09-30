@@ -1,0 +1,71 @@
+#outside-request
+  %h1= title
+
+  %p= t(:'outside/request/content/one')
+
+  %form.pure-form.pure-form-stacked{method: 'POST'}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+
+    .form-main
+      %h1= t(:'outside/request/requester_info/section_title')
+
+      .x-margin
+        %label{for: 'requester_name'}
+          = t(:'outside/request/requester_info/field_name')
+        %input#requester_name{name: 'requester_name', required: true, value: requester_name}
+
+      .pure-g
+        .pure-u-1.pure-u-md-1-2
+          .x-margin
+            %label{for: 'requester_email'}
+              = t(:'outside/request/requester_info/field_email')
+            %input#requester_email{name: 'requester_email', value: requester_email}
+
+        .pure-u-1.pure-u-md-1-2
+          .x-margin
+            %label{for: 'requester_phone'}
+              = t(:'outside/request/requester_info/field_phone')
+            %input#requester_phone{name: 'requester_phone', value: requester_phone}
+
+    .form-main
+      %h1= t(:'outside/request/prisoner_info/section_title')
+
+      .pure-g
+        .pure-u-1.pure-u-md-1-2
+          .x-margin
+            %label{for: 'prisoner_name_first'}
+              = t(:'outside/request/prisoner_info/field_name_first')
+            %input#prisoner_name_first{name: 'name_first', value: name_first, required: true}
+
+        .pure-u-1.pure-u-md-1-2
+          .x-margin
+            %label{for: 'prisoner_name_last'}
+              = t(:'outside/request/prisoner_info/field_name_last')
+            %input#prisoner_name_last{name: 'name_last', value: name_last, required: true}
+
+      .pure-g
+        .pure-u-1.pure-u-md-1-2
+          .x-margin
+            %label{for: 'prisoner_prison'}
+              = t(:'outside/request/prisoner_info/field_prison')
+            %input#prisoner_prison{name: 'prison', value: prison, required: true}
+
+        .pure-u-1.pure-u-md-1-2
+          .x-margin
+            %label{for: 'prisoner_prn'}
+              = t(:'outside/request/prisoner_info/field_prn')
+            %input#prisoner_prn{name: 'prn', value: prn, required: true}
+
+    .form-main
+      %h1= t(:'outside/request/details/section_title')
+
+      .x-margin
+        = haml :'partials/editor', layout: false, locals: {editor_name: 'content', editor_label: t(:'outside/request/details/field_request'), editor_data: content}
+
+    .form-main
+      .y-margin
+        %button.pure-button.button.button-primary{type: 'submit'}
+          %i.fa.fa-send= ""
+          = t(:'outside/request/submit')
+
+.async-load{:'data-sources' => JSON.generate(['/static/editor.bundle.js'])}
