@@ -432,5 +432,15 @@
 :'system/roles/edit/remove/success': "Successfully removed role <code><%= e(role) %></code> (UserRole ID <%= e(ur) %>)."
 :'system/roles/edit/remove/errors/invalid_rid': "Form submission had an invalid role ID. Please try again."
 
+# System admin - workers
+:'system/worker/title': "Workers"
+:'system/worker/section_title': "Queue a job"
+:'system/worker/field_worker': "Worker"
+:'system/worker/field_data': "Data to pass to worker (as a JSON array)"
+:'system/worker/submit': "Queue"
+:'system/worker/success': "Queued worker <%= e(worker) %> with job ID <code><%= e(job_id) %></code>."
+:'system/worker/errors/invalid_worker': "Invalid worker specified in form submission."
+:'system/worker/errors/invalid_data': "Invalid worker data specified in form submission."
+
 # Miscellaneous things
 :'powered_by_kukupa': "<%= site_name %> is powered by <a href=\"https://gitlab.com/againstprisons/kukupa\">Kūkupa</a>"

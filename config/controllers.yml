@@ -43,6 +43,8 @@ controllers:
   - path: /case
     controller: CaseIndexController
 
+  - path: /system/worker
+    controller: SystemWorkerController
   - path: /system/roles
     controller: SystemRolesController
   - path: /system/config

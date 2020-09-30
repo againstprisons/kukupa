@@ -1,0 +1,19 @@
+#system-admin-workers
+  %h1= title
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'system/worker/section_title')
+
+    %label{for: 'worker'}= t(:'system/worker/field_worker')
+    %select{name: 'worker'}
+      - workers.keys.each do |w|
+        %option{name: w}
+          &= w
+
+    %label{for: 'worker_data'}= t(:'system/worker/field_data')
+    %input#worker_data{name: 'data', value: '[]'}
+
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-gear= ""
+      = t(:'system/worker/submit')
