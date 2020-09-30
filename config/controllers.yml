@@ -79,3 +79,5 @@ controllers:
 
   - path: /api/meta
     controller: ApiMetaController
+  - path: /api/request
+    controller: ApiRequestController
