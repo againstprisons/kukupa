@@ -42,6 +42,8 @@ module Kukupa::Route
       Kukupa::Application.class_eval do
         route(v, full_path, {}) do |*args|
           controller = this.new(self)
+          controller.preflight()
+
           controller.before() if controller.respond_to?(:before)
           next controller.send(meth, *args)
         end
