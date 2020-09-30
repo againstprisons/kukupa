@@ -113,7 +113,7 @@ class Kukupa::Controllers::SystemConfigurationController < Kukupa::Controllers::
     end
 
     type = request.params["type"]&.strip&.downcase
-    unless %w[bool text number json].include?(type)
+    unless %w[bool text number json time_period].include?(type)
       flash :error, t(:'system/config/edit/errors/type_invalid')
       return redirect request.path
     end

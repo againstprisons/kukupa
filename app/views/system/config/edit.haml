@@ -26,6 +26,8 @@
         = t(:'system/config/edit/type/number')
       %option{:value => 'json', :selected => (type == "json")}
         = t(:'system/config/edit/type/json')
+      %option{:value => 'json', :selected => (type == "time_period")}
+        = t(:'system/config/edit/type/time_period')
 
     %label{:for => 'value'}= t(:'system/config/edit/value')
     %input#value{:name => 'value', :required => true, :value => value}

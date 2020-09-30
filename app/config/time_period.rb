@@ -1,12 +1,12 @@
-module Kukupa::Config::InviteExpiry
+module Kukupa::Config::TimePeriod
   module_function
 
   def order
     100
   end
 
-  def accept?(key, _type)
-    key == "invite-expiry"
+  def accept?(_key, type)
+    type == :time_period
   end
 
   def parse(value)
@@ -14,7 +14,7 @@ module Kukupa::Config::InviteExpiry
     if loaded.nil?
       return {
         :warning => "Failed to parse time period",
-        :data => Kukupa::APP_CONFIG_ENTRIES['invite-expiry'][:default],
+        :data => nil,
       }
     end
 
