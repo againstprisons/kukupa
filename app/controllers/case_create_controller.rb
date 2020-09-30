@@ -45,6 +45,8 @@ class Kukupa::Controllers::CaseCreateController < Kukupa::Controllers::CaseContr
     @case.encrypt(:prisoner_number, prisoner_number)
     @case.save
 
+    Kukupa::Models::CaseFilter.create_filters_for(@case)
+
     flash :success, t(:'case/create/success', case_id: @case.id)
     return redirect url("/case/#{@case.id}/view")
   end
