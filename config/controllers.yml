@@ -59,6 +59,8 @@ controllers:
 
   - path: /dashboard
     controller: DashboardController
+  - path: /
+    controller: IndexController
 
   - path: /-/language
     controller: DashLanguageController
@@ -69,10 +71,8 @@ controllers:
         - development
         - test
 
-  - path: /api/meta
-    controller: ApiMetaController
-
   - path: /static
     controller: StaticController
-  - path: /
-    controller: IndexController
+
+  - path: /api/meta
+    controller: ApiMetaController
