@@ -13,6 +13,8 @@ class Kukupa::Workers::CaseTaskReminderWorker
       .order(Sequel.desc(:creation))
       .all
 
+    logger.info("Uncompleted tasks with creation older than threshold: #{tasks.count}")
+
     tasks.each do |task|
       if task.last_updated < threshold
         to_notify << task
