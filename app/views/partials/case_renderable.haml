@@ -48,16 +48,20 @@
                 = t(:'case_renderable/note/outside_request/name')
               %strong
                 &= rb[:metadata][:name]
-            %li
-              = succeed ': ' do
-                = t(:'case_renderable/note/outside_request/phone')
-              %span
-                &= rb[:metadata][:phone]
-            %li
-              = succeed ': ' do
-                = t(:'case_renderable/note/outside_request/email')
-              %span
-                &= rb[:metadata][:email]
+
+            - if rb[:metadata][:phone]
+              %li
+                = succeed ': ' do
+                  = t(:'case_renderable/note/outside_request/phone')
+                %span
+                  &= rb[:metadata][:phone]
+
+            - if rb[:metadata][:email]
+              %li
+                = succeed ': ' do
+                  = t(:'case_renderable/note/outside_request/email')
+                %span
+                  &= rb[:metadata][:email]
 
         %blockquote.blockquote-fancy
           = rb[:content]
