@@ -1,0 +1,74 @@
+.case-edit{'data-case-id': case_obj.id}
+  %h1= title
+
+  %a.pure-button.button{href: url("/case/#{case_obj.id}/view")}
+    %i.fa.fa-chevron-left= ""
+    = t(:'back')
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'case/edit/edit/section_title')
+
+    %label{for: 'first_name'}
+      = t(:'name/first')
+      %span.badge= t(:'required')
+    %input#first_name{type: 'text', name: 'first_name', required: true, placeholder: t(:'name/first'), value: case_editables[:first_name]}
+
+    %label{for: 'middle_name'}
+      = t(:'name/middle')
+    %input#middle_name{type: 'text', name: 'middle_name', required: false, placeholder: t(:'name/middle'), value: case_editables[:middle_name]}
+
+    %label{for: 'last_name'}
+      = t(:'name/last')
+      %span.badge= t(:'required')
+    %input#last_name{type: 'text', name: 'last_name', required: true, placeholder: t(:'name/last'), value: case_editables[:last_name]}
+
+    %label{for: 'pseudonym'}
+      = t(:'pseudonym')
+    %input#pseudonym{type: 'text', name: 'pseudonym', required: false, placeholder: t(:'pseudonym'), value: case_editables[:pseudonym]}
+
+    %label{for: 'birth_date'}
+      = t(:'birth_date')
+    %input#birth_date{type: 'date', name: 'birth_date', required: false, value: case_editables[:birth_date]&.strftime('%Y-%m-%d')}
+
+    %label{for: 'release_date'}
+      = t(:'release_date')
+    %input#release_date{type: 'date', name: 'release_date', required: false, value: case_editables[:release_date]&.strftime('%Y-%m-%d')}
+
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-save= ""
+      = t(:'case/edit/edit/submit')
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: url("/case/#{case_obj.id}/edit/prison")}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'case/edit/prison/section_title')
+
+    %label{for: 'prison'}= t(:'case/edit/prison/field_prison')
+    %select#prison{name: 'prison'}
+      %option{value: 'unknown', selected: true}= t(:'unknown')
+
+    %label{for: 'prn'}= t(:'case/edit/prison/field_prisoner_number')
+    %input#prn{name: 'prn', value: case_editables[:prn]}
+
+    %button.pure-button.button{type: 'submit'}
+      %i.fa.fa-save= ""
+      = t(:'case/edit/prison/submit')
+
+  - if has_role?('case:assign')
+    %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: url("/case/#{case_obj.id}/edit/assign")}
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+      %h1= t(:'case/edit/assign/section_title')
+
+      %label{for: 'assignee'}= t(:'case/edit/assign/assignee_field')
+      %select#assignee{name: 'assignee', required: true}
+        - assignable_users.each do |u|
+          %option{value: u[:id], selected: u[:id] == case_assigned&.id}
+            &= u[:name]
+
+            = surround ' (', ') ' do
+              ID
+              &= u[:id]
+
+      %button.pure-button.button.button-primary{type: 'submit'}
+        %i.fa.fa-user-o= ""
+        = t(:'case/edit/assign/submit')
