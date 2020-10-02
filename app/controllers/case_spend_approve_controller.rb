@@ -50,6 +50,9 @@ class Kukupa::Controllers::CaseSpendApproveController < Kukupa::Controllers::Cas
     @spend.approver = @user.id
     @spend.save
 
+    # update aggregate 
+    Kukupa::Models::CaseSpendAggregate.create_aggregate_for_case(@case)
+
     # send email to spend author and case assigned advocate
     # saying the spend has been approved
     to_email = [@spend.author, @case.assigned_advocate].uniq
