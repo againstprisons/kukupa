@@ -13,6 +13,26 @@ class Kukupa::Models::Case < Sequel::Model
 
     ps
   end
+
+  def delete!
+    # notes
+    Kukupa::Models::CaseNote.where(case: self.id).map(&:delete)
+
+    # spends
+    Kukupa::Models::CaseSpend.where(case: self.id).map(&:delete)
+    Kukupa::Models::CaseSpendAggregate.where(case: self.id).map(&:delete)
+
+    # tasks
+    Kukupa::Models::CaseTask.where(case: self.id).each do |ct|
+      Kukupa::Models::CaseTaskUpdate.where(task: ct.id).map(&:delete)
+      ct.delete
+    end
+
+    # filters
+    Kukupa::Models::CaseFilter.clear_filters_for(self)
+    
+    self.delete
+  end
 end
 
 class Kukupa::Models::CaseFilter < Sequel::Model
