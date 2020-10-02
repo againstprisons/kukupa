@@ -53,7 +53,10 @@
                 = t(:'case_renderable/creation', ts: c[:last_note][:creation])
 
               %span{title: "User[#{c[:last_note][:advocate][:id]}]"}
-                = t(:'case/index/cases/item/last_note/author', name: c[:last_note][:advocate][:name])
+                - if c[:last_note][:advocate][:id].zero?
+                  = t(:'case/index/cases/item/last_note/author', name: t(:'author/robot'))
+                - else
+                  = t(:'case/index/cases/item/last_note/author', name: c[:last_note][:advocate][:name])
 
             - else
               = t(:'case/index/cases/item/last_note/none')

@@ -53,6 +53,8 @@
 :'unknown': "(unknown)"
 :'unconfirmed': "(unconfirmed)"
 :'required': "Required"
+:'author': "Author"
+:'author/robot': "Kūkupa Robot"
 
 # Some generic stuff
 :'required_field_missing': "A required field was not provided."
@@ -79,7 +81,6 @@
 :'case_renderable/creation/edited': "(edited)"
 :'case_renderable/note/author': "Author"
 :'case_renderable/note/author/outside_request': "Outside request"
-:'case_renderable/note/author/unknown': "Author unknown"
 :'case_renderable/note/outside_request/name': "Name"
 :'case_renderable/note/outside_request/phone': "Phone number"
 :'case_renderable/note/outside_request/email': "Email address"

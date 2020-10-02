@@ -11,7 +11,11 @@
             = t(:'case_renderable/note/author/outside_request')
 
           - else
-            = t(:'case_renderable/note/author/unknown')
+            = succeed ': ' do
+              = t(:'case_renderable/note/author')
+
+            %strong
+              = t(:'author/robot')
 
         - else
           = succeed ': ' do
