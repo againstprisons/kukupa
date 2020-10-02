@@ -47,11 +47,15 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
 
         # TODO: if case doesn't exist, create a new case
         unless @case
+          @case_is_new = true
+
           @case = Kukupa::Models::Case.new(is_open: true).save
           @case.encrypt(:first_name, @name_first)
           @case.encrypt(:last_name, @name_last)
           @case.encrypt(:prisoner_number, @prn)
           @case.save
+
+          Kukupa::Models::CaseFilter.create_filters_for(@case)
 
           # Add "system" case note with the prison
           @sysnote = Kukupa::Models::CaseNote.new(case: @case.id).save
@@ -80,6 +84,27 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
         @request.encrypt(:metadata, JSON.generate(@metadata))
         @request.encrypt(:content, @content)
         @request.save
+
+        # send alert email
+        begin
+          case_url = Addressable::URI.parse(Kukupa.app_config['base-url'])
+          case_url += "/case/#{@case.id}/view"
+
+          @email = Kukupa::Models::EmailQueue.new_from_template("outside_request", {
+            case_obj: @case,
+            case_url: case_url.to_s,
+            case_is_new: @case_is_new,
+          })
+
+          @email.encrypt(:subject, "New outside request") # TODO: tl this
+          @email.encrypt(:recipients, JSON.generate({
+            "mode": "roles",
+            "roles": ["case:alerts"],
+          }))
+
+          @email.queue_status = 'queued'
+          @email.save
+        end
 
         return haml :'outside/request/complete', :locals => {
           title: t(:'outside/request/complete/title'),

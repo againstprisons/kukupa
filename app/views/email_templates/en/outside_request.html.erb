@@ -1,0 +1,16 @@
+<p>Hello,</p>
+
+<p>
+  The case for <%= e(case_obj.get_name) %>
+  has had a new outside request submitted.
+</p>
+
+<% if case_is_new %><p>
+  This is a new case, created by <%= e(site_name) %> along with
+  this outside request.
+</p><% end %>
+
+<p>
+  To view details of this case, and the new outside request,
+  visit: <a href="<%= e(case_url) %>"><%= e(case_url) %></a>
+</p>
