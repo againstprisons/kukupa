@@ -13,6 +13,18 @@ module Kukupa::Helpers::CaseHelpers
     advocates
   end
 
+  def case_assignable_users
+    uids = Kukupa::Models::User.select(:id).all.map(&:id)
+
+    # get user objects
+    advocates = {}
+    uids.flatten.compact.each do |uid|
+      advocates = case_populate_advocate(advocates, uid)
+    end
+
+    advocates.values.sort { |a, b| a[:id] <=> b[:id] }
+  end
+
   def case_users_with_access(c)
     c = c.id if c.respond_to?(:id)
     c = Kukupa::Models::Case[c]
