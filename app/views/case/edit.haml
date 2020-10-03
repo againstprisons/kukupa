@@ -1,9 +1,7 @@
 .case-edit{'data-case-id': case_obj.id}
   %h1= title
 
-  %a.pure-button.button{href: url("/case/#{case_obj.id}/view")}
-    %i.fa.fa-chevron-left= ""
-    = t(:'back')
+  = haml :'partials/case_header', layout: false, locals: {caseid: case_obj.id}
 
   %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
     %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
