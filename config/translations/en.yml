@@ -306,6 +306,7 @@
 :'case/edit/edit/section_title': "Case details"
 :'case/edit/edit/submit': "Save case details"
 :'case/edit/edit/success': "Successfully saved details for this case."
+:'case/edit/edit/errors/missing_required': "One or more required fields was not provided."
 :'case/edit/prison/section_title': "Prison details"
 :'case/edit/prison/field_prison': "Prison"
 :'case/edit/prison/field_prisoner_number': "Prisoner number"

@@ -37,11 +37,20 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
 
     if request.post?
       @first_name = request.params['first_name']&.strip
+      @first_name = nil if @first_name&.empty?
       @middle_name = request.params['middle_name']&.strip
+      @middle_name = nil if @middle_name&.empty?
       @last_name = request.params['last_name']&.strip
+      @last_name = nil if @last_name&.empty?
       @pseudonym = request.params['pseudonym']&.strip
+      @pseudonym = nil if @pseudonym&.empty?
       @birth_date = Chronic.parse(request.params['birth_date']&.strip, guess: true)
       @release_date = Chronic.parse(request.params['release_date']&.strip, guess: true)
+
+      if @first_name.nil? || @last_name.nil?
+        flash :error, t(:'case/edit/edit/errors/missing_required')
+        return redirect request.path
+      end
 
       @case.encrypt(:first_name, @first_name)
       @case.encrypt(:middle_name, @middle_name)
