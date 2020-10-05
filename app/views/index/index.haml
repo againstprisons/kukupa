@@ -1,3 +1,9 @@
 %h1= title
 
 %p= t(:'index/content/one')
+%p= t(:'index/content/two')
+
+.form-main
+  %a.pure-button.button.button-primary{href: url("/o/request")}
+    %i.fa.fa-send= "" 
+    = t(:'outside/request/title')

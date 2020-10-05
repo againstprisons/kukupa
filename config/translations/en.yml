@@ -102,6 +102,7 @@
 # Index
 :'index/title': "Welcome"
 :'index/content/one': "This is <%= e(site_name) %>, the <%= e(org_name) %> advocacy portal."
+:'index/content/two': "To request advocacy from <%= e(org_name) %> for someone you know who is in prison, click the \"<%= t(:'outside/request/title') %>\" button below."
 
 # Outside request
 :'outside/request/title': "Request advocacy contact"
