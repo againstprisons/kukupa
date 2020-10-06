@@ -4,12 +4,21 @@ class Kukupa::Controllers::ApiRequestController < Kukupa::Controllers::ApiContro
   def index
     @content = request.params['content']&.strip
     @content = nil if @content&.empty?
+    @content = Sanitize.fragment(@content, Sanitize::Config::BASIC) if @content
+
     @requester_name = request.params['requester_name']&.strip
     @requester_name = nil if @requester_name&.empty?
     @requester_email = request.params['requester_email']&.strip&.downcase
     @requester_email = nil if @requester_email&.empty?
     @requester_phone = request.params['requester_phone']&.strip&.downcase
     @requester_phone = nil if @requester_phone&.empty?
+
+    @name_first = request.params['name_first']&.strip
+    @name_first = nil if @name_first&.empty?
+    @name_last = request.params['name_last']&.strip
+    @name_last = nil if @name_last&.empty?
+    @prison = request.params['prison']&.strip
+    @prison = nil if @prison&.empty?
     @prn = request.params['prn']&.strip&.downcase
     @prn = nil if @prn&.empty?
 
@@ -17,6 +26,9 @@ class Kukupa::Controllers::ApiRequestController < Kukupa::Controllers::ApiContro
       @content.nil?,
       @requester_name.nil?,
       @requester_phone.nil? && @requester_email.nil?,
+      @name_first.nil?,
+      @name_last.nil?,
+      @prison.nil?,
       @prn.nil?,
     ]
 
@@ -40,27 +52,6 @@ class Kukupa::Controllers::ApiRequestController < Kukupa::Controllers::ApiContro
     unless @case
       @case_is_new = true
 
-      @prison = request.params['prison']&.strip
-      @prison = nil if @prison&.empty?
-      @name_first = request.params['name_first']&.strip
-      @name_first = nil if @name_first&.empty?
-      @name_last = request.params['name_last']&.strip
-      @name_last = nil if @name_last&.empty?
-
-      errs = [
-        @prison.nil?,
-        @name_first.nil?,
-        @name_last.nil?,
-      ]
-
-      # bail if we're missing any info
-      if errs.any?
-        return halt 400, api_json({
-          success: false,
-          error: 'Missing required information',
-        })
-      end
-
       # create new case with provided information
       @case = Kukupa::Models::Case.new(is_open: true).save
       @case.encrypt(:first_name, @name_first)
@@ -80,9 +71,6 @@ class Kukupa::Controllers::ApiRequestController < Kukupa::Controllers::ApiContro
       ))
       @sysnote.save
     end
-
-    # sanitize input
-    @content = Sanitize.fragment(@content, Sanitize::Config::BASIC)
 
     # create request metadata object
     @metadata = {
