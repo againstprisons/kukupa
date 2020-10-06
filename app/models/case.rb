@@ -98,7 +98,6 @@ class Kukupa::Models::CaseFilter < Sequel::Model
       filters << self.new(case: case_.id, filter_label: "prisoner_number", filter_value: e)
     end
 
-=begin
     # prison
     prison = case_.decrypt(:prison)&.strip&.downcase.to_i
     prison = Kukupa::Models::Prison[prison]
@@ -106,7 +105,6 @@ class Kukupa::Models::CaseFilter < Sequel::Model
       e = Kukupa::Crypto.index("Case", "prison", prison.id.to_s)
       filters << self.new(case: case_.id, filter_label: "prison", filter_value: e)
     end
-=end
 
     filters.map(&:save)
     filters
