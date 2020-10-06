@@ -508,6 +508,8 @@
 # System admin - debug
 :'system/debug/title': "Debugging"
 :'system/debug/version': "This site is running Kūkupa version <code><%= e(version) %></code>."
+:'system/debug/warnings/section_title': "Warnings"
+:'system/debug/warnings/non_reconnect_prisons': "There are <%= e(count) %> prison(s) in the database that are not associated with a prison as known by re:connect."
 :'system/debug/flashes/title': "Test flashes"
 :'system/debug/flashes/content': "You should see examples of each flash type at the top of this page."
 :'system/debug/flashes/flash': "This is a flash of type <code><%= e(type.inspect) %></code>."

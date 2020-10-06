@@ -12,10 +12,12 @@ class Kukupa::Controllers::SystemDebugController < Kukupa::Controllers::SystemCo
 
   def index
     @title = t(:'system/debug/title')
+    @non_reconnect_prisons = Kukupa::Models::Prison.where(reconnect_id: nil).all.map(&:id)
 
     return haml(:'system/layout', locals: {title: @title}) do
       haml(:'system/debug/index', layout: false, locals: {
         title: @title,
+        non_reconnect_prisons: @non_reconnect_prisons,
       })
     end
   end

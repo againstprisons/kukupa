@@ -12,3 +12,15 @@
 
   %p
     = t(:'system/debug/version', version: Kukupa.version)
+
+  .form-main
+    %h1= t(:'system/debug/warnings/section_title')
+
+    %ul
+      - if non_reconnect_prisons.count.positive?
+        %li
+          = t(:'system/debug/warnings/non_reconnect_prisons', count: non_reconnect_prisons.count)
+          = succeed ': ' do
+            IDs
+          %code
+            &= non_reconnect_prisons.map(&:to_s).join(', ')
