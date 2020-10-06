@@ -54,6 +54,18 @@ module Kukupa
       :type => :time_period,
       :default => '1 month ago',
     },
+    "reconnect-url" => {
+      :type => :text,
+      :default => '',
+    },
+    "reconnect-api-key" => {
+      :type => :text,
+      :default => '',
+    },
+    "reconnect-penpal-id" => {
+      :type => :number,
+      :default => 0,
+    }
   }
 
   APP_CONFIG_DEPRECATED_ENTRIES = {
