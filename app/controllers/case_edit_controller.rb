@@ -127,7 +127,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
     return halt 404 unless @case
 
     @new_assignee = Kukupa::Models::User[request.params['assignee'].to_i]
-    unless @new_assignee
+    unless @new_assignee || @assignable_users.keys.include?(@new_assignee.id.to_s)
       flash :error, t(:'case/edit/assign/errors/invalid_user')
       return redirect back
     end
