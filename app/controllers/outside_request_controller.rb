@@ -73,6 +73,7 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
           name: @requester_name,
           email: @requester_email,
           phone: @requester_phone,
+          prison: @prison,
         }
 
         # create an outside request in the given case

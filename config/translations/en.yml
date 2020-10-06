@@ -84,6 +84,7 @@
 :'case_renderable/note/outside_request/name': "Name"
 :'case_renderable/note/outside_request/phone': "Phone number"
 :'case_renderable/note/outside_request/email': "Email address"
+:'case_renderable/note/outside_request/prison': "Supplied prison name"
 :'case_renderable/spend/content': "Fund spending of"
 :'case_renderable/spend/amount': "<code><%= e(sprintf('$%.02f', amount)) %></code>"
 :'case_renderable/spend/author': "Added by"
@@ -122,7 +123,7 @@
 :'outside/request/errors/missing_required': "A required field was not provided. Please fill in all the fields, then try again."
 :'outside/request/complete/title': "Advocacy request submitted!"
 :'outside/request/complete/content/one': "Your request for advocacy contact has been recorded."
-:'outside/request/system_case_note_creation': "<p>This case has been created automatically by an outside request.</p><ul><li>Prison: <%= e(prison) %></li><li>Creation: <%= e(now.strftime('%Y-%m-%d %H:%M:%S')) %></li></ul>"
+:'outside/request/system_case_note_creation': "<p>This case has been created automatically by an outside request.</p><ul><li>Creation: <%= e(now.strftime('%Y-%m-%d %H:%M:%S')) %></li></ul>"
 
 # Authentication - log in
 :'auth/login/title': "Log in"

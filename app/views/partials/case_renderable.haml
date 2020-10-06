@@ -45,7 +45,7 @@
 
     .caserenderable-content
       - if rb[:outside_request]
-        .cr-outsidereq-data
+        .cr-outsidereq-meta-author
           %ul.inline-list
             %li
               = succeed ': ' do
@@ -66,6 +66,16 @@
                   = t(:'case_renderable/note/outside_request/email')
                 %span
                   &= rb[:metadata][:email]
+
+        - if rb[:metadata][:prison]
+          .cr-outsidereq-meta-prison
+            %ul.inline-list
+              %li
+                = succeed ': ' do
+                  = t(:'case_renderable/note/outside_request/prison')
+                %span
+                  &= rb[:metadata][:prison]
+
 
         %blockquote.blockquote-fancy
           = rb[:content]
