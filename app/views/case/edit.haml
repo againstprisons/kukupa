@@ -43,7 +43,10 @@
 
     %label{for: 'prison'}= t(:'case/edit/prison/field_prison')
     %select#prison{name: 'prison'}
-      %option{value: 'unknown', selected: true}= t(:'unknown')
+      %option{value: 'unknown', selected: case_prison.nil?}= t(:'unknown')
+      - prisons.each do |prison|
+        %option{value: prison[:id], selected: case_prison&.id == prison[:id]}
+          &= prison[:name]
 
     %label{for: 'prn'}= t(:'case/edit/prison/field_prisoner_number')
     %input#prn{name: 'prn', value: case_editables[:prn]}

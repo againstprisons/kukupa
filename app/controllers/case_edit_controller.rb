@@ -12,6 +12,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
     return halt 404 unless logged_in?
     @user = current_user
 
+    @prisons = Kukupa::Models::Prison.get_prisons
     @assignable_users = case_assignable_users
   end
 
@@ -22,6 +23,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       return halt 404 unless @case.assigned_advocate == @user.id
     end
 
+    @prison = Kukupa::Models::Prison[@case.decrypt(:prison).to_i]
     @first_name = @case.decrypt(:first_name)
     @middle_name = @case.decrypt(:middle_name)
     @last_name = @case.decrypt(:last_name)
@@ -68,6 +70,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       case_obj: @case,
       case_name: @case_name,
       case_assigned: @assigned,
+      case_prison: @prison,
       case_editables: {
         first_name: @first_name,
         middle_name: @middle_name,
@@ -78,6 +81,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
         release_date: @release_date,
       },
       assignable_users: @assignable_users,
+      prisons: @prisons,
     })
   end
 
@@ -89,14 +93,10 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
     end
 
     @prison = request.params['prison']&.strip&.downcase
-    if @prison == 'unknown'
+    if ['unknown', 'nil', ''].include?(@prison)
       @prison = nil
     else
-      # TODO: once we have a list of prisons, allow changing what prison
-      # a case resides in
-      # @prison = Kukupa::Models::Prison[@prison.to_i]
-
-      return halt 501 # TODO: remove this
+      @prison = Kukupa::Models::Prison[@prison.to_i]
 
       unless @prison
         flash :error, t(:'case/edit/prison/errors/invalid_prison')
@@ -113,7 +113,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
     end
 
     # save details
-    @case.encrypt(:prison, @prison)
+    @case.encrypt(:prison, @prison&.id&.to_s)
     @case.encrypt(:prisoner_number, @prn)
     @case.save
 
