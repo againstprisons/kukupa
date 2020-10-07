@@ -95,20 +95,37 @@ class Kukupa::Controllers::ApiRequestController < Kukupa::Controllers::ApiContro
       case_url = Addressable::URI.parse(Kukupa.app_config['base-url'])
       case_url += "/case/#{@case.id}/view"
 
-      @email = Kukupa::Models::EmailQueue.new_from_template("outside_request", {
+      @admin_email = Kukupa::Models::EmailQueue.new_from_template("outside_request", {
         case_obj: @case,
         case_url: case_url.to_s,
         case_is_new: @case_is_new,
       })
 
-      @email.encrypt(:subject, "New outside request") # TODO: tl this
-      @email.encrypt(:recipients, JSON.generate({
+      @admin_email.queue_status = 'queued'
+      @admin_email.encrypt(:subject, "New outside request") # TODO: tl this
+      @admin_email.encrypt(:recipients, JSON.generate({
         "mode": "roles",
         "roles": ["case:alerts"],
       }))
 
-      @email.queue_status = 'queued'
-      @email.save
+      @admin_email.save
+
+      unless @case.assigned_advocate.nil?
+        @advocate_email = Kukupa::Models::EmailQueue.new_from_template("outside_request", {
+          case_obj: @case,
+          case_url: case_url.to_s,
+          case_is_new: @case_is_new,
+        })
+
+        @advocate_email.queue_status = 'queued'
+        @advocate_email.encrypt(:subject, "New outside request") # TODO: tl this
+        @advocate_email.encrypt(:recipients, JSON.generate({
+          "mode": "list_uids",
+          "uids": [@case.assigned_advocate],
+        }))
+
+        @advocate_email.save
+      end
     end
 
     return api_json({
