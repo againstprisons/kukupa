@@ -32,6 +32,7 @@ class Kukupa::Controllers::CaseTaskAddController < Kukupa::Controllers::CaseCont
     # get content
     @content = request.params['content']&.strip
     @content = nil if @content&.empty?
+    @content = Sanitize.fragment(@content, Sanitize::Config::RELAXED) if @content
     unless @content
       flash :error, t(:'case/task/add/errors/no_content')
       return redirect request.path

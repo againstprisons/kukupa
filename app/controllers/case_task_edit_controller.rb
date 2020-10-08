@@ -46,6 +46,7 @@ class Kukupa::Controllers::CaseTaskEditController < Kukupa::Controllers::CaseCon
     # get content
     @content = request.params['content']&.strip
     @content = nil if @content&.empty?
+    @content = Sanitize.fragment(@content, Sanitize::Config::RELAXED) if @content
     unless @content
       flash :error, t(:'case/task/edit/edit/errors/no_content')
       return redirect request.path
