@@ -12,3 +12,32 @@
       %li
         %a{href: c[:url]}
           &= c[:name]
+
+.form-main
+  %h1= t(:'dashboard/tasks/section_title')
+
+  - if tasks.empty?
+    %p= t(:'dashboard/tasks/no_tasks')
+
+  %ul.block-list
+    - tasks.each do |c|
+      %li
+        .dashboard-task-content
+          %ul.inline-list
+            %li
+              = c[:content]
+
+            %li
+              %a{href: c[:turl]}
+                %i.fa.fa-gear= ""
+
+
+        .dashboard-task-meta
+          %ul.inline-list
+            %li
+              = succeed ': ' do
+                = t(:'dashboard/tasks/item/case')
+
+              %a{href: c[:curl]}
+                &= c[:name]
+

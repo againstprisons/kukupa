@@ -161,6 +161,9 @@
 :'dashboard/content/welcome': "Welcome<% unless user_name.nil? %>, <%= e(user_name) %><% end %>!"
 :'dashboard/cases/section_title': "Assigned cases"
 :'dashboard/cases/no_cases': "You are not assigned to any cases."
+:'dashboard/tasks/section_title': "Incomplete tasks"
+:'dashboard/tasks/no_tasks': "You have no incomplete tasks. Yay!"
+:'dashboard/tasks/item/case': "Case"
 
 # Cases - index
 :'case/index/title': "Cases"
