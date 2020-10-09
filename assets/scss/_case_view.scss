@@ -21,14 +21,12 @@
   }
 }
 
-.case-view-tasks {
-  .case-view-task-editlink {
-    color: $case_renderable_header_foreground;
-    text-decoration: none;
+.case-view-task-editlink {
+  color: $case_renderable_header_foreground;
+  text-decoration: none;
 
-    &:focus, &:hover {
-      color: $color_accent;
-    }
+  &:focus, &:hover {
+    color: $color_accent;
   }
 }
 
