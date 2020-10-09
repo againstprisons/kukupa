@@ -21,6 +21,11 @@
     %h1= t(:'case/view/tasks/section_title')
 
     .inline-form
+      %a.pure-button.button{href: url("/case/#{case_obj.id}/task/add")}
+        %i.fa.fa-check-square-o= ""
+        %span
+          = t(:'case/view/actions/add_task')
+
       %a.pure-button.button{href: url("/case/#{case_obj.id}/view?tc=#{tasks_complete ? '0' : '1'}")}
         %i.fa{class: "fa-toggle-#{tasks_complete ? 'on' : 'off'}"}= ""
         = t("case/view/tasks/complete/#{tasks_complete ? 'on' : 'off'}".to_sym)
@@ -113,11 +118,6 @@
         %i.fa.fa-dollar= ""
         %span
           = t(:'case/view/actions/add_spend')
-
-      %a.pure-button.button{href: url("/case/#{case_obj.id}/task/add")}
-        %i.fa.fa-check-square-o= ""
-        %span
-          = t(:'case/view/actions/add_task')
 
     .case-view-renderables
       - if renderables.empty?
