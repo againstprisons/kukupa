@@ -20,6 +20,14 @@
   .form-main#case-view-tasks
     %h1= t(:'case/view/tasks/section_title')
 
+    %ul.inline-list
+      %li
+        = t("case/view/tasks/complete/#{tasks_complete ? 'on' : 'off'}".to_sym)
+
+      %li
+        %a{href: url("/case/#{case_obj.id}/view?tc=#{tasks_complete ? '0' : '1'}")}
+          = t(:'case/view/tasks/complete/toggle')
+
     - if tasks.empty?
       .message.message-warning
         = t(:'case/view/tasks/no_tasks')
@@ -29,6 +37,9 @@
         %li
           %ul.inline-list
             %li
+              - if t[:completion]
+                %i.fa.fa-check= ""
+
               &= t[:content]
 
             %li
@@ -79,6 +90,13 @@
                     = t(:'case/view/tasks/item/added')
 
                   = t(:'case_renderable/creation', ts: t[:creation])
+
+                - if t[:completion]
+                  %li
+                    = succeed ': ' do
+                      = t(:'case/view/tasks/item/completed')
+
+                    = t(:'case_renderable/creation', ts: t[:completion])
 
   .form-main#case-view-renderables
     %h1= t(:'case/view/entries/section_title')

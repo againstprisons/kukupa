@@ -1,9 +1,12 @@
 module Kukupa::Helpers::CaseViewHelpers
-  def get_tasks(c)
+  def get_tasks(c, opts = {})
     c = c.id if c.respond_to?(:id)
     advocates = {}
 
-    tasks = Kukupa::Models::CaseTask.where(case: c, completion: nil).map do |ct|
+    ds = Kukupa::Models::CaseTask.where(case: c)
+    ds = ds.where(completion: nil) unless opts[:include_complete]
+
+    tasks = ds.map do |ct|
       advocates = case_populate_advocate(advocates, ct.author)
       advocates = case_populate_advocate(advocates, ct.assigned_to)
 
@@ -12,13 +15,19 @@ module Kukupa::Helpers::CaseViewHelpers
         url: url("/case/#{c}/task/#{ct.id}"),
         anchor: ct.anchor,
         creation: ct.creation,
+        completion: ct.completion,
         content: ct.decrypt(:content),
         author: advocates[ct.author.to_s],
         assigned_to: advocates[ct.assigned_to.to_s],
       }
     end
 
-    tasks.sort { |a, b| b[:creation] <=> a[:creation] }
+    complete = tasks.select { |x| x[:completion] != nil }
+    tasks.reject! { |x| x[:completion] != nil }
+    tasks.sort! { |a, b| b[:creation] <=> a[:creation] }
+    complete.sort! { |a, b| b[:completion] <=> a[:completion] }
+
+    [tasks, complete].flatten
   end
 
   def get_renderables(c)
