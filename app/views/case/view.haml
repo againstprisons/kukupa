@@ -20,13 +20,10 @@
   .form-main#case-view-tasks
     %h1= t(:'case/view/tasks/section_title')
 
-    %ul.inline-list
-      %li
+    .inline-form
+      %a.pure-button.button{href: url("/case/#{case_obj.id}/view?tc=#{tasks_complete ? '0' : '1'}")}
+        %i.fa{class: "fa-toggle-#{tasks_complete ? 'on' : 'off'}"}= ""
         = t("case/view/tasks/complete/#{tasks_complete ? 'on' : 'off'}".to_sym)
-
-      %li
-        %a{href: url("/case/#{case_obj.id}/view?tc=#{tasks_complete ? '0' : '1'}")}
-          = t(:'case/view/tasks/complete/toggle')
 
     - if tasks.empty?
       .message.message-warning
