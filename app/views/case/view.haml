@@ -3,10 +3,40 @@
 
   = haml :'partials/case_header', layout: false, locals: {caseid: case_obj.id}
 
-  - if case_obj.assigned_advocate.nil?
+  - unless case_obj.assigned_advocate&.positive?
     .message.message-warning
       %i.fa.fa-warning= ""
       = t(:'case/view/no_advocate_assigned')
+
+  - unless case_obj.reconnect_id&.positive?
+    .message.message-warning
+      %i.fa.fa-warning= ""
+      = t(:'case/view/no_reconnect_link')
+
+  .form-main
+    %h1= t(:'case/view/details/section_title')
+
+    %ul
+      - if case_prison
+        %li
+          = succeed ': ' do
+            = t(:'prison')
+          %span
+            &= case_prison.decrypt(:name)
+
+      - if case_obj.prisoner_number
+        %li
+          = succeed ': ' do
+            = t(:'prisoner_number')
+          %code
+            &= case_obj.decrypt(:prisoner_number)
+
+      - if case_address
+        %li
+          = succeed ': ' do
+            = t(:'case/view/details/address')
+          %code
+            &= case_address
 
   .form-main
     %h1= t(:'case/view/spend_summary/section_title')

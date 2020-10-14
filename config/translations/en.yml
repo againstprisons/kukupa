@@ -200,6 +200,9 @@
 # Cases - view
 :'case/view/title': "Case: <%= e(name) %>"
 :'case/view/no_advocate_assigned': "This case does not have an assigned advocate, so only admins will be able to see it. You can assign an advocate to this case under the \"<%= t(:'case/nav/edit') %>\" section of this case profile."
+:'case/view/no_reconnect_link': "This case is not currently linked to a re:connect profile. Mail functionality will not work."
+:'case/view/details/section_title': "Case details"
+:'case/view/details/address': "Address"
 :'case/view/actions/add_note': "Add note"
 :'case/view/actions/add_spend': "Add spend"
 :'case/view/actions/add_task': "Add task"
