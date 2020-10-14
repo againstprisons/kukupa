@@ -330,6 +330,15 @@
 :'case/edit/assign/submit': "Change assigned advocate"
 :'case/edit/assign/success': "Successfully changed the assigned advocate for this case to <%= e(name) %>."
 :'case/edit/assign/errors/invalid_user': "The form submission included a case assignee that does not exist. Please try again."
+:'case/edit/reconnect/section_title': "Link to re:connect"
+:'case/edit/reconnect/linked': "This case is linked to the re:connect profile for <%= e(name) %>."
+:'case/edit/reconnect/not_linked': "This case is not currently linked to a re:connect profile."
+:'case/edit/reconnect/submit': "Edit re:connect link"
+:'case/edit/reconnect/index/title': "Case re:connect link: <%= e(name) %>"
+:'case/edit/reconnect/index/unlink/section_title': "Unlink re:connect profile"
+:'case/edit/reconnect/index/unlink/content': "To unlink this case from it's re:connect profile, click the button below."
+:'case/edit/reconnect/index/unlink/submit': "Unlink"
+:'case/edit/reconnect/index/unlink/success': "Successfully unlinked re:connect profile."
 
 # User settings
 :'usersettings/title': "User settings"

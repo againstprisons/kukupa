@@ -37,6 +37,8 @@ controllers:
     controller: CaseNoteAddController
   - path: /case/:case_id/note/:note_id
     controller: CaseNoteEditController
+  - path: /case/:case_id/edit/rc
+    controller: CaseEditReconnectController
   - path: /case/:case_id/edit
     controller: CaseEditController
   - path: /case/:case_id/view

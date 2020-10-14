@@ -7,6 +7,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
   add_route :post, '/assign', method: :assign
 
   include Kukupa::Helpers::CaseHelpers
+  include Kukupa::Helpers::ReconnectHelpers
 
   def before
     return halt 404 unless logged_in?
@@ -34,6 +35,8 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
     @release_date = @case.decrypt(:release_date)
     @release_date = Chronic.parse(@release_date, guess: true) if @release_date
     @assigned = Kukupa::Models::User[@case.assigned_advocate]
+    @reconnect_id = @case.reconnect_id
+    @reconnect_data = reconnect_penpal(cid: @reconnect_id) if @reconnect_id&.positive?
     @case_name = @case.get_name
     @title = t(:'case/edit/title', name: @case_name)
 
@@ -79,6 +82,11 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
         prn: @prn,
         birth_date: @birth_date,
         release_date: @release_date,
+      },
+      case_reconnect: {
+        id: @reconnect_id,
+        data: @reconnect_data,
+        name: @reconnect_data ? @reconnect_data['name']&.compact&.join(' ') : nil,
       },
       assignable_users: @assignable_users,
       prisons: @prisons,

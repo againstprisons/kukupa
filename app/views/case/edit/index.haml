@@ -73,3 +73,17 @@
       %button.pure-button.button.button-primary{type: 'submit'}
         %i.fa.fa-user-o= ""
         = t(:'case/edit/assign/submit')
+
+  .form-main
+    %h1= t(:'case/edit/reconnect/section_title')
+
+    %p
+      - if case_reconnect[:id] && case_reconnect[:id].positive?
+        = t(:'case/edit/reconnect/linked', name: case_reconnect[:name])
+      - else
+        = t(:'case/edit/reconnect/not_linked')
+
+    - if has_role?('case:reconnect')
+      %a.pure-button.button{href: url("/case/#{case_obj.id}/edit/rc")}
+        %i.fa.fa-link=""
+        = t(:'case/edit/reconnect/submit')

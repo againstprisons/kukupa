@@ -1,0 +1,27 @@
+.case-edit-reconnect{'data-case-id': case_obj.id}
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: url("/case/#{case_obj.id}/edit")}
+      %i.fa.fa-chevron-left= ""
+      %span
+        = t(:'back')
+
+  %p
+    - if case_reconnect[:id] && case_reconnect[:id].positive?
+      = t(:'case/edit/reconnect/linked', name: case_reconnect[:name])
+    - else
+      = t(:'case/edit/reconnect/not_linked')
+
+  - if case_reconnect[:id] && case_reconnect[:id].positive?
+    %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: url("/case/#{case_obj.id}/edit/rc/unlink")}
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+      %input{type: 'hidden', name: 'confirm', value: '1'}
+
+      %h1= t(:'case/edit/reconnect/index/unlink/section_title')
+      %p= t(:'case/edit/reconnect/index/unlink/content')
+
+      %button.pure-button.button{type: 'submit'}
+        %i.fa.fa-unlink= ""
+        = t(:'case/edit/reconnect/index/unlink/submit')
+
