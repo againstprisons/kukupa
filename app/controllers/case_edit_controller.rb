@@ -65,7 +65,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       flash :success, t(:'case/edit/edit/success')
     end
 
-    return haml(:'case/edit', :locals => {
+    return haml(:'case/edit/index', :locals => {
       title: @title,
       case_obj: @case,
       case_name: @case_name,
