@@ -91,7 +91,7 @@
               %time{datetime: c[:last_unapproved_spend][:creation].strftime("%Y-%m-%d %H:%M")}
                 = t(:'case_renderable/creation', ts: c[:last_unapproved_spend][:creation])
 
-              %span{title: "User[#{c[:last_spend][:author][:id]}]"}
+              %span{title: "User[#{c[:last_unapproved_spend][:author][:id]}]"}
                 = t(:'case/index/cases/item/last_unapproved_spend/author', name: c[:last_unapproved_spend][:author][:name])
 
               %span{title: c[:last_unapproved_spend][:fid]}
