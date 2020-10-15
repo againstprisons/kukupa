@@ -24,12 +24,14 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
     @prison = Kukupa::Models::Prison[@case.decrypt(:prison).to_i]
     if @prison && @case.prisoner_number
       p_addr = @prison.decrypt(:physical_address)
-      p_addr = p_addr.split('\n').map(&:strip)
-      @address = [
-        @case_name,
-        "PRN #{@case.decrypt(:prisoner_number)&.strip}",
-        p_addr,
-      ].join(', ')
+      p_addr = p_addr&.split("\n")&.map(&:strip)
+      unless p_addr.nil? || p_addr&.empty?
+        @address = [
+          @case_name,
+          "PRN #{@case.decrypt(:prisoner_number)&.strip}",
+          p_addr,
+        ].join(', ')
+      end
     end
 
     @spend_year_max = Kukupa.app_config['fund-max-spend-per-case-year'].to_f
