@@ -21,7 +21,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case
     unless has_role?('case:view_all')
-      return halt 404 unless @case.assigned_advocate == @user.id
+      return halt 404 unless @case.can_access?(@user)
     end
 
     @prison = Kukupa::Models::Prison[@case.decrypt(:prison).to_i]
@@ -97,7 +97,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case
     unless has_role?('case:view_all')
-      return halt 404 unless @case.assigned_advocate == @user.id
+      return halt 404 unless @case.can_access?(@user)
     end
 
     @prison = request.params['prison']&.strip&.downcase

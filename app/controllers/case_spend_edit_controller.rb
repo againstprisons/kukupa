@@ -14,7 +14,7 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
     @case = Kukupa::Models::Case[cid.to_i]
     return halt 404 unless @case
     unless has_role?('case:view_all')
-      return halt 404 unless @case.assigned_advocate == @user.id
+      return halt 404 unless @case.can_access?(@user)
     end
 
     @spend = Kukupa::Models::CaseSpend[sid.to_i]
@@ -101,7 +101,7 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
     @case = Kukupa::Models::Case[cid.to_i]
     return halt 404 unless @case
     unless has_role?('case:view_all')
-      return halt 404 unless @case.assigned_advocate == @user.id
+      return halt 404 unless @case.can_access?(@user)
     end
 
     @spend = Kukupa::Models::CaseSpend[sid.to_i]

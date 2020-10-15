@@ -21,7 +21,7 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case
     unless has_role?('case:view_all')
-      return halt 404 unless @case.assigned_advocate == @user.id
+      return halt 404 unless @case.can_access?(@user)
     end
 
     @reconnect_id = @case.reconnect_id
@@ -46,7 +46,7 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case
     unless has_role?('case:view_all')
-      return halt 404 unless @case.assigned_advocate == @user.id
+      return halt 404 unless @case.can_access?(@user)
     end
 
     if request.params['confirm'].to_i.positive?
@@ -63,7 +63,7 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case
     unless has_role?('case:view_all')
-      return halt 404 unless @case.assigned_advocate == @user.id
+      return halt 404 unless @case.can_access?(@user)
     end
 
     @prn = @case.decrypt(:prisoner_number)
@@ -89,7 +89,7 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case
     unless has_role?('case:view_all')
-      return halt 404 unless @case.assigned_advocate == @user.id
+      return halt 404 unless @case.can_access?(@user)
     end
 
     if request.post?

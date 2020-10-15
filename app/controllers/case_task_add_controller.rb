@@ -13,7 +13,7 @@ class Kukupa::Controllers::CaseTaskAddController < Kukupa::Controllers::CaseCont
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case
     unless has_role?('case:view_all')
-      return halt 404 unless @case.assigned_advocate == @user.id
+      return halt 404 unless @case.can_access?(@user)
     end
 
     @accessors = case_users_with_access(@case)

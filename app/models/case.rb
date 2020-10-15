@@ -1,4 +1,16 @@
 class Kukupa::Models::Case < Sequel::Model
+  # TODO: allow multiple advocates per case
+  def self.assigned_to(user)
+    user = user.id if user.respond_to?(:id)
+    self.where(assigned_advocate: user)
+  end
+
+  # TODO: allow multiple advocates per case
+  def can_access?(user)
+    user = user.id if user.respond_to?(:id)
+    user == self.assigned_advocate
+  end
+
   def get_name
     [
       self.decrypt(:first_name),

@@ -27,7 +27,7 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
       }
     end
 
-    @my_cases = Kukupa::Models::Case.where(assigned_advocate: @user.id).map do |c|
+    @my_cases = Kukupa::Models::Case.assigned_to(@user).map do |c|
       url = Addressable::URI.parse(url("/case/#{c.id}/view"))
 
       {
