@@ -8,7 +8,7 @@
       %i.fa.fa-warning= ""
       = t(:'case/view/no_advocate_assigned')
 
-  - unless case_obj.reconnect_id&.positive?
+  - unless case_obj.reconnect_id.to_i.positive?
     .message.message-warning
       %i.fa.fa-warning= ""
       = t(:'case/view/no_reconnect_link')

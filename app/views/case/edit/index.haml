@@ -78,7 +78,7 @@
     %h1= t(:'case/edit/reconnect/section_title')
 
     %p
-      - if case_reconnect[:id] && case_reconnect[:id].positive?
+      - if case_reconnect[:id] && case_reconnect[:id].to_i.positive?
         = t(:'case/edit/reconnect/linked', name: case_reconnect[:name])
       - else
         = t(:'case/edit/reconnect/not_linked')

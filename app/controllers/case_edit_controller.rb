@@ -36,7 +36,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
     @release_date = Chronic.parse(@release_date, guess: true) if @release_date
     @assigned = Kukupa::Models::User[@case.assigned_advocate]
     @reconnect_id = @case.reconnect_id
-    @reconnect_data = reconnect_penpal(cid: @reconnect_id) if @reconnect_id&.positive?
+    @reconnect_data = reconnect_penpal(cid: @reconnect_id) if @reconnect_id.to_i.positive?
     @case_name = @case.get_name
     @title = t(:'case/edit/title', name: @case_name)
 

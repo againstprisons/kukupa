@@ -1,0 +1,19 @@
+.case-edit-reconnect-manual-link{'data-case-id': case_obj.id}
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: url("/case/#{case_obj.id}/edit/rc")}
+      %i.fa.fa-chevron-left= ""
+      %span
+        = t(:'back')
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'case/edit/reconnect/index/manual_link/section_title')
+
+    %label{for: 'cid'}= t(:'case/edit/reconnect/index/manual_link/id_field')
+    %input#cid{name: 'cid', type: 'number', required: true}
+
+    %button.pure-button.button{type: 'submit'}
+      %i.fa.fa-link= ""
+      = t(:'case/edit/reconnect/index/manual_link/submit')
