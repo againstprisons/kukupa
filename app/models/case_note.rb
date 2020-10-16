@@ -50,5 +50,21 @@ class Kukupa::Models::CaseNote < Sequel::Model
 
       advocate_email.save
     end
+
+    # confirmation email to requester
+    unless request_metadata['email'].nil? || request_metadata['email']&.empty?
+      confirm_email = Kukupa::Models::EmailQueue.new_from_template("outside_request_confirm", {
+        case_obj: case_obj,
+      })
+
+      confirm_email.queue_status = 'queued'
+      confirm_email.encrypt(:subject, "Your advocacy request was received") # TODO: tl this
+      confirm_email.encrypt(:recipients, JSON.generate({
+        "mode": "list",
+        "list": [request_metadata['email']],
+      }))
+
+      confirm_email.save
+    end
   end
 end
