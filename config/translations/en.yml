@@ -352,6 +352,9 @@
 :'case/edit/reconnect/index/manual_link/submit': "Attempt re:connect link"
 :'case/edit/reconnect/index/manual_link/success': "Successfully linked re:connect profile."
 :'case/edit/reconnect/index/manual_link/errors/no_reconnect_data': "No data was provided by re:connect with the given penpal ID. This could mean re:connect is down, or that there is no re:connect penpal profile with the given ID."
+:'case/edit/reconnect/index/sync/section_title': "Sync data from re:connect"
+:'case/edit/reconnect/index/sync/submit': "Perform sync"
+:'case/edit/reconnect/index/sync/success': "Successfully queued sync from re:connect. This will happen in the next few minutes."
 
 # User settings
 :'usersettings/title': "User settings"

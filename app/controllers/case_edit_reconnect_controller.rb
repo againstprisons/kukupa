@@ -1,5 +1,6 @@
 class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::CaseController
   add_route :get, '/'
+  add_route :post, '/sync', method: :sync
   add_route :post, '/unlink', method: :unlink
   add_route :post, '/link', method: :link
   add_route :get, '/manual-link', method: :manual_link
@@ -42,6 +43,19 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
     })
   end
 
+  def sync(cid)
+    @case = Kukupa::Models::Case[cid]
+    return halt 404 unless @case
+    unless has_role?('case:view_all')
+      return halt 404 unless @case.can_access?(@user)
+    end
+
+    Kukupa::Workers::SyncCasePenpalFromReconnectWorker.perform_async(@case.id)
+    flash :success, t(:'case/edit/reconnect/index/sync/success')
+
+    return redirect url("/case/#{@case.id}/edit/rc")
+  end
+
   def unlink(cid)
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case
@@ -81,6 +95,8 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
     @case.reconnect_id = @reconnect_data['id'].to_i
     @case.save
 
+    Kukupa::Workers::SyncCasePenpalFromReconnectWorker.perform_async(@case.id)
+
     flash :success, t(:'case/edit/reconnect/index/link/success')
     return redirect url("/case/#{@case.id}/edit/rc")
   end
@@ -99,7 +115,9 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
       if @reconnect_data && @reconnect_data&.key?('id')
         @case.reconnect_id = @reconnect_data['id'].to_i
         @case.save
-  
+
+        Kukupa::Workers::SyncCasePenpalFromReconnectWorker.perform_async(@case.id)
+
         flash :success, t(:'case/edit/reconnect/index/manual_link/success')
         return redirect url("/case/#{@case.id}/edit/rc")
 
