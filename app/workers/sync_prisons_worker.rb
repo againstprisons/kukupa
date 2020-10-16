@@ -53,7 +53,7 @@ class Kukupa::Workers::SyncPrisonsWorker
       end
 
       model.encrypt(:name, pr['name'])
-      model.encrypt(:physical_address, pr['address'])
+      model.encrypt(:physical_address, pr['physical'])
       model.encrypt(:email_address, pr['email'])
       model.save
     end
