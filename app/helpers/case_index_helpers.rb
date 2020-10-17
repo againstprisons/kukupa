@@ -3,9 +3,11 @@ module Kukupa::Helpers::CaseIndexHelpers
     cuser = current_user
     advocates = {}
 
-    cases = Kukupa::Models::Case.map do |c|
-      next unless c.is_open || opts[:include_closed]
+    ds = Kukupa::Models::Case
+    ds = ds.where(is_open: true) unless opts[:include_closed]
+    ds = ds.where(assigned_advocate: cuser.id) unless opts[:view_all]
 
+    cases = ds.map do |c|
       url = Addressable::URI.parse(url("/case/#{c.id}/view"))
 
       {
@@ -19,11 +21,6 @@ module Kukupa::Helpers::CaseIndexHelpers
 
     cases.compact!
     cases.sort! { |a, b| (a[:mine] ? 1 : 0) <=> (b[:mine] ? 1 : 0) }
-
-    # only let admins see all cases by rejecting anything that isn't :mine
-    unless opts[:view_all]
-      cases.reject! { |x| !x[:mine] }
-    end
 
     # get advocate details
     cases.map! do |c|
