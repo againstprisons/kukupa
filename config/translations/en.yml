@@ -167,6 +167,12 @@
 
 # Cases - index
 :'case/index/title': "Cases"
+:'case/index/search/section_title': "Search cases"
+:'case/index/search/field_type': "Search type"
+:'case/index/search/field_type/prn': "Prisoner number"
+:'case/index/search/field_type/name': "Name / Pseudonym"
+:'case/index/search/field_query': "Search query"
+:'case/index/search/submit': "Search"
 :'case/index/cases/no_cases': "No cases."
 :'case/index/cases/section_title': "Cases assigned to me"
 :'case/index/cases/item/last_note': "Last case note"
@@ -182,6 +188,11 @@
 :'case/index/cases/item/total_spend/month': "This month"
 :'case/index/cases/item/total_spend/year': "This year"
 :'case/index/cases/item/total_spend/year/percent': "<%= e(sprintf('%.01f%%', (amount / max) * 100)) %> of yearly max"
+
+# Cases - search
+:'case/search/title': "Search results"
+:'case/search/section_title': "Search results"
+:'case/search/errors/no_cases': "No cases were found with your search criteria."
 
 # Cases - create
 :'case/create/title': "Create case"

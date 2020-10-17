@@ -6,6 +6,21 @@
       %i.fa.fa-plus= ""
       = t(:'case/create/title')
 
+%form.pure-form.pure-form-stacked.form-main{method: 'GET', action: url('/case/search')}
+  %h1= t(:'case/index/search/section_title')
+
+  %label{for: 'search_type'}= t(:'case/index/search/field_type')
+  %select#search_type{name: 'type', required: true}
+    %option{value: 'prn'}= t(:'case/index/search/field_type/prn')
+    %option{value: 'name'}= t(:'case/index/search/field_type/name')
+
+  %label{for: 'search_query'}= t(:'case/index/search/field_query')
+  %input#search_query{name: 'query', type: 'text', required: true, placeholder: t(:'case/index/search/field_query')}
+
+  %button.pure-button.button{type: 'submit'}
+    %i.fa.fa-search= ""
+    = t(:'case/index/search/submit')
+
 .form-main
   %h1= t(:'case/index/cases/section_title')
 

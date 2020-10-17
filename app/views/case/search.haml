@@ -1,0 +1,33 @@
+.case-search-results
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: url('/case')}
+      %i.fa.fa-chevron-left= ""
+      = t(:'back')
+
+  .form-main
+    %h1= t(:'case/search/section_title')
+
+    %ul
+      - results.each do |res|
+        %li
+          .searchres-name
+            %a{href: res[:url]}
+              &= res[:name]
+
+          .searchres-meta
+            %ul.inline-list
+              - if res[:prn]
+                %li
+                  = succeed ': ' do
+                    = t(:'prisoner_number')
+                  %code
+                    &= res[:prn]
+
+              - if res[:prison]
+                %li
+                  = succeed ': ' do
+                    = t(:'prison')
+                  %code
+                    &= res[:prison][:name]

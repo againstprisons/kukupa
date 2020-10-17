@@ -45,6 +45,8 @@ controllers:
     controller: CaseViewController
   - path: /case/create
     controller: CaseCreateController
+  - path: /case/search
+    controller: CaseSearchController
   - path: /case
     controller: CaseIndexController
 
