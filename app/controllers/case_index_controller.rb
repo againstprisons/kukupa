@@ -12,14 +12,12 @@ class Kukupa::Controllers::CaseIndexController < Kukupa::Controllers::CaseContro
   end
 
   def index
-    @all_cases = case_index_get_cases(
-      view_all: has_role?('case:view_all'),
-    )
-
+    @cases = case_index_get_cases()
     @title = t(:'case/index/title')
+
     return haml(:'case/index', :locals => {
       title: @title,
-      cases: @all_cases,
+      cases: @cases,
       stats: @stats,
     })
   end
