@@ -6,12 +6,6 @@
       %i.fa.fa-plus= ""
       = t(:'case/create/title')
 
-- if has_role?('case:stats:view')
-  .form-main
-    %h1= t(:'case/index/stats/section_title')
-
-    %p= t(:'case/index/stats/spend_recent', stats[:spend])
-
 .form-main
   %h1= t(:'case/index/cases/section_title')
 
