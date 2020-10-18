@@ -193,6 +193,8 @@
 :'case/search/title': "Search results"
 :'case/search/section_title': "Search results"
 :'case/search/errors/no_cases': "No cases were found with your search criteria."
+:'case/search/res/name': "Searching for name: <code><%= e(query) %></code>"
+:'case/search/res/prn': "Searching for PRN: <code><%= e(query) %></code>"
 
 # Cases - create
 :'case/create/title': "Create case"

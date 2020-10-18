@@ -72,6 +72,7 @@ class Kukupa::Controllers::CaseSearchController < Kukupa::Controllers::CaseContr
     @title = t(:'case/search/title')
     return haml(:'case/search', :locals => {
       title: @title,
+      query: t("case/search/res/#{@type}".to_sym, query: @query),
       results: @results,
     })
   end
