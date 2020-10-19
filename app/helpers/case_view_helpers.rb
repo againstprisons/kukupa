@@ -47,9 +47,8 @@ module Kukupa::Helpers::CaseViewHelpers
       ]
 
       begin
-        metadata = JSON.parse(cn.decrypt(:metadata) || '{}')
-        metadata = metadata.keys.map do |k|
-          [k.to_sym, metadata[k]]
+        metadata = JSON.parse(cn.decrypt(:metadata) || '{}').map do |k, v|
+          [k.to_sym, v]
         end.to_h
       rescue
         metadata = {}
@@ -131,20 +130,19 @@ module Kukupa::Helpers::CaseViewHelpers
       end
 
       Kukupa::Models::CaseSpendUpdate.where(spend: cs.id).each do |csu|
-        data = JSON.parse(csu.decrypt(:data))
-        update = {}
-
         advocates = case_populate_advocate(advocates, csu.author)
 
-        if csu.update_type == 'edit'
-          update = {
-            type: :edit,
-            old_amount: data['old_amount'].to_f,
-            new_amount: data['new_amount'].to_f,
-            old_content: data['old_content'],
-            new_content: data['new_content'],
-          }
+        begin
+          data = JSON.parse(csu.decrypt(:data) || '{}').map do |k, v|
+            [k.to_sym, v]
+          end.to_h
+        rescue
+          data = {}
         end
+
+        data.merge!({
+          type: csu.update_type.to_sym,
+        })
 
         items << {
           type: :spend_update,
@@ -154,7 +152,7 @@ module Kukupa::Helpers::CaseViewHelpers
           creation: csu.creation,
           author: advocates[csu.author.to_s],
           parent: parent,
-          update: update,
+          update: data,
           actions: child_actions,
         }
       end
