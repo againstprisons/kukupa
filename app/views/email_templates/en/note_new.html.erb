@@ -1,10 +1,23 @@
 <p>Hello,</p>
 
 <p>
-  A new case note has been added by 
-  <em><%= e(author.decrypt(:name)) %></em>
-  in the case for <%= e(case_obj.get_name) %>.
+  <% if edited %>
+    A case note that was created by <em><%= e(author.decrypt(:name)) %></em>
+    has been edited.
+  <% else %>
+    A new case note has been added by <em><%= e(author.decrypt(:name)) %></em>.
+  <% end %>
+
+  This case note belongs to the case for <%= e(case_obj.get_name) %>.
 </p>
+
+<% if edited %>
+  <p>
+    This case note has been edited since it's creation.
+    Edits to this case note are shown in the notes section
+    of the case page linked below.
+  </p>
+<% end %>
 
 <p>
   To view this case note, visit:

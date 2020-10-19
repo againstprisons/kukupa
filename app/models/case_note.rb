@@ -68,6 +68,39 @@ class Kukupa::Models::CaseNote < Sequel::Model
     end
   end
 
+  def send_creation_email!(opts = {})
+    opts[:edited] ||= false
+
+    case_obj = Kukupa::Models::Case[self.case]
+    return unless case_obj
+    return unless case_obj.assigned_advocate&.positive?
+
+    author = Kukupa::Models::User[self.author]
+    return unless author
+
+    note_url = Addressable::URI.parse(Kukupa.app_config['base-url'])
+    note_url += "/case/#{case_obj.id}/view##{self.anchor}"
+
+    subject = "Case note #{opts[:edited] ? 'edited' : 'added'}" # TODO: tl this
+
+    email = Kukupa::Models::EmailQueue.new_from_template("note_new", {
+      case_obj: case_obj,
+      note_url: note_url.to_s,
+      spend_obj: self,
+      author: author,
+      edited: opts[:edited],
+    })
+
+    email.queue_status = 'queued'
+    email.encrypt(:subject, subject)
+    email.encrypt(:recipients, JSON.generate({
+      "mode": "list_uids",
+      "uids": [case_obj.assigned_advocate],
+    }))
+
+    email.save
+  end
+
   def send_deletion_email!(user, opts = {})
     case_obj = Kukupa::Models::Case[self.case]
     return unless case_obj

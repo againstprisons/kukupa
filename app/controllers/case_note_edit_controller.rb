@@ -53,6 +53,9 @@ class Kukupa::Controllers::CaseNoteEditController < Kukupa::Controllers::CaseCon
     # run a sanitize pass
     @content = Sanitize.fragment(@content, Sanitize::Config::RELAXED)
 
+    # send note edit email
+    @note.send_creation_email!(edited: true)
+
     # save
     @note.edited = Time.now.utc
     @note.encrypt(:content, @content)

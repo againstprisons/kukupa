@@ -44,28 +44,7 @@ class Kukupa::Controllers::CaseNoteAddController < Kukupa::Controllers::CaseCont
     @note.save
 
     # send "new note" email to the assigned advocate for this case
-    # if the assigned advocate was not the one that created this case note
-    unless @user.id == @case.assigned_advocate
-      note_url = Addressable::URI.parse(Kukupa.app_config['base-url'])
-      note_url += "/case/#{@case.id}/view##{@note.anchor}"
-
-      @email = Kukupa::Models::EmailQueue.new_from_template("note_new", {
-        case_obj: @case,
-        note_obj: @note,
-        note_url: note_url.to_s,
-        content: @content,
-        author: @user,
-      })
-
-      @email.encrypt(:subject, "Case note added") # TODO: tl this
-      @email.encrypt(:recipients, JSON.generate({
-        "mode": "list_uids",
-        "uids": [@case.assigned_advocate],
-      }))
-
-      @email.queue_status = 'queued'
-      @email.save
-    end
+    @note.send_creation_email!
 
     # redirect back
     flash :success, t(:'case/note/add/success')

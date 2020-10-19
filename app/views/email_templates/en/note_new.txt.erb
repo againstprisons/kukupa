@@ -1,7 +1,19 @@
 Hello,
 
-A new case note has been added by <%= e(author.decrypt(:name)) %>
-in the case for <%= e(case_obj.get_name) %>.
+<% if edited %>
+A case note that was created by <%= e(author.decrypt(:name)) %>
+has been edited.
+<% else %>
+A new case note has been added by <%= e(author.decrypt(:name)) %>.
+<% end %>
+
+This case note belongs to the case for <%= e(case_obj.get_name) %>.
+
+<% if edited %>
+This case note has been edited since it's creation.
+Edits to this case note are shown in the notes section
+of the case page linked below.
+<% end %>
 
 To view this case note, visit:
 <%= e(note_url) %>
