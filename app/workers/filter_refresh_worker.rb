@@ -44,8 +44,23 @@ class Kukupa::Workers::FilterRefreshWorker
     logger.info("Generated #{pp_count[:filters]} filters for #{pp_count[:cases]} cases.")
 
     ###
+    # fix task update type values
+    # TODO: this is temporary, remove this later!
+    ###
+
+    ctu_valid_types = %w[assign complete]
+    Kukupa::Models::CaseTaskUpdate.all.each do |ctu|
+      unless ctu_valid_types.include?(ctu.update_type)
+        logger.info("Decrypting update_type on CaseTaskUpdate[#{ctu.id}]")
+        update_type = ctu.decrypt(:update_type)&.downcase&.to_s
+        ctu.update_type = update_type
+        ctu.save
+      end
+    end
+
+    ###
     # disable maintenance mode if it wasn't already enabled
-    ####
+    ###
 
     if maint_enabled
       logger.info("Not disabling maintenance mode as it was enabled when worker started")

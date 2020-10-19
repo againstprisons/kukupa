@@ -64,9 +64,9 @@ class Kukupa::Controllers::CaseTaskEditController < Kukupa::Controllers::CaseCon
       update_entry = Kukupa::Models::CaseTaskUpdate.new(
         task: @task.id,
         author: @user.id,
+        update_type: 'assign',
       ).save
 
-      update_entry.encrypt(:update_type, 'assign')
       update_entry.encrypt(:data, JSON.generate(to: @assignee.id))
       update_entry.save
 
@@ -133,10 +133,8 @@ class Kukupa::Controllers::CaseTaskEditController < Kukupa::Controllers::CaseCon
     update_entry = Kukupa::Models::CaseTaskUpdate.new(
       task: @task.id,
       author: @user.id,
+      update_type: 'complete',
     ).save
-
-    update_entry.encrypt(:update_type, 'complete')
-    update_entry.save
 
     # TODO: send "task complete" email to this task's author and assignee
     # if the author or assignee is not the user completing the task

@@ -192,13 +192,21 @@ module Kukupa::Helpers::CaseViewHelpers
       Kukupa::Models::CaseTaskUpdate.where(task: ct.id).each do |ctu|
         advocates = case_populate_advocate(advocates, ctu.author)
 
-        update_type = ctu.decrypt(:update_type)&.strip&.downcase&.to_sym
-        update_data = JSON.parse(ctu.data.nil?() ? '{}' : ctu.decrypt(:data))
-        update = {type: update_type}
+        begin
+          data = JSON.parse(ctu.decrypt(:data) || '{}').map do |k, v|
+            [k.to_sym, v]
+          end.to_h
+        rescue
+          data = {}
+        end
 
-        if update_type == :assign
-          advocates = case_populate_advocate(advocates, update_data['to'])
-          update[:to] = advocates[update_data['to'].to_s]
+        data.merge!({
+          type: ctu.update_type.to_sym,
+        })
+
+        if data[:type] == :assign
+          advocates = case_populate_advocate(advocates, update_data[:to])
+          update_data[:to] = advocates[update_data[:to].to_s]
         end
 
         items << {
@@ -207,7 +215,7 @@ module Kukupa::Helpers::CaseViewHelpers
           anchor: ctu.anchor,
           creation: ctu.creation,
           author: advocates[ctu.author.to_s],
-          update: update,
+          update: data,
           content: parent[:content],
           parent: parent,
           actions: child_actions,
