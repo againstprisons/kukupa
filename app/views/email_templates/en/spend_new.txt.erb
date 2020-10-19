@@ -8,5 +8,17 @@ The note for this spend is:
 
 > <%= e(content) %>
 
+<% if autoapproved %>
+This spend has been automatically approved,
+as it is under the automatic approval threshold
+of <%= e(sprintf('$%.02f', app_config['fund-max-auto-approve'].to_f)) %>.
+<% end %>
+
+<% if edited %>
+This spend has been edited since it's creation.
+Edits to this spend are shown in the notes section
+of the case page linked below.
+<% end %>
+
 To view this case, visit:
 <%= e(case_url) %>

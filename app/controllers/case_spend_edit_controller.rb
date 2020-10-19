@@ -96,6 +96,8 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
       if aggregate <= Kukupa.app_config['fund-max-spend-per-case-year']
         @spend.approver = @user.id
         @spend.save
+
+        @spend.send_creation_email!(autoapproved: true, edited: true)
       end
 
     # if > auto-approve threshold, automatically *unapprove* the edit, even if
@@ -105,7 +107,8 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
       @spend.approver = nil
       @spend.save
 
-      # TODO: send "new spending request to be approved" email
+      # send "new spending request to be approved" email
+      @spend.send_creation_email!(edited: true)
     end
 
     # regenerate aggregates

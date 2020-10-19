@@ -11,6 +11,22 @@
   <blockquote><%= content %></blockquote>
 </p>
 
+<% if autoapproved %>
+  <p>
+    This spend has been automatically approved,
+    as it is under the automatic approval threshold
+    of <%= e(sprintf('$%.02f', app_config['fund-max-auto-approve'].to_f)) %>.
+  </p>
+<% end %>
+
+<% if edited %>
+  <p>
+    This spend has been edited since it's creation.
+    Edits to this spend are shown in the notes section
+    of the case page linked below.
+  </p>
+<% end %>
+
 <p>
   To view this case, visit:
   <a href="<%= e(case_url) %>"><%= e(case_url) %></a>

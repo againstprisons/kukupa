@@ -63,28 +63,7 @@ class Kukupa::Controllers::CaseSpendAddController < Kukupa::Controllers::CaseCon
         Kukupa::Models::CaseSpendAggregate.create_aggregate_for_case(@case)
 
         # send "new spending request, auto-approved" email
-        begin
-          case_url = Addressable::URI.parse(Kukupa.app_config['base-url'])
-          case_url += "/case/#{@case.id}/view"
-
-          @email = Kukupa::Models::EmailQueue.new_from_template("spend_new_autoapproved", {
-            case_obj: @case,
-            case_url: case_url.to_s,
-            spend_obj: @spend,
-            content: @content,
-            amount: @amount,
-            author: @user,
-          })
-
-          @email.encrypt(:subject, "Case spend added and auto-approved") # TODO: tl this
-          @email.encrypt(:recipients, JSON.generate({
-            "mode": "roles",
-            "roles": ["case:alerts"],
-          }))
-
-          @email.queue_status = 'queued'
-          @email.save
-        end
+        @spend.send_creation_email!(autoapproved: true)
 
         flash :success, t(:'case/spend/add/success/auto_approve', threshold: Kukupa.app_config['fund-max-auto-approve'])
         redirect url("/case/#{@case.id}/view##{@spend.anchor}")
@@ -92,27 +71,7 @@ class Kukupa::Controllers::CaseSpendAddController < Kukupa::Controllers::CaseCon
 
     else
       # send "new spending request to be approved" email
-
-      case_url = Addressable::URI.parse(Kukupa.app_config['base-url'])
-      case_url += "/case/#{@case.id}/view"
-
-      @email = Kukupa::Models::EmailQueue.new_from_template("spend_new", {
-        case_obj: @case,
-        case_url: case_url.to_s,
-        spend_obj: @spend,
-        content: @content,
-        amount: @amount,
-        author: @user,
-      })
-
-      @email.encrypt(:subject, "Case spend added") # TODO: tl this
-      @email.encrypt(:recipients, JSON.generate({
-        "mode": "roles",
-        "roles": ["case:alerts"],
-      }))
-
-      @email.queue_status = 'queued'
-      @email.save
+      @spend.send_creation_email!
     end
 
     # redirect back
