@@ -10,11 +10,11 @@ class Kukupa::Models::CaseTask < Sequel::Model
       self.reminded,
     ]
 
-    update = Kukupa::Models::CaseTaskUpdate
+    dates << Kukupa::Models::CaseTaskUpdate
       .where(task: self.id)
-      .order(Sequel.desc(:creation))
+      .reverse(:creation)
       .first
-    dates << update.creation if update
+      &.creation
 
     dates.compact.sort.last
   end
