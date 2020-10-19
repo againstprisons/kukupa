@@ -27,15 +27,10 @@
         %i.fa.fa-pencil-square-o= ""
         = t(:'case/spend/edit/edit/submit')
 
-  %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: urls[:delete]}
-    %h1= t(:'case/spend/edit/delete/section_title')
-
-    - unless spend_approver.nil? || spend_approver_self || has_role?('case:spend:can_approve')
-      .message.message-warning
-        = t(:'case/spend/edit/delete/errors/is_approved')
-
-    - else
+  - if has_role?('case:delete_entry')
+    %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: urls[:delete]}
       %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+      %h1= t(:'case/spend/edit/delete/section_title')
 
       %label{for: 'delete-confirm'}= t(:'case/spend/edit/delete/confirm')
       %input#delete-confirm{name: 'confirm', type: 'text', required: true}

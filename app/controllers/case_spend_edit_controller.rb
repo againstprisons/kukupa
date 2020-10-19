@@ -99,22 +99,14 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
   end
 
   def delete(cid, sid)
+    return halt 404 unless has_role?('case:delete_entry')
+
     @case = Kukupa::Models::Case[cid.to_i]
     return halt 404 unless @case
-    unless has_role?('case:view_all')
-      return halt 404 unless @case.can_access?(@user)
-    end
 
     @spend = Kukupa::Models::CaseSpend[sid.to_i]
     return halt 404 unless @spend
     return halt 404 unless @spend.case == @case.id
-
-    unless @spend.approver.nil?
-      unless @spend.approver == @user.id || has_role?('case:spend:can_approve')
-        flash :error, t(:'case/spend/edit/delete/errors/is_approved')
-        return redirect url("/case/#{@case.id}/spend/#{@spend.id}")
-      end
-    end
 
     unless request.params['confirm']&.strip == "DELETE"
       flash :error, t(:'case/note/edit/delete/errors/no_confirm')
