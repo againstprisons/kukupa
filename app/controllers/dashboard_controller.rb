@@ -13,17 +13,18 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
     @user_name = nil if @user_name.nil? || @user_name&.empty?
 
     @my_tasks = Kukupa::Models::CaseTask.where(assigned_to: @user.id, completion: nil).map do |t|
-      c = Kukupa::Models::Case[t.case]
-      curl = Addressable::URI.parse(url("/case/#{c.id}/view#case-view-tasks"))
-      turl = Addressable::URI.parse(url("/case/#{c.id}/task/#{t.id}"))
+      case_obj = Kukupa::Models::Case[t.case]
+      view_url = Addressable::URI.parse(url("/case/#{case_obj.id}/view"))
+      edit_url = Addressable::URI.parse(url("/case/#{case_obj.id}/task/#{t.id}"))
       content = Sanitize.fragment(t.decrypt(:content).to_s, Sanitize::Config::RESTRICTED)
 
       {
-        case: c,
-        name: c.get_name,
-        curl: curl.to_s,
-        turl: turl.to_s,
-        content: content,
+        case: case_obj,
+        case_name: case_obj.get_name,
+        task: t,
+        task_content: content,
+        view_url: view_url,
+        edit_url: edit_url,
       }
     end
 

@@ -167,7 +167,9 @@
 :'dashboard/cases/no_cases': "You are not assigned to any cases."
 :'dashboard/tasks/section_title': "Incomplete tasks"
 :'dashboard/tasks/no_tasks': "You have no incomplete tasks. Yay!"
-:'dashboard/tasks/item/case': "Case"
+:'dashboard/tasks/item/content': "Task in case for <%= e(name) %>"
+:'dashboard/tasks/item/view': "View case"
+:'dashboard/tasks/item/edit': "Edit task"
 
 # Cases - index
 :'case/index/title': "Cases"

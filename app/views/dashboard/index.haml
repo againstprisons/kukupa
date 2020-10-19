@@ -22,21 +22,23 @@
   %ul.block-list
     - tasks.each do |c|
       %li
-        .dashboard-task-content
-          %ul.inline-list
-            %li
-              = c[:content]
-
-            %li
-              %a.case-view-task-editlink{href: c[:turl]}
-                %i.fa.fa-gear= ""
-
         .dashboard-task-meta
           %ul.inline-list
             %li
-              = succeed ': ' do
-                = t(:'dashboard/tasks/item/case')
+              = t(:'dashboard/tasks/item/content', name: c[:case_name])
 
-              %a{href: c[:curl]}
-                &= c[:name]
+            %li
+              %a.case-view-task-editlink{href: c[:view_url]}
+                %i.fa.fa-external-link= ""
+                = t(:'dashboard/tasks/item/view')
+
+            %li
+              %a.case-view-task-editlink{href: c[:edit_url]}
+                %i.fa.fa-gear= ""
+                = t(:'dashboard/tasks/item/edit')
+
+        .dashboard-task-content
+          %blockquote
+            = c[:task_content]
+
 
