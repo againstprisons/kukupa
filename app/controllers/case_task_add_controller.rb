@@ -49,37 +49,14 @@ class Kukupa::Controllers::CaseTaskAddController < Kukupa::Controllers::CaseCont
     @task = Kukupa::Models::CaseTask.new(
       case: @case.id,
       author: @user.id,
-      assigned_to: @assignee.id
+      assigned_to: @assignee.id,
     ).save
 
     @task.encrypt(:content, @content)
     @task.save
 
     # send "new task" email to the assigned advocate for this task
-    # if the assigned advocate was not the one that created this task
-    unless @user.id == @assignee.id
-      case_url = Addressable::URI.parse(Kukupa.app_config['base-url'])
-      case_url += "/case/#{@case.id}/view"
-
-      @email = Kukupa::Models::EmailQueue.new_from_template("task_new", {
-        case_obj: @case,
-        case_url: case_url.to_s,
-        task_obj: @task,
-        content: @content,
-        assignee: @assignee,
-      })
-
-      @email.encrypt(:subject, "New task assigned to you") # TODO: tl this
-      @email.encrypt(:recipients, JSON.generate({
-        "mode": "list_uids",
-        "uids": [
-          @assignee.id,
-        ],
-      }))
-
-      @email.queue_status = 'queued'
-      @email.save
-    end
+    @task.send_creation_email!
 
     # redirect back
     flash :success, t(:'case/task/add/success')

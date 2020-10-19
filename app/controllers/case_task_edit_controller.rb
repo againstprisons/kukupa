@@ -59,8 +59,15 @@ class Kukupa::Controllers::CaseTaskEditController < Kukupa::Controllers::CaseCon
       return redirect request.path
     end
 
-    if @assignee.id != @task.assigned_to
-      # if assignee changing, create update entry
+    @previous_assignee = @task.assigned_to
+
+    # save task
+    @task.assigned_to = @assignee.id
+    @task.encrypt(:content, @content)
+    @task.save
+
+    # if assignee changing, create update entry and send "new task" email
+    if @assignee.id != @previous_assignee
       update_entry = Kukupa::Models::CaseTaskUpdate.new(
         task: @task.id,
         author: @user.id,
@@ -70,34 +77,8 @@ class Kukupa::Controllers::CaseTaskEditController < Kukupa::Controllers::CaseCon
       update_entry.encrypt(:data, JSON.generate(to: @assignee.id))
       update_entry.save
 
-      # if assignee changing, send "new task" email to the new assignee
-      case_url = Addressable::URI.parse(Kukupa.app_config['base-url'])
-      case_url += "/case/#{@case.id}/view"
-
-      @email = Kukupa::Models::EmailQueue.new_from_template("task_new", {
-        case_obj: @case,
-        case_url: case_url.to_s,
-        task_obj: @task,
-        content: @content,
-        assignee: @assignee,
-      })
-
-      @email.encrypt(:subject, "New task assigned to you") # TODO: tl this
-      @email.encrypt(:recipients, JSON.generate({
-        "mode": "list_uids",
-        "uids": [
-          @assignee.id,
-        ],
-      }))
-
-      @email.queue_status = 'queued'
-      @email.save
+      @task.send_creation_email!(reassigned: true)
     end
-
-    # save task
-    @task.assigned_to = @assignee.id
-    @task.encrypt(:content, @content)
-    @task.save
 
     # redirect back
     flash :success, t(:'case/task/edit/edit/success')
