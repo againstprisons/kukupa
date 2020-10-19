@@ -84,6 +84,7 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
     # if > auto-approve threshold, automatically *unapprove* the edit, even if
     # the editor has approve powers
     else
+      @spend.approved = nil
       @spend.approver = nil
       @spend.save
 
