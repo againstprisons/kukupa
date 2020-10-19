@@ -73,6 +73,13 @@ module Kukupa::Helpers::CaseViewHelpers
     end
 
     Kukupa::Models::CaseSpend.where(case: c).each do |cs|
+      child_actions = [
+        {
+          url: "##{cs.anchor}",
+          fa_icon: 'fa-external-link',
+        }
+      ]
+
       actions =  [
         {
           url: url("/case/#{c}/spend/#{cs.id}"),
@@ -89,6 +96,19 @@ module Kukupa::Helpers::CaseViewHelpers
 
       advocates = case_populate_advocate(advocates, cs.author)
       advocates = case_populate_advocate(advocates, cs.approver)
+
+      parent = {
+        type: :spend,
+        id: "CaseSpend[#{cs.id}]",
+        anchor: cs.anchor,
+        case_spend: cs,
+        creation: cs.creation,
+        amount: cs.decrypt(:amount),
+        notes: cs.decrypt(:notes),
+        author: advocates[cs.author.to_s],
+        approver: advocates[cs.approver.to_s],
+        actions: actions,
+      }
 
       unless cs.approved.nil?
         approve_actions = [
@@ -110,18 +130,36 @@ module Kukupa::Helpers::CaseViewHelpers
         }
       end
 
-      items << {
-        type: :spend,
-        id: "CaseSpend[#{cs.id}]",
-        anchor: cs.anchor,
-        case_spend: cs,
-        creation: cs.creation,
-        amount: cs.decrypt(:amount),
-        notes: cs.decrypt(:notes),
-        author: advocates[cs.author.to_s],
-        approver: advocates[cs.approver.to_s],
-        actions: actions,
-      }
+      Kukupa::Models::CaseSpendUpdate.where(spend: cs.id).each do |csu|
+        data = JSON.parse(csu.decrypt(:data))
+        update = {}
+
+        advocates = case_populate_advocate(advocates, csu.author)
+
+        if csu.update_type == 'edit'
+          update = {
+            type: :edit,
+            old_amount: data['old_amount'].to_f,
+            new_amount: data['new_amount'].to_f,
+            old_content: data['old_content'],
+            new_content: data['new_content'],
+          }
+        end
+
+        items << {
+          type: :spend_update,
+          id: "CaseSpendUpdate[#{csu.id}]",
+          anchor: csu.anchor,
+          case_spend: cs,
+          creation: csu.creation,
+          author: advocates[csu.author.to_s],
+          parent: parent,
+          update: update,
+          actions: child_actions,
+        }
+      end
+
+      items << parent
     end
 
     Kukupa::Models::CaseTask.where(case: c).each do |ct|

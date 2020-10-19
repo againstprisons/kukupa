@@ -65,7 +65,24 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
     # run a sanitize pass
     @content = Sanitize.fragment(@content, Sanitize::Config::RELAXED)
 
-    # save
+    # create a CaseSpendUpdate with the edited content
+    @spend_update_data = {
+      old_amount: @spend.decrypt(:amount).to_s,
+      new_amount: @amount.to_s,
+      old_content: @spend.decrypt(:notes),
+      new_content: @content,
+    }
+
+    @spend_update = Kukupa::Models::CaseSpendUpdate.new(
+      spend: @spend.id,
+      author: @user.id,
+      update_type: 'edit',
+    ).save
+
+    @spend_update.encrypt(:data, JSON.generate(@spend_update_data))
+    @spend_update.save
+
+    # save the spend
     @spend.encrypt(:amount, @amount.to_s)
     @spend.encrypt(:notes, @content)
     @spend.save
@@ -113,7 +130,7 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
       return redirect url("/case/#{@case.id}/spend/#{@spend.id}")
     end
 
-    @spend.delete
+    @spend.delete!
 
     # regenerate aggregate if approved
     unless @spend.approver.nil?

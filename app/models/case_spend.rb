@@ -6,6 +6,20 @@ class Kukupa::Models::CaseSpend < Sequel::Model
   def get_year
     self.creation.strftime("%Y")
   end
+
+  def delete!
+    Kukupa::Models::CaseSpendUpdate
+      .where(spend: self.id)
+      .map(&:delete)
+
+    self.delete
+  end
+end
+
+class Kukupa::Models::CaseSpendUpdate < Sequel::Model
+  def anchor
+    "CaseSpendUpdate-#{self.id}"
+  end
 end
 
 class Kukupa::Models::CaseSpendAggregate < Sequel::Model

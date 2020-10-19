@@ -31,8 +31,11 @@ class Kukupa::Models::Case < Sequel::Model
     Kukupa::Models::CaseNote.where(case: self.id).map(&:delete)
 
     # spends
-    Kukupa::Models::CaseSpend.where(case: self.id).map(&:delete)
     Kukupa::Models::CaseSpendAggregate.where(case: self.id).map(&:delete)
+    Kukupa::Models::CaseSpend.where(case: self.id).each do |cs|
+      Kukupa::Models::CaseSpendUpdate.where(spend: cs.id).map(&:delete)
+      cs.delete
+    end
 
     # tasks
     Kukupa::Models::CaseTask.where(case: self.id).each do |ct|

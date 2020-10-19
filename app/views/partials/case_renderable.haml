@@ -179,6 +179,61 @@
               %i.fa.fa-user-o= ""
               = t(:'thats_you')
 
+- if rb[:type] == :spend_update
+  .caserenderable-container{'data-rb-type': rb[:type], id: rb[:anchor]}
+    .caserenderable-header
+      %span.caserenderable-header-fund
+        %a.caserenderable-header-iconlink{href: "##{rb[:anchor]}"}
+          %i.fa.fa-fw{title: rb[:id], class: 'fa-dollar'}
+            = ""
+
+        = succeed ': ' do
+          = t("case_renderable/spend/update/#{rb[:update][:type].to_s}".to_sym)
+
+        %strong{title: "User[#{rb[:author][:id]}]"}
+          &= rb[:author][:name]
+
+        - if rb[:author][:me]
+          %span.badge
+            %i.fa.fa-user-o= ""
+            = t(:'thats_you')
+
+      %ul.inline-list
+        %li
+          = t(:'case_renderable/creation', ts: rb[:creation])
+
+        - rb[:actions]&.each do |link|
+          %li.case-renderable-action
+            %a{href: link[:url]}
+              %i.fa{class: link[:fa_icon]}= ""
+
+    .caserenderable-content
+      - if rb[:update][:type] == :edit
+        %ul
+          - unless rb[:update][:old_amount] == rb[:update][:new_amount]
+            %li
+              = succeed ': ' do
+                = t(:'case_renderable/spend/update/edit/amount')
+
+              %span= t(:'case_renderable/spend/amount', amount: rb[:update][:old_amount].to_f)
+              %i.fa.fa-arrow-right= ""
+              %strong= t(:'case_renderable/spend/amount', amount: rb[:update][:new_amount].to_f)
+
+          - unless rb[:update][:old_content] == rb[:update][:new_content]
+            %li
+              = succeed ': ' do
+                = t(:'case_renderable/spend/update/edit/old_content')
+
+              %blockquote.blockquote-fancy
+                = rb[:update][:old_content]
+
+            %li
+              = succeed ': ' do
+                = t(:'case_renderable/spend/update/edit/new_content')
+
+              %blockquote.blockquote-fancy
+                = rb[:update][:new_content]
+
 - if rb[:type] == :task
   .caserenderable-container{'data-rb-type': rb[:type], id: rb[:anchor]}
     .caserenderable-header
