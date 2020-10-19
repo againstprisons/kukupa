@@ -1,0 +1,22 @@
+<p>Hello,</p>
+
+<p>
+  A task in the case for <%= e(case_obj.get_name) %><% if author %>,
+  created by <em><%= e(author.decrypt(:name)) %></em>, <% end %><% if assignee %>
+  assigned to <em><%= e(assignee.decrypt(:name)) %></em>, <% end %>
+  has been deleted.
+</p>
+
+<% if user %><p>
+  The task was deleted by <em><%= e(user.decrypt(:name)) %></em>.
+</p><% end %>
+
+<p>
+  The task was:
+  <blockquote><%= content %></blockquote>
+</p>
+
+<p>
+  To view the case this task belonged to, visit:
+  <a href="<%= e(case_url) %>"><%= e(case_url) %></a>
+</p>

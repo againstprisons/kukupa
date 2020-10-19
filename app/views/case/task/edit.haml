@@ -45,20 +45,14 @@
         .message.message-error
           = t(:'case/task/edit/complete/errors/not_author')
 
-  %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: urls[:delete]}
-    %h1= t(:'case/task/edit/delete/section_title')
-
-    - if current_user.id == task_obj.assigned_to || current_user.id == task_obj.author
+  - if has_role?('case:delete_entry')
+    %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: urls[:delete]}
       %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+      %h1= t(:'case/task/edit/delete/section_title')
 
-      %label{for: 'delete-confirm'}
-        = t(:'case/task/edit/delete/confirm')
+      %label{for: 'delete-confirm'}= t(:'case/task/edit/delete/confirm')
       %input#delete-confirm{name: 'confirm', type: 'text', required: true}
 
       %button.pure-button.button.button-error{type: 'submit'}
         %i.fa.fa-trash= ""
         = t(:'case/task/edit/delete/submit')
-
-    - else
-      .message.message-error
-        = t(:'case/task/edit/delete/errors/not_author')

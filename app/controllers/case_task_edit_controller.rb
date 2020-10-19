@@ -144,32 +144,22 @@ class Kukupa::Controllers::CaseTaskEditController < Kukupa::Controllers::CaseCon
   end
 
   def delete(cid, tid)
+    return halt 404 unless has_role?('case:delete_entry')
     @case = Kukupa::Models::Case[cid.to_i]
     return halt 404 unless @case
-    unless has_role?('case:view_all')
-      return halt 404 unless @case.can_access?(@user)
-    end
 
     @task = Kukupa::Models::CaseTask[tid.to_i]
     return halt 404 unless @task
     return halt 404 unless @task.case == @case.id
-
-    unless @user.id == @task.assigned_to || @user.id == @task.author
-      flash :error, t(:'case/task/edit/delete/errors/not_author')
-      return redirect url("/case/#{@case.id}/task/#{@task.id}")
-    end
 
     unless request.params['confirm']&.strip == "DELETE"
       flash :error, t(:'case/task/edit/delete/errors/no_confirm')
       return redirect url("/case/#{@case.id}/task/#{@task.id}")
     end
 
-    # TODO: send "task deleted" email to this task's author and assignee
-    # if the author or assignee is not the user deleting the task
-
     # perform deletion
-    Kukupa::Models::CaseTaskUpdate.where(task: @task.id).delete
-    @task.delete
+    @task.send_deletion_email!(@user)
+    @task.delete!
 
     # redirect back
     flash :success, t(:'case/task/edit/delete/success', task_id: @task.id)

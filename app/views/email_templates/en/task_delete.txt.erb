@@ -1,0 +1,15 @@
+Hello,
+
+A task in the case for <%= e(case_obj.get_name) %><% if author %>,
+created by <%= e(author.decrypt(:name)) %>, <% end %><% if assignee %>
+assigned to <%= e(assignee.decrypt(:name)) %>, <% end %>
+has been deleted.
+
+<% if user %>The task was deleted by <%= e(user.decrypt(:name)) %>.
+<% end %>
+
+The task was:
+> <%= e(content) %>
+
+To view the case this task belonged to, visit:
+<%= e(case_url) %>
