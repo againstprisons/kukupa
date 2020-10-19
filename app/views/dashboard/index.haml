@@ -41,4 +41,32 @@
           %blockquote
             = c[:task_content]
 
+- if has_role?('case:spend:can_approve')
+  .form-main
+    %h1= t(:'dashboard/unapproved_spends/section_title')
 
+    - if spends.empty?
+      %p= t(:'dashboard/unapproved_spends/no_spends')
+
+    %ul
+      - spends.each do |sp|
+        %li
+          .dashboard-spend-meta
+            %ul.inline-list
+              %li
+                %span
+                  = t(:'dashboard/unapproved_spends/item/content', amount: sp[:spend_amount], name: sp[:case_name])
+
+              %li
+                %a.case-view-task-editlink{href: sp[:view_url]}
+                  %i.fa.fa-external-link= ""
+                  = t(:'dashboard/unapproved_spends/item/view')
+
+              %li
+                %a.case-view-task-editlink{href: sp[:approve_url]}
+                  %i.fa.fa-check-square-o= ""
+                  = t(:'dashboard/unapproved_spends/item/approve')
+
+          .dashboard-spend-content
+            %blockquote
+              = sp[:spend_content]

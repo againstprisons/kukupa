@@ -38,6 +38,26 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
       }
     end
 
+    if has_role?('case:spend:can_approve')
+      @spends = Kukupa::Models::CaseSpend.where(approver: nil).map do |s|
+        case_obj = Kukupa::Models::Case[s.case]
+        next unless case_obj
+
+        view_url = Addressable::URI.parse(url("/case/#{case_obj.id}/view"))
+        approve_url = Addressable::URI.parse(url("/case/#{case_obj.id}/spend/#{s.id}/approve"))
+
+        {
+          case: case_obj,
+          case_name: case_obj.get_name,
+          spend: s,
+          spend_amount: s.decrypt(:amount).to_f,
+          spend_content: s.decrypt(:notes),
+          view_url: view_url,
+          approve_url: approve_url,
+        }
+      end
+    end
+
     return haml(:'dashboard/index', :locals => {
       :title => @title,
       :user => {
@@ -46,6 +66,7 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
       },
       cases: @my_cases,
       tasks: @my_tasks,
+      spends: @spends,
     })
   end
 end
