@@ -46,40 +46,16 @@ class Kukupa::Controllers::CaseSpendApproveController < Kukupa::Controllers::Cas
       return redirect request.path
     end
 
+    # save details
     @spend.approved = Time.now.utc
     @spend.approver = @user.id
     @spend.save
 
+    # send spend-approved email
+    @spend.send_approve_email!
+
     # update aggregate 
     Kukupa::Models::CaseSpendAggregate.create_aggregate_for_case(@case)
-
-    # send email to spend author and case assigned advocate
-    # saying the spend has been approved
-    to_email = [@spend.author, @case.assigned_advocate].uniq
-    to_email.reject! { |x| x == @user.id }
-    unless to_email.empty?
-      case_url = Addressable::URI.parse(Kukupa.app_config['base-url'])
-      case_url += "/case/#{@case.id}/view"
-
-      @email = Kukupa::Models::EmailQueue.new_from_template("spend_approved", {
-        case_obj: @case,
-        case_url: case_url.to_s,
-        spend_obj: @spend,
-        content: @content,
-        amount: @amount,
-        author: @author,
-        approver: @user,
-      })
-
-      @email.encrypt(:subject, "Spend approved") # TODO: tl this
-      @email.encrypt(:recipients, JSON.generate({
-        "mode": "list_uids",
-        "uids": to_email,
-      }))
-
-      @email.queue_status = 'queued'
-      @email.save
-    end
 
     flash :success, t(:'case/spend/approve/success', spend_id: @spend.id, amount: @spend.decrypt(:amount).to_f)
     return redirect url("/case/#{@case.id}/view")

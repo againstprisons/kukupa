@@ -47,6 +47,43 @@ class Kukupa::Models::CaseSpend < Sequel::Model
     email.save
   end
 
+  def send_approve_email!(opts = {})
+    case_obj = Kukupa::Models::Case[self.case]
+    return unless case_obj
+
+    case_url = Addressable::URI.parse(Kukupa.app_config['base-url'])
+    case_url += "/case/#{case_obj.id}/view"
+
+    approver = Kukupa::Models::User[self.approver]
+    author = Kukupa::Models::User[self.author]
+
+    to_email = [
+      author&.id,
+      approver&.id,
+      case_obj.assigned_advocate
+    ].compact.uniq
+    return if to_email.empty?
+
+    email = Kukupa::Models::EmailQueue.new_from_template("spend_approved", {
+      case_obj: case_obj,
+      case_url: case_url.to_s,
+      spend_obj: self,
+      content: self.decrypt(:notes),
+      amount: self.decrypt(:amount).to_f,
+      author: author,
+      approver: approver,
+    })
+
+    email.queue_status = 'queued'
+    email.encrypt(:subject, "Spend approved") # TODO: tl this
+    email.encrypt(:recipients, JSON.generate({
+      "mode": "list_uids",
+      "uids": to_email,
+    }))
+
+    email.save
+  end
+
   def send_deletion_email!(user, opts = {})
     case_obj = Kukupa::Models::Case[self.case]
     return unless case_obj
