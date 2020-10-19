@@ -1,0 +1,14 @@
+Hello,
+
+A case spend in the case for <%= e(case_obj.get_name) %>
+<% if user %>has been deleted by <%= e(user.decrypt(:name)) %>.
+<% else %>has been deleted by an unknown user.
+<% end %>
+
+The spend was for <%= e(sprintf('$%.02f', amount)) %>,
+and the note for the spend was:
+
+> <%= e(content) %>
+
+To view this case, visit:
+<%= e(case_url) %>

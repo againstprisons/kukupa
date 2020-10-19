@@ -1,0 +1,21 @@
+<p>Hello,</p>
+
+<p>
+  A case spend in the case for <%= e(case_obj.get_name) %>
+  <% if user %>
+    has been deleted by <em><%= e(user.decrypt(:name)) %></em>.
+  <% else %>
+    has been deleted by an unknown user.
+  <% end %>
+</p>
+
+<p>
+  The spend was for <%= e(sprintf('$%.02f', amount)) %>,
+  and the note for the spend was:
+  <blockquote><%= content %></blockquote>
+</p>
+
+<p>
+  To view this case, visit:
+  <a href="<%= e(case_url) %>"><%= e(case_url) %></a>
+</p>

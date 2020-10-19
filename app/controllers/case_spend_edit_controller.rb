@@ -133,6 +133,7 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
       return redirect url("/case/#{@case.id}/spend/#{@spend.id}")
     end
 
+    @spend.send_deletion_email!(@user)
     @spend.delete!
 
     # regenerate aggregate if approved
