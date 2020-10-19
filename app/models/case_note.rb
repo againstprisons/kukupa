@@ -67,4 +67,36 @@ class Kukupa::Models::CaseNote < Sequel::Model
       confirm_email.save
     end
   end
+
+  def send_deletion_email!(user, opts = {})
+    case_obj = Kukupa::Models::Case[self.case]
+    return unless case_obj
+    user = Kukupa::Models::User[user] if user.is_a?(Integer)
+    author = Kukupa::Models::User[self.author]
+
+    case_url = Addressable::URI.parse(Kukupa.app_config['base-url'])
+    case_url += "/case/#{case_obj.id}/view"
+
+    email = Kukupa::Models::EmailQueue.new_from_template("note_delete", {
+      case_obj: case_obj,
+      case_url: case_url.to_s,
+      spend_obj: self,
+      content: self.decrypt(:content),
+      author: author,
+      user: user,
+    })
+
+    email.queue_status = 'queued'
+    email.encrypt(:subject, "Case note deleted") # TODO: tl this
+    email.encrypt(:recipients, JSON.generate({
+      "mode": "roles",
+      "roles": ["case:alerts"],
+    }))
+
+    email.save
+  end
+
+  def delete!
+    self.delete
+  end
 end

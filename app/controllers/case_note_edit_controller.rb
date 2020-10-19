@@ -63,11 +63,9 @@ class Kukupa::Controllers::CaseNoteEditController < Kukupa::Controllers::CaseCon
   end
 
   def delete(cid, nid)
+    return halt 404 unless has_role?('case:delete_entry')
     @case = Kukupa::Models::Case[cid.to_i]
     return halt 404 unless @case
-    unless has_role?('case:view_all')
-      return halt 404 unless @case.can_access?(@user)
-    end
 
     @note = Kukupa::Models::CaseNote[nid.to_i]
     return halt 404 unless @note
@@ -78,7 +76,8 @@ class Kukupa::Controllers::CaseNoteEditController < Kukupa::Controllers::CaseCon
       return redirect url("/case/#{@case.id}/note/#{@note.id}")
     end
 
-    @note.delete
+    @note.send_deletion_email!(@user)
+    @note.delete!
 
     flash :success, t(:'case/note/edit/delete/success', note_id: @note.id)
     return redirect url("/case/#{@case.id}/view")

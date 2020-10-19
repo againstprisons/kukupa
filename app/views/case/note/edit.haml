@@ -24,16 +24,16 @@
         %i.fa.fa-pencil-square-o= ""
         = t(:'case/note/edit/edit/submit')
 
-  %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: urls[:delete]}
-    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
-    %h1= t(:'case/note/edit/delete/section_title')
+  - if has_role?('case:delete_entry')
+    %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: urls[:delete]}
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+      %h1= t(:'case/note/edit/delete/section_title')
 
-    %label{for: 'delete-confirm'}
-      = t(:'case/note/edit/delete/confirm')
-    %input#delete-confirm{name: 'confirm', type: 'text', required: true}
+      %label{for: 'delete-confirm'}= t(:'case/note/edit/delete/confirm')
+      %input#delete-confirm{name: 'confirm', type: 'text', required: true}
 
-    %button.pure-button.button.button-error{type: 'submit'}
-      %i.fa.fa-trash= ""
-      = t(:'case/note/edit/delete/submit')
+      %button.pure-button.button.button-error{type: 'submit'}
+        %i.fa.fa-trash= ""
+        = t(:'case/note/edit/delete/submit')
 
 .async-load{:'data-sources' => JSON.generate(['/static/editor.bundle.js'])}

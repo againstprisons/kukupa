@@ -1,0 +1,14 @@
+Hello,
+
+A case note in the case for <%= e(case_obj.get_name) %><% if author %>,
+created by <%= e(author.decrypt(:name)) %>, <% end %>
+has been deleted.
+
+<% if user %>The case note was deleted by <%= e(user.decrypt(:name)) %>.
+<% end %>
+
+The contents of this case note were:
+> <%= e(content) %>
+
+To view the case this note belonged to, visit:
+<%= e(case_url) %>
