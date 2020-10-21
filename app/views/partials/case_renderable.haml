@@ -3,8 +3,11 @@
     .caserenderable-header
       %span.caserenderable-header-author
         %a.caserenderable-header-iconlink{href: "##{rb[:anchor]}"}
-          %i.fa.fa-fw{title: rb[:id], class: (rb[:case_note].is_outside_request ? 'fa-question' : 'fa-file-text-o')}
-            = ""
+          %span{title: rb[:id]}
+            - if rb[:case_note].is_outside_request
+              %i.fa.fa-question.fa-fw= ""
+            - else 
+              %i.fa.fa-file-text-o.fa-fw= ""
 
         - if rb[:author][:id].zero?
           - if rb[:outside_request]
@@ -139,8 +142,8 @@
     .caserenderable-header
       %span.caserenderable-header-fund
         %a.caserenderable-header-iconlink{href: "##{rb[:anchor]}"}
-          %i.fa.fa-fw{title: rb[:id], class: 'fa-dollar'}
-            = ""
+          %span{title: rb[:id]}
+            %i.fa.fa-dollar.fa-fw= ""
 
         = succeed ': ' do
           = t(:'case_renderable/spend/content')
@@ -198,8 +201,8 @@
     .caserenderable-header
       %span.caserenderable-header-fund
         %a.caserenderable-header-iconlink{href: "##{rb[:anchor]}"}
-          %i.fa.fa-fw{title: rb[:id], class: 'fa-dollar'}
-            = ""
+          %span{title: rb[:id]}
+            %i.fa.fa-dollar.fa-fw= ""
 
         = succeed ': ' do
           = t(:'case_renderable/spend/approve/content')
@@ -235,8 +238,8 @@
     .caserenderable-header
       %span.caserenderable-header-fund
         %a.caserenderable-header-iconlink{href: "##{rb[:anchor]}"}
-          %i.fa.fa-fw{title: rb[:id], class: 'fa-dollar'}
-            = ""
+          %span{title: rb[:id]}
+            %i.fa.fa-dollar.fa-fw= ""
 
         = succeed ': ' do
           = t("case_renderable/spend/update/#{rb[:update][:type].to_s}".to_sym)
@@ -290,8 +293,8 @@
     .caserenderable-header
       %span.caserenderable-header-task
         %a.caserenderable-header-iconlink{href: "##{rb[:anchor]}"}
-          %i.fa.fa-fw{title: rb[:id], class: 'fa-check-square-o'}
-            = ""
+          %span{title: rb[:id]}
+            %i.fa.fa-check-square-o.fa-fw= ""
 
         = succeed ': ' do
           = t(:'case_renderable/task/author')
@@ -336,8 +339,8 @@
     .caserenderable-header
       %span.caserenderable-header-task
         %a.caserenderable-header-iconlink{href: "##{rb[:anchor]}"}
-          %i.fa.fa-fw{title: rb[:id], class: 'fa-check-square-o'}
-            = ""
+          %span{title: rb[:id]}
+            %i.fa.fa-check-square-o.fa-fw= ""
 
         = succeed ': ' do
           = t("case_renderable/task/update/#{rb[:update][:type].to_s}".to_sym)
