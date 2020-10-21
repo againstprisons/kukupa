@@ -8,7 +8,7 @@
           - else 
             %i.fa.fa-file-text-o.fa-fw= ""
 
-      - if rb[:author][:id].zero?
+      - if rb[:author].nil? || rb[:author][:id].to_i.zero?
         - if rb[:outside_request]
           = t(:'case_renderable/note/author/outside_request')
 

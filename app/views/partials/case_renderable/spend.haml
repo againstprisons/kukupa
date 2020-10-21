@@ -34,7 +34,7 @@
             %i.fa.fa-user-o= ""
             = t(:'thats_you')
 
-      - if rb[:approver][:id].positive?
+      - unless rb[:approver].nil? || rb[:approver][:id].to_i.zero?
         - if rb[:approver][:id] != rb[:author][:id]
           %li
             = succeed ': ' do

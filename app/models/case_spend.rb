@@ -7,6 +7,58 @@ class Kukupa::Models::CaseSpend < Sequel::Model
     self.creation.strftime("%Y")
   end
 
+  def renderables(opts = {})
+    items = []
+
+    actions =  [
+      {
+        url: [:url, "/case/#{self.case}/spend/#{self.id}"],
+        fa_icon: 'fa-gear',
+      },
+    ]
+
+    if self.approver.nil? && opts[:spend_can_approve]
+      actions.insert(0, {
+        url: [:url, "/case/#{self.case}/spend/#{self.id}/approve"],
+        fa_icon: 'fa-check-square-o',
+      })
+    end
+
+    items << {
+      type: :spend,
+      id: "CaseSpend[#{self.id}]",
+      anchor: self.anchor,
+      case_spend: self,
+      creation: self.creation,
+      amount: self.decrypt(:amount),
+      notes: self.decrypt(:notes),
+      author: [:user, self.author],
+      approver: [:user, self.approver],
+      actions: actions,
+    }
+
+    unless self.approved.nil?
+      approve_actions = [
+        {
+          url: "##{self.anchor}",
+          fa_icon: 'fa-external-link',
+        }
+      ]
+
+      items << {
+        type: :spend_approve,
+        id: "CaseSpend[#{self.id}]",
+        anchor: "Approve-#{self.anchor}",
+        creation: self.approved,
+        amount: self.decrypt(:amount),
+        author: [:user, self.approver],
+        actions: approve_actions,
+      }
+    end
+
+    items
+  end
+
   def send_creation_email!(opts = {})
     opts[:autoapproved] ||= false
     opts[:edited] ||= false

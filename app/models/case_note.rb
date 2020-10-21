@@ -3,6 +3,42 @@ class Kukupa::Models::CaseNote < Sequel::Model
     "CaseNote-#{self.id}"
   end
 
+  def renderables(opts = {})
+    items = []
+
+    begin
+      metadata = JSON.parse(self.decrypt(:metadata) || '{}').map do |k, v|
+        [k.to_sym, v]
+      end.to_h
+    rescue
+      metadata = {}
+    end
+
+    actions = [
+      {
+        url: [:url, "/case/#{self.case}/note/#{self.id}"],
+        fa_icon: 'fa-gear',
+      }
+    ]
+
+    items << {
+      type: :note,
+      id: "CaseNote[#{self.id}]",
+      anchor: self.anchor,
+      case_note: self,
+      creation: self.creation,
+      edited: self.edited,
+      content: self.decrypt(:content),
+      outside_request: self.is_outside_request,
+      metadata: metadata,
+      author: [:user, self.author],
+      history_url: [:url, "/case/#{self.case}/note/#{self.id}/history"],
+      actions: actions,
+    }
+
+    items
+  end
+
   def outside_request_email!(opts = {})
     return unless self.is_outside_request
 

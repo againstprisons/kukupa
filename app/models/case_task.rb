@@ -19,6 +19,30 @@ class Kukupa::Models::CaseTask < Sequel::Model
     dates.compact.sort.last
   end
 
+  def renderables(opts = {})
+    items = []
+
+    actions =  [
+      {
+        url: [:url, "/case/#{self.case}/task/#{self.id}"],
+        fa_icon: 'fa-gear',
+      },
+    ]
+
+    items << {
+      type: :task,
+      id: "CaseTask[#{self.id}]",
+      anchor: self.anchor,
+      creation: self.creation,
+      content: self.decrypt(:content),
+      author: [:user, self.author],
+      assigned_to: [:user, self.assigned_to],
+      actions: actions,
+    }
+
+    items
+  end
+
   def send_creation_email!(opts = {})
     opts[:reassigned] ||= false
 

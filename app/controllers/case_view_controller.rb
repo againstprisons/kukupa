@@ -18,10 +18,18 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
 
     @case_name = @case.get_name
     @title = t(:'case/view/title', name: @case_name)
+
     @renderable_updates = request.params['ru'].to_i.positive?
-    @renderables = get_renderables(@case, include_updates: @renderable_updates)
+    @renderables = get_renderables(@case, {
+      include_updates: @renderable_updates,
+      renderable_opts: {
+        spend_can_approve: has_role?('case:spend:can_approve'),
+      }
+    })
+
     @tasks_complete = request.params['tc'].to_i.positive?
     @tasks = get_tasks(@case, include_complete: @tasks_complete)
+
     @prison = Kukupa::Models::Prison[@case.decrypt(:prison).to_i]
     if @prison && @case.prisoner_number
       p_addr = @prison.decrypt(:physical_address)

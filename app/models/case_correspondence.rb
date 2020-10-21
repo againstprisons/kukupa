@@ -3,6 +3,24 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     "CaseCorrespondence-#{self.id}"
   end
 
+  def renderables(opts = {})
+    items = []
+    actions = [
+    ]
+
+    items << {
+      type: :correspondence,
+      id: "CaseCorrespondence[#{self.id}]",
+      anchor: self.anchor,
+      creation: self.creation,
+      subject: self.decrypt(:subject),
+      outgoing: self.sent_by_us,
+      actions: actions,
+    }
+
+    items
+  end
+
   def get_download_url
     meth = "get_download_url_#{self.file_type}".to_sym
     return self.send(meth) if self.respond_to?(meth)
