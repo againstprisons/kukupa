@@ -50,7 +50,7 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
       return halt 404 unless @case.can_access?(@user)
     end
 
-    Kukupa::Workers::SyncCasePenpalFromReconnectWorker.perform_async(@case.id)
+    Kukupa::Workers::SyncCaseFromReconnectWorker.perform_async(@case.id)
     flash :success, t(:'case/edit/reconnect/index/sync/success')
 
     return redirect url("/case/#{@case.id}/edit/rc")

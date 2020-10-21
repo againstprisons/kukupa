@@ -65,7 +65,11 @@ module Kukupa
     "reconnect-penpal-id" => {
       :type => :number,
       :default => 0,
-    }
+    },
+    "reconnect-sync-after" => {
+      :type => :time_period,
+      :default => '30 minutes ago',
+    },
   }
 
   APP_CONFIG_DEPRECATED_ENTRIES = {
