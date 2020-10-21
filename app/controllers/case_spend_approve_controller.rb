@@ -47,7 +47,7 @@ class Kukupa::Controllers::CaseSpendApproveController < Kukupa::Controllers::Cas
     end
 
     # save details
-    @spend.approved = Time.now.utc
+    @spend.approved = Sequel.function(:NOW)
     @spend.approver = @user.id
     @spend.save
 

@@ -81,7 +81,7 @@ class Kukupa::Workers::CaseTaskReminderWorker
       end
 
       logger.info("Task #{task.id}: complete, marking as reminded")
-      task.reminded = Time.now.utc
+      task.reminded = Sequel.function(:NOW)
       task.save
     end
   end

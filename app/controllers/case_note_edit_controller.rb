@@ -71,7 +71,7 @@ class Kukupa::Controllers::CaseNoteEditController < Kukupa::Controllers::CaseCon
     @note.send_creation_email!(edited: true)
 
     # save
-    @note.edited = Time.now.utc
+    @note.edited = @note_update.creation
     @note.encrypt(:content, @content)
     @note.save
 

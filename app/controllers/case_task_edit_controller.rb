@@ -107,7 +107,7 @@ class Kukupa::Controllers::CaseTaskEditController < Kukupa::Controllers::CaseCon
     end
 
     # set completion
-    @task.completion = Time.now.utc
+    @task.completion = Sequel.function(:NOW)
     @task.save
 
     # create update entry
