@@ -34,6 +34,16 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
       end
     end
 
+    @this_url = Addressable::URI.parse(url(request.path))
+    @this_url.query_values = {
+      'tc' => @tasks_complete ? '1' : '0',
+     }
+
+    @tasks_complete_toggle = @this_url.dup
+    @tasks_complete_toggle.query_values = {
+      'tc' => @tasks_complete ? '0' : '1',
+    }
+
     @spend_year_max = Kukupa.app_config['fund-max-spend-per-case-year'].to_f
     @spend_year = Kukupa::Models::CaseSpendAggregate.get_case_year_total(@case, DateTime.now)
     @spend_year_percent = @spend_year / @spend_year_max
@@ -47,6 +57,7 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
       renderables: @renderables,
       tasks: @tasks,
       tasks_complete: @tasks_complete,
+      tasks_complete_toggle: @tasks_complete_toggle,
       spend_year: @spend_year,
       spend_year_max: @spend_year_max,
       spend_year_percent: @spend_year_percent,

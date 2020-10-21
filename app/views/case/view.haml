@@ -56,7 +56,7 @@
         %span
           = t(:'case/view/actions/add_task')
 
-      %a.pure-button.button{href: url("/case/#{case_obj.id}/view?tc=#{tasks_complete ? '0' : '1'}")}
+      %a.pure-button.button{href: tasks_complete_toggle}
         %i.fa{class: "fa-toggle-#{tasks_complete ? 'on' : 'off'}"}= ""
         = t("case/view/tasks/complete/#{tasks_complete ? 'on' : 'off'}".to_sym)
 
