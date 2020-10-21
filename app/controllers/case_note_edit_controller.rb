@@ -53,6 +53,20 @@ class Kukupa::Controllers::CaseNoteEditController < Kukupa::Controllers::CaseCon
     # run a sanitize pass
     @content = Sanitize.fragment(@content, Sanitize::Config::RELAXED)
 
+    # create a CaseNoteUpdate with the edited content
+    @note_update = Kukupa::Models::CaseNoteUpdate.new(
+      note: @note.id,
+      author: @user.id,
+      update_type: 'edit',
+    ).save
+
+    @note_update.encrypt(:data, JSON.generate({
+      old_content: @note.decrypt(:content),
+      new_content: @content,
+    }))
+
+    @note_update.save
+
     # send note edit email
     @note.send_creation_email!(edited: true)
 

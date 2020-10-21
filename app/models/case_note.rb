@@ -130,6 +130,10 @@ class Kukupa::Models::CaseNote < Sequel::Model
   end
 
   def delete!
+    Kukupa::Models::CaseNoteUpdate
+      .where(note: self.id)
+      .map(&:delete)
+
     self.delete
   end
 end

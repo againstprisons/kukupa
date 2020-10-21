@@ -39,6 +39,13 @@ module Kukupa::Helpers::CaseViewHelpers
     items = []
 
     Kukupa::Models::CaseNote.where(case: c).each do |cn|
+      child_actions = [
+        {
+          url: "##{cn.anchor}",
+          fa_icon: 'fa-external-link',
+        }
+      ]
+
       actions =  [
         {
           url: url("/case/#{c}/note/#{cn.id}"),
@@ -56,7 +63,7 @@ module Kukupa::Helpers::CaseViewHelpers
 
       advocates = case_populate_advocate(advocates, cn.author)
 
-      items << {
+      parent = {
         type: :case_note,
         id: "CaseNote[#{cn.id}]",
         anchor: cn.anchor,
@@ -69,6 +76,36 @@ module Kukupa::Helpers::CaseViewHelpers
         author: advocates[cn.author.to_s],
         actions: actions,
       }
+
+      Kukupa::Models::CaseNoteUpdate.where(note: cn.id).each do |cnu|
+        advocates = case_populate_advocate(advocates, cnu.author)
+
+        begin
+          data = JSON.parse(cnu.decrypt(:data) || '{}').map do |k, v|
+            [k.to_sym, v]
+          end.to_h
+        rescue
+          data = {}
+        end
+
+        data.merge!({
+          type: cnu.update_type.to_sym,
+        })
+
+        items << {
+          type: :note_update,
+          id: "CaseNoteUpdate[#{cnu.id}]",
+          anchor: cnu.anchor,
+          case_note: cn,
+          creation: cnu.creation,
+          author: advocates[cnu.author.to_s],
+          parent: parent,
+          update: data,
+          actions: child_actions,
+        }
+      end
+
+      items << parent
     end
 
     Kukupa::Models::CaseSpend.where(case: c).each do |cs|

@@ -76,12 +76,63 @@
                 %span
                   &= rb[:metadata][:prison]
 
-
         %blockquote.blockquote-fancy
           = rb[:content]
 
       - else
         = rb[:content]
+
+- if rb[:type] == :note_update
+  .caserenderable-container{'data-rb-type': rb[:type], id: rb[:anchor]}
+    .caserenderable-header
+      %span.caserenderable-header-author
+        %a.caserenderable-header-iconlink{href: "##{rb[:anchor]}"}
+          %span{title: rb[:id]}
+            %i.fa.fa-pencil.fa-fw= ""
+
+          = succeed ': ' do
+            = t(:'case_renderable/note/update/edit/author')
+
+          - if rb[:author][:id].zero?
+            %strong
+              = t(:'author/robot')
+
+          - else
+            %strong{title: "User[#{rb[:author][:id]}]"}
+              &= rb[:author][:name]
+
+            - if rb[:author][:me]
+              %span.badge
+                %i.fa.fa-user-o= ""
+                = t(:'thats_you')
+
+      %ul.inline-list
+        %li
+          %span.case-renderable-creation
+            = t(:'case_renderable/creation', ts: rb[:creation])
+
+        - rb[:actions]&.each do |link|
+          %li.case-renderable-action
+            %a{href: link[:url]}
+              %i.fa{class: link[:fa_icon]}= ""
+
+    .caserenderable-content
+      - if rb[:update][:type] == :edit
+        %ul
+          - unless rb[:update][:old_content] == rb[:update][:new_content]
+            %li
+              = succeed ': ' do
+                = t(:'case_renderable/note/update/edit/old_content')
+
+              %blockquote
+                = rb[:update][:old_content]
+
+            %li
+              = succeed ': ' do
+                = t(:'case_renderable/note/update/edit/new_content')
+
+              %blockquote
+                = rb[:update][:new_content]
 
 - if rb[:type] == :spend
   .caserenderable-container{'data-rb-type': rb[:type], id: rb[:anchor]}
