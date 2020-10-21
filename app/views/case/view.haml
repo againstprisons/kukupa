@@ -164,3 +164,11 @@
         %i.fa.fa-arrow-up= ""
         %span.sr-only
           = t(:'case/view/actions/to_start_of_entries')
+
+    .page-footer
+      %ul.inline-list
+        %li= t(:'case/view/options')
+        %li
+          %a.case-view-task-editlink{href: renderable_updates_toggle}
+            %i.fa{class: "fa-toggle-#{renderable_updates ? 'on' : 'off'}"}= ""
+            = t("case/view/options/renderable_updates/#{renderable_updates ? 'on' : 'off'}".to_sym)

@@ -18,7 +18,8 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
 
     @case_name = @case.get_name
     @title = t(:'case/view/title', name: @case_name)
-    @renderables = get_renderables(@case)
+    @renderable_updates = request.params['ru'].to_i.positive?
+    @renderables = get_renderables(@case, include_updates: @renderable_updates)
     @tasks_complete = request.params['tc'].to_i.positive?
     @tasks = get_tasks(@case, include_complete: @tasks_complete)
     @prison = Kukupa::Models::Prison[@case.decrypt(:prison).to_i]
@@ -37,11 +38,19 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
     @this_url = Addressable::URI.parse(url(request.path))
     @this_url.query_values = {
       'tc' => @tasks_complete ? '1' : '0',
+      'ru' => @renderable_updates ? '1' : '0',
      }
+
+    @renderable_updates_toggle = @this_url.dup
+    @renderable_updates_toggle.query_values = {
+      'tc' => @tasks_complete ? '1' : '0',
+      'ru' => @renderable_updates ? '0' : '1',
+    }
 
     @tasks_complete_toggle = @this_url.dup
     @tasks_complete_toggle.query_values = {
       'tc' => @tasks_complete ? '0' : '1',
+      'ru' => @renderable_updates ? '1' : '0',
     }
 
     @spend_year_max = Kukupa.app_config['fund-max-spend-per-case-year'].to_f
@@ -55,6 +64,8 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
       case_prison: @prison,
       case_address: @address,
       renderables: @renderables,
+      renderable_updates: @renderable_updates,
+      renderable_updates_toggle: @renderable_updates_toggle,
       tasks: @tasks,
       tasks_complete: @tasks_complete,
       tasks_complete_toggle: @tasks_complete_toggle,

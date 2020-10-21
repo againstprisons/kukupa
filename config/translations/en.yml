@@ -245,6 +245,9 @@
 :'case/view/tasks/item/jump_to_log': "Jump to log entry for this task"
 :'case/view/entries/section_title': "Notes"
 :'case/view/entries/no_entries': "There are no entries for this case yet."
+:'case/view/options': "Options"
+:'case/view/options/renderable_updates/off': "Entry updates: click to show"
+:'case/view/options/renderable_updates/on': "Entry updates: click to hide"
 
 # Cases - note add
 :'case/note/add/title': "Add case note: <%= e(name) %>"

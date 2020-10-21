@@ -30,7 +30,7 @@ module Kukupa::Helpers::CaseViewHelpers
     [tasks, complete].flatten
   end
 
-  def get_renderables(c)
+  def get_renderables(c, opts = {})
     c = c.id if c.respond_to?(:id)
 
     cuser = current_user
@@ -77,32 +77,34 @@ module Kukupa::Helpers::CaseViewHelpers
         actions: actions,
       }
 
-      Kukupa::Models::CaseNoteUpdate.where(note: cn.id).each do |cnu|
-        advocates = case_populate_advocate(advocates, cnu.author)
+      if opts[:include_updates]
+        Kukupa::Models::CaseNoteUpdate.where(note: cn.id).each do |cnu|
+          advocates = case_populate_advocate(advocates, cnu.author)
 
-        begin
-          data = JSON.parse(cnu.decrypt(:data) || '{}').map do |k, v|
-            [k.to_sym, v]
-          end.to_h
-        rescue
-          data = {}
+          begin
+            data = JSON.parse(cnu.decrypt(:data) || '{}').map do |k, v|
+              [k.to_sym, v]
+            end.to_h
+          rescue
+            data = {}
+          end
+
+          data.merge!({
+            type: cnu.update_type.to_sym,
+          })
+
+          items << {
+            type: :note_update,
+            id: "CaseNoteUpdate[#{cnu.id}]",
+            anchor: cnu.anchor,
+            case_note: cn,
+            creation: cnu.creation,
+            author: advocates[cnu.author.to_s],
+            parent: parent,
+            update: data,
+            actions: child_actions,
+          }
         end
-
-        data.merge!({
-          type: cnu.update_type.to_sym,
-        })
-
-        items << {
-          type: :note_update,
-          id: "CaseNoteUpdate[#{cnu.id}]",
-          anchor: cnu.anchor,
-          case_note: cn,
-          creation: cnu.creation,
-          author: advocates[cnu.author.to_s],
-          parent: parent,
-          update: data,
-          actions: child_actions,
-        }
       end
 
       items << parent
@@ -166,32 +168,34 @@ module Kukupa::Helpers::CaseViewHelpers
         }
       end
 
-      Kukupa::Models::CaseSpendUpdate.where(spend: cs.id).each do |csu|
-        advocates = case_populate_advocate(advocates, csu.author)
+      if opts[:include_updates]
+        Kukupa::Models::CaseSpendUpdate.where(spend: cs.id).each do |csu|
+          advocates = case_populate_advocate(advocates, csu.author)
 
-        begin
-          data = JSON.parse(csu.decrypt(:data) || '{}').map do |k, v|
-            [k.to_sym, v]
-          end.to_h
-        rescue
-          data = {}
+          begin
+            data = JSON.parse(csu.decrypt(:data) || '{}').map do |k, v|
+              [k.to_sym, v]
+            end.to_h
+          rescue
+            data = {}
+          end
+
+          data.merge!({
+            type: csu.update_type.to_sym,
+          })
+
+          items << {
+            type: :spend_update,
+            id: "CaseSpendUpdate[#{csu.id}]",
+            anchor: csu.anchor,
+            case_spend: cs,
+            creation: csu.creation,
+            author: advocates[csu.author.to_s],
+            parent: parent,
+            update: data,
+            actions: child_actions,
+          }
         end
-
-        data.merge!({
-          type: csu.update_type.to_sym,
-        })
-
-        items << {
-          type: :spend_update,
-          id: "CaseSpendUpdate[#{csu.id}]",
-          anchor: csu.anchor,
-          case_spend: cs,
-          creation: csu.creation,
-          author: advocates[csu.author.to_s],
-          parent: parent,
-          update: data,
-          actions: child_actions,
-        }
       end
 
       items << parent
