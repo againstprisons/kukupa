@@ -37,7 +37,7 @@
           = t(:'case_renderable/creation', ts: rb[:creation])
 
           - if rb[:edited]
-            %span.case-renderable-creation-edited{title: t(:'case_renderable/creation', ts: rb[:edited])}
+            %a.case-renderable-creation-edited.case-view-task-editlink{title: t(:'case_renderable/creation', ts: rb[:edited]), href: rb[:history_url]}
               = t(:'case_renderable/creation/edited')
 
       - rb[:actions]&.each do |link|

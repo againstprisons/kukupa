@@ -271,6 +271,12 @@
 :'case/note/edit/delete/success': "Deleted case note <%= e(note_id) %>."
 :'case/note/edit/delete/errors/no_confirm': "Refusing to delete this case note as the confirmation was not correct."
 
+# Cases - note history
+:'case/note/history/title': "Viewing history for case note <%= e(note) %>: <%= e(name) %>"
+:'case/note/history/current': "Current version"
+:'case/note/history/author': "Author"
+:'case/note/history/edited': "Edited"
+
 # Cases - spend add
 :'case/spend/add/title': "Add case spend: <%= e(name) %>"
 :'case/spend/add/section_title': "Add case spend"

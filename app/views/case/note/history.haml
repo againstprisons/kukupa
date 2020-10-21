@@ -1,0 +1,72 @@
+.case-note-history{'data-case-id': case_obj.id, 'data-note-id': note_obj.id}
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: url("/case/#{case_obj.id}/view##{note_obj.anchor}")}
+      %i.fa.fa-chevron-left= ""
+      %span
+        = t(:'back')
+
+  -# first entry uses the actual note obj for author/timestamp/etc
+  -# but if there is an update it uses the :old_content from that update
+  .caserenderable-container.caserenderable-non-list-entry
+    .caserenderable-header
+      %span.caserenderable-header-author
+        %span{title: "CaseNote[#{note_obj.id}]"}
+          %i.fa.fa-file-text-o.fa-fw= ""
+
+        = succeed ': ' do
+          = t(:'case_renderable/note/author')
+
+        - if note_author[:id].zero?
+          %strong= t(:'author/robot')
+
+        - else
+          %strong{title: "User[#{note_author[:id]}]"}
+            &= note_author[:name]
+
+          - if note_author[:me]
+            %span.badge
+              %i.fa.fa-user-o= ""
+              = t(:'thats_you')
+
+      %ul.inline-list
+        %li
+          %span.case-renderable-creation
+            = t(:'case_renderable/creation', ts: note_creation)
+
+    .caserenderable-content
+      - if note_history.empty?
+        = note_content
+      - else
+        = note_history.first[:old_content]
+
+  - note_history.each do |nh|
+    .caserenderable-container.caserenderable-non-list-entry
+      .caserenderable-header
+        %span.caserenderable-header-author
+          %span{title: "CaseNoteUpdate[#{nh[:id]}]"}
+            %i.fa.fa-file-text-o.fa-fw= ""
+
+          = succeed ': ' do
+            = t(:'case_renderable/note/author')
+
+          - if nh[:author][:id].zero?
+            %strong= t(:'author/robot')
+
+          - else
+            %strong{title: "User[#{nh[:author][:id]}]"}
+              &= nh[:author][:name]
+
+            - if nh[:author][:me]
+              %span.badge
+                %i.fa.fa-user-o= ""
+                = t(:'thats_you')
+
+        %ul.inline-list
+          %li
+            %span.case-renderable-creation
+              = t(:'case_renderable/creation', ts: nh[:creation])
+
+      .caserenderable-content
+        = nh[:new_content]

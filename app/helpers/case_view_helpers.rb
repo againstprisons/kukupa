@@ -75,6 +75,7 @@ module Kukupa::Helpers::CaseViewHelpers
         metadata: metadata,
         author: advocates[cn.author.to_s],
         actions: actions,
+        history_url: url("/case/#{c}/note/#{cn.id}/history"),
       }
 
       if opts[:include_updates]
