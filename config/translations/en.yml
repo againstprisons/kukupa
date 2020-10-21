@@ -80,6 +80,7 @@
 :'case_renderable/creation': "<%= e(ts.strftime('%A, %B %e, %Y at %l:%M %P')) %>"
 :'case_renderable/creation/edited': "(edited)"
 :'case_renderable/note/author': "Author"
+:'case_renderable/note/author/editor': "Editor"
 :'case_renderable/note/author/outside_request': "Outside request"
 :'case_renderable/note/outside_request/name': "Name"
 :'case_renderable/note/outside_request/phone': "Phone number"
@@ -276,9 +277,6 @@
 
 # Cases - note history
 :'case/note/history/title': "Viewing history for case note <%= e(note) %>: <%= e(name) %>"
-:'case/note/history/current': "Current version"
-:'case/note/history/author': "Author"
-:'case/note/history/edited': "Edited"
 
 # Cases - spend add
 :'case/spend/add/title': "Add case spend: <%= e(name) %>"
