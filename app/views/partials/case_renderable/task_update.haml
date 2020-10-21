@@ -1,0 +1,45 @@
+.caserenderable-container{'data-rb-type': rb[:type], id: rb[:anchor]}
+  .caserenderable-header
+    %span.caserenderable-header-task
+      %a.caserenderable-header-iconlink{href: "##{rb[:anchor]}"}
+        %span{title: rb[:id]}
+          %i.fa.fa-check-square-o.fa-fw= ""
+
+      = succeed ': ' do
+        = t("case_renderable/task/update/#{rb[:update][:type].to_s}".to_sym)
+
+      %strong{title: "User[#{rb[:author][:id]}]"}
+        &= rb[:author][:name]
+
+      - if rb[:author][:me]
+        %span.badge
+          %i.fa.fa-user-o= ""
+          = t(:'thats_you')
+
+    %ul.inline-list
+      %li
+        = t(:'case_renderable/creation', ts: rb[:creation])
+
+      - rb[:actions]&.each do |link|
+        %li.case-renderable-action
+          %a{href: link[:url]}
+            %i.fa{class: link[:fa_icon]}= ""
+
+  .caserenderable-content
+    %ul.inline-list
+      - if rb[:update][:type] == :assign
+        %li
+          = succeed ': ' do
+            = t(:'case_renderable/task/assigned')
+
+          %span.caserenderable--task-assigned
+            %strong{title: "User[#{rb[:update][:to][:id]}]"}
+              &= rb[:update][:to][:name]
+
+            - if rb[:update][:to][:me]
+              %span.badge
+                %i.fa.fa-user-o= ""
+                = t(:'thats_you')
+
+    %blockquote.blockquote-fancy
+      &= rb[:content]

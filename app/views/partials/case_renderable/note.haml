@@ -1,0 +1,85 @@
+.caserenderable-container{'data-rb-type': rb[:type], id: rb[:anchor]}
+  .caserenderable-header
+    %span.caserenderable-header-author
+      %a.caserenderable-header-iconlink{href: "##{rb[:anchor]}"}
+        %span{title: rb[:id]}
+          - if rb[:case_note].is_outside_request
+            %i.fa.fa-question.fa-fw= ""
+          - else 
+            %i.fa.fa-file-text-o.fa-fw= ""
+
+      - if rb[:author][:id].zero?
+        - if rb[:outside_request]
+          = t(:'case_renderable/note/author/outside_request')
+
+        - else
+          = succeed ': ' do
+            = t(:'case_renderable/note/author')
+
+          %strong
+            = t(:'author/robot')
+
+      - else
+        = succeed ': ' do
+          = t(:'case_renderable/note/author')
+
+        %strong{title: "User[#{rb[:author][:id]}]"}
+          &= rb[:author][:name]
+
+        - if rb[:author][:me]
+          %span.badge
+            %i.fa.fa-user-o= ""
+            = t(:'thats_you')
+
+    %ul.inline-list
+      %li
+        %span.case-renderable-creation
+          = t(:'case_renderable/creation', ts: rb[:creation])
+
+          - if rb[:edited]
+            %span.case-renderable-creation-edited{title: t(:'case_renderable/creation', ts: rb[:edited])}
+              = t(:'case_renderable/creation/edited')
+
+      - rb[:actions]&.each do |link|
+        %li.case-renderable-action
+          %a{href: link[:url]}
+            %i.fa{class: link[:fa_icon]}= ""
+
+  .caserenderable-content
+    - if rb[:outside_request]
+      .cr-outsidereq-meta-author
+        %ul.inline-list
+          %li
+            = succeed ': ' do
+              = t(:'case_renderable/note/outside_request/name')
+            %strong
+              &= rb[:metadata][:name]
+
+          - if rb[:metadata][:phone]
+            %li
+              = succeed ': ' do
+                = t(:'case_renderable/note/outside_request/phone')
+              %span
+                &= rb[:metadata][:phone]
+
+          - if rb[:metadata][:email]
+            %li
+              = succeed ': ' do
+                = t(:'case_renderable/note/outside_request/email')
+              %span
+                &= rb[:metadata][:email]
+
+      - if rb[:metadata][:prison]
+        .cr-outsidereq-meta-prison
+          %ul.inline-list
+            %li
+              = succeed ': ' do
+                = t(:'case_renderable/note/outside_request/prison')
+              %span
+                &= rb[:metadata][:prison]
+
+      %blockquote.blockquote-fancy
+        = rb[:content]
+
+    - else
+      = rb[:content]

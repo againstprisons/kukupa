@@ -155,7 +155,7 @@
           = t(:'case/view/entries/no_entries')
 
       - renderables.each do |rb|
-        = haml :'partials/case_renderable', layout: false, locals: {rb: rb}
+        = haml "partials/case_renderable/#{rb[:type]}".to_sym, layout: false, locals: {rb: rb}
 
       #case-view-renderables-end= ""
 

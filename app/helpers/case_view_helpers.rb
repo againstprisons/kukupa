@@ -64,7 +64,7 @@ module Kukupa::Helpers::CaseViewHelpers
       advocates = case_populate_advocate(advocates, cn.author)
 
       parent = {
-        type: :case_note,
+        type: :note,
         id: "CaseNote[#{cn.id}]",
         anchor: cn.anchor,
         case_note: cn,
