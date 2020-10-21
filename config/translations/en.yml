@@ -107,6 +107,7 @@
 :'case_renderable/correspondence/outgoing': "Outgoing mail"
 :'case_renderable/correspondence/incoming': "Incoming mail"
 :'case_renderable/correspondence/subject': "Mail subject"
+:'case_renderable/correspondence/subject/none': "No subject"
 
 # Maintenance
 :'maintenance/warning': "Maintenance mode is enabled!"

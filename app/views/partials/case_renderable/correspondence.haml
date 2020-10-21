@@ -21,11 +21,13 @@
             %i.fa{class: link[:fa_icon]}= ""
 
   .caserenderable-content
-    %ul
-      - unless rb[:subject].nil? || rb[:subject]&.empty?
-        %li
+    %ul.inline-list
+      %li
+        - unless rb[:subject].nil? || rb[:subject]&.empty?
           = succeed ": " do
             = t(:'case_renderable/correspondence/subject')
-
           %span
             &= rb[:subject]
+
+        - else
+          = t(:'case_renderable/correspondence/subject/none')
