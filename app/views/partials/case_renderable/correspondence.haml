@@ -1,0 +1,31 @@
+.caserenderable-container{'data-rb-type': rb[:type], id: rb[:anchor]}
+  .caserenderable-header
+    %span.caserenderable-header-correspondence
+      %a.caserenderable-header-iconlink{href: "##{rb[:anchor]}"}
+        %span{title: rb[:id]}
+          %i.fa.fa-envelope-o.fa-fw= ""
+
+      %span
+        - if rb[:outgoing]
+          = t(:'case_renderable/correspondence/outgoing')
+        - else 
+          = t(:'case_renderable/correspondence/incoming')
+
+    %ul.inline-list
+      %li
+        = t(:'case_renderable/creation', ts: rb[:creation])
+
+      - rb[:actions]&.each do |link|
+        %li.case-renderable-action
+          %a{href: link[:url]}
+            %i.fa{class: link[:fa_icon]}= ""
+
+  .caserenderable-content
+    %ul
+      - unless rb[:subject].nil? || rb[:subject]&.empty?
+        %li
+          = succeed ": " do
+            = t(:'case_renderable/correspondence/subject')
+
+          %span
+            &= rb[:subject]

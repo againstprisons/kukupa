@@ -267,6 +267,21 @@ module Kukupa::Helpers::CaseViewHelpers
       items << parent
     end
 
+    Kukupa::Models::CaseCorrespondence.where(case: c).each do |cc|
+      actions = [
+      ]
+
+      items << {
+        type: :correspondence,
+        id: "CaseCorrespondence[#{cc.id}]",
+        anchor: cc.anchor,
+        creation: cc.creation,
+        subject: cc.decrypt(:subject),
+        outgoing: cc.sent_by_us,
+        actions: actions,
+      }
+    end
+
     items.sort { |a, b| b[:creation] <=> a[:creation] }
   end
 end

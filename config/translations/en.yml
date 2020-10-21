@@ -103,6 +103,9 @@
 :'case_renderable/task/assigned': "Assigned to"
 :'case_renderable/task/update/assign': "Task reassigned by"
 :'case_renderable/task/update/complete': "Task completed by"
+:'case_renderable/correspondence/outgoing': "Outgoing mail"
+:'case_renderable/correspondence/incoming': "Incoming mail"
+:'case_renderable/correspondence/subject': "Mail subject"
 
 # Maintenance
 :'maintenance/warning': "Maintenance mode is enabled!"
