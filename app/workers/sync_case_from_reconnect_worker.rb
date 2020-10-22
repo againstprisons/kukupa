@@ -1,6 +1,3 @@
-require 'addressable'
-require 'typhoeus'
-
 class Kukupa::Workers::SyncCaseFromReconnectWorker
   include Sidekiq::Worker
 
