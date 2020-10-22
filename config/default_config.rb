@@ -68,7 +68,7 @@ module Kukupa
     },
     "reconnect-sync-after" => {
       :type => :time_period,
-      :default => '30 minutes ago',
+      :default => '10 minutes ago',
     },
   }
 
