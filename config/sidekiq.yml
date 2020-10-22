@@ -7,6 +7,10 @@
     cron: '0 0 * * *'
     class: "Kukupa::Workers::CaseTaskReminderWorker"
 
+  sync_prisons:
+    cron: '*/30 * * * *'
+    class: "Kukupa::Workers::SyncPrisonsWorker"
+
   sync_cases:
     cron: '*/10 * * * *'
     class: "Kukupa::Workers::SyncCasesWorker"
