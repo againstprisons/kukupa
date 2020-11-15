@@ -1,0 +1,22 @@
+.case-correspondence-download{'data-case-id': case_obj.id}
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: url("/case/#{case_obj.id}/view")}
+      %i.fa.fa-chevron-left= ""
+      %span
+        = t(:'back')
+
+  .form-main
+    %h1= t(:'case/correspondence/download/section_title')
+
+    - if cc_type == 'reconnect'
+      %p= t(:'case/correspondence/download/reconnect')
+
+    %a.pure-button.button{target: '_blank', href: view_url}
+      %i.fa.fa-file-text-o= ""
+      = t(:'case/correspondence/download/actions/view')
+
+    %a.pure-button.button{target: '_blank', href: download_url}
+      %i.fa.fa-download= ""
+      = t(:'case/correspondence/download/actions/download')

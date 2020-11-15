@@ -348,6 +348,15 @@
 :'case/task/edit/delete/errors/not_author': "You can not delete a task unless you are the task's author or assignee."
 :'case/task/edit/delete/errors/no_confirm': "Refusing to delete this case spend as the confirmation was not correct."
 
+# Cases - correspondence download
+:'case/correspondence/download/title': "Correspondence <%= e(ccid) %>: <%= e(name) %>"
+:'case/correspondence/download/section_title': "Download or view correspondence"
+:'case/correspondence/download/reconnect': "This correspondence is stored on the linked re:connect instance, and therefore the download links on this page will expire after some time. If you see an error trying to download or view this correspondence, please refresh the page."
+:'case/correspondence/download/actions/view': "View correspondence"
+:'case/correspondence/download/actions/download': "Download correspondence"
+:'case/correspondence/download/errors/no_reconnect_response': "The re:connect instance did not respond to the request to download this correspondence. Either the re:connect instance could not be contacted, or the file does not exist on re:connect. Please try again later, and if this persists, contact the administrator of the re:connect instance."
+:'case/correspondence/download/errors/unknown_error': "An unknown error occurred when trying to retrieve the file to download."
+
 # Cases - edit
 :'case/edit/title': "Edit case: <%= e(name) %>"
 :'case/edit/edit/section_title': "Case details"

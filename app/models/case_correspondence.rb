@@ -6,6 +6,10 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
   def renderables(opts = {})
     items = []
     actions = [
+      {
+        url: [:url, "/case/#{self.case}/correspondence/#{self.id}/dl"],
+        fa_icon: 'fa-download',
+      },
     ]
 
     items << {
