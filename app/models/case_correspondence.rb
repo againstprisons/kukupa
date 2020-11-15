@@ -10,6 +10,10 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
         url: [:url, "/case/#{self.case}/correspondence/#{self.id}/dl"],
         fa_icon: 'fa-download',
       },
+      {
+        url: [:url, "/case/#{self.case}/correspondence/#{self.id}"],
+        fa_icon: 'fa-gear',
+      },
     ]
 
     items << {
