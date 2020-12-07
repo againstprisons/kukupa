@@ -1,0 +1,20 @@
+<p>Hello,</p>
+
+<p>
+  A piece of correspondence in the case for <%= e(case_obj.get_name) %>
+  has been deleted.
+</p>
+
+<% if user %><p>
+  The case note was deleted by <em><%= e(user.decrypt(:name)) %></em>.
+</p><% end %>
+
+<p>
+  The subject of this correspondence was:
+  <blockquote><%= e(cc_subject) %></blockquote>
+</p>
+
+<p>
+  To view the case this note belonged to, visit:
+  <a href="<%= e(case_url) %>"><%= e(case_url) %></a>
+</p>

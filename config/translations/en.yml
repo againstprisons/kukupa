@@ -254,22 +254,6 @@
 :'case/view/options/renderable_updates/off': "Entry updates: click to show"
 :'case/view/options/renderable_updates/on': "Entry updates: click to hide"
 
-# Cases - send mail
-:'case/correspondence/send/title': "Send mail to case: <%= e(name) %>"
-:'case/correspondence/send/compose/section_title': "Compose mail"
-:'case/correspondence/send/compose/subject': "Mail subject"
-:'case/correspondence/send/compose/content': "Mail content"
-:'case/correspondence/send/compose/submit': "Continue"
-:'case/correspondence/send/confirm/section_title': "Confirm mail content"
-:'case/correspondence/send/confirm/subject': "Mail subject: <%= e(subject) %>"
-:'case/correspondence/send/confirm/edit': "Go back to editor"
-:'case/correspondence/send/confirm/submit': "Send mail"
-:'case/correspondence/send/mail_disabled': "Sending mail is currently disabled for this case."
-:'case/correspondence/send/mail_disabled/no_association': "This case is not associated with a re:connect profile."
-:'case/correspondence/send/mail_disabled/reconnect_data_nil': "The re:connect instance could not be reached to verify this case's information."
-:'case/correspondence/send/errors/reconnect_err': "An error occurred syncing this correspondence with re:connect. Please give your system administrator this error identifier: <code><%= e(error_id) %></code>"
-:'case/correspondence/send/success': "Successfully sent correspondence."
-
 # Cases - note add
 :'case/note/add/title': "Add case note: <%= e(name) %>"
 :'case/note/add/section_title': "Enter case note"
@@ -363,6 +347,34 @@
 :'case/task/edit/delete/success': "Deleted case task <%= e(task_id) %>."
 :'case/task/edit/delete/errors/not_author': "You can not delete a task unless you are the task's author or assignee."
 :'case/task/edit/delete/errors/no_confirm': "Refusing to delete this case spend as the confirmation was not correct."
+
+# Cases - correspondence send
+:'case/correspondence/send/title': "Send mail to case: <%= e(name) %>"
+:'case/correspondence/send/compose/section_title': "Compose mail"
+:'case/correspondence/send/compose/subject': "Mail subject"
+:'case/correspondence/send/compose/content': "Mail content"
+:'case/correspondence/send/compose/submit': "Continue"
+:'case/correspondence/send/confirm/section_title': "Confirm mail content"
+:'case/correspondence/send/confirm/subject': "Mail subject: <%= e(subject) %>"
+:'case/correspondence/send/confirm/edit': "Go back to editor"
+:'case/correspondence/send/confirm/submit': "Send mail"
+:'case/correspondence/send/mail_disabled': "Sending mail is currently disabled for this case."
+:'case/correspondence/send/mail_disabled/no_association': "This case is not associated with a re:connect profile."
+:'case/correspondence/send/mail_disabled/reconnect_data_nil': "The re:connect instance could not be reached to verify this case's information."
+:'case/correspondence/send/errors/reconnect_err': "An error occurred syncing this correspondence with re:connect. Please give your system administrator this error identifier: <code><%= e(error_id) %></code>"
+:'case/correspondence/send/success': "Successfully sent correspondence."
+
+# Cases - correspondence edit
+:'case/correspondence/edit/title': "Case correspondence <%= e(ccid) %>: <%= e(name) %>"
+:'case/correspondence/edit/edit/section_title': "Edit correspondence"
+:'case/correspondence/edit/edit/subject': "Mail subject"
+:'case/correspondence/edit/edit/submit': "Save correspondence"
+:'case/correspondence/edit/edit/success': "Correspondence entry updated."
+:'case/correspondence/edit/delete/section_title': "Delete correspondence"
+:'case/correspondence/edit/delete/confirm': "To delete this correspondence, enter \"DELETE\" (in all caps) into the box below, and click \"<%= t(:'case/correspondence/edit/delete/submit') %>\"."
+:'case/correspondence/edit/delete/submit': "Delete correspondence"
+:'case/correspondence/edit/delete/success': "Deleted case correspondence <%= e(ccid) %>."
+:'case/correspondence/edit/delete/errors/no_confirm': "Refusing to delete this correspondence as the confirmation was not correct."
 
 # Cases - correspondence download
 :'case/correspondence/download/title': "Correspondence <%= e(ccid) %>: <%= e(name) %>"

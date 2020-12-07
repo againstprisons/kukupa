@@ -1,0 +1,32 @@
+.case-correspondence-edit{'data-case-id': case_obj.id}
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: url("/case/#{case_obj.id}/view##{cc_obj.anchor}")}
+      %i.fa.fa-chevron-left= ""
+      %span
+        = t(:'back')
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'case/correspondence/edit/edit/section_title')
+
+    %label{for: 'subject'}= t(:'case/correspondence/edit/edit/subject')
+    %input#subject{name: 'subject', type: 'text', required: false, value: cc_subject}
+
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-pencil= ""
+      = t(:'case/correspondence/edit/edit/submit')
+
+  - if has_role?('case:delete_entry')
+    %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: urls[:delete]}
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+      %h1= t(:'case/correspondence/edit/delete/section_title')
+
+      %label{for: 'delete-confirm'}= t(:'case/correspondence/edit/delete/confirm')
+      %input#delete-confirm{name: 'confirm', type: 'text', required: true}
+
+      %button.pure-button.button.button-error{type: 'submit'}
+        %i.fa.fa-trash= ""
+        = t(:'case/correspondence/edit/delete/submit')
+
