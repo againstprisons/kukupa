@@ -17,6 +17,7 @@ module Kukupa::Helpers::CaseHelpers
     uids = []
 
     # all users with `case:*` or `case:assignable` roles
+    uids << Kukupa::Models::UserRole.where(role: "*").map(&:user_id).to_a
     uids << Kukupa::Models::UserRole.where(role: "case:*").map(&:user_id).to_a
     uids << Kukupa::Models::UserRole.where(role: "case:assignable").map(&:user_id).to_a
 
@@ -39,6 +40,7 @@ module Kukupa::Helpers::CaseHelpers
     uids << c.assigned_advocate
 
     # all users with `case:*` or `case:view_all` roles
+    uids << Kukupa::Models::UserRole.where(role: "*").map(&:user_id).to_a
     uids << Kukupa::Models::UserRole.where(role: "case:*").map(&:user_id).to_a
     uids << Kukupa::Models::UserRole.where(role: "case:view_all").map(&:user_id).to_a
 
