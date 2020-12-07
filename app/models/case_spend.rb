@@ -24,6 +24,13 @@ class Kukupa::Models::CaseSpend < Sequel::Model
       })
     end
 
+    edited_ts = Kukupa::Models::CaseSpendUpdate
+      .select(:id, :spend, :creation)
+      .where(spend: self.id)
+      .reverse(:creation)
+      .map(&:creation)
+      .first
+
     items << {
       type: :spend,
       id: "CaseSpend[#{self.id}]",
@@ -32,6 +39,7 @@ class Kukupa::Models::CaseSpend < Sequel::Model
       creation: self.creation,
       amount: self.decrypt(:amount),
       notes: self.decrypt(:notes),
+      edited: edited_ts,
       author: [:user, self.author],
       approver: [:user, self.approver],
       actions: actions,

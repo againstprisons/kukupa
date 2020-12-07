@@ -11,10 +11,11 @@ class Kukupa::Models::CaseTask < Sequel::Model
     ]
 
     dates << Kukupa::Models::CaseTaskUpdate
+      .select(:id, :task, :creation)
       .where(task: self.id)
       .reverse(:creation)
+      .map(&:creation)
       .first
-      &.creation
 
     dates.compact.sort.last
   end
@@ -28,6 +29,13 @@ class Kukupa::Models::CaseTask < Sequel::Model
         fa_icon: 'fa-gear',
       },
     ]
+    
+    edited_ts = Kukupa::Models::CaseTaskUpdate
+      .select(:id, :task, :creation)
+      .where(task: self.id)
+      .reverse(:creation)
+      .map(&:creation)
+      .first
 
     items << {
       type: :task,
@@ -36,6 +44,7 @@ class Kukupa::Models::CaseTask < Sequel::Model
       creation: self.creation,
       content: self.decrypt(:content),
       author: [:user, self.author],
+      edited: edited_ts,
       assigned_to: [:user, self.assigned_to],
       actions: actions,
     }
