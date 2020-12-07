@@ -23,12 +23,12 @@ controllers:
   - path: /user
     controller: UserSettingsController
 
+  - path: /case/:case_id/correspondence/send
+    controller: CaseCorrespondenceSendController
   - path: /case/:case_id/correspondence/:cc_id/dl
     controller: CaseCorrespondenceDownloadController
   - path: /case/:case_id/correspondence/:cc_id
     controller: CaseCorrespondenceEditController
-  - path: /case/:case_id/correspondence/send
-    controller: CaseCorrespondenceSendController
   - path: /case/:case_id/task/add
     controller: CaseTaskAddController
   - path: /case/:case_id/task/:task_id
