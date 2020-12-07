@@ -9,6 +9,11 @@
   background: $body_header_background;
   color: $body_header_foreground;
 
+  &.body-header-sub {
+    background: $body_header_accent;
+    color: $body_header_foreground;
+  }
+
   .body-header-brand {
     img {
       display: inline-block;
@@ -53,6 +58,7 @@
       width: auto;
     }
 
+
     li {
       list-style: none outside none;
 
@@ -76,11 +82,14 @@
       }
 
       &.current {
-        border-color: $body_header_accent;
+        font-weight: bold;
+        background-color: $body_header_accent;
       }
 
-      &:focus, &:hover {
-        background: $body_header_hover_background;
+      &:not(.current) {
+        &:focus, &:hover {
+          background-image: $body_header_hover_background;
+        }
       }
 
       a {
@@ -90,6 +99,12 @@
         &:focus, &:hover {
           color: inherit;
         }
+      }
+    }
+
+    &.body-header-nav-list-sub {
+      li.current {
+        border-color: $body_header_background;
       }
     }
   }

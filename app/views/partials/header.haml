@@ -20,7 +20,7 @@
     %nav.body-header-nav
       %ul.body-header-nav-list><
         - if logged_in?
-          %li{class: current?('/user')}><
+          %li{class: current_prefix?('/user')}><
             %a{href: url('/user')}><
               &= current_user_name_or_email
 
@@ -29,6 +29,17 @@
               = t(:'auth/logout/title')
 
         - else
-          %li{class: current?('/auth')}><
+          %li{class: current_prefix?('/auth')}><
             %a{href: url('/auth')}><
               = t(:'auth/login/title')
+
+- if navbar_sub_items.count.positive?
+  .body-header.body-header-sub
+    .body-header-section.body-header-section-sub
+      %nav.body-header-nav.body-header-nav-sub
+        %ul.body-header-nav-list><
+          - navbar_sub_items.each do |item|
+            %li{class: item[:selected]}><
+              %a{href: item[:link]}><
+                &= item[:text]
+
