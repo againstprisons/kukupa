@@ -1,0 +1,12 @@
+.case-send-mail{'data-case-id': case_obj.id}
+  %h1= title
+
+  = haml :'partials/case_header', layout: false, locals: {caseid: case_obj.id}
+
+  %p
+    = t(:'case/correspondence/send/mail_disabled')
+
+    - if reconnect_id.to_i.positive? && reconnect_data.nil?
+      = t(:'case/correspondence/send/mail_disabled/reconnect_data_nil')
+    - else
+      = t(:'case/correspondence/send/mail_disabled/no_association')

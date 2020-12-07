@@ -254,6 +254,22 @@
 :'case/view/options/renderable_updates/off': "Entry updates: click to show"
 :'case/view/options/renderable_updates/on': "Entry updates: click to hide"
 
+# Cases - send mail
+:'case/correspondence/send/title': "Send mail to case: <%= e(name) %>"
+:'case/correspondence/send/compose/section_title': "Compose mail"
+:'case/correspondence/send/compose/subject': "Mail subject"
+:'case/correspondence/send/compose/content': "Mail content"
+:'case/correspondence/send/compose/submit': "Continue"
+:'case/correspondence/send/confirm/section_title': "Confirm mail content"
+:'case/correspondence/send/confirm/subject': "Mail subject: <%= e(subject) %>"
+:'case/correspondence/send/confirm/edit': "Go back to editor"
+:'case/correspondence/send/confirm/submit': "Send mail"
+:'case/correspondence/send/mail_disabled': "Sending mail is currently disabled for this case."
+:'case/correspondence/send/mail_disabled/no_association': "This case is not associated with a re:connect profile."
+:'case/correspondence/send/mail_disabled/reconnect_data_nil': "The re:connect instance could not be reached to verify this case's information."
+:'case/correspondence/send/errors/reconnect_err': "An error occurred syncing this correspondence with re:connect. Please give your system administrator this error identifier: <code><%= e(error_id) %></code>"
+:'case/correspondence/send/success': "Successfully sent correspondence."
+
 # Cases - note add
 :'case/note/add/title': "Add case note: <%= e(name) %>"
 :'case/note/add/section_title': "Enter case note"

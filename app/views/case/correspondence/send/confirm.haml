@@ -1,0 +1,34 @@
+.case-send-mail-confirm{'data-case-id': case_obj.id}
+  %h1= title
+
+  .form-main
+    %h1= t(:'case/correspondence/send/confirm/section_title')
+    %p= t(:'case/correspondence/send/confirm/subject', subject: compose_subject)
+
+    .case-send-mail-preview.rich-text-container.y-margin
+      != compose_content
+
+    %form.pure-form.pure-form-stacked{method: 'POST'}
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+      %input{type: 'hidden', name: 'confirm', value: '0'}
+      %input{type: 'hidden', name: 'preview', value: '0'}
+      %input{type: 'hidden', name: 'subject', value: compose_subject}
+      %input{type: 'hidden', name: 'content', value: compose_content}
+
+      %button.pure-button.button.button-primary{type: 'submit'}
+        %i.fa.fa-pencil= ""
+        = t(:'case/correspondence/send/confirm/edit')
+
+    %form.pure-form.pure-form-stacked{method: 'POST'}
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+      %input{type: 'hidden', name: 'confirm', value: '1'}
+      %input{type: 'hidden', name: 'preview', value: '0'}
+      %input{type: 'hidden', name: 'subject', value: compose_subject}
+      %input{type: 'hidden', name: 'content', value: compose_content}
+
+      %button.pure-button.button.button-primary{type: 'submit'}
+        %i.fa.fa-envelope-open-o= ""
+        = t(:'case/correspondence/send/confirm/submit')
+
+.async-load{:'data-sources' => JSON.generate(['/static/editor.bundle.js'])}
+    

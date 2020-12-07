@@ -32,4 +32,48 @@ module Kukupa::Helpers::ReconnectHelpers
 
     data
   end
+
+  def reconnect_send_mail(cid, content, opts = {})
+    return nil unless Kukupa.app_config['reconnect-api-key']
+    return nil unless Kukupa.app_config['reconnect-url']
+
+    opts[:mime_type] ||= 'text/html'
+
+    tmpfile = Tempfile.new('kukupa-mail')
+    tmpfile.write(content)
+    tmpfile.rewind
+
+    req_opts = {
+      method: :post,
+      headers: {
+        ContentType: 'multipart/form-data',
+      },
+      body: {
+        token: Kukupa.app_config['reconnect-api-key'],
+        sending: Kukupa.app_config['reconnect-penpal-id'],
+        receiving: cid,
+        mime: opts[:mime_type],
+        file: tmpfile,
+      },
+    }
+
+    api_url = Addressable::URI.parse(Kukupa.app_config['reconnect-url'])
+    api_url += '/api/correspondence/create'
+
+    response = Typhoeus::Request.new(api_url.to_s, req_opts).run
+    unless response.success?
+      raise "Request failure: #{response.body.inspect}"
+    end
+
+    begin
+      data = JSON.parse(response.body)
+    rescue => e
+      raise "Failed to parse JSON: #{e.inspect}"
+    end
+
+    tmpfile.close
+    tmpfile.unlink
+
+    data
+  end
 end
