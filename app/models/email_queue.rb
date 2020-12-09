@@ -55,8 +55,23 @@ class Kukupa::Models::EmailQueue < Sequel::Model(:email_queue)
     entry
   end
 
+  def self.annotate_subject_prefix
+    case Kukupa.app_config["email-subject-prefix"]
+    when "none"
+      ""
+    when "org-name"
+      "#{Kukupa.app_config["org-name"]}: "
+    when "org-name-brackets"
+      "[#{Kukupa.app_config["org-name"]}] "
+    when "site-name"
+      "#{Kukupa.app_config["site-name"]}: "
+    else # site-name-brackets
+      "[#{Kukupa.app_config["site-name"]}] "
+    end
+  end
+
   def self.annotate_subject(text)
-    "[#{Kukupa.app_config["site-name"]}] #{text}"
+    "#{self.annotate_subject_prefix}#{text}"
   end
 
   def self.recipients_list(data)
