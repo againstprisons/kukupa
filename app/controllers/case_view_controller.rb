@@ -64,6 +64,9 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
     @spend_year_max = Kukupa.app_config['fund-max-spend-per-case-year'].to_f
     @spend_year = Kukupa::Models::CaseSpendAggregate.get_case_year_total(@case, DateTime.now)
     @spend_year_percent = @spend_year / @spend_year_max
+    
+    @global_note = @case.decrypt(:global_note)
+    @global_note = nil if @global_note&.strip&.empty?
 
     return haml(:'case/view', :locals => {
       title: @title,
@@ -71,6 +74,7 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
       case_name: @case_name,
       case_prison: @prison,
       case_address: @address,
+      case_global_note: @global_note,
       renderables: @renderables,
       renderable_updates: @renderable_updates,
       renderable_updates_toggle: @renderable_updates_toggle,

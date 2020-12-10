@@ -33,6 +33,9 @@
       = t(:'release_date')
     %input#release_date{type: 'date', name: 'release_date', required: false, value: case_editables[:release_date]&.strftime('%Y-%m-%d')}
 
+    = haml :'partials/editor', layout: false, locals: {editor_name: 'global_note', editor_label: t(:'global_note'), editor_data: case_editables[:global_note]}
+    .y-margin= ""
+
     %button.pure-button.button.button-primary{type: 'submit'}
       %i.fa.fa-save= ""
       = t(:'case/edit/edit/submit')
@@ -87,3 +90,5 @@
       %a.pure-button.button{href: url("/case/#{case_obj.id}/edit/rc")}
         %i.fa.fa-link=""
         = t(:'case/edit/reconnect/submit')
+
+.async-load{:'data-sources' => JSON.generate(['/static/editor.bundle.js'])}
