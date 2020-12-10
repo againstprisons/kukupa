@@ -67,6 +67,8 @@ class Kukupa::Controllers::SystemRolesController < Kukupa::Controllers::SystemCo
       @users = [Kukupa::Models::User[@value.to_i]]
     end
 
+    @users.compact!
+
     # retrieve roles for each user in our search results
     @users.map! do |user|
       {
