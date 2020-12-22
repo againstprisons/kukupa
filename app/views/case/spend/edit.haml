@@ -14,6 +14,28 @@
       .message.message-warning
         = t(:'case/spend/edit/edit/errors/is_approved')
 
+      %ul
+        %li
+          = succeed ': ' do
+            = t(:'case/spend/edit/edit/amount_field')
+          %span
+            = t(:'case_renderable/spend/amount', amount: spend_amount)
+
+        %li
+          = succeed ': ' do
+            = t(:'case/spend/edit/edit/note_field')
+
+          %blockquote.blockquote-fancy
+            = spend_notes
+
+        - if spend_reimbursement
+          %li
+            = succeed ': ' do
+              = t(:'case/spend/edit/edit/reimbursement_info')
+
+            %blockquote.blockquote-fancy
+              = spend_reimbursement_info
+
     - else
       %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
 
@@ -21,6 +43,13 @@
       %input#amount{type: 'number', name: 'amount', required: true, value: sprintf('%.02f', spend_amount)}
 
       = haml :'partials/editor', layout: false, locals: {editor_name: 'content', editor_label: t(:'case/spend/edit/edit/note_field'), editor_data: spend_notes}
+      .y-margin= ""
+    
+      %label{for: 'reimbursement'}
+        %input#reimbursement{type: 'checkbox', name: 'reimbursement', checked: spend_reimbursement}
+        = t(:'case/spend/edit/edit/is_reimbursement')
+
+      = haml :'partials/editor', layout: false, locals: {editor_name: 'reimbursement_info', editor_label: t(:'case/spend/edit/edit/reimbursement_info'), editor_data: spend_reimbursement_info}
       .y-margin= ""
 
       %button.pure-button.button.button-primary{type: 'submit'}

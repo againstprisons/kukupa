@@ -27,6 +27,7 @@ class Kukupa::Controllers::CaseSpendApproveController < Kukupa::Controllers::Cas
     @content = @spend.decrypt(:notes)
     @amount = @spend.decrypt(:amount).to_f
     @author = Kukupa::Models::User[@spend.author]
+    @reimbursement_info = @spend.decrypt(:reimbursement_info)
     @title = t(:'case/spend/approve/title', name: @case_name, spend_id: @spend.id)
 
     if request.get?
@@ -39,6 +40,8 @@ class Kukupa::Controllers::CaseSpendApproveController < Kukupa::Controllers::Cas
         spend_amount: @amount,
         spend_author: @author,
         spend_author_self: @author.id == @user.id,
+        spend_reimbursement: @spend.is_reimbursement,
+        spend_reimbursement_info: @reimbursement_info,
       })
     end
 

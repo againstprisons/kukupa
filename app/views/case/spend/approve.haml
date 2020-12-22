@@ -30,6 +30,14 @@
         %blockquote.blockquote-fancy
           = spend_notes
 
+      - if spend_reimbursement
+        %li
+          = succeed ': ' do
+            = t(:'case/spend/approve/details/reimbursement')
+
+          %blockquote.blockquote-fancy
+            = spend_reimbursement_info
+
   %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
     %h1= t(:'case/spend/approve/approve/section_title')
 

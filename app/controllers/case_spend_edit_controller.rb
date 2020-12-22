@@ -34,6 +34,8 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
         spend_amount: @spend.decrypt(:amount).to_f,
         spend_approver: @spend.approver,
         spend_approver_self: @spend.approver == @user.id,
+        spend_reimbursement: @spend.is_reimbursement,
+        spend_reimbursement_info: @spend.decrypt(:reimbursement_info),
         urls: {
           delete: url("/case/#{@case.id}/spend/#{@spend.id}/delete"),
         }
@@ -64,6 +66,14 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
 
     # run a sanitize pass
     @content = Sanitize.fragment(@content, Sanitize::Config::RELAXED)
+    
+    # is this a reimbursement?
+    @reimbursement_info = nil
+    @reimbursement = request.params['reimbursement']&.strip&.downcase == "on"
+    if @reimbursement
+      @reimbursement_info = request.params['reimbursement_info']&.strip || ""
+      @reimbursement_info = Sanitize.fragment(@reimbursement_info, Sanitize::Config::RELAXED)
+    end
 
     # create a CaseSpendUpdate with the edited content
     @spend_update_data = {
@@ -71,6 +81,8 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
       new_amount: @amount.to_s,
       old_content: @spend.decrypt(:notes),
       new_content: @content,
+      old_reimbursement_info: @spend.decrypt(:reimbursement_info),
+      new_reimbursement_info: @reimbursement_info,
     }
 
     @spend_update = Kukupa::Models::CaseSpendUpdate.new(
@@ -85,6 +97,8 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
     # save the spend
     @spend.encrypt(:amount, @amount.to_s)
     @spend.encrypt(:notes, @content)
+    @spend.is_reimbursement = @reimbursement
+    @spend.encrypt(:reimbursement_info, @reimbursement_info)
     @spend.save
 
     # if <= auto-approve threshold AND aggregate for this year is below max,

@@ -45,10 +45,20 @@ class Kukupa::Controllers::CaseSpendAddController < Kukupa::Controllers::CaseCon
     # run a sanitize pass
     @content = Sanitize.fragment(@content, Sanitize::Config::RELAXED)
 
+    # is this a reimbursement?
+    @reimbursement_info = nil
+    @reimbursement = request.params['reimbursement']&.strip&.downcase == "on"
+    if @reimbursement
+      @reimbursement_info = request.params['reimbursement_info']&.strip || ""
+      @reimbursement_info = Sanitize.fragment(@reimbursement_info, Sanitize::Config::RELAXED)
+    end
+
     # create spend
     @spend = Kukupa::Models::CaseSpend.new(case: @case.id, author: @user.id).save
     @spend.encrypt(:amount, @amount.to_s)
     @spend.encrypt(:notes, @content)
+    @spend.is_reimbursement = @reimbursement
+    @spend.encrypt(:reimbursement_info, @reimbursement_info)
     @spend.save
 
     # if <= auto-approve threshold AND aggregate for this year is below max:

@@ -37,7 +37,7 @@ class Kukupa::Models::CaseSpend < Sequel::Model
       anchor: self.anchor,
       case_spend: self,
       creation: self.creation,
-      amount: self.decrypt(:amount),
+      amount: self.decrypt(:amount).to_f,
       notes: self.decrypt(:notes),
       edited: edited_ts,
       author: [:user, self.author],

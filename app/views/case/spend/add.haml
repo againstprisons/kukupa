@@ -17,6 +17,13 @@
     = haml :'partials/editor', layout: false, locals: {editor_name: 'content', editor_label: t(:'case/spend/add/note_field')}
     .y-margin= ""
 
+    %label{for: 'reimbursement'}
+      %input#reimbursement{type: 'checkbox', name: 'reimbursement'}
+      = t(:'case/spend/add/is_reimbursement')
+
+    = haml :'partials/editor', layout: false, locals: {editor_name: 'reimbursement_info', editor_label: t(:'case/spend/add/reimbursement_info')}
+    .y-margin= ""
+
     %button.pure-button.button.button-primary{type: 'submit'}
       %i.fa.fa-pencil-square-o= ""
       = t(:'case/spend/add/submit')
