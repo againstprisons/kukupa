@@ -1,0 +1,31 @@
+#system-admin-prison-edit{:'data-prison-id' => prison.id}
+  %h1= title
+
+  %a.pure-button.button{href: url("/system/prison")}
+    %i.fa.fa-chevron-left= ""
+    = t(:'back')
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'system/prison/edit/info/section_title')
+    
+    - disabled = prison.reconnect_id != nil
+    - if disabled
+      .message.message-warning
+        = t(:'system/prison/edit/info/reconnect_warning')
+
+    %label{for: 'name'}= t(:'system/prison/edit/info/name')
+    %input#name{type: 'text', name: 'name', disabled: disabled, value: editables[:name]}
+
+    %label{for: 'address'}= t(:'system/prison/edit/info/address')
+    %input#address{type: 'text', name: 'address', disabled: disabled, value: editables[:address]}
+
+    %label{for: 'email'}= t(:'system/prison/edit/info/email')
+    %input#email{type: 'text', name: 'email', disabled: disabled, value: editables[:email]}
+
+    %label{for: 'bank_account'}= t(:'system/prison/edit/info/bank_account')
+    %input#bank_account{type: 'text', name: 'bank_account', value: editables[:bank_account]}
+
+    %button.pure-button.button{type: 'submit'}
+      %i.fa.fa-save= ""
+      = t(:'system/prison/edit/info/submit')

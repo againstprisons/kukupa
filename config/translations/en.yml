@@ -585,6 +585,23 @@
 :'system/roles/edit/remove/success': "Successfully removed role <code><%= e(role) %></code> (UserRole ID <%= e(ur) %>)."
 :'system/roles/edit/remove/errors/invalid_rid': "Form submission had an invalid role ID. Please try again."
 
+# System admin - prisons
+:'system/prison/title': "Prisons"
+:'system/prison/sync': "Sync prisons with re:connect"
+:'system/prison/sync/success': "Successfully queued prison sync with job ID <code><%= e(jid) %></code>."
+:'system/prison/list/section_title': "Known prisons"
+:'system/prison/list/empty': "No prisons found."
+:'system/prison/list/no_rc': "This prison is not linked with re:connect"
+:'system/prison/edit/title': "Editing prison: <%= e(name) %>"
+:'system/prison/edit/info/section_title': "Prison information"
+:'system/prison/edit/info/reconnect_warning': "Some fields can not be edited as this prison is linked to re:connect."
+:'system/prison/edit/info/name': "Prison name"
+:'system/prison/edit/info/address': "Prison address"
+:'system/prison/edit/info/email': "Prison email address"
+:'system/prison/edit/info/bank_account': "Prison bank account number"
+:'system/prison/edit/info/submit': "Save details"
+:'system/prison/edit/info/success': "Successfully saved prison details."
+
 # System admin - workers
 :'system/worker/title': "Workers"
 :'system/worker/section_title': "Queue a job"

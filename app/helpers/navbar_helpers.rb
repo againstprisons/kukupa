@@ -68,6 +68,14 @@ module Kukupa::Helpers::NavbarHelpers
         selected: current_prefix?('/system/roles'),
       }
     end
+    
+    if has_role?('system:prison:access')
+      items << {
+        link: url('/system/prison'),
+        text: t(:'system/prison/title'),
+        selected: current_prefix?('/system/prison'),
+      }
+    end
 
     if has_role?('system:worker')
       items << {

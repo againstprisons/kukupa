@@ -60,6 +60,8 @@ controllers:
 
   - path: /system/debug
     controller: SystemDebugController
+  - path: /system/prison
+    controller: SystemPrisonController
   - path: /system/worker
     controller: SystemWorkerController
   - path: /system/apikey

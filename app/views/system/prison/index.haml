@@ -1,0 +1,23 @@
+#system-admin-prisons
+  %h1= title
+
+  %a.pure-button.button{href: url("/system/prison/sync")}
+    %i.fa.fa-refresh= ""
+    = t(:'system/prison/sync')
+
+  .form-main
+    %h1= t(:'system/prison/list/section_title')
+
+    - if prisons.empty?
+      %p= t(:'system/prison/list/empty')
+
+    %ul
+      - prisons.each do |pr|
+        %li
+          %a{href: url("/system/prison/#{pr[:id]}/edit")}
+            %strong
+              &= pr[:name]
+
+          - unless pr[:reconnect_id]
+            %span{title: t(:'system/prison/list/no_rc')}
+              %i.fa.fa-warning= ""
