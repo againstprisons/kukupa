@@ -15,9 +15,3 @@
       %button.pure-button.button{type: 'submit'}
         %i.fa.fa-envelope-o= ""
         = t(:'system/index/actions/test_email')
-
-    %form.pure-form.pure-form-stacked{method: 'POST', action: to('/system/act/sync-prisons')}
-      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
-      %button.pure-button.button{type: 'submit'}
-        %i.fa.fa-refresh= ""
-        = t(:'system/index/actions/sync_prisons')

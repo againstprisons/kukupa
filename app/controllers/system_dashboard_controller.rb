@@ -2,7 +2,6 @@ class Kukupa::Controllers::SystemDashboardController < Kukupa::Controllers::Syst
   add_route :get, '/'
   add_route :post, '/act/invite', method: :invite
   add_route :post, '/act/test-email', method: :test_email
-  add_route :post, '/act/sync-prisons', method: :sync_prisons
 
   def before
     return halt 404 unless logged_in?
@@ -41,12 +40,6 @@ class Kukupa::Controllers::SystemDashboardController < Kukupa::Controllers::Syst
     @email.save
 
     flash :success, t(:'system/index/actions/test_email/success', qid: @email.id)
-    redirect back
-  end
-
-  def sync_prisons
-    jid = Kukupa::Workers::SyncPrisonsWorker.perform_async
-    flash :success, t(:'system/index/actions/sync_prisons/success', jid: jid)
     redirect back
   end
 end

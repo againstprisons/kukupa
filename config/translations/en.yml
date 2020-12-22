@@ -502,8 +502,6 @@
 :'system/index/actions/invite/success': "Generated invite: <code><%= e(invite) %></code> (expires: <%= e(expiry.strftime('%B %e, %Y at %l:%M %P')) %>)"
 :'system/index/actions/test_email': "Send test email"
 :'system/index/actions/test_email/success': "Successfully queued test email with ID <code><%= e(qid) %></code>."
-:'system/index/actions/sync_prisons': "Sync prisons with re:connect"
-:'system/index/actions/sync_prisons/success': "Successfully queued prison sync with job ID <code><%= e(jid) %></code>."
 
 # System admin - Configuration
 :'system/config/title': "Configuration"
