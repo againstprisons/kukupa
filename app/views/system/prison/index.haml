@@ -11,13 +11,17 @@
     - if prisons.empty?
       %p= t(:'system/prison/list/empty')
 
-    %ul
+    %ul.fa-ul
       - prisons.each do |pr|
         %li
-          %a{href: url("/system/prison/#{pr[:id]}/edit")}
-            %strong
-              &= pr[:name]
+          - if pr[:reconnect_id]
+            %i.fa.fa-li.fa-link= ""
+          - else
+            %i.fa.fa-li.fa-warning= ""
+
+          %a{href: url("/system/prison/#{pr[:id]}/edit")}><
+            &= pr[:name]
 
           - unless pr[:reconnect_id]
-            %span{title: t(:'system/prison/list/no_rc')}
-              %i.fa.fa-warning= ""
+            %span.badge{style: 'margin:0 0.5rem'}
+              = t(:'system/prison/list/no_rc')

@@ -594,7 +594,7 @@
 :'system/prison/sync/success': "Successfully queued prison sync with job ID <code><%= e(jid) %></code>."
 :'system/prison/list/section_title': "Known prisons"
 :'system/prison/list/empty': "No prisons found."
-:'system/prison/list/no_rc': "This prison is not linked with re:connect"
+:'system/prison/list/no_rc': "Not linked with re:connect"
 :'system/prison/edit/title': "Editing prison: <%= e(name) %>"
 :'system/prison/edit/info/section_title': "Prison information"
 :'system/prison/edit/info/reconnect_warning': "Some fields can not be edited as this prison is linked to re:connect."
