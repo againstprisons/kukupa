@@ -73,6 +73,7 @@ class Kukupa::Controllers::SystemPrisonController < Kukupa::Controllers::SystemC
 
     @name = @prison.decrypt(:name)
     @address = @prison.decrypt(:physical_address)
+    @address = @address&.split("\n")&.map(&:strip).join(", ")
     @email = @prison.decrypt(:email_address)
     @bank_account = @prison.decrypt(:bank_account)
 
