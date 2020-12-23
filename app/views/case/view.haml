@@ -82,6 +82,11 @@
             %li
               &= t[:content]
 
+              - if t[:completion]
+                %span.sr-only
+                  = surround '(', ')' do
+                    = t(:'case/view/tasks/item/completed')
+
             %li
               %a.case-view-task-editlink{href: t[:url]}
                 %i.fa.fa-gear= ""
