@@ -70,14 +70,16 @@
       .message.message-warning
         = t(:'case/view/tasks/no_tasks')
 
-    %ul.case-view-tasks
+    %ul.case-view-tasks.fa-ul
       - tasks.each do |t|
         %li
+          - if t[:completion]
+            %i.fa.fa-li.fa-check-square-o= ""
+          - else
+            %i.fa.fa-li.fa-square-o= ""
+          
           %ul.inline-list
             %li
-              - if t[:completion]
-                %i.fa.fa-check= ""
-
               &= t[:content]
 
             %li
