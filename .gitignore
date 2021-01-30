@@ -9,3 +9,4 @@ node_modules/
 config/certs/*
 !config/certs/.keep
 cargo_target/
+site/
