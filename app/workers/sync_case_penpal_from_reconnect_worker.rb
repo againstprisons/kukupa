@@ -58,13 +58,15 @@ class Kukupa::Workers::SyncCasePenpalFromReconnectWorker
       logger.warn("Prison with re:connect ID #{data['prison'].inspect} was not found in the database")
     end
 
+    @case.encrypt(:prisoner_number, data['prn'])
     @case.encrypt(:first_name, data['name'][0])
     @case.encrypt(:middle_name, data['name'][1])
     @case.encrypt(:last_name, data['name'][2])
-    if data['pseudonym'] != data['name'][0]
+    if data['pseudonym'] == data['name'][0]
+      @case.pseudonym = nil
+    else
       @case.encrypt(:pseudonym, data['pseudonym'])
     end
-    @case.encrypt(:prisoner_number, data['prn'])
 
     @case.save
     logger.info("Updated case #{@case.id} successfully")
