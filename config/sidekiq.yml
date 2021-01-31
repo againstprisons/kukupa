@@ -14,3 +14,7 @@
   sync_cases:
     cron: '*/10 * * * *'
     class: "Kukupa::Workers::SyncCasesWorker"
+
+  sync_new_cases:
+    cron: '*/30 * * * *'
+    class: "Kukupa::Workers::SyncNewReconnectCasesWorker"

@@ -682,5 +682,8 @@
 :'system/debug/flashes/flash': "This is a flash of type <code><%= e(type.inspect) %></code>."
 :'system/debug/routes/title': "Registered routes"
 
+# Automatic re:connect sync - system notes
+:'reconnect_sync/automatic_case_creation': "<p>This case has been created by an automatic import from the re:connect instance at <code><%= e(reconnect_url) %></code>.</p><p>If you have administration privileges on this re:connect instance, <a href=\"<%= e(penpal_url) %>\">you can view the penpal for this case by clicking here.</a>"
+
 # Miscellaneous things
 :'powered_by_kukupa': "<%= site_name %> is powered by <a href=\"https://gitlab.com/againstprisons/kukupa\">Kūkupa</a>"

@@ -32,6 +32,28 @@ class Kukupa::Models::Case < Sequel::Model
 
     ps
   end
+  
+  def send_imported_case_email!(opts = {})
+    case_url = Addressable::URI.parse(Kukupa.app_config['base-url'])
+    case_url += "/case/#{self.id}/view"
+    
+    prison = Kukupa::Models::Prison[self.decrypt(:prison).to_i]
+
+    email = Kukupa::Models::EmailQueue.new_from_template("case_imported", {
+      case_obj: self,
+      case_url: case_url.to_s,
+      prison: prison,
+    })
+
+    email.queue_status = 'queued'
+    email.encrypt(:subject, "New case imported") # TODO: tl this
+    email.encrypt(:recipients, JSON.generate({
+      "mode": "roles",
+      "roles": ["case:alerts"],
+    }))
+
+    email.save
+  end
 
   def delete!
     # notes

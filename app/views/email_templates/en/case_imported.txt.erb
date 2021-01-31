@@ -1,0 +1,16 @@
+Hello,
+
+A new case has been imported from re:connect,
+with the name <%= e(case_obj.get_name) %>.
+
+<% unless prison.nil? %>
+This case is within the prison <%= e(prison.decrypt(:name)) %>.
+<% end %>
+
+More data, including any new correspondence, will be synced shortly
+from re:connect. If there is new correspondence for this case before
+the case has an advocate assigned, you will receive an email alert.
+
+
+To view details of this case, visit:
+<%= e(case_url) %>
