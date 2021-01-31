@@ -29,13 +29,24 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     items
   end
 
-  def get_download_url
+  def get_download_url(opts = {})
     meth = "get_download_url_#{self.file_type}".to_sym
-    return self.send(meth) if self.respond_to?(meth)
+    return self.send(meth, opts) if self.respond_to?(meth)
     nil
   end
+  
+  def get_download_url_local(opts = {})
+    file = Kukupa::Models::File.where(file_id: self.file_id)
+    return nil unless file
+    
+    token = file.generate_download_token(opts[:user])
 
-  def get_download_url_reconnect
+    url = Addressable::URI.parse(Kukupa.app_config['base-url'])
+    url += "/filedl/#{file.file_id}/#{token.token}"
+    url.to_s
+  end
+
+  def get_download_url_reconnect(opts = {})
     api_url = Addressable::URI.parse(Kukupa.app_config['reconnect-url'])
     api_url += '/api/dltoken'
 

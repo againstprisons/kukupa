@@ -18,7 +18,7 @@ class Kukupa::Controllers::CaseCorrespondenceDownloadController < Kukupa::Contro
     return halt 404 unless @ccobj.case == @case.id
 
     @type = @ccobj.file_type
-    @download_url = @ccobj.get_download_url
+    @download_url = @ccobj.get_download_url(user: @user)
 
     unless @download_url
       case @type
