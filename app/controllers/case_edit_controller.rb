@@ -81,6 +81,9 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       @case.encrypt(:global_note, @global_note)
       @case.save
 
+      Kukupa::Models::CaseFilter.clear_filters_for(@case)
+      Kukupa::Models::CaseFilter.create_filters_for(@case)
+
       flash :success, t(:'case/edit/edit/success')
     end
 
@@ -142,6 +145,9 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
     @case.encrypt(:prison, @prison&.id&.to_s)
     @case.encrypt(:prisoner_number, @prn)
     @case.save
+    
+    Kukupa::Models::CaseFilter.clear_filters_for(@case)
+    Kukupa::Models::CaseFilter.create_filters_for(@case)
 
     flash :success, t(:'case/edit/prison/success')
     redirect back
