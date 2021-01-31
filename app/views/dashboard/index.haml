@@ -66,14 +66,22 @@
                   = t(:'dashboard/unapproved_spends/item/content', amount: sp[:spend_amount], name: sp[:case_name])
 
               %li
-                %a.case-view-task-editlink{href: sp[:view_url]}
-                  %i.fa.fa-external-link= ""
-                  = t(:'dashboard/unapproved_spends/item/view')
+                %a.case-view-task-editlink{href: sp[:edit_url]}
+                  %i.fa.fa-gear= ""
+                  %span.sr-only
+                    = t(:'dashboard/unapproved_spends/item/edit')
 
-              %li
-                %a.case-view-task-editlink{href: sp[:approve_url]}
-                  %i.fa.fa-check-square-o= ""
-                  = t(:'dashboard/unapproved_spends/item/approve')
+                %li
+                  %a.case-view-task-editlink{href: "#{sp[:view_url]}##{sp[:anchor]}"}
+                    %i.fa.fa-external-link= ""
+                    %span.sr-only
+                      = t(:'dashboard/unapproved_spends/item/view')
+
+                %li
+                  %a.case-view-task-editlink{href: sp[:approve_url]}
+                    %i.fa.fa-check= ""
+                    %span
+                      = t(:'dashboard/unapproved_spends/item/approve')
 
           .dashboard-spend-content
             %blockquote

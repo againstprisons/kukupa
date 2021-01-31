@@ -173,18 +173,19 @@
 # Dashboard
 :'dashboard/title': "Dashboard"
 :'dashboard/content/welcome': "Welcome<% unless user_name.nil? %>, <%= e(user_name) %><% end %>!"
-:'dashboard/cases/section_title': "Assigned cases"
+:'dashboard/cases/section_title': "Cases assigned to me"
 :'dashboard/cases/no_cases': "You are not assigned to any cases."
-:'dashboard/tasks/section_title': "Incomplete tasks"
+:'dashboard/tasks/section_title': "Incomplete tasks assigned to me"
 :'dashboard/tasks/no_tasks': "You have no incomplete tasks. Yay!"
 :'dashboard/tasks/item/content': "Task in case for <%= e(name) %>"
 :'dashboard/tasks/item/view': "View case"
 :'dashboard/tasks/item/edit': "Edit task"
 :'dashboard/tasks/item/mark_as_completed': "Mark as completed"
-:'dashboard/unapproved_spends/section_title': "Unapproved spends"
+:'dashboard/unapproved_spends/section_title': "Unapproved spending requests"
 :'dashboard/unapproved_spends/no_spends': "No unapproved spending requests."
 :'dashboard/unapproved_spends/item/content': "Spend of <%= t(:'case_renderable/spend/amount', amount: amount) %> in case for <%= e(name) %>"
 :'dashboard/unapproved_spends/item/view': "View case"
+:'dashboard/unapproved_spends/item/edit': "Edit spend"
 :'dashboard/unapproved_spends/item/approve': "Approve"
 
 # Cases - index

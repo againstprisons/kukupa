@@ -45,6 +45,7 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
         next unless case_obj
 
         view_url = Addressable::URI.parse(url("/case/#{case_obj.id}/view"))
+        edit_url = Addressable::URI.parse(url("/case/#{case_obj.id}/spend/#{s.id}"))
         approve_url = Addressable::URI.parse(url("/case/#{case_obj.id}/spend/#{s.id}/approve"))
 
         {
@@ -53,6 +54,8 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
           spend: s,
           spend_amount: s.decrypt(:amount).to_f,
           spend_content: s.decrypt(:notes),
+          anchor: s.anchor,
+          edit_url: edit_url,
           view_url: view_url,
           approve_url: approve_url,
         }
