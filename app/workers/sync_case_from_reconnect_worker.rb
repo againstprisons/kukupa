@@ -4,6 +4,10 @@ class Kukupa::Workers::SyncCaseFromReconnectWorker
   def perform(cid)
     Kukupa.initialize if Kukupa.app.nil?
     Kukupa.app_config_refresh(:force => true)
+    
+    rchelpers = Class.new do
+      extend Kukupa::Helpers::ReconnectHelpers
+    end
 
     case_obj = Kukupa::Models::Case[cid.to_i]
     if case_obj.nil? || case_obj&.reconnect_id.to_i.zero?
@@ -17,6 +21,14 @@ class Kukupa::Workers::SyncCaseFromReconnectWorker
         logger.warn("Case #{case_obj.id} last synced within window, not syncing")
         return
       end
+    end
+
+    # check that the penpal exists in re:connect before triggering sync
+    logger.info("Checking that we can get re:connect data for case #{case_obj.id}...")
+    rcdata = rchelpers.reconnect_penpal(cid: case_obj.reconnect_id)
+    unless rcdata
+      logger.warn("Could not get re:connect data for case #{case_obj.id} (re:connect ID #{case_obj.reconnect_id}), bailing")
+      return
     end
 
     logger.info("Setting last sync timestamp for #{case_obj.id}")
