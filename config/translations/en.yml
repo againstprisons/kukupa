@@ -180,6 +180,7 @@
 :'dashboard/tasks/item/content': "Task in case for <%= e(name) %>"
 :'dashboard/tasks/item/view': "View case"
 :'dashboard/tasks/item/edit': "Edit task"
+:'dashboard/tasks/item/mark_as_completed': "Mark as completed"
 :'dashboard/unapproved_spends/section_title': "Unapproved spends"
 :'dashboard/unapproved_spends/no_spends': "No unapproved spending requests."
 :'dashboard/unapproved_spends/item/content': "Spend of <%= t(:'case_renderable/spend/amount', amount: amount) %> in case for <%= e(name) %>"

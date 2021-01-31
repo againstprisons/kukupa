@@ -28,14 +28,22 @@
               = t(:'dashboard/tasks/item/content', name: c[:case_name])
 
             %li
-              %a.case-view-task-editlink{href: c[:view_url]}
-                %i.fa.fa-external-link= ""
-                = t(:'dashboard/tasks/item/view')
-
-            %li
               %a.case-view-task-editlink{href: c[:edit_url]}
                 %i.fa.fa-gear= ""
-                = t(:'dashboard/tasks/item/edit')
+                %span.sr-only
+                  = t(:'dashboard/tasks/item/edit')
+
+            %li
+              %a.case-view-task-editlink{href: "#{c[:view_url]}##{c[:anchor]}"}
+                %i.fa.fa-external-link= ""
+                %span.sr-only
+                  = t(:'dashboard/tasks/item/view')
+                  
+            %li
+              %a.case-view-task-editlink{href: "#{c[:edit_url]}#mark-complete"}
+                %i.fa.fa-check= ""
+                %span
+                  = t(:'dashboard/tasks/item/mark_as_completed')
 
         .dashboard-task-content
           %blockquote

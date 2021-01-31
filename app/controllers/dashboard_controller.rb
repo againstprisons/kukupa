@@ -23,6 +23,7 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
         case_name: case_obj.get_name,
         task: t,
         task_content: content,
+        anchor: t.anchor,
         view_url: view_url,
         edit_url: edit_url,
       }
