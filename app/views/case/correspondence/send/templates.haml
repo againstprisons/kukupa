@@ -10,13 +10,13 @@
       %i.fa.fa-chevron-left= ""
       = t(:'case/correspondence/send/templates/back_without_template')
 
-    %p
-      = t(:'case/correspondence/send/templates/content')
-
     - if templates.empty?
       = t(:'case/correspondence/send/templates/no_templates')
 
     - else
+      %p
+        = t(:'case/correspondence/send/templates/content')
+
       %ul
         - templates.each do |tpl|
           %li
