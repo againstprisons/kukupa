@@ -6,9 +6,13 @@ class Kukupa::Models::Case < Sequel::Model
   end
 
   # TODO: allow multiple advocates per case
+  def get_assigned_advocates
+    [self.assigned_advocate].compact
+  end
+
   def can_access?(user)
     user = user.id if user.respond_to?(:id)
-    user == self.assigned_advocate
+    self.get_assigned_advocates.include?(user)
   end
 
   def get_name
