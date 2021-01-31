@@ -69,14 +69,14 @@ class Kukupa::Controllers::AuthSignupController < Kukupa::Controllers::Applicati
       return redirect @this_url.to_s
     end
 
-    # TODO: create the user
+    # create the user
     @user = Kukupa::Models::User.new(email: email)
     @user.save
     @user.encrypt(:name, user_name)
     @user.password = password
     @user.save
 
-    # TODO: invalidate the invite token
+    # invalidate the invite token
     @token.invalidate!
 
     # redirect to login

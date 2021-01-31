@@ -45,7 +45,7 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
 
         @case = Kukupa::Models::Case[@case_id] if @case_id
 
-        # TODO: if case doesn't exist, create a new case
+        # if case doesn't exist, create a new case
         unless @case
           @case_is_new = true
 
