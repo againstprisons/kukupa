@@ -85,6 +85,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
     end
 
     return haml(:'case/edit/index', :locals => {
+      cuser: @user,
       title: @title,
       case_obj: @case,
       case_name: @case_name,

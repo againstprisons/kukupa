@@ -1,14 +1,8 @@
 .case-search-results
   %h1= title
 
-  .inline-form
-    %a.pure-button.button{href: url('/case')}
-      %i.fa.fa-chevron-left= ""
-      = t(:'back')
-
   .form-main
     %h1= t(:'case/search/section_title')
-
     %p= query
 
     %ul
@@ -19,7 +13,7 @@
               &= res[:name]
 
           .searchres-meta
-            %ul.inline-list
+            %ul
               - if res[:prn]
                 %li
                   = succeed ': ' do
@@ -31,5 +25,22 @@
                 %li
                   = succeed ': ' do
                     = t(:'prison')
-                  %code
+                  %span
                     &= res[:prison][:name]
+
+              - unless res[:advocates].empty?
+                %li
+                  = succeed ': ' do
+                    = t(:'advocate/plural')
+                    
+                  %ul
+                    - res[:advocates].each do |ad|
+                      %li
+                        %a{href: url("/case/search?type=advocate&query=#{ad[:id]}"), title: "User[#{ad[:id]}]"}><
+                          &= ad[:name]
+
+                        - if cuser.id == ad[:id]
+                          &nbsp;
+                          %span.badge
+                            %i.fa.fa-user-o= ""
+                            = t(:'thats_you')

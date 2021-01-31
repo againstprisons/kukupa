@@ -18,6 +18,8 @@ class Kukupa::Controllers::CaseSearchController < Kukupa::Controllers::CaseContr
       return redirect url("/case")
     end
 
+    @query_desc = t("case/search/res/#{@type}".to_sym, query: @query)
+
     if @type == 'prn'
       ids = Kukupa::Models::CaseFilter
         .perform_filter(:prisoner_number, @query)
@@ -39,6 +41,13 @@ class Kukupa::Controllers::CaseSearchController < Kukupa::Controllers::CaseContr
       ids.each do |id|
         @results << Kukupa::Models::Case[id]
       end
+      
+    elsif @type == "advocate"
+      user = Kukupa::Models::User[@query.to_i]
+      if user
+        @query_desc = t(:'case/search/res/advocate', query: "#{user.decrypt(:name)} (ID #{user.id})")
+        @results = Kukupa::Models::Case.assigned_to(user)
+      end
     end
 
     if @results.empty?
@@ -46,6 +55,7 @@ class Kukupa::Controllers::CaseSearchController < Kukupa::Controllers::CaseContr
       return redirect url("/case")
     end
 
+    @advocates = {}
     @results.map! do |c|
       name = c.get_name
       pseudonym = c.decrypt(:pseudonym)
@@ -59,6 +69,11 @@ class Kukupa::Controllers::CaseSearchController < Kukupa::Controllers::CaseContr
           name: prison.decrypt(:name),
         }
       end
+      
+      advocates = c.get_assigned_advocates.map do |aa|
+        @advocates = case_populate_advocate(@advocates, aa)
+        @advocates[aa.to_s]
+      end
 
       {
         case_obj: c,
@@ -67,13 +82,15 @@ class Kukupa::Controllers::CaseSearchController < Kukupa::Controllers::CaseContr
         pseudonym: pseudonym,
         prn: prn,
         prison: prison,
+        advocates: advocates,
       }
     end
 
     @title = t(:'case/search/title')
     return haml(:'case/search', :locals => {
+      cuser: @user,
       title: @title,
-      query: t("case/search/res/#{@type}".to_sym, query: @query),
+      query: @query_desc,
       results: @results,
     })
   end

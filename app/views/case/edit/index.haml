@@ -76,13 +76,22 @@
                 %button.pure-button.button{type: 'submit'}
                   %i.fa.fa-minus-square-o= ""
                   = t(:'case/edit/assignees/unassign/submit')
+                
+                &nbsp;
                   
-                %span
-                  &= u[:name]
+                - if has_role?("case:search")
+                  %a{href: url("/case/search?type=advocate&query=#{u[:id]}"), title: "User[#{u[:id]}]"}><
+                    &= u[:name]
 
-                  = surround ' (', ') ' do
-                    ID
-                    &= u[:id]
+                - else
+                  %span{title: "User[#{ad[:id]}]"}><
+                    &= u[:name]
+                    
+                - if u[:id] == cuser.id
+                  &nbsp;
+                  %span.badge
+                    %i.fa.fa-user-o= ""
+                    = t(:'thats_you')
 
   - if has_role?('case:assignees:assign')
     %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: url("/case/#{case_obj.id}/edit/assign")}

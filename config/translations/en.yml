@@ -192,6 +192,7 @@
 :'case/index/search/field_type': "Search type"
 :'case/index/search/field_type/prn': "Prisoner number"
 :'case/index/search/field_type/name': "Name / Pseudonym"
+:'case/index/search/field_type/advocate': "Advocate user ID"
 :'case/index/search/field_query': "Search query"
 :'case/index/search/submit': "Search"
 :'case/index/cases/no_cases': "No cases."
@@ -216,6 +217,7 @@
 :'case/search/errors/no_cases': "No cases were found with your search criteria."
 :'case/search/res/name': "Searching for name: <code><%= e(query) %></code>"
 :'case/search/res/prn': "Searching for PRN: <code><%= e(query) %></code>"
+:'case/search/res/advocate': "Searching by assigned advocate: <code><%= e(query) %></code>"
 
 # Cases - create
 :'case/create/title': "Create case"
