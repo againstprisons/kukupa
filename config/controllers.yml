@@ -89,6 +89,9 @@ controllers:
       env:
         - development
         - test
+  
+  - path: /filedl
+    controller: FileDownloadController
 
   - path: /static
     controller: StaticController

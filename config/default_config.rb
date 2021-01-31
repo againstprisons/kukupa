@@ -18,6 +18,10 @@ module Kukupa
       :type => :bool,
       :default => false,
     },
+    "file-storage-dir" => {
+      :type => :text,
+      :default => '@SITEDIR@/files/',
+    },
     "email-from" => {
       :type => :text,
       :default => 'advocacy@example.com',
