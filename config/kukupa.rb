@@ -82,9 +82,6 @@ module Kukupa
     require File.join(Kukupa.root, 'app', 'helpers')
     require File.join(Kukupa.root, 'app', 'models')
 
-    # load the helpers
-    Kukupa::Helpers.load_helpers
-
     # load the application
     require File.join(Kukupa.root, 'app', 'application')
 
