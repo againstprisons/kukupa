@@ -31,10 +31,6 @@ class Kukupa::Workers::SyncCaseFromReconnectWorker
       return
     end
 
-    logger.info("Setting last sync timestamp for #{case_obj.id}")
-    case_obj.reconnect_last_sync = Sequel.function(:NOW)
-    case_obj.save
-
     logger.info("Queueing sync jobs for case #{case_obj.id}")
     Kukupa::Workers::SyncCasePenpalFromReconnectWorker.perform_async(case_obj.id)
     Kukupa::Workers::SyncCaseMailFromReconnectWorker.perform_async(case_obj.id)

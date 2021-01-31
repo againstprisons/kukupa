@@ -141,6 +141,9 @@ class Kukupa::Workers::SyncCaseMailFromReconnectWorker
       cm.save
     end
 
+    case_obj.reconnect_last_sync = Sequel.function(:NOW)
+    case_obj.save
+
     logger.info("Sync successful: updated #{entries.count - count_new}, created #{count_new}")
   end
 end

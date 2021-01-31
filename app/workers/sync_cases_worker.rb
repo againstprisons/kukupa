@@ -5,9 +5,11 @@ class Kukupa::Workers::SyncCasesWorker
     Kukupa.initialize if Kukupa.app.nil?
     Kukupa.app_config_refresh(:force => true)
 
-    if Kukupa.app_config['reconnect-api-key'].nil?
-      logger.fatal("No re:connect API key present, bailing")
-      return
+    %w[reconnect-api-key reconnect-url reconnect-penpal-id].each do |k|
+      unless Kukupa.app_config[k]
+        logger.fatal("Configuration key #{k} is not present, bailing")
+        return
+      end
     end
 
     ids = Kukupa::Models::Case
