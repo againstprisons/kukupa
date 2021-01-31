@@ -11,6 +11,7 @@ module Kukupa::Config::Text
 
   def parse(value)
     value = value.force_encoding(Encoding::UTF_8)
+    value.gsub!("@SITEDIR@", Kukupa.site_dir) if Kukupa.site_dir
 
     {
       :data => value

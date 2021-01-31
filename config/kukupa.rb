@@ -24,7 +24,7 @@ module Kukupa
     attr_reader :app
     attr_accessor :database
 
-    attr_accessor :theme_dir
+    attr_accessor :site_dir, :theme_dir
     attr_accessor :app_config, :app_config_refresh_pending
 
     attr_accessor :default_language, :languages
@@ -58,7 +58,7 @@ module Kukupa
     Encoding.default_external = Encoding::UTF_8
 
     # Do an early environment check
-    %w[KEYDERIV_URL KEYDERIV_SECRET DATABASE_URL].each do |var|
+    %w[KEYDERIV_URL KEYDERIV_SECRET DATABASE_URL SITE_DIR].each do |var|
       unless ENV.key?(var)
         raise "Required environment variable #{var} not present, dying."
       end
