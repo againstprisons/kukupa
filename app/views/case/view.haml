@@ -98,6 +98,12 @@
                 %i.fa.fa-external-link= ""
                 %span.sr-only
                   = t(:'case/view/tasks/item/jump_to_log')
+            
+            - unless t[:completion]
+              %li
+                %a.case-view-task-editlink{href: "#{t[:url]}#mark-complete"}
+                  %i.fa.fa-check= ""
+                  = t(:'case/view/tasks/item/mark_as_completed')
 
           %ul
             %li

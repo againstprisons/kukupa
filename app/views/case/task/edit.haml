@@ -29,7 +29,7 @@
       = t(:'case/note/edit/edit/submit')
 
   - if task_obj.completion.nil?
-    %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: urls[:complete]}
+    %form.pure-form.pure-form-stacked.form-main#mark-complete{method: 'POST', action: urls[:complete]}
       %h1= t(:'case/task/edit/complete/section_title')
 
       - if current_user.id == task_obj.assigned_to || current_user.id == task_obj.author

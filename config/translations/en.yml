@@ -250,6 +250,7 @@
 :'case/view/tasks/item/completed': "Completed"
 :'case/view/tasks/item/edit': "Edit task"
 :'case/view/tasks/item/jump_to_log': "Jump to log entry for this task"
+:'case/view/tasks/item/mark_as_completed': "Mark as completed"
 :'case/view/entries/section_title': "Notes"
 :'case/view/entries/no_entries': "There are no entries for this case yet."
 :'case/view/options': "Options"
