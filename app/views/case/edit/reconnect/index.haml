@@ -7,16 +7,21 @@
       %span
         = t(:'back')
 
-  %p
-    - if case_reconnect[:id] && case_reconnect[:id].to_i.positive?
-      = t(:'case/edit/reconnect/linked', name: case_reconnect[:name])
-    - else
-      = t(:'case/edit/reconnect/not_linked')
+  .form-main
+    %h1= t(:'case/edit/reconnect/link_status/section_title')
+
+    %p
+      - if case_reconnect[:id] && case_reconnect[:id].to_i.positive?
+        = t(:'case/edit/reconnect/link_status/linked', name: case_reconnect[:name])
+      - else
+        = t(:'case/edit/reconnect/link_status/not_linked')
 
   - if case_reconnect[:id] && case_reconnect[:id].to_i.positive?
     %form.pure-form.pure-form-starked.form-main{method: 'POST', action: url("/case/#{case_obj.id}/edit/rc/sync")}
       %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
       %h1= t(:'case/edit/reconnect/index/sync/section_title')
+
+      %p= t(:'case/edit/reconnect/index/sync/content')
 
       %button.pure-button.button{type: 'submit'}
         %i.fa.fa-refresh= ""

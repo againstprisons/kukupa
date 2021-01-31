@@ -429,8 +429,9 @@
 :'case/edit/assignees/assign/errors/invalid_user': "The form submission included an advocate that does not exist or can not be assigned to cases. Please try again."
 :'case/edit/assignees/assign/errors/user_already_assigned': "The selected advocate is already assigned to this case."
 :'case/edit/reconnect/section_title': "Link to re:connect"
-:'case/edit/reconnect/linked': "This case is linked to the re:connect profile for <%= e(name) %>."
-:'case/edit/reconnect/not_linked': "This case is not currently linked to a re:connect profile."
+:'case/edit/reconnect/link_status/section_title': "Link status"
+:'case/edit/reconnect/link_status/linked': "This case is linked to the re:connect profile for <%= e(name) %>."
+:'case/edit/reconnect/link_status/not_linked': "This case is not currently linked to a re:connect profile."
 :'case/edit/reconnect/submit': "Edit re:connect link"
 :'case/edit/reconnect/index/title': "Case re:connect link: <%= e(name) %>"
 :'case/edit/reconnect/index/unlink/section_title': "Unlink re:connect profile"
@@ -451,8 +452,9 @@
 :'case/edit/reconnect/index/manual_link/success': "Successfully linked re:connect profile."
 :'case/edit/reconnect/index/manual_link/errors/no_reconnect_data': "No data was provided by re:connect with the given penpal ID. This could mean re:connect is down, or that there is no re:connect penpal profile with the given ID."
 :'case/edit/reconnect/index/sync/section_title': "Sync data from re:connect"
-:'case/edit/reconnect/index/sync/submit': "Perform sync"
-:'case/edit/reconnect/index/sync/success': "Successfully queued sync from re:connect. This will happen in the next few minutes."
+:'case/edit/reconnect/index/sync/content': "The below button will force a re:connect sync, clearing the last sync timestamp. Generally, you shouldn't use this, as <%= e(site_name) %> will sync cases from re:connect every few minutes, but if you need to pull data from re:connect into <%= e(site_name) %> and can't wait for the regular sync schedule, you can force it."
+:'case/edit/reconnect/index/sync/submit': "Force re:connect sync"
+:'case/edit/reconnect/index/sync/success': "Successfully queued sync from re:connect as job ID <code><%= e(jid) %></code>. This sync will start momentarily."
 
 # User settings
 :'usersettings/title': "User settings"
