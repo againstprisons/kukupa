@@ -5,8 +5,10 @@ require 'base32'
 require 'memoist'
 
 module Kukupa::Crypto
-  TOKEN_LENGTH_LONG = 32
+  TOKEN_LENGTH_LONG = 64
   TOKEN_LENGTH_SHORT = 16
+  TOKEN_RANDOM_LEN = 40
+
   OPS_LIMIT = 2**20
   MEM_LIMIT = 2**24
 
@@ -137,11 +139,12 @@ module Kukupa::Crypto
     #####
 
     def generate_token_long
-      return Kukupa::Utils.bin_to_hex(RbNaCl::Random.random_bytes(TOKEN_LENGTH_LONG))
+      b = Base32.encode(RbNaCl::Random.random_bytes(TOKEN_RANDOM_LEN))
+      b[0..(TOKEN_LENGTH_LONG - 1)].downcase
     end
 
     def generate_token_short
-      b = Base32.encode(RbNaCl::Random.random_bytes(TOKEN_LENGTH_LONG))
+      b = Base32.encode(RbNaCl::Random.random_bytes(TOKEN_RANDOM_LEN))
       b[0..(TOKEN_LENGTH_SHORT - 1)].downcase
     end
   end

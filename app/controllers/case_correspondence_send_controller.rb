@@ -65,7 +65,7 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
           return redirect to "/case/#{@case.id}/view##{cm.anchor}"
 
         rescue => e
-          error_id = Kukupa::Models::Token.generate_short.token
+          error_id = Kukupa::Crypto.generate_token_short
           $stderr.puts "----- Error ID #{error_id} -----"
           $stderr.puts e.inspect
           $stderr.puts e.backtrace
