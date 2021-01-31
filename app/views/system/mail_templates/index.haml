@@ -1,0 +1,41 @@
+#system-admin-mailtemplates-index
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: url('/system/mailtemplates/create')}
+      %i.fa.fa-plus= ""
+      = t(:'system/mail_templates/actions/create')
+
+  .form-main
+    %h1= t(:'system/mail_templates/enabled_section_title')
+    
+    - if templates_enabled.empty?
+      %p= t(:'system/mail_templates/no_templates')
+
+    - else
+      %ul
+        - templates_enabled.each do |tpl|
+          %li
+            %a{href: url("/system/mailtemplates/edit/#{tpl[:id]}")}><
+              &= tpl[:name]
+
+            %span
+              = surround ' (', ') ' do
+                = "ID #{tpl[:id]}"
+
+  .form-main
+    %h1= t(:'system/mail_templates/disabled_section_title')
+    
+    - if templates_disabled.empty?
+      %p= t(:'system/mail_templates/no_templates')
+
+    - else
+      %ul
+        - templates_disabled.each do |tpl|
+          %li
+            %a{href: url("/system/mailtemplates/edit/#{tpl[:id]}")}><
+              &= tpl[:name]
+
+            %span
+              = surround ' (', ') ' do
+                = "ID #{tpl[:id]}"

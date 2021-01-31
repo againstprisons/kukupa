@@ -1,0 +1,27 @@
+.system-admin-mailtemplates-edit{:'data-template-id' => template.id}
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: url('/system/mailtemplates')}
+      %i.fa.fa-chevron-left= ""
+      = t(:'back')
+      
+  %form.pure-form.pure-form-stacked.form-main{method: "POST"}
+    %h1= t(:'system/mail_templates/edit/data/section_title')
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    
+    %label{for: 'name'}= t(:'system/mail_templates/edit/data/template_name')
+    %input#name{type: 'text', name: 'name', required: true, placeholder: t(:'system/mail_templates/edit/data/template_name'), value: template_name}
+    
+    = haml :'partials/editor', layout: false, locals: {editor_name: 'content', editor_label: t(:'system/mail_templates/edit/data/template_content'), editor_data: template_content}
+    .y-margin= ""
+    
+    %label{for: 'enabled'}
+      %input#enabled{type: 'checkbox', name: 'enabled', checked: template.enabled}
+      = t(:'system/mail_templates/edit/data/template_enabled')
+
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-save= ""
+      = t(:'system/mail_templates/edit/data/submit')
+
+.async-load{:'data-sources' => JSON.generate(['/static/editor.bundle.js'])}

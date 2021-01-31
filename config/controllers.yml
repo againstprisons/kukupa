@@ -60,6 +60,8 @@ controllers:
 
   - path: /system/debug
     controller: SystemDebugController
+  - path: /system/mailtemplates
+    controller: SystemMailTemplatesController
   - path: /system/prison
     controller: SystemPrisonController
   - path: /system/worker

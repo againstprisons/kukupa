@@ -611,6 +611,24 @@
 :'system/prison/edit/info/submit': "Save details"
 :'system/prison/edit/info/success': "Successfully saved prison details."
 
+# System admin - mail templates
+:'system/mail_templates/title': "Mail templates"
+:'system/mail_templates/actions/create': "Create a template"
+:'system/mail_templates/no_templates': "No templates."
+:'system/mail_templates/enabled_section_title': "Enabled templates"
+:'system/mail_templates/disabled_section_title': "Disabled templates"
+:'system/mail_templates/create/section_title': "Create a template"
+:'system/mail_templates/create/template_name': "Template name"
+:'system/mail_templates/create/submit': "Create template"
+:'system/mail_templates/create/errors/no_name': "No template name was provided."
+:'system/mail_templates/edit/title': "Edit template: <%= e(name) %>"
+:'system/mail_templates/edit/data/section_title': "Template data"
+:'system/mail_templates/edit/data/template_name': "Template name"
+:'system/mail_templates/edit/data/template_content': "Template content"
+:'system/mail_templates/edit/data/template_enabled': "Enable this template?"
+:'system/mail_templates/edit/data/submit': "Save changes"
+:'system/mail_templates/edit/data/success': "Successfully saved changes to template."
+
 # System admin - workers
 :'system/worker/title': "Workers"
 :'system/worker/section_title': "Queue a job"

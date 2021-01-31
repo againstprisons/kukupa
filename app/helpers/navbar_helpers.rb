@@ -77,6 +77,14 @@ module Kukupa::Helpers::NavbarHelpers
       }
     end
 
+    if has_role?('system:mail_templates')
+      items << {
+        link: url('/system/mailtemplates'),
+        text: t(:'system/mail_templates/title'),
+        selected: current_prefix?('/system/mailtemplates'),
+      }
+    end
+
     if has_role?('system:worker')
       items << {
         link: url('/system/worker'),

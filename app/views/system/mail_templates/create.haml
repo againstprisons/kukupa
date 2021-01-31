@@ -1,0 +1,18 @@
+#system-admin-mailtemplates-index
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: url('/system/mailtemplates')}
+      %i.fa.fa-chevron-left= ""
+      = t(:'back')
+      
+  %form.pure-form.pure-form-stacked.form-main{method: "POST"}
+    %h1= t(:'system/mail_templates/create/section_title')
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    
+    %label{for: 'name'}= t(:'system/mail_templates/create/template_name')
+    %input#name{type: 'text', name: 'name', required: true, placeholder: t(:'system/mail_templates/create/template_name')}
+    
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-plus= ""
+      = t(:'system/mail_templates/create/submit')
