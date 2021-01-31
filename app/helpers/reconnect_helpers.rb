@@ -1,7 +1,8 @@
 module Kukupa::Helpers::ReconnectHelpers
   def reconnect_penpal(opts = {})
-    return nil unless Kukupa.app_config['reconnect-api-key']
-    return nil unless Kukupa.app_config['reconnect-url']
+    %w[reconnect-api-key reconnect-url reconnect-penpal-id].each do |k|
+      return nil unless Kukupa.app_config[k]
+    end
 
     req_opts = {
       method: :post,
@@ -34,8 +35,9 @@ module Kukupa::Helpers::ReconnectHelpers
   end
 
   def reconnect_send_mail(cid, content, opts = {})
-    return nil unless Kukupa.app_config['reconnect-api-key']
-    return nil unless Kukupa.app_config['reconnect-url']
+    %w[reconnect-api-key reconnect-url reconnect-penpal-id].each do |k|
+      return nil unless Kukupa.app_config[k]
+    end
 
     opts[:mime_type] ||= 'text/html'
 
