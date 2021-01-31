@@ -72,8 +72,12 @@ class Kukupa::Workers::SyncNewReconnectCasesWorker
       end
 
       c.save
-      Kukupa::Models::CaseFilter.create_filters_for(c)
       logger.info("Created new case for re:connect penpal #{rel[:penpal_id]} as case ID #{c.id}")
+      
+      # Regenerate filters
+      logger.info("Regenerating filters for case #{c.id}...")
+      Kukupa::Models::CaseFilter.clear_filters_for(c)
+      Kukupa::Models::CaseFilter.create_filters_for(c)
 
       rc_penpal_url = Addressable::URI.parse(Kukupa.app_config['reconnect-url'])
       rc_penpal_url += "/system/penpal/#{rel[:penpal_id]}"
@@ -95,6 +99,8 @@ class Kukupa::Workers::SyncNewReconnectCasesWorker
       
       # Send the "new imported case" email alert to admins
       c.send_imported_case_email!
+      
+      logger.info("Done with case #{c.id}!")
     end
   end
 end

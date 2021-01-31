@@ -70,6 +70,12 @@ class Kukupa::Workers::SyncCasePenpalFromReconnectWorker
 
     @case.reconnect_last_sync = Sequel.function(:NOW)
     @case.save
+    
+    # Regenerate filters
+    logger.info("Regenerating filters for case #{@case.id}...")
+    Kukupa::Models::CaseFilter.clear_filters_for(@case)
+    Kukupa::Models::CaseFilter.create_filters_for(@case)
+    
     logger.info("Updated case #{@case.id} successfully")
   end
 end
