@@ -7,6 +7,6 @@
     %a{href: url("/case/#{caseid}/edit")}
       = t(:'case/nav/edit')
 
-  %li{class: current?("/case/#{caseid}/correspondence/send")}><
+  %li{class: current_prefix?("/case/#{caseid}/correspondence/send")}><
     %a{href: url("/case/#{caseid}/correspondence/send")}
       = t(:'case/nav/mail')

@@ -5,6 +5,13 @@
 
   %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
     %h1= t(:'case/correspondence/send/compose/section_title')
+    
+    %a.pure-button.button{href: url("/case/#{case_obj.id}/correspondence/send/templates")}
+      %i.fa.fa-list= ""
+      = t(:'case/correspondence/send/templates/view_templates')
+
+    - if template_name
+      %p= t(:'case/correspondence/send/compose/is_template', name: template_name)
 
     %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
     %input{type: 'hidden', name: 'preview', value: '1'}

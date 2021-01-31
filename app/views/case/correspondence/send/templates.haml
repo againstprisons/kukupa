@@ -1,0 +1,24 @@
+.case-send-mail-templates{'data-case-id': case_obj.id}
+  %h1= title
+
+  = haml :'partials/case_header', layout: false, locals: {caseid: case_obj.id}
+
+  .form-main
+    %h1= t(:'case/correspondence/send/templates/section_title')
+
+    %a.pure-button.button{href: url("/case/#{case_obj.id}/correspondence/send")}
+      %i.fa.fa-chevron-left= ""
+      = t(:'case/correspondence/send/templates/back_without_template')
+
+    %p
+      = t(:'case/correspondence/send/templates/content')
+
+    - if templates.empty?
+      = t(:'case/correspondence/send/templates/no_templates')
+
+    - else
+      %ul
+        - templates.each do |tpl|
+          %li
+            %a{href: url("/case/#{case_obj.id}/correspondence/send?tpl=#{tpl[:id]}")}
+              &= tpl[:name]

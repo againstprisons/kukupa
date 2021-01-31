@@ -3,6 +3,7 @@ require 'sanitize'
 class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controllers::CaseController
   add_route :get, '/'
   add_route :post, '/'
+  add_route :get, '/templates', method: :templates
 
   include Kukupa::Helpers::CaseHelpers
   include Kukupa::Helpers::ReconnectHelpers
@@ -37,6 +38,16 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
     end
 
     @subject = @content = ''
+
+    # Pull in template data if we've selected a template
+    if request.params['tpl'].to_i.positive?
+      @template = Kukupa::Models::MailTemplate[request.params['tpl'].to_i]
+      if @template && @template.enabled
+        @subject = @template.decrypt(:name)
+        @content = @template.decrypt(:content)
+      end
+    end
+
     if request.post?
       @subject = request.params['subject']&.strip || ''
       @content = request.params['content']&.strip || ''
@@ -92,11 +103,32 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
       title: @title,
       case_obj: @case,
       case_name: @case_name,
+      template_name: @template&.decrypt(:name),
       compose_subject: @subject,
       compose_content: @content,
     })
   end
+  
+  def templates(cid)
+    @case = Kukupa::Models::Case[cid]
+    return halt 404 unless @case
+    unless has_role?('case:view_all')
+      return halt 404 unless @case.can_access?(@user)
+    end
+
+    @case_name = @case.get_name
+    @title = t(:'case/correspondence/send/title', name: @case_name)
+    @reconnect_id = @case.reconnect_id
+    @reconnect_data = reconnect_penpal(cid: @reconnect_id) if @reconnect_id.to_i.positive?
+    return redirect url("/case/#{@case.id}/correspondence/send") unless @reconnect_data
+
+    @templates = Kukupa::Models::MailTemplate.template_list.reject { |tpl| !tpl[:enabled] }
+    
+    return haml(:'case/correspondence/send/templates', :locals => {
+      title: @title,
+      case_obj: @case,
+      case_name: @case_name,
+      templates: @templates,
+    })
+  end
 end
-
-
-
