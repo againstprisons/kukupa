@@ -5,6 +5,7 @@ class Kukupa::Controllers::CaseSearchController < Kukupa::Controllers::CaseContr
 
   def before
     return halt 404 unless logged_in?
+    return halt 404 unless has_role?("case:search")
     @user = current_user
   end
 
