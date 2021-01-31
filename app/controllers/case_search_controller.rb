@@ -42,6 +42,22 @@ class Kukupa::Controllers::CaseSearchController < Kukupa::Controllers::CaseContr
         @results << Kukupa::Models::Case[id]
       end
       
+    elsif @type == "prison"
+      prison = Kukupa::Models::Prison[@query.to_i]
+      if prison
+        @query_desc = t(:'case/search/res/prison', query: "#{prison.decrypt(:name)} (ID #{prison.id})")
+
+        ids = Kukupa::Models::CaseFilter
+          .perform_filter(:prison, prison.id)
+          .map(&:case)
+          .compact
+          .uniq
+          
+        ids.each do |id|
+          @results << Kukupa::Models::Case[id]
+        end
+      end
+      
     elsif @type == "advocate"
       user = Kukupa::Models::User[@query.to_i]
       if user
