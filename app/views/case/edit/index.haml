@@ -118,9 +118,9 @@
 
     %p
       - if case_reconnect[:id] && case_reconnect[:id].to_i.positive?
-        = t(:'case/edit/reconnect/linked', name: case_reconnect[:name])
+        = t(:'case/edit/reconnect/link_status/linked', name: case_reconnect[:name])
       - else
-        = t(:'case/edit/reconnect/not_linked')
+        = t(:'case/edit/reconnect/link_status/not_linked')
 
     - if has_role?('case:reconnect')
       %a.pure-button.button{href: url("/case/#{case_obj.id}/edit/rc")}
