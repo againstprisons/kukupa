@@ -133,6 +133,9 @@ class Kukupa::Workers::SyncCaseMailFromReconnectWorker
         cm.file_type = 'reconnect'
         cm.file_id = c['file_id']
         cm.sent_by_us = (c['sending_penpal'].to_s == Kukupa.app_config['reconnect-penpal-id'].to_s)
+        
+        # send email alert to case assigned advocates (or site admins if no assigned advocate)
+        cm.send_incoming_alert_email!
       end
 
       cm.save
