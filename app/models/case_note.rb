@@ -70,7 +70,7 @@ class Kukupa::Models::CaseNote < Sequel::Model
     end
 
     # email to assigned advocate
-    unless case_obj.assigned_advocate.nil?
+    unless case_obj.get_assigned_advocates.empty?
       advocate_email = Kukupa::Models::EmailQueue.new_from_template("outside_request", {
         case_obj: case_obj,
         case_url: case_url.to_s,
@@ -81,7 +81,7 @@ class Kukupa::Models::CaseNote < Sequel::Model
       advocate_email.encrypt(:subject, "New outside request") # TODO: tl this
       advocate_email.encrypt(:recipients, JSON.generate({
         "mode": "list_uids",
-        "uids": [case_obj.assigned_advocate],
+        "uids": case_obj.get_assigned_advocates,
       }))
 
       advocate_email.save
@@ -109,7 +109,7 @@ class Kukupa::Models::CaseNote < Sequel::Model
 
     case_obj = Kukupa::Models::Case[self.case]
     return unless case_obj
-    return unless case_obj.assigned_advocate&.positive?
+    return if case_obj.get_assigned_advocates.empty?
 
     author = Kukupa::Models::User[self.author]
     return unless author
@@ -131,7 +131,7 @@ class Kukupa::Models::CaseNote < Sequel::Model
     email.encrypt(:subject, subject)
     email.encrypt(:recipients, JSON.generate({
       "mode": "list_uids",
-      "uids": [case_obj.assigned_advocate],
+      "uids": case_obj.get_assigned_advocates,
     }))
 
     email.save

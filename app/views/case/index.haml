@@ -30,29 +30,30 @@
   %ul.block-list
     - cases.each do |c|
       %li
-        %ul.inline-list
-          %li
-            %a{href: c[:url]}
-              &= c[:name]
+        %a{href: c[:url]}
+          &= c[:name]
 
+        %ul
           %li
-            - if c[:advocate][:id].positive?
+            - unless c[:advocates].empty?
               = succeed ': ' do
-                = t(:'advocate')
+                = t(:'advocate/plural')
+                
+              %ul
+                - c[:advocates].each do |ad|
+                  %li
+                    %span{title: "User[#{ad[:id]}]"}
+                      &= ad[:name]
 
-              %strong{title: "User[#{c[:advocate][:id]}]"}
-                &= c[:advocate][:name]
-
-              - if c[:mine]
-                %span.badge
-                  %i.fa.fa-user-o= ""
-                  = t(:'thats_you')
+                      - if cuser.id == ad[:id]
+                        %span.badge
+                          %i.fa.fa-user-o= ""
+                          = t(:'thats_you')
 
             - else
               %i.fa.fa-warning= ""
               = t(:'advocate/none_assigned')
 
-        %ul
           %li
             - if c[:last_note]
               = succeed ': ' do

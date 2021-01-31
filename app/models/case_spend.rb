@@ -120,8 +120,8 @@ class Kukupa::Models::CaseSpend < Sequel::Model
     to_email = [
       author&.id,
       approver&.id,
-      case_obj.assigned_advocate
-    ].compact.uniq
+      case_obj.get_assigned_advocates,
+    ].flatten.compact.uniq
     return if to_email.empty?
 
     email = Kukupa::Models::EmailQueue.new_from_template("spend_approved", {

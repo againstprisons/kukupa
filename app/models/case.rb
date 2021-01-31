@@ -1,13 +1,16 @@
 class Kukupa::Models::Case < Sequel::Model
-  # TODO: allow multiple advocates per case
   def self.assigned_to(user)
     user = user.id if user.respond_to?(:id)
-    self.where(assigned_advocate: user)
+
+    Kukupa::Models::CaseAssignedAdvocate
+      .where(user: user)
+      .map { |aa| self[aa.case] }
   end
 
-  # TODO: allow multiple advocates per case
   def get_assigned_advocates
-    [self.assigned_advocate].compact
+    Kukupa::Models::CaseAssignedAdvocate
+      .where(case: self.id)
+      .map(&:user)
   end
 
   def can_access?(user)

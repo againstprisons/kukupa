@@ -5,7 +5,14 @@ module Kukupa::Helpers::CaseIndexHelpers
 
     ds = Kukupa::Models::Case
     ds = ds.where(is_open: true) unless opts[:include_closed]
-    ds = ds.where(assigned_advocate: cuser.id) unless opts[:view_all]
+
+    unless opts[:view_all]
+      assigned = Kukupa::Models::CaseAssignedAdvocate
+        .where(user: cuser.id)
+        .map(&:case)
+
+      ds = ds.where(id: assigned)
+    end
 
     cases = ds.map do |c|
       url = Addressable::URI.parse(url("/case/#{c.id}/view"))
@@ -15,20 +22,27 @@ module Kukupa::Helpers::CaseIndexHelpers
         :id => c.id,
         :name => c.get_name,
         :url => url.to_s,
-        :mine => c.assigned_advocate == cuser.id,
       }
     end
 
     cases.compact!
-    cases.sort! { |a, b| (a[:mine] ? 1 : 0) <=> (b[:mine] ? 1 : 0) }
 
     # get advocate details
     cases.map! do |c|
-      advocates = case_populate_advocate(advocates, c[:obj].assigned_advocate)
-      c[:advocate] = advocates[c[:obj].assigned_advocate.to_s]
+      c[:advocates] = []
+
+      assigned = Kukupa::Models::CaseAssignedAdvocate.where(case: c[:id]).map(&:user)
+      assigned.each do |aa|
+        advocates = case_populate_advocate(advocates, aa)
+        c[:advocates] << advocates[aa.to_s]
+      end
+
+      c[:mine] = true if assigned.include?(cuser.id)
 
       c
     end
+
+    cases.sort! { |a, b| (a[:mine] ? 1 : 0) <=> (b[:mine] ? 1 : 0) }
 
     # get this year's total spend for this case
     cases.map! do |c|

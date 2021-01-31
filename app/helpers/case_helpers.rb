@@ -34,10 +34,8 @@ module Kukupa::Helpers::CaseHelpers
     c = c.id if c.respond_to?(:id)
     c = Kukupa::Models::Case[c]
 
-    uids = []
-
-    # assigned advocate for this case
-    uids << c.assigned_advocate
+    # start with all assigned advocates for the case
+    uids = c.get_assigned_advocates
 
     # all users with `case:*` or `case:view_all` roles
     uids << Kukupa::Models::UserRole.where(role: "*").map(&:user_id).to_a
@@ -60,7 +58,7 @@ module Kukupa::Helpers::CaseHelpers
     u = Kukupa::Models::User[u]
 
     return true if has_role?('case:view_all', user: u)
-    return true if c.assigned_advocate == u.id
+    return true if c.get_assigned_advocates.include?(u.id)
 
     false
   end

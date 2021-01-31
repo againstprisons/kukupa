@@ -16,6 +16,7 @@ class Kukupa::Controllers::CaseIndexController < Kukupa::Controllers::CaseContro
     @title = t(:'case/index/title')
 
     return haml(:'case/index', :locals => {
+      cuser: @user,
       title: @title,
       cases: @cases,
       stats: @stats,

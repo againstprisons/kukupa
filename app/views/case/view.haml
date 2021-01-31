@@ -3,7 +3,7 @@
 
   = haml :'partials/case_header', layout: false, locals: {caseid: case_obj.id}
 
-  - unless case_obj.assigned_advocate&.positive?
+  - if case_obj.get_assigned_advocates.empty?
     .message.message-warning
       %i.fa.fa-warning= ""
       = t(:'case/view/no_advocate_assigned')

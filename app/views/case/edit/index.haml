@@ -58,15 +58,42 @@
       %i.fa.fa-save= ""
       = t(:'case/edit/prison/submit')
 
-  - if has_role?('case:assign')
+  - if has_role?('case:assignees:unassign')
+    .form-main
+      %h1= t(:'case/edit/assignees/unassign/section_title')
+      
+      - if case_assigned.empty?
+        %p= t(:'case/edit/assignees/unassign/no_assignees')
+
+      - else
+        %ul.block-list
+          - case_assigned.each do |u|
+            %li    
+              %form.block-form{method: 'POST', action: url("/case/#{case_obj.id}/edit/unassign")}
+                %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+                %input{type: 'hidden', name: 'assignee', value: u[:id]}
+
+                %button.pure-button.button{type: 'submit'}
+                  %i.fa.fa-minus-square-o= ""
+                  = t(:'case/edit/assignees/unassign/submit')
+                  
+                %span
+                  &= u[:name]
+
+                  = surround ' (', ') ' do
+                    ID
+                    &= u[:id]
+
+  - if has_role?('case:assignees:assign')
     %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: url("/case/#{case_obj.id}/edit/assign")}
       %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
-      %h1= t(:'case/edit/assign/section_title')
+      %h1= t(:'case/edit/assignees/assign/section_title')
 
-      %label{for: 'assignee'}= t(:'case/edit/assign/assignee_field')
+      %label{for: 'assignee'}= t(:'case/edit/assignees/assign/assignee_field')
       %select#assignee{name: 'assignee', required: true}
+        - assigned_ids = case_assigned.map { |x| x[:id] }
         - assignable_users.each do |u|
-          %option{value: u[:id], selected: u[:id] == case_assigned&.id}
+          %option{value: u[:id], disabled: assigned_ids.include?(u[:id])}
             &= u[:name]
 
             = surround ' (', ') ' do
@@ -75,7 +102,7 @@
 
       %button.pure-button.button.button-primary{type: 'submit'}
         %i.fa.fa-user-o= ""
-        = t(:'case/edit/assign/submit')
+        = t(:'case/edit/assignees/assign/submit')
 
   .form-main
     %h1= t(:'case/edit/reconnect/section_title')

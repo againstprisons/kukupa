@@ -5,6 +5,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
   add_route :post, '/'
   add_route :post, '/prison', method: :prison
   add_route :post, '/assign', method: :assign
+  add_route :post, '/unassign', method: :unassign
 
   include Kukupa::Helpers::CaseHelpers
   include Kukupa::Helpers::ReconnectHelpers
@@ -24,6 +25,9 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       return halt 404 unless @case.can_access?(@user)
     end
 
+    @case_name = @case.get_name
+    @title = t(:'case/edit/title', name: @case_name)
+
     @prison = Kukupa::Models::Prison[@case.decrypt(:prison).to_i]
     @first_name = @case.decrypt(:first_name)
     @middle_name = @case.decrypt(:middle_name)
@@ -35,11 +39,19 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
     @release_date = @case.decrypt(:release_date)
     @release_date = Chronic.parse(@release_date, guess: true) if @release_date
     @global_note = @case.decrypt(:global_note)
-    @assigned = Kukupa::Models::User[@case.assigned_advocate]
     @reconnect_id = @case.reconnect_id
     @reconnect_data = reconnect_penpal(cid: @reconnect_id) if @reconnect_id.to_i.positive?
-    @case_name = @case.get_name
-    @title = t(:'case/edit/title', name: @case_name)
+
+    @assigned = @case.get_assigned_advocates.map do |aa|
+      user = Kukupa::Models::User[aa]
+      next nil unless user
+
+      {
+        obj: user,
+        id: user.id,
+        name: user.decrypt(:name),
+      }
+    end.compact
 
     if request.post?
       @first_name = request.params['first_name']&.strip
@@ -135,20 +147,46 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
   end
 
   def assign(cid)
-    return halt 404 unless has_role?('case:assign')
+    return halt 404 unless has_role?('case:assignees:assign')
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case
 
     @new_assignee = Kukupa::Models::User[request.params['assignee'].to_i]
     unless @new_assignee || @assignable_users.keys.include?(@new_assignee.id.to_s)
-      flash :error, t(:'case/edit/assign/errors/invalid_user')
+      flash :error, t(:'case/edit/assignees/assign/errors/invalid_user')
+      return redirect back
+    end
+    
+    if @case.get_assigned_advocates.include?(@new_assignee.id)
+      flash :error, t(:'case/edit/assignees/assign/errors/user_already_assigned')
       return redirect back
     end
 
-    @case.assigned_advocate = @new_assignee.id
-    @case.save
+    Kukupa::Models::CaseAssignedAdvocate
+      .new(case: @case.id, user: @new_assignee.id)
+      .save
 
-    flash :success, t(:'case/edit/assign/success', name: @new_assignee.decrypt(:name))
+    flash :success, t(:'case/edit/assignees/assign/success', name: @new_assignee.decrypt(:name))
+    redirect back
+  end
+  
+  def unassign(cid)
+    return halt 404 unless has_role?('case:assignees:unassign')
+    @case = Kukupa::Models::Case[cid]
+    return halt 404 unless @case
+
+    @assignee = Kukupa::Models::User[request.params['assignee'].to_i]
+    unless @new_assignee || @case.get_assigned_advocates.include?(@assignee.id)
+      flash :error, t(:'case/edit/assignees/unassign/errors/invalid_user')
+      return redirect back
+    end
+
+    Kukupa::Models::CaseAssignedAdvocate
+      .where(case: @case.id, user: @assignee.id)
+      .first
+      .delete!
+
+    flash :success, t(:'case/edit/assignees/unassign/success', name: @assignee.decrypt(:name))
     redirect back
   end
 end
