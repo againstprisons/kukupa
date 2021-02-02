@@ -7,7 +7,7 @@
       %span
         = t(:'back')
 
-  %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST', enctype: 'multipart/form-data'}
     %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
     %h1= t(:'case/note/add/section_title')
 
@@ -23,6 +23,9 @@
 
     = haml :'partials/editor', layout: false, locals: {editor_name: 'reimbursement_info', editor_label: t(:'case/spend/add/reimbursement_info')}
     .y-margin= ""
+
+    %label{for: 'receipt'}= t(:'case/spend/add/receipt_file')
+    %input#receipt{name: 'file', type: 'file', required: false}
 
     %button.pure-button.button.button-primary{type: 'submit'}
       %i.fa.fa-pencil-square-o= ""

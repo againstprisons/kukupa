@@ -52,6 +52,20 @@ class Kukupa::Controllers::CaseSpendAddController < Kukupa::Controllers::CaseCon
       @reimbursement_info = request.params['reimbursement_info']&.strip || ""
       @reimbursement_info = Sanitize.fragment(@reimbursement_info, Sanitize::Config::RELAXED)
     end
+    
+    # store receipt if one was uploaded
+    @receipt = nil
+    if params[:file]
+      begin
+        fn = params[:file][:filename]
+        params[:file][:tempfile].rewind
+        data = params[:file][:tempfile].read
+      
+        @receipt = Kukupa::Models::File.upload(data, filename: fn)
+      rescue
+        flash :warning, t(:'case/spend/add/errors/receipt_upload_failed')
+      end
+    end
 
     # create spend
     @spend = Kukupa::Models::CaseSpend.new(case: @case.id, author: @user.id).save
@@ -59,6 +73,7 @@ class Kukupa::Controllers::CaseSpendAddController < Kukupa::Controllers::CaseCon
     @spend.encrypt(:notes, @content)
     @spend.is_reimbursement = @reimbursement
     @spend.encrypt(:reimbursement_info, @reimbursement_info)
+    @spend.encrypt(:receipt_file, @receipt&.file_id)
     @spend.save
 
     # if <= auto-approve threshold AND aggregate for this year is below max:
@@ -82,6 +97,25 @@ class Kukupa::Controllers::CaseSpendAddController < Kukupa::Controllers::CaseCon
     else
       # send "new spending request to be approved" email
       @spend.send_creation_email!
+    end
+
+    # if reimbursement, and no receipt provided, create "upload receipt please"
+    # task assigned to the spend creator
+    if @reimbursement && !@receipt
+      @task = Kukupa::Models::CaseTask.new(
+        case: @case.id,
+        author: nil,
+        assigned_to: @user.id,
+      ).save
+
+      @task.encrypt(:content, t(:'case/spend/add/upload_receipt_task',
+        force_language: true,
+        spend_id: @spend.id,
+        amount: @amount,
+      ))
+
+      @task.save
+      @task.send_creation_email!
     end
 
     # redirect back

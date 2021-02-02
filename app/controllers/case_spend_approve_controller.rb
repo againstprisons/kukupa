@@ -23,11 +23,17 @@ class Kukupa::Controllers::CaseSpendApproveController < Kukupa::Controllers::Cas
       return redirect url("/case/#{@case.id}/spend/#{@spend.id}")
     end
 
-    @case_name = @case.get_name
     @content = @spend.decrypt(:notes)
     @amount = @spend.decrypt(:amount).to_f
     @author = Kukupa::Models::User[@spend.author]
     @reimbursement_info = @spend.decrypt(:reimbursement_info)
+    
+    receipt_file = @spend.decrypt(:receipt_file)
+    if receipt_file
+      @receipt = Kukupa::Models::File.where(file_id: receipt_file).first
+    end
+
+    @case_name = @case.get_name
     @title = t(:'case/spend/approve/title', name: @case_name, spend_id: @spend.id)
 
     if request.get?
@@ -42,6 +48,7 @@ class Kukupa::Controllers::CaseSpendApproveController < Kukupa::Controllers::Cas
         spend_author_self: @author.id == @user.id,
         spend_reimbursement: @spend.is_reimbursement,
         spend_reimbursement_info: @reimbursement_info,
+        spend_receipt: @receipt,
       })
     end
 

@@ -30,13 +30,18 @@
         = succeed ': ' do
           = t(:'case_renderable/spend/author')
 
-        %strong{title: "User[#{rb[:author][:id]}]"}
-          &= rb[:author][:name]
+        - if rb[:author][:id].zero?
+          %strong
+            = t(:'author/robot')
 
-        - if rb[:author][:me]
-          %span.badge
-            %i.fa.fa-user-o= ""
-            = t(:'thats_you')
+        - else
+          %strong{title: "User[#{rb[:author][:id]}]"}
+            &= rb[:author][:name]
+
+          - if rb[:author][:me]
+            %span.badge
+              %i.fa.fa-user-o= ""
+              = t(:'thats_you')
 
       - unless rb[:approver].nil? || rb[:approver][:id].to_i.zero?
         - if rb[:approver][:id] != rb[:author][:id]
@@ -59,3 +64,6 @@
 
     %blockquote.blockquote-fancy
       = rb[:notes]
+
+    - if rb[:receipt]
+      %p= t(:'case_renderable/spend/has_receipt', url: rb[:receipt])

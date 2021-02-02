@@ -1,0 +1,19 @@
+.case-spend-receipt{'data-case-id': case_obj.id}
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: url("/case/#{case_obj.id}/view##{spend_obj.anchor}")}
+      %i.fa.fa-chevron-left= ""
+      %span
+        = t(:'back')
+
+  .form-main
+    %h1= t(:'case/spend/receipt/section_title')
+    
+    %a.pure-button.button{target: '_blank', href: view_url}
+      %i.fa.fa-file-text-o= ""
+      = t(:'case/spend/receipt/actions/view')
+
+    %a.pure-button.button{target: '_blank', href: download_url}
+      %i.fa.fa-download= ""
+      = t(:'case/spend/receipt/actions/download')

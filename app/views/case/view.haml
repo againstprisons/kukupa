@@ -113,13 +113,18 @@
                     = t(:'case_renderable/task/author')
 
                   %span.case-task-author
-                    %strong{title: "User[#{t[:author][:id]}]"}
-                      &= t[:author][:name]
+                    - if t[:author][:id].zero?
+                      %strong
+                        = t(:'author/robot')
 
-                    - if t[:author][:me]
-                      %span.badge
-                        %i.fa.fa-user-o= ""
-                        = t(:'thats_you')
+                    - else
+                      %strong{title: "User[#{t[:author][:id]}]"}
+                        &= t[:author][:name]
+
+                      - if t[:author][:me]
+                        %span.badge
+                          %i.fa.fa-user-o= ""
+                          = t(:'thats_you')
 
                 %li
                   = succeed ': ' do

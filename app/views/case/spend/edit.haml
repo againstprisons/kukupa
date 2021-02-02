@@ -1,4 +1,4 @@
-.case-note-edit{'data-case-id': case_obj.id}
+.case-spend-edit{'data-case-id': case_obj.id}
   %h1= title
 
   .inline-form
@@ -7,7 +7,7 @@
       %span
         = t(:'back')
 
-  %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST', enctype: 'multipart/form-data'}
     %h1= t(:'case/spend/edit/edit/section_title')
 
     - unless spend_approver.nil? || spend_approver_self || has_role?('case:spend:can_approve')
@@ -51,6 +51,14 @@
 
       = haml :'partials/editor', layout: false, locals: {editor_name: 'reimbursement_info', editor_label: t(:'case/spend/edit/edit/reimbursement_info'), editor_data: spend_reimbursement_info}
       .y-margin= ""
+
+      %label{for: 'receipt'}
+        = t(:'case/spend/add/receipt_file')
+        - if spend_receipt
+          %strong
+            = t(:'case/spend/edit/edit/receipt_file/will_replace')
+
+      %input#receipt{name: 'file', type: 'file', required: false}
 
       %button.pure-button.button.button-primary{type: 'submit'}
         %i.fa.fa-pencil-square-o= ""

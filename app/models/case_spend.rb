@@ -10,7 +10,7 @@ class Kukupa::Models::CaseSpend < Sequel::Model
   def renderables(opts = {})
     items = []
 
-    actions =  [
+    actions = [
       {
         url: [:url, "/case/#{self.case}/spend/#{self.id}"],
         fa_icon: 'fa-gear',
@@ -22,6 +22,15 @@ class Kukupa::Models::CaseSpend < Sequel::Model
         url: [:url, "/case/#{self.case}/spend/#{self.id}/approve"],
         fa_icon: 'fa-check-square-o',
       })
+    end
+    
+    receipt_url = nil
+    receipt_file_id = self.decrypt(:receipt_file)
+    unless receipt_file_id.nil? || receipt_file_id&.empty?
+      receipt_file = Kukupa::Models::File.where(file_id: receipt_file_id).first
+      if receipt_file
+        receipt_url = [:url, "/case/#{self.case}/spend/#{self.id}/receipt"]
+      end
     end
 
     edited_ts = Kukupa::Models::CaseSpendUpdate
@@ -40,6 +49,7 @@ class Kukupa::Models::CaseSpend < Sequel::Model
       amount: self.decrypt(:amount).to_f,
       notes: self.decrypt(:notes),
       edited: edited_ts,
+      receipt: receipt_url,
       author: [:user, self.author],
       approver: [:user, self.approver],
       actions: actions,

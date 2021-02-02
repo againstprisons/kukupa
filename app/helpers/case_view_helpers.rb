@@ -171,8 +171,12 @@ module Kukupa::Helpers::CaseViewHelpers
 
         # Populate advocate information
         elsif k_first == :user
-          advocates = case_populate_advocate(advocates, k_value.to_i)
-          value = advocates[k_value.to_s]
+          if k_value.to_i.zero?
+            value = {id: 0}
+          else
+            advocates = case_populate_advocate(advocates, k_value.to_i)
+            value = advocates[k_value.to_s]
+          end
         end
       end
 
