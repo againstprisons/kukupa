@@ -40,3 +40,16 @@
       %i.fa.fa-pencil= ""
       = t(:'usersettings/change_password/submit')
 
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: '/user/change-case-load-limit'}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'usersettings/case_load/section_title')
+    
+    %p= t(:'usersettings/case_load/content/one', case_count: user[:case_count])
+    %p= t(:'usersettings/case_load/content/two', case_count: user[:case_count])
+
+    %label{for: 'case-load-limit'}= t(:'usersettings/case_load/value')
+    %input#case-load-limit{name: 'limit', type: 'number', required: true, placeholder: t(:'usersettings/case_load/value'), value: user[:case_load_limit], min: 0}
+
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-pencil= ""
+      = t(:'usersettings/case_load/submit')

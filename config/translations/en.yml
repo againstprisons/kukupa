@@ -486,6 +486,12 @@
 :'usersettings/change_password/success': "Successfully changed your password."
 :'usersettings/change_password/errors/invalid_password': "Your password was incorrect. Please try again."
 :'usersettings/change_password/errors/passwords_dont_match': "The provided passwords do not match. Please try again."
+:'usersettings/case_load/section_title': "Case load limit"
+:'usersettings/case_load/content/one': "You can set a limit for the number of open cases you wish to be assigned to at any given time. If you are at or above your case load limit, you can not be assigned to new cases, but you will not be automatically unassigned from any cases you're already assigned to by changing this limit."
+:'usersettings/case_load/content/two': "You are currently assigned to <%= e(case_count) %> case<% if case_count != 1 %>s<% end %>. To unset your case load limit, allowing you to be assigned to any number of cases, set this field to 0."
+:'usersettings/case_load/value': "Case load limit"
+:'usersettings/case_load/submit': "Change case load limit"
+:'usersettings/case_load/success': "Successfully set your case load limit to <%= e(limit) %>."
 
 # User settings - multi-factor authentication
 :'usersettings/mfa/title': "Multi-factor authentication"

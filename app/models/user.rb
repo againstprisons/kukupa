@@ -4,6 +4,12 @@ class Kukupa::Models::User < Sequel::Model
   one_to_many :user_roles
   one_to_many :tokens
 
+  def case_count
+    Kukupa::Models::CaseAssignedAdvocate
+      .where(user: self.id)
+      .count
+  end
+
   def mfa_data
     recovery_tokens = Kukupa::Models::Token.where(
       user_id: self.id,

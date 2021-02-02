@@ -3,14 +3,15 @@ class Kukupa::Controllers::UserSettingsController < Kukupa::Controllers::Applica
   add_route :post, "/change-name", method: :change_name
   add_route :post, "/change-email", method: :change_email
   add_route :post, "/change-password", method: :change_password
+  add_route :post, "/change-case-load-limit", method: :change_case_load_limit
 
   def before
     return halt 404 unless logged_in?
+    @user = current_user
   end
 
   def index
     @title = t(:'usersettings/title')
-    @user = current_user
 
     haml :'usersettings/layout', locals: {title: @title} do
       haml :'usersettings/index', layout: false, locals: {
@@ -19,13 +20,14 @@ class Kukupa::Controllers::UserSettingsController < Kukupa::Controllers::Applica
           user: @user,
           name: @user.decrypt(:name),
           email: @user.email,
+          case_count: @user.case_count,
+          case_load_limit: @user.case_load_limit,
         }
       }
     end
   end
 
   def change_name
-    @user = current_user
     @name = request.params['name']&.strip
     @name = nil if @name&.empty?
 
@@ -42,7 +44,6 @@ class Kukupa::Controllers::UserSettingsController < Kukupa::Controllers::Applica
   end
 
   def change_email
-    @user = current_user
     @email = request.params['email']&.strip&.downcase
     @email = nil if @email&.empty?
 
@@ -64,7 +65,6 @@ class Kukupa::Controllers::UserSettingsController < Kukupa::Controllers::Applica
   end
 
   def change_password
-    @user = current_user
     unless @user.password_correct?(request.params['password'])
       flash :error, t(:'usersettings/change_password/errors/invalid_password')
       return redirect url("/user")
@@ -89,6 +89,16 @@ class Kukupa::Controllers::UserSettingsController < Kukupa::Controllers::Applica
     @user.save
 
     flash :success, t(:'usersettings/change_password/success')
+    redirect url("/user")
+  end
+  
+  def change_case_load_limit
+    @new_limit = request.params['limit'].to_i
+    @new_limit = 0 if @new_limit < 0
+    @user.case_load_limit = @new_limit
+    @user.save
+    
+    flash :success, t(:'usersettings/case_load/success', limit: @new_limit == 0 ? '∞' : @new_limit.to_s)
     redirect url("/user")
   end
 end
