@@ -9,6 +9,11 @@ class Kukupa::Models::User < Sequel::Model
       .where(user: self.id)
       .count
   end
+  
+  def is_at_case_limit?
+    return false if self.case_load_limit.zero?
+    self.case_count >= self.case_load_limit
+  end
 
   def mfa_data
     recovery_tokens = Kukupa::Models::Token.where(

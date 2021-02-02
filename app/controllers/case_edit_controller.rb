@@ -168,6 +168,11 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       flash :error, t(:'case/edit/assignees/assign/errors/user_already_assigned')
       return redirect back
     end
+    
+    if @new_assignee.is_at_case_limit?
+      flash :error, t(:'case/edit/assignees/assign/errors/user_over_case_load_limit')
+      return redirect back
+    end
 
     Kukupa::Models::CaseAssignedAdvocate
       .new(case: @case.id, user: @new_assignee.id)

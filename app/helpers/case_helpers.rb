@@ -7,6 +7,7 @@ module Kukupa::Helpers::CaseHelpers
         id: adv&.id || 0,
         name: adv&.decrypt(:name) || t(:'unknown'),
         me: logged_in?() ? current_user.id == adv&.id : false,
+        is_at_case_limit: adv&.is_at_case_limit?,
       }
     end
 
