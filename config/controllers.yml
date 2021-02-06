@@ -5,6 +5,8 @@ preload:
   - SystemController
 
 controllers:
+  - path: /auth/reset
+    controller: AuthResetController
   - path: /auth/signup
     controller: AuthSignupController
   - path: /auth/logout

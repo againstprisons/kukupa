@@ -15,6 +15,11 @@
         %i.fa.fa-sign-in= ""
         = t(:'auth/login/submit')
 
+    .page-footer.page-footer--pad
+      %span
+        %a{href: url('/auth/reset')}
+          = t(:'auth/login/to_reset')
+
     .page-footer
       %span
         %a{href: url('/auth/signup')}
