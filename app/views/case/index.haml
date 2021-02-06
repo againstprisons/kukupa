@@ -1,10 +1,15 @@
 %h1= title
 
-- if has_role?('case:create')
-  .inline-form
+.inline-form
+  - if has_role?('case:create')
     %a.pure-button.button{href: url('/case/create')}
       %i.fa.fa-plus= ""
       = t(:'case/create/title')
+
+  - if has_role?('case:search')
+    %a.pure-button.button{href: url('/case/list')}
+      %i.fa.fa-list= ""
+      = t(:'case/list/title')
 
 - if has_role?("case:search")
   %form.pure-form.pure-form-stacked.form-main{method: 'GET', action: url('/case/search')}

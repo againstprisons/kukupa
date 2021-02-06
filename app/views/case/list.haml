@@ -1,0 +1,65 @@
+%h1= title
+
+.inline-form
+  %a.pure-button.button{href: url('/case')}
+    %i.fa.fa-chevron-left= ""
+    = t(:'back')
+
+%p= t("case/list/sort/#{sort.to_s}".to_sym)
+
+- if cases.empty?
+  %p= t(:'case/list/no_cases')
+
+- if sort == :assigned
+  - unassigned = cases.filter { |c| c[:advocates].empty? }
+  - assigned = cases.reject { |c| c[:advocates].empty? }
+
+  .form-main
+    %h1= t(:'case/list/sort/assigned/unassigned')
+
+    - if unassigned.empty?
+      %p= t(:'case/list/no_cases')
+
+    %ul.block-list
+      - unassigned.each do |c|
+        %li
+          %a{href: c[:url]}
+            &= c[:name]
+
+          %ul
+            %li
+              = succeed ': ' do
+                = t(:'prison')
+              %span
+                &= c[:prison]&.decrypt(:name) || t(:'unknown')
+
+            %li
+              = succeed ': ' do
+                = t(:'prisoner_number')
+              %code
+                &= c[:prn]
+
+  .form-main
+    %h1= t(:'case/list/sort/assigned/assigned')
+
+    - if assigned.empty?
+      %p= t(:'case/list/no_cases')
+
+    %ul.block-list
+      - assigned.each do |c|
+        %li
+          %a{href: c[:url]}
+            &= c[:name]
+
+          %ul
+            %li
+              = succeed ': ' do
+                = t(:'prison')
+              %span
+                &= c[:prison]&.decrypt(:name) || t(:'unknown')
+
+            %li
+              = succeed ': ' do
+                = t(:'prisoner_number')
+              %code
+                &= c[:prn]

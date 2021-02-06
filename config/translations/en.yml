@@ -215,6 +215,13 @@
 :'case/index/cases/item/total_spend/year': "This year"
 :'case/index/cases/item/total_spend/year/percent': "<%= e(sprintf('%.01f%%', (amount / max) * 100)) %> of yearly max"
 
+# Cases - list
+:'case/list/title': "List cases"
+:'case/list/no_cases': "No cases."
+:'case/list/sort/assigned': "Sorting by whether cases have assignees."
+:'case/list/sort/assigned/assigned': "Assigned cases"
+:'case/list/sort/assigned/unassigned': "Unassigned cases"
+
 # Cases - search
 :'case/search/title': "Search results"
 :'case/search/section_title': "Search results"
