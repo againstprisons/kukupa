@@ -30,4 +30,14 @@
     background: $symbolic_error_background;
     color: $symbolic_error_foreground;
   }
+
+  a
+  {
+    color: inherit;
+
+    &:visited
+    {
+      color: inherit;
+    }
+  }
 }
