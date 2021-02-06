@@ -5,48 +5,31 @@
     %i.fa.fa-chevron-left= ""
     = t(:'back')
 
-%p= t("case/list/sort/#{sort.to_s}".to_sym)
+%form.pure-form.pure-form-stacked.form-main{method: 'GET'}
+  %h1= t(:'case/list/sort/section_title')
+
+  %label{for: 'sort'}= t(:'case/list/sort/value')
+  %select#sort{name: 'sort'}
+    - %w[assigned purpose].each do |so|
+      %option{value: so, selected: so == sort.to_s}
+        = t("case/list/sort/#{so}".to_sym)
+
+  %button.pure-button.button.button-primary{type: 'submit'}
+    %i.fa.fa-sort= ""
+    = t(:'case/list/sort/submit')
 
 - if cases.empty?
   %p= t(:'case/list/no_cases')
 
-- if sort == :assigned
-  - unassigned = cases.filter { |c| c[:advocates].empty? }
-  - assigned = cases.reject { |c| c[:advocates].empty? }
-
+- cases.each do |title, caselist|
   .form-main
-    %h1= t(:'case/list/sort/assigned/unassigned')
+    %h1= t(title)
 
-    - if unassigned.empty?
+    - if caselist.empty?
       %p= t(:'case/list/no_cases')
 
     %ul.block-list
-      - unassigned.each do |c|
-        %li
-          %a{href: c[:url]}
-            &= c[:name]
-
-          %ul
-            %li
-              = succeed ': ' do
-                = t(:'prison')
-              %span
-                &= c[:prison]&.decrypt(:name) || t(:'unknown')
-
-            %li
-              = succeed ': ' do
-                = t(:'prisoner_number')
-              %code
-                &= c[:prn]
-
-  .form-main
-    %h1= t(:'case/list/sort/assigned/assigned')
-
-    - if assigned.empty?
-      %p= t(:'case/list/no_cases')
-
-    %ul.block-list
-      - assigned.each do |c|
+      - caselist.each do |c|
         %li
           %a{href: c[:url]}
             &= c[:name]

@@ -221,9 +221,13 @@
 # Cases - list
 :'case/list/title': "List cases"
 :'case/list/no_cases': "No cases."
-:'case/list/sort/assigned': "Sorting by whether cases have assignees."
+:'case/list/sort/section_title': "Sorting options"
+:'case/list/sort/value': "Sort by"
+:'case/list/sort/purpose': "Case purpose"
+:'case/list/sort/assigned': "Case assignee status"
 :'case/list/sort/assigned/assigned': "Assigned cases"
 :'case/list/sort/assigned/unassigned': "Unassigned cases"
+:'case/list/sort/submit': "Change sorting"
 
 # Cases - list tasks
 :'case/list_tasks/title': "List open tasks"
