@@ -6,7 +6,7 @@
       %i.fa.fa-plus= ""
       = t(:'case/create/title')
 
-  - if has_role?('case:search')
+  - if has_role?('case:list:cases')
     %a.pure-button.button{href: url('/case/list')}
       %i.fa.fa-list= ""
       = t(:'case/list/title')
