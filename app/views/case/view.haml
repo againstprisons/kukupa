@@ -3,6 +3,11 @@
 
   = haml :'partials/case_header', layout: false, locals: {caseid: case_obj.id}
 
+  - unless case_open
+    .message.message-error
+      %i.fa.fa-times-circle= ""
+      = t(:'case/view/case_is_closed', link: url("/case/#{case_obj.id}/edit/open-case"))
+
   - if case_obj.get_assigned_advocates.empty?
     .message.message-warning
       %i.fa.fa-warning= ""

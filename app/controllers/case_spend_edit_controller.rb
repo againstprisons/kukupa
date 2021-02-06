@@ -12,7 +12,7 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
 
   def index(cid, sid)
     @case = Kukupa::Models::Case[cid.to_i]
-    return halt 404 unless @case
+    return halt 404 unless @case && @case.is_open
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
@@ -156,7 +156,7 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
     return halt 404 unless has_role?('case:delete_entry')
 
     @case = Kukupa::Models::Case[cid.to_i]
-    return halt 404 unless @case
+    return halt 404 unless @case && @case.is_open
 
     @spend = Kukupa::Models::CaseSpend[sid.to_i]
     return halt 404 unless @spend

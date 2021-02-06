@@ -74,6 +74,7 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
     return haml(:'case/view', :locals => {
       title: @title,
       case_obj: @case,
+      case_open: @case.is_open,
       case_name: @case_name,
       case_prison: @prison,
       case_address: @address,

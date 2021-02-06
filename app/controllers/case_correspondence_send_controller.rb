@@ -18,7 +18,7 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
 
   def index(cid)
     @case = Kukupa::Models::Case[cid]
-    return halt 404 unless @case
+    return halt 404 unless @case && @case.is_open
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
@@ -111,7 +111,7 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
   
   def templates(cid)
     @case = Kukupa::Models::Case[cid]
-    return halt 404 unless @case
+    return halt 404 unless @case && @case.is_open
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end

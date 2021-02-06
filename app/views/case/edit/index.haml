@@ -175,4 +175,17 @@
         %i.fa.fa-link=""
         = t(:'case/edit/reconnect/submit')
 
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: url("/case/#{case_obj.id}/edit/close-case")}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'case/edit/close_case/section_title')
+    %p= t(:'case/edit/close_case/content')
+
+    %label{for: 'close_case_confirm'}
+      %input#close_case_confirm{type: 'checkbox', name: 'confirm', required: true}
+      = t(:'case/edit/close_case/confirm_checkbox')
+
+    %button.pure-button.button.button-error{type: 'submit'}
+      %i.fa.fa-times-circle=""
+      = t(:'case/edit/close_case/submit')
+
 .async-load{:'data-sources' => JSON.generate(['/static/editor.bundle.js'])}

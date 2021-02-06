@@ -278,6 +278,7 @@
 
 # Cases - view
 :'case/view/title': "Case: <%= e(name) %>"
+:'case/view/case_is_closed': "This case is currently closed. <a href=\"<%= e(link) %>\">To reopen it, click here.</a>"
 :'case/view/no_advocate_assigned': "This case does not have an assigned advocate, so only admins will be able to see it. You can assign an advocate to this case under the \"<%= t(:'case/nav/edit') %>\" section of this case profile."
 :'case/view/no_reconnect_link': "This case is not currently linked to a re:connect profile. Mail functionality will not work."
 :'case/view/no_triage_task': "This case has no initial triage task. <a href=\"<%= e(link) %>\">To create a triage task, click here.</a>"
@@ -523,6 +524,17 @@
 :'case/edit/triage_task/errors/already_exists': "An initial triage task for this case already exists."
 :'case/edit/triage_task/errors/invalid_user': "An invalid user was provided in the form submission. Please try again."
 :'case/edit/triage_task/task_message': "Please read any new correspondence, and triage this case accordingly. [automatic task]"
+:'case/edit/close_case/section_title': "Close case"
+:'case/edit/close_case/content': "To close this case, check the confirmation checkbox, and click the button below."
+:'case/edit/close_case/confirm_checkbox': "Yes, I'm sure I want to close this case"
+:'case/edit/close_case/submit': "Close case"
+:'case/edit/close_case/success': "Successfully closed the case."
+:'case/edit/close_case/errors/confirm_not_checked': "The confirmation checkbox was not checked, stubbornly refusing to close the case."
+:'case/edit/open_case/title': "Re-open case: <%= e(name) %>"
+:'case/edit/open_case/section_title': "Re-open case"
+:'case/edit/open_case/content': "To re-open the case for <strong><%= e(name) %></strong>, click the button below."
+:'case/edit/open_case/submit': "Re-open case"
+:'case/edit/open_case/success': "Successfully re-opened the case."
 
 # User settings
 :'usersettings/title': "User settings"

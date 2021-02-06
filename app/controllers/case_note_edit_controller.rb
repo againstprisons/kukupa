@@ -12,7 +12,7 @@ class Kukupa::Controllers::CaseNoteEditController < Kukupa::Controllers::CaseCon
 
   def index(cid, nid)
     @case = Kukupa::Models::Case[cid.to_i]
-    return halt 404 unless @case
+    return halt 404 unless @case && @case.is_open
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
@@ -82,7 +82,7 @@ class Kukupa::Controllers::CaseNoteEditController < Kukupa::Controllers::CaseCon
   def delete(cid, nid)
     return halt 404 unless has_role?('case:delete_entry')
     @case = Kukupa::Models::Case[cid.to_i]
-    return halt 404 unless @case
+    return halt 404 unless @case && @case.is_open
 
     @note = Kukupa::Models::CaseNote[nid.to_i]
     return halt 404 unless @note

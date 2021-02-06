@@ -10,7 +10,7 @@ class Kukupa::Controllers::CaseCorrespondenceEditController < Kukupa::Controller
 
   def index(cid, ccid)
     @case = Kukupa::Models::Case[cid.to_i]
-    return halt 404 unless @case
+    return halt 404 unless @case && @case.is_open
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
@@ -48,7 +48,7 @@ class Kukupa::Controllers::CaseCorrespondenceEditController < Kukupa::Controller
   def delete(cid, ccid)
     return halt 404 unless has_role?('case:delete_entry')
     @case = Kukupa::Models::Case[cid.to_i]
-    return halt 404 unless @case
+    return halt 404 unless @case && @case.is_open
 
     @cc_obj = Kukupa::Models::CaseCorrespondence[ccid.to_i]
     return halt 404 unless @cc_obj

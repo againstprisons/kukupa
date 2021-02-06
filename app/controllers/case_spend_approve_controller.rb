@@ -10,7 +10,7 @@ class Kukupa::Controllers::CaseSpendApproveController < Kukupa::Controllers::Cas
 
   def index(cid, sid)
     @case = Kukupa::Models::Case[cid.to_i]
-    return halt 404 unless @case
+    return halt 404 unless @case && @case.is_open
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end

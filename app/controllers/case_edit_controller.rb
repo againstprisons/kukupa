@@ -7,6 +7,9 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
   add_route :post, '/assign', method: :assign
   add_route :post, '/unassign', method: :unassign
   add_route :post, '/create-triage-task', method: :create_triage_task
+  add_route :post, '/close-case', method: :close_case
+  add_route :get, '/open-case', method: :open_case
+  add_route :post, '/open-case', method: :open_case
 
   include Kukupa::Helpers::CaseHelpers
   include Kukupa::Helpers::ReconnectHelpers
@@ -21,7 +24,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
 
   def index(cid)
     @case = Kukupa::Models::Case[cid]
-    return halt 404 unless @case
+    return halt 404 unless @case && @case.is_open
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
@@ -130,7 +133,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
 
   def prison(cid)
     @case = Kukupa::Models::Case[cid]
-    return halt 404 unless @case
+    return halt 404 unless @case && @case.is_open
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
@@ -170,7 +173,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
   def assign(cid)
     return halt 404 unless has_role?('case:assignees:assign')
     @case = Kukupa::Models::Case[cid]
-    return halt 404 unless @case
+    return halt 404 unless @case && @case.is_open
 
     @new_assignee = Kukupa::Models::User[request.params['assignee'].to_i]
     unless @new_assignee || @assignable_users.keys.include?(@new_assignee.id.to_s)
@@ -202,7 +205,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
   def unassign(cid)
     return halt 404 unless has_role?('case:assignees:unassign')
     @case = Kukupa::Models::Case[cid]
-    return halt 404 unless @case
+    return halt 404 unless @case && @case.is_open
 
     @assignee = Kukupa::Models::User[request.params['assignee'].to_i]
     unless @new_assignee || @case.get_assigned_advocates.include?(@assignee.id)
@@ -221,7 +224,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
 
   def create_triage_task(cid)
     @case = Kukupa::Models::Case[cid]
-    return halt 404 unless @case
+    return halt 404 unless @case && @case.is_open
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
@@ -265,5 +268,51 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
     )
 
     return redirect back
+  end
+
+  def close_case(cid)
+    @case = Kukupa::Models::Case[cid]
+    return halt 404 unless @case && @case.is_open
+    unless has_role?('case:view_all')
+      return halt 404 unless @case.can_access?(@user)
+    end
+
+    unless request.params['confirm']&.strip&.downcase == 'on'
+      flash :error, t(:'case/edit/close_case/errors/confirm_not_checked')
+      return redirect back
+    end
+
+    @case.is_open = false
+    @case.save
+
+    flash :success, t(:'case/edit/close_case/success')
+    return redirect url("/case")
+  end
+
+  def open_case(cid)
+    return halt 404 unless has_role?("case:reopen")
+
+    @case = Kukupa::Models::Case[cid]
+    return halt 404 unless @case
+    if @case.is_open
+      return redirect url("/case/#{@case.id}/view")
+    end
+
+    @case_name = @case.get_name
+    @title = t(:'case/edit/open_case/title', name: @case_name)
+
+    if request.post?
+      @case.is_open = true
+      @case.save
+  
+      flash :success, t(:'case/edit/open_case/success')
+      return redirect url("/case/#{@case.id}/view")
+    end
+
+    haml(:'case/edit/reopen', locals: {
+      title: @title,
+      case_obj: @case,
+      case_name: @case_name,
+    })
   end
 end

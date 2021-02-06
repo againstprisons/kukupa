@@ -1,0 +1,16 @@
+.case-reopen{'data-case-id': case_obj.id}
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: url("/case/#{case_obj.id}/view")}
+      %i.fa.fa-chevron-left= ""
+      = t(:'back')
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'case/edit/open_case/section_title')
+    %p= t(:'case/edit/open_case/content', name: case_name)
+
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-check-square= ""
+      = t(:'case/edit/open_case/submit')
