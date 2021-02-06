@@ -33,7 +33,7 @@ class Kukupa::Controllers::SystemMailTemplatesController < Kukupa::Controllers::
         return redirect request.path
       end
 
-      @template = Kukupa::Models::MailTemplate.new(enabled: false)
+      @template = Kukupa::Models::MailTemplate.new(enabled: false).save
       @template.encrypt(:name, @tpl_name)
       @template.encrypt(:content, "<p>Replace this with your template content.</p>")
       @template.save

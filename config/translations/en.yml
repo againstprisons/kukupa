@@ -708,6 +708,7 @@
 :'system/mail_templates/create/section_title': "Create a template"
 :'system/mail_templates/create/template_name': "Template name"
 :'system/mail_templates/create/submit': "Create template"
+:'system/mail_templates/create/success': "Successfully created new mail template!"
 :'system/mail_templates/create/errors/no_name': "No template name was provided."
 :'system/mail_templates/edit/title': "Edit template: <%= e(name) %>"
 :'system/mail_templates/edit/data/section_title': "Template data"
