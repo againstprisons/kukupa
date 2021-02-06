@@ -13,12 +13,14 @@ class Kukupa::Controllers::CaseListTasksController < Kukupa::Controllers::CaseCo
   end
 
   def index
-    @tasks = case_task_list_tasks()
+    @group_by_assignee = request.params['gba'].to_i.positive?
+    @tasks = case_task_list_tasks(group_by_assignee: @group_by_assignee)
 
     @title = t(:'case/list_tasks/title')
     return haml(:'case/list_tasks', :locals => {
       cuser: @user,
       title: @title,
+      group_by_assignee: @group_by_assignee,
       tasks: @tasks,
     })
   end

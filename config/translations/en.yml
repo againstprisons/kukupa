@@ -224,6 +224,8 @@
 
 # Cases - list tasks
 :'case/list_tasks/title': "List open tasks"
+:'case/list_tasks/toggle_by_assignee/on': "Grouping by assignee: on"
+:'case/list_tasks/toggle_by_assignee/off': "Grouping by assignee: off"
 :'case/list_tasks/tasks/section_title': "Open tasks"
 :'case/list_tasks/tasks/content': "Tasks are sorted by the date they were created, oldest first."
 :'case/list_tasks/tasks/no_tasks': "No open tasks."

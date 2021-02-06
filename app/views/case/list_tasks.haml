@@ -5,40 +5,49 @@
     %i.fa.fa-chevron-left= ""
     = t(:'back')
 
-.form-main
-  %h1= t(:'case/list_tasks/tasks/section_title')
+.inline-form
+  %a.pure-button.button{href: "?gba=#{group_by_assignee ? '0' : '1'}"}
+    %i.fa{class: "fa-toggle-#{group_by_assignee ? 'on' : 'off'}"}= ""
+    = t("case/list_tasks/toggle_by_assignee/#{group_by_assignee ? 'on' : 'off'}".to_sym)
 
-  %p= t(:'case/list_tasks/tasks/content')
+- tasks.each do |per_assignee|
+  .form-main
+    - if group_by_assignee
+      %h1
+        &= per_assignee.first[:assigned_to][:name]
 
-  - if tasks.empty?
-    %p= t(:'case/list_tasks/tasks/no_tasks')
+    - else
+      %h1= t(:'case/list_tasks/tasks/section_title')
 
-  %ul.block-list
-    - tasks.each do |task|
-      %li
-        .task-list-meta
-          %ul.inline-list
-            %li
-              = t(:'case/list_tasks/tasks/item/case_name', name: task[:case][:name])
+    - if per_assignee.empty?
+      %p= t(:'case/list_tasks/tasks/no_tasks')
 
-            %li
-              = succeed ': ' do
-                = t(:'case/list_tasks/tasks/item/creation')
-              %span
-                = t(:'case_renderable/creation', ts: task[:creation])
+    %ul.block-list
+      - per_assignee.each do |task|
+        %li
+          .task-list-meta
+            %ul.inline-list
+              %li
+                = t(:'case/list_tasks/tasks/item/case_name', name: task[:case][:name])
 
-            %li
-              %a.case-view-task-editlink{href: task[:edit_url]}
-                %i.fa.fa-gear= ""
-                %span.sr-only
-                  = t(:'case/list_tasks/tasks/item/edit')
+              %li
+                = succeed ': ' do
+                  = t(:'case/list_tasks/tasks/item/creation')
+                %span
+                  = t(:'case_renderable/creation', ts: task[:creation])
 
-            %li
-              %a.case-view-task-editlink{href: "#{task[:case][:url]}##{task[:anchor]}"}
-                %i.fa.fa-external-link= ""
-                %span.sr-only
-                  = t(:'case/list_tasks/tasks/item/view')
+              %li
+                %a.case-view-task-editlink{href: task[:edit_url]}
+                  %i.fa.fa-gear= ""
+                  %span.sr-only
+                    = t(:'case/list_tasks/tasks/item/edit')
 
-        .dashboard-task-content
-          %blockquote
-            = task[:content]
+              %li
+                %a.case-view-task-editlink{href: "#{task[:case][:url]}##{task[:anchor]}"}
+                  %i.fa.fa-external-link= ""
+                  %span.sr-only
+                    = t(:'case/list_tasks/tasks/item/view')
+
+          .dashboard-task-content
+            %blockquote
+              = task[:content]

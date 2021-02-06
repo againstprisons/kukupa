@@ -1,5 +1,11 @@
 module Kukupa::Helpers::CaseListTasksHelpers
+  # This function always returns an array containing arrays of tasks,
+  # by default the return value will only contain a single array with
+  # all tasks in it, but if the :group_by_assignee option is set to true,
+  # the return value will contain a list of tasks per assigned advocate.
   def case_task_list_tasks(opts = {})
+    opts[:group_by_assignee] = false unless opts.key?(:group_by_assignee)
+
     advocates = {}
     cases = {}
 
@@ -52,6 +58,19 @@ module Kukupa::Helpers::CaseListTasksHelpers
       a[:creation] <=> b[:creation]
     end
 
-    tasks
+    if opts[:group_by_assignee]
+      out = []
+
+      advocates.each do |_, v|
+        this = tasks.filter { |t| t[:assigned_to][:id] == v[:id] }
+        unless this.empty?
+          out << this
+        end
+      end
+
+      return out
+    end
+
+    [tasks]
   end
 end
