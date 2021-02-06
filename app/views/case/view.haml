@@ -13,6 +13,11 @@
       %i.fa.fa-warning= ""
       = t(:'case/view/no_reconnect_link')
 
+  - if case_triage_task.nil?
+    .message.message-warning
+      %i.fa.fa-check-square-o= ""
+      = t(:'case/view/no_triage_task', link: url("/case/#{case_obj.id}/edit#triage-task"))
+
   .form-main
     %h1= t(:'case/view/details/section_title')
 

@@ -3,6 +3,43 @@
 
   = haml :'partials/case_header', layout: false, locals: {caseid: case_obj.id}
 
+  - if case_triage_task.nil?
+    .form-main#triage-task
+      %h1= t(:'case/edit/triage_task/section_title')
+      %p= t(:'case/edit/triage_task/content')
+
+      - if case_assigned.empty?
+        .message.message-warning
+          = t(:'case/edit/triage_task/no_assignees')
+
+      - else
+        %ul.block-list
+          - case_assigned.each do |u|
+            %li    
+              %form.block-form{method: 'POST', action: url("/case/#{case_obj.id}/edit/create-triage-task")}
+                %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+                %input{type: 'hidden', name: 'assignee', value: u[:id]}
+
+                %button.pure-button.button{type: 'submit'}
+                  %i.fa.fa-check-square-o= ""
+                  = t(:'case/edit/triage_task/submit')
+                
+                &nbsp;
+                  
+                - if has_role?("case:search")
+                  %a{href: url("/case/search?type=advocate&query=#{u[:id]}"), title: "User[#{u[:id]}]"}><
+                    &= u[:name]
+
+                - else
+                  %span{title: "User[#{ad[:id]}]"}><
+                    &= u[:name]
+                    
+                - if u[:id] == cuser.id
+                  &nbsp;
+                  %span.badge
+                    %i.fa.fa-user-o= ""
+                    = t(:'thats_you')
+
   %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
     %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
     %h1= t(:'case/edit/edit/section_title')

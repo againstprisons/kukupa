@@ -6,6 +6,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
   add_route :post, '/prison', method: :prison
   add_route :post, '/assign', method: :assign
   add_route :post, '/unassign', method: :unassign
+  add_route :post, '/create-triage-task', method: :create_triage_task
 
   include Kukupa::Helpers::CaseHelpers
   include Kukupa::Helpers::ReconnectHelpers
@@ -42,6 +43,8 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
     @case_purpose = @case.purpose
     @reconnect_id = @case.reconnect_id
     @reconnect_data = reconnect_penpal(cid: @reconnect_id) if @reconnect_id.to_i.positive?
+    @case_is_new = @case.creation > Chronic.parse(Kukupa.app_config['case-new-threshold'])
+    @case_triage_task = Kukupa::Models::CaseTask[@case.triage_task]
 
     @assigned = @case.get_assigned_advocates.map do |aa|
       user = Kukupa::Models::User[aa]
@@ -118,6 +121,8 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
         data: @reconnect_data,
         name: @reconnect_data ? @reconnect_data['name']&.compact&.join(' ') : nil,
       },
+      case_is_new: @case_is_new,
+      case_triage_task: @case_triage_task,
       assignable_users: @assignable_users,
       prisons: @prisons,
     })
@@ -212,5 +217,53 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
 
     flash :success, t(:'case/edit/assignees/unassign/success', name: @assignee.decrypt(:name))
     redirect back
+  end
+
+  def create_triage_task(cid)
+    @case = Kukupa::Models::Case[cid]
+    return halt 404 unless @case
+    unless has_role?('case:view_all')
+      return halt 404 unless @case.can_access?(@user)
+    end
+
+    # bail if we already have a triage task
+    unless @case.triage_task.nil?
+      flash :warning, t(:'case/edit/triage_task/errors/already_exists')
+      return redirect back
+    end
+
+    # get the assignee from the query params, bail if the user doesn't exist
+    @assignee = Kukupa::Models::User[request.params['assignee'].to_i]
+    unless @assignee
+      flash :error, t(:'case/edit/triage_task/errors/invalid_user')
+      return redirect back
+    end
+
+    # create the task
+    @task = Kukupa::Models::CaseTask.new(
+      case: @case.id,
+      author: nil,
+      assigned_to: @assignee.id,
+    ).save
+
+    @task.encrypt(:content, t(
+      :'case/edit/triage_task/task_message',
+      force_language: true,
+    ))
+    @task.save
+ 
+    # save the triage task ID on the case
+    @case.triage_task = @task.id
+    @case.save
+
+    # send "new task" email to the assigned advocate for this task
+    @task.send_creation_email!
+
+    flash :success, t(
+      :'case/edit/triage_task/success',
+      name: @assignee.decrypt(:name) || t(:'unknown'),
+    )
+
+    return redirect back
   end
 end

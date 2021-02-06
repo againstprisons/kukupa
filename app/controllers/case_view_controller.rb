@@ -68,6 +68,9 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
     @global_note = @case.decrypt(:global_note)
     @global_note = nil if @global_note&.strip&.empty?
 
+    @case_is_new = @case.creation > Chronic.parse(Kukupa.app_config['case-new-threshold'])
+    @case_triage_task = Kukupa::Models::CaseTask[@case.triage_task]
+
     return haml(:'case/view', :locals => {
       title: @title,
       case_obj: @case,
@@ -76,6 +79,8 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
       case_address: @address,
       case_global_note: @global_note,
       case_purpose: @case.purpose,
+      case_is_new: @case_is_new,
+      case_triage_task: @case_triage_task,
       renderables: @renderables,
       renderable_updates: @renderable_updates,
       renderable_updates_toggle: @renderable_updates_toggle,

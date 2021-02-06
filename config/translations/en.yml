@@ -280,6 +280,7 @@
 :'case/view/title': "Case: <%= e(name) %>"
 :'case/view/no_advocate_assigned': "This case does not have an assigned advocate, so only admins will be able to see it. You can assign an advocate to this case under the \"<%= t(:'case/nav/edit') %>\" section of this case profile."
 :'case/view/no_reconnect_link': "This case is not currently linked to a re:connect profile. Mail functionality will not work."
+:'case/view/no_triage_task': "This case has no initial triage task. <a href=\"<%= e(link) %>\">To create a triage task, click here.</a>"
 :'case/view/details/section_title': "Case details"
 :'case/view/details/address': "Address"
 :'case/view/global_note/section_title': "Case summary"
@@ -514,6 +515,14 @@
 :'case/edit/reconnect/index/sync/content': "The below button will force a re:connect sync, clearing the last sync timestamp. Generally, you shouldn't use this, as <%= e(site_name) %> will sync cases from re:connect every few minutes, but if you need to pull data from re:connect into <%= e(site_name) %> and can't wait for the regular sync schedule, you can force it."
 :'case/edit/reconnect/index/sync/submit': "Force re:connect sync"
 :'case/edit/reconnect/index/sync/success': "Successfully queued sync from re:connect as job ID <code><%= e(jid) %></code>. This sync will start momentarily."
+:'case/edit/triage_task/section_title': "Initial triage task"
+:'case/edit/triage_task/content': "To create a triage task, select an assignee from the list of assigned advocates for this case below."
+:'case/edit/triage_task/no_assignees': "This case has no assigned advocates."
+:'case/edit/triage_task/submit': "Assign triage task"
+:'case/edit/triage_task/success': "Successfully created initial triage task assigned to <%= e(name) %>."
+:'case/edit/triage_task/errors/already_exists': "An initial triage task for this case already exists."
+:'case/edit/triage_task/errors/invalid_user': "An invalid user was provided in the form submission. Please try again."
+:'case/edit/triage_task/task_message': "Please read any new correspondence, and triage this case accordingly. [automatic task]"
 
 # User settings
 :'usersettings/title': "User settings"

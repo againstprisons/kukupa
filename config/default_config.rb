@@ -74,6 +74,10 @@ module Kukupa
       :type => :time_period,
       :default => '10 minutes ago',
     },
+    "case-new-threshold" => {
+      :type => :time_period,
+      :default => '5 days ago',
+    },
   }
 
   APP_CONFIG_DEPRECATED_ENTRIES = {
