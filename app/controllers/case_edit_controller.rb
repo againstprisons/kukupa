@@ -174,9 +174,12 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       return redirect back
     end
 
-    Kukupa::Models::CaseAssignedAdvocate
+    assign = Kukupa::Models::CaseAssignedAdvocate
       .new(case: @case.id, user: @new_assignee.id)
       .save
+
+    # send an email to the assignee telling them they have a new case
+    assign.send_new_assignee_email!
 
     flash :success, t(:'case/edit/assignees/assign/success', name: @new_assignee.decrypt(:name))
     redirect back
