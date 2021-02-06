@@ -11,6 +11,11 @@
       %i.fa.fa-list= ""
       = t(:'case/list/title')
 
+  - if has_role?('case:list:tasks')
+    %a.pure-button.button{href: url('/case/list-tasks')}
+      %i.fa.fa-list= ""
+      = t(:'case/list_tasks/title')
+
 - if has_role?("case:search")
   %form.pure-form.pure-form-stacked.form-main{method: 'GET', action: url('/case/search')}
     %h1= t(:'case/index/search/section_title')

@@ -222,6 +222,16 @@
 :'case/list/sort/assigned/assigned': "Assigned cases"
 :'case/list/sort/assigned/unassigned': "Unassigned cases"
 
+# Cases - list tasks
+:'case/list_tasks/title': "List open tasks"
+:'case/list_tasks/tasks/section_title': "Open tasks"
+:'case/list_tasks/tasks/content': "Tasks are sorted by the date they were created, oldest first."
+:'case/list_tasks/tasks/no_tasks': "No open tasks."
+:'case/list_tasks/tasks/item/case_name': "Task in case for <%= e(name) %>"
+:'case/list_tasks/tasks/item/creation': "Created"
+:'case/list_tasks/tasks/item/edit': "Edit task"
+:'case/list_tasks/tasks/item/view': "View case"
+
 # Cases - search
 :'case/search/title': "Search results"
 :'case/search/section_title': "Search results"

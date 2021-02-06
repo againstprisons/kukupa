@@ -1,0 +1,44 @@
+%h1= title
+
+.inline-form
+  %a.pure-button.button{href: url('/case')}
+    %i.fa.fa-chevron-left= ""
+    = t(:'back')
+
+.form-main
+  %h1= t(:'case/list_tasks/tasks/section_title')
+
+  %p= t(:'case/list_tasks/tasks/content')
+
+  - if tasks.empty?
+    %p= t(:'case/list_tasks/tasks/no_tasks')
+
+  %ul.block-list
+    - tasks.each do |task|
+      %li
+        .task-list-meta
+          %ul.inline-list
+            %li
+              = t(:'case/list_tasks/tasks/item/case_name', name: task[:case][:name])
+
+            %li
+              = succeed ': ' do
+                = t(:'case/list_tasks/tasks/item/creation')
+              %span
+                = t(:'case_renderable/creation', ts: task[:creation])
+
+            %li
+              %a.case-view-task-editlink{href: task[:edit_url]}
+                %i.fa.fa-gear= ""
+                %span.sr-only
+                  = t(:'case/list_tasks/tasks/item/edit')
+
+            %li
+              %a.case-view-task-editlink{href: "#{task[:case][:url]}##{task[:anchor]}"}
+                %i.fa.fa-external-link= ""
+                %span.sr-only
+                  = t(:'case/list_tasks/tasks/item/view')
+
+        .dashboard-task-content
+          %blockquote
+            = task[:content]
