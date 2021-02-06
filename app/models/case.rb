@@ -1,4 +1,6 @@
 class Kukupa::Models::Case < Sequel::Model
+  ALLOWED_PURPOSES = %w[advocacy ppc]
+
   def self.assigned_to(user)
     user = user.id if user.respond_to?(:id)
 

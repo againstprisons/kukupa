@@ -17,6 +17,13 @@
     %h1= t(:'case/view/details/section_title')
 
     %ul
+      - if case_purpose
+        %li
+          = succeed ': ' do
+            = t(:'case_purpose')
+          %span
+            = t("case_purpose/#{case_purpose}".to_sym)
+
       - if case_prison
         %li
           = succeed ': ' do

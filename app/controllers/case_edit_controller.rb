@@ -39,6 +39,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
     @release_date = @case.decrypt(:release_date)
     @release_date = Chronic.parse(@release_date, guess: true) if @release_date
     @global_note = @case.decrypt(:global_note)
+    @case_purpose = @case.purpose
     @reconnect_id = @case.reconnect_id
     @reconnect_data = reconnect_penpal(cid: @reconnect_id) if @reconnect_id.to_i.positive?
 
@@ -66,8 +67,14 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       @release_date = Chronic.parse(request.params['release_date']&.strip, guess: true)
       @global_note = request.params['global_note']&.strip
       @global_note = Sanitize.fragment(@global_note, Sanitize::Config::RELAXED)
+      @case_purpose = request.params['purpose']&.strip&.downcase
 
       if @first_name.nil? || @last_name.nil?
+        flash :error, t(:'case/edit/edit/errors/missing_required')
+        return redirect request.path
+      end
+
+      unless Kukupa::Models::Case::ALLOWED_PURPOSES.include?(@case_purpose)
         flash :error, t(:'case/edit/edit/errors/missing_required')
         return redirect request.path
       end
@@ -79,6 +86,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       @case.encrypt(:birth_date, @birth_date&.strftime('%Y-%m-%d'))
       @case.encrypt(:release_date, @release_date&.strftime('%Y-%m-%d'))
       @case.encrypt(:global_note, @global_note)
+      @case.purpose = @case_purpose
       @case.save
 
       Kukupa::Models::CaseFilter.clear_filters_for(@case)
@@ -103,6 +111,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
         birth_date: @birth_date,
         release_date: @release_date,
         global_note: @global_note,
+        case_purpose: @case_purpose,
       },
       case_reconnect: {
         id: @reconnect_id,

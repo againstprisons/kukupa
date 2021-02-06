@@ -75,6 +75,7 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
       case_prison: @prison,
       case_address: @address,
       case_global_note: @global_note,
+      case_purpose: @case.purpose,
       renderables: @renderables,
       renderable_updates: @renderable_updates,
       renderable_updates_toggle: @renderable_updates_toggle,
