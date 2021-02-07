@@ -8,6 +8,14 @@ module Kukupa::Helpers::NavbarHelpers
       selected: current_prefix?('/case'),
     }
 
+    if has_role?('case:assignable')
+      items << {
+        :link => url('/prison-assignees'),
+        :text => t(:'prison_signup/title'),
+        :selected => current_prefix?('/prison-assignees'),
+      }
+    end
+
     if has_role?('system:access')
       items << {
         :link => url('/system'),

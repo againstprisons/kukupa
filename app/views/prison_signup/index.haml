@@ -1,0 +1,47 @@
+.prison-signup
+  %h1= title
+
+  - if prisons.empty?
+    .message.message-warning
+      %i.fa.fa-warning= ""
+      = t(:'prison_signup/prisons/no_prisons')
+    
+  - prisons.each do |pr|
+    .form-main
+      %h1
+        &= pr[:name]
+
+      %ul
+        - pr[:assignees].each do |u|
+          %li
+            - if has_role?("case:search")
+              %a{href: url("/case/search?type=advocate&query=#{u[:id]}"), title: "User[#{u[:id]}]"}><
+                &= u[:name]
+
+            - else
+              %span{title: "User[#{ad[:id]}]"}><
+                &= u[:name]
+
+            - if u[:id] == cuser.id
+              &nbsp;
+              %span.badge
+                %i.fa.fa-user-o= ""
+                = t(:'thats_you')
+
+      - if pr[:self_assigned]
+        %form{method: 'POST', action: url("/prison-assignees/unassign")}
+          %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+          %input{type: 'hidden', name: 'prison', value: pr[:id]}
+
+          %button.pure-button.button{type: 'submit'}
+            %i.fa.fa-square-o= ""
+            = t(:'prison_signup/prisons/item/unassign_self')
+
+      - else
+        %form{method: 'POST', action: url("/prison-assignees/assign")}
+          %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+          %input{type: 'hidden', name: 'prison', value: pr[:id]}
+
+          %button.pure-button.button{type: 'submit'}
+            %i.fa.fa-check-square-o= ""
+            = t(:'prison_signup/prisons/item/assign_self')

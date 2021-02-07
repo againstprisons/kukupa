@@ -66,6 +66,9 @@ controllers:
   - path: /case
     controller: CaseIndexController
 
+  - path: /prison-assignees
+    controller: PrisonAssigneesController
+
   - path: /system/debug
     controller: SystemDebugController
   - path: /system/mailtemplates

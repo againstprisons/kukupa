@@ -536,6 +536,16 @@
 :'case/edit/open_case/submit': "Re-open case"
 :'case/edit/open_case/success': "Successfully re-opened the case."
 
+# Prison assignee list
+:'prison_signup/title': "Prison assignees"
+:'prison_signup/prisons/section_title': "Available prisons"
+:'prison_signup/prisons/no_prisons': "No prisons were found."
+:'prison_signup/prisons/item/assign_self': "Assign myself to this prison"
+:'prison_signup/prisons/item/unassign_self': "Unassign myself from this prison"
+:'prison_signup/assign_self/success': "Successfully assigned yourself to the prison <%= e(name) %>."
+:'prison_signup/assign_self/errors/already_assigned': "You are already assigned to this prison!"
+:'prison_signup/unassign_self/success': "Successfully unassigned yourself from the prison <%= e(name) %>."
+
 # User settings
 :'usersettings/title': "User settings"
 :'usersettings/change_name/section_title': "Change your name"
