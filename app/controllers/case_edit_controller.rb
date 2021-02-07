@@ -75,8 +75,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
         id: user.id,
         name: user.decrypt(:name),
       }
-    end
-    @suggested_advocates.compact!
+    end.compact
 
     if request.post?
       @first_name = request.params['first_name']&.strip
