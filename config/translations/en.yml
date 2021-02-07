@@ -481,6 +481,8 @@
 :'case/edit/assignees/unassign/success': "Successfully unassigned advocate <%= e(name) %> from this case."
 :'case/edit/assignees/unassign/errors/invalid_user': "The form submission included an advocate that does not exist or is not assigned to this case. Please try again."
 :'case/edit/assignees/assign/section_title': "Assign a new advocate"
+:'case/edit/assignees/assign/suggested': "Suggested advocates (those assigned to this case's prison)"
+:'case/edit/assignees/assign/suggested/submit': "Assign"
 :'case/edit/assignees/assign/assignee_field': "Choose advocate to assign"
 :'case/edit/assignees/assign/item_disabled/already_assigned': "already assigned"
 :'case/edit/assignees/assign/item_disabled/case_limit': "at case load limit"

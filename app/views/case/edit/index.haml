@@ -137,29 +137,46 @@
                     = t(:'thats_you')
 
   - if has_role?('case:assignees:assign')
-    %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: url("/case/#{case_obj.id}/edit/assign")}
-      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    .form-main
       %h1= t(:'case/edit/assignees/assign/section_title')
 
-      %label{for: 'assignee'}= t(:'case/edit/assignees/assign/assignee_field')
-      %select#assignee{name: 'assignee', required: true}
-        - assigned_ids = case_assigned.map { |x| x[:id] }
-        - assignable_users.each do |u|
-          - u_disabled = assigned_ids.include?(u[:id]) || u[:is_at_case_limit]
-          %option{value: u[:id], disabled: u_disabled}
-            &= u[:name] || "User ID #{u[:id]}"
+      - if assignable_suggested.count.positive?
+        %strong= t(:'case/edit/assignees/assign/suggested')
+        %ul.block-list
+          - assignable_suggested.each do |u|
+            %li
+              %form.block-form{method: 'POST', action: url("/case/#{case_obj.id}/edit/assign")}
+                %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+                %input{type: 'hidden', name: 'assignee', value: u[:id]}
+                %button.pure-button.button{type: 'submit'}
+                  %i.fa.fa-check-square-o= ""
+                  = t(:'case/edit/assignees/assign/suggested/submit')
 
-            - if assigned_ids.include?(u[:id])
-              = surround ' [', '] ' do
-                = t(:'case/edit/assignees/assign/item_disabled/already_assigned')
+                %span
+                  &= u[:name]
 
-            - if u[:is_at_case_limit]
-              = surround ' [', '] ' do
-                = t(:'case/edit/assignees/assign/item_disabled/case_limit')
+      %form.pure-form.pure-form-stacked{method: 'POST', action: url("/case/#{case_obj.id}/edit/assign")}
+        %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
 
-      %button.pure-button.button.button-primary{type: 'submit'}
-        %i.fa.fa-user-o= ""
-        = t(:'case/edit/assignees/assign/submit')
+        %label{for: 'assignee'}= t(:'case/edit/assignees/assign/assignee_field')
+        %select#assignee{name: 'assignee', required: true}
+          - assigned_ids = case_assigned.map { |x| x[:id] }
+          - assignable_users.each do |u|
+            - u_disabled = assigned_ids.include?(u[:id]) || u[:is_at_case_limit]
+            %option{value: u[:id], disabled: u_disabled}
+              &= u[:name] || "User ID #{u[:id]}"
+
+              - if assigned_ids.include?(u[:id])
+                = surround ' [', '] ' do
+                  = t(:'case/edit/assignees/assign/item_disabled/already_assigned')
+
+              - if u[:is_at_case_limit]
+                = surround ' [', '] ' do
+                  = t(:'case/edit/assignees/assign/item_disabled/case_limit')
+
+        %button.pure-button.button.button-primary{type: 'submit'}
+          %i.fa.fa-user-o= ""
+          = t(:'case/edit/assignees/assign/submit')
 
   .form-main
     %h1= t(:'case/edit/reconnect/section_title')

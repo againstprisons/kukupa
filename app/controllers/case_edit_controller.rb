@@ -60,6 +60,24 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       }
     end.compact
 
+    @suggested_advocates = Kukupa::Models::PrisonAssignee.where(prison: @prison.id).map do |pa|
+      user = Kukupa::Models::User[pa.user]
+      next nil unless user
+
+      is_assigned = @assigned
+        .filter { |u| u[:id] == user.id }
+        .count
+        .positive?
+
+      next nil if is_assigned
+
+      {
+        id: user.id,
+        name: user.decrypt(:name),
+      }
+    end
+    @suggested_advocates.compact!
+
     if request.post?
       @first_name = request.params['first_name']&.strip
       @first_name = nil if @first_name&.empty?
@@ -127,6 +145,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       case_is_new: @case_is_new,
       case_triage_task: @case_triage_task,
       assignable_users: @assignable_users,
+      assignable_suggested: @suggested_advocates,
       prisons: @prisons,
     })
   end
