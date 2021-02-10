@@ -1,0 +1,38 @@
+.system-admin-rolegroups-edit{:'data-role-group-id' => group.id}
+  %h1= title
+
+  .inline-form 
+    %a.pure-button.button{href: url("/system/roles/groups")}
+      %i.fa.fa-chevron-left= ""
+      = t(:'back')
+
+  .form-main
+    %h1= t(:'system/roles/groups/edit/existing/section_title')
+
+    %ul.block-list
+      - if group_roles.empty?
+        %li= t(:'system/roles/groups/edit/existing/no_roles')
+
+      - group_roles.each do |rgr|
+        %li
+          %code
+            &= rgr.role
+
+          %form.block-form{method: 'POST', action: url("/system/roles/groups/#{group[:id]}/-/role/delete")}
+            %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+            %input{type: 'hidden', name: 'rgr', value: rgr.id}
+
+            %button.pure-button.button.button-error{type: 'submit'}
+              %i.fa.fa-times= ""
+              = t(:'system/roles/groups/edit/existing/item/actions/remove')
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: url("/system/roles/groups/#{group[:id]}/-/role/add")}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'system/roles/groups/edit/add/section_title')
+
+    %label{for: 'role-add'}= t(:'system/roles/groups/edit/add/role')
+    %input#role-add{type: 'text', name: 'role', required: true, placeholder: t(:'system/roles/groups/edit/add/role')}
+
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-plus= ""
+      = t(:'system/roles/groups/edit/add/submit')

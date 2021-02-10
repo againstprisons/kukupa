@@ -1,6 +1,11 @@
 #system-admin-roles-index
   %h1= title
 
+  .inline-form
+    %a.pure-button.button{href: url("/system/roles/groups")}
+      %i.fa.fa-list= ""
+      = t(:'system/roles/groups/title')
+
   .pure-g
     .pure-u-1.pure-u-md-1-2
       %form.pure-form.pure-form-stacked.form-main.x-margin{method: "GET", action: url('/system/roles/search')}

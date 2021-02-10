@@ -2,6 +2,7 @@ require 'addressable'
 
 class Kukupa::Models::User < Sequel::Model
   one_to_many :user_roles
+  one_to_many :role_group_users
   one_to_many :tokens
 
   def case_count

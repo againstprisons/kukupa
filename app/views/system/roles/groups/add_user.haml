@@ -1,0 +1,18 @@
+.system-admin-rolegroups-adduser{:'data-role-group-id' => group.id}
+  %h1= title
+
+  .inline-form 
+    %a.pure-button.button{href: url("/system/roles/groups")}
+      %i.fa.fa-chevron-left= ""
+      = t(:'back')
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'system/roles/groups/add_user/section_title')
+
+    %label{for: 'user'}= t(:'system/roles/groups/add_user/user_id')
+    %input#user{type: 'number', name: 'user', required: true, placeholder: t(:'system/roles/groups/add_user/user_id')}
+
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-user-plus= ""
+      = t(:'system/roles/groups/add_user/submit')

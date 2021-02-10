@@ -67,10 +67,10 @@ module Kukupa::Helpers::UserHelpers
 
     user_roles = [
       user.user_roles.map(&:role),
-      # user.user_groups.map do |ug|
-      #   ug.group.group_roles.map(&:role)
-      # end,
-    ].flatten
+      user.role_group_users.map do |ug|
+        ug.role_group.role_group_roles.map(&:role)
+      end,
+    ].flatten.compact
 
     if role_matches?(role, user_roles, :reject => true)
       return false

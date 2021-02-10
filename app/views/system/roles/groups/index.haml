@@ -1,0 +1,43 @@
+#system-admin-rolegroups-index
+  %h1= title
+
+  .inline-form 
+    %a.pure-button.button{href: url("/system/roles")}
+      %i.fa.fa-chevron-left= ""
+      = t(:'back')
+
+  .form-main
+    %h1= t(:'system/roles/groups/list/section_title')
+
+    %ul.block-list
+      - groups.each do |gr|
+        %li
+          %strong
+            &= gr[:name]
+
+          %ul.block-list
+            - gr[:users].each do |user|
+              %li
+                %form.inline-form{method: 'POST', action: url("/system/roles/groups/#{gr[:id]}/-/user/delete")}
+                  %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+                  %input{type: 'hidden', name: 'rgu', value: user[:rgu]}
+
+                  %button.pure-button.button.button-error{type: 'submit'}
+                    %i.fa.fa-user-times= ""
+                    %span.sr-only
+                      = t(:'system/roles/groups/list/item/actions/remove_user')
+
+                %span
+                  &= user[:name]
+                
+                = surround ' (', ') ' do
+                  &= "ID #{user[:id]}"
+
+          .block-form 
+            %a.pure-button.button{href: url("/system/roles/groups/#{gr[:id]}")}
+              %i.fa.fa-pencil= ""
+              = t(:'system/roles/groups/list/item/actions/modify')
+
+            %a.pure-button.button{href: url("/system/roles/groups/#{gr[:id]}/-/user/add")}
+              %i.fa.fa-user-plus= ""
+              = t(:'system/roles/groups/list/item/actions/add_user')

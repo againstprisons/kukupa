@@ -79,6 +79,8 @@ controllers:
     controller: SystemWorkerController
   - path: /system/apikey
     controller: SystemApiKeyController
+  - path: /system/roles/groups
+    controller: SystemRoleGroupsController
   - path: /system/roles
     controller: SystemRolesController
   - path: /system/config
