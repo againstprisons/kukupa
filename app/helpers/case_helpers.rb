@@ -17,10 +17,24 @@ module Kukupa::Helpers::CaseHelpers
   def case_assignable_users
     uids = []
 
-    # all users with `case:*` or `case:assignable` roles
-    uids << Kukupa::Models::UserRole.where(role: "*").map(&:user_id).to_a
-    uids << Kukupa::Models::UserRole.where(role: "case:*").map(&:user_id).to_a
-    uids << Kukupa::Models::UserRole.where(role: "case:assignable").map(&:user_id).to_a
+    roles = ['*', 'case:*', 'case:assignable' ]
+
+    roles.each do |role|
+      # user-specific roles
+      uids << Kukupa::Models::UserRole
+        .where(role: role)
+        .map(&:user_id)
+        .to_a
+
+      # user role groups
+      uids << Kukupa::Models::RoleGroupRole
+        .where(role: role)
+        .map(&:role_group)
+        .map(&:role_group_users)
+        .flatten
+        .map(&:user_id)
+        .to_a
+    end
 
     # get user objects
     advocates = {}
