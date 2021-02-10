@@ -60,7 +60,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       }
     end.compact
 
-    @suggested_advocates = Kukupa::Models::PrisonAssignee.where(prison: @prison.id).map do |pa|
+    @suggested_advocates = Kukupa::Models::PrisonAssignee.where(prison: @prison&.id).map do |pa|
       user = Kukupa::Models::User[pa.user]
       next nil unless user
 
