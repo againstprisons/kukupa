@@ -19,6 +19,7 @@
 
 # Fields
 :'user_id': "User ID"
+:'case_id': "Case ID"
 :'email_address': "Email address"
 :'email_address/current': "Current email address"
 :'email_address/new': "New email address"

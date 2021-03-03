@@ -27,6 +27,12 @@
     %h1= t(:'case/view/details/section_title')
 
     %ul
+      %li
+        = succeed ': ' do
+          = t(:'case_id')
+        %span
+          &= case_obj.id
+
       - if case_purpose
         %li
           = succeed ': ' do
