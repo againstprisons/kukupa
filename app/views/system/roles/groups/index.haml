@@ -6,6 +6,17 @@
       %i.fa.fa-chevron-left= ""
       = t(:'back')
 
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: url("/system/roles/groups/-/create")}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'system/roles/groups/create/section_title')
+
+    %label{for: 'role_group_name'}= t(:'system/roles/groups/create/name')
+    %input#role_group_name{type: 'text', name: 'name', required: true, placeholder: t(:'system/roles/groups/create/name')}
+
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-plus= ""
+      = t(:'system/roles/groups/create/submit')
+
   .form-main
     %h1= t(:'system/roles/groups/list/section_title')
 

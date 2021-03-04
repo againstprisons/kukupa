@@ -1,5 +1,6 @@
 class Kukupa::Controllers::SystemRoleGroupsController < Kukupa::Controllers::SystemController
   add_route :get, '/'
+  add_route :post, '/-/create', method: :create
   add_route :get, '/:rgid', method: :edit
   add_route :post, '/:rgid/-/role/add', method: :role_add
   add_route :post, '/:rgid/-/role/delete', method: :role_delete
@@ -38,6 +39,20 @@ class Kukupa::Controllers::SystemRoleGroupsController < Kukupa::Controllers::Sys
         groups: @groups,
       })
     end
+  end
+
+  def create
+    @name = request.params['name']&.strip
+    @name = nil if @name&.empty?
+    unless @name
+      flash :error, t(:'required_field_missing')
+      return redirect back
+    end
+
+    @group = Kukupa::Models::RoleGroup.new(name: @name).save
+
+    flash :success, t(:'system/roles/groups/create/success')
+    return redirect url("/system/roles/groups/#{@group.id}")
   end
 
   def edit(rgid)
