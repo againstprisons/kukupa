@@ -61,6 +61,8 @@
 :'case_purpose': "Case purpose"
 :'case_purpose/advocacy': "Advocacy"
 :'case_purpose/ppc': "Prisoner Political Committee"
+:'tag/coordinator': "Advocacy coordinator"
+:'tag/advocate': "Advocacy volunteer"
 
 # Some generic stuff
 :'required_field_missing': "A required field was not provided."

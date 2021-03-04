@@ -57,6 +57,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
         obj: user,
         id: user.id,
         name: user.decrypt(:name),
+        tags: user.roles.map{|r| /tag\:(\w+)/.match(r)&.[](1)}.compact.uniq,
       }
     end.compact
 
@@ -74,6 +75,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       {
         id: user.id,
         name: user.decrypt(:name),
+        tags: user.roles.map{|r| /tag\:(\w+)/.match(r)&.[](1)}.compact.uniq,
       }
     end.compact
 

@@ -8,6 +8,7 @@ module Kukupa::Helpers::CaseHelpers
         name: adv&.decrypt(:name) || t(:'unknown'),
         me: logged_in?() ? current_user.id == adv&.id : false,
         is_at_case_limit: adv&.is_at_case_limit?,
+        tags: adv&.roles&.map{|r| /tag\:(\w+)/.match(r)&.[](1)}&.compact&.uniq || [],
       }
     end
 

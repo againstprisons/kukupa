@@ -129,7 +129,12 @@
                 - else
                   %span{title: "User[#{ad[:id]}]"}><
                     &= u[:name]
-                    
+
+                - unless u[:tags].empty?
+                  %span
+                    = surround ' (', ') ' do
+                      = u[:tags].map{|t| t("tag/#{t}".to_sym)}.join(', ')
+
                 - if u[:id] == cuser.id
                   &nbsp;
                   %span.badge
@@ -155,6 +160,11 @@
                 %span
                   &= u[:name]
 
+                - unless u[:tags].empty?
+                  %span
+                    = surround ' (', ') ' do
+                      = u[:tags].map{|t| t("tag/#{t}".to_sym)}.join(', ')
+
       %form.pure-form.pure-form-stacked{method: 'POST', action: url("/case/#{case_obj.id}/edit/assign")}
         %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
 
@@ -165,6 +175,10 @@
             - u_disabled = assigned_ids.include?(u[:id]) || u[:is_at_case_limit]
             %option{value: u[:id], disabled: u_disabled}
               &= u[:name] || "User ID #{u[:id]}"
+
+              - unless u[:tags].empty?
+                = surround ' (', ') ' do
+                  = u[:tags].map{|t| t("tag/#{t}".to_sym)}.join(', ')
 
               - if assigned_ids.include?(u[:id])
                 = surround ' [', '] ' do

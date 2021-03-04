@@ -18,11 +18,11 @@
     %select#assignee{name: 'assignee', required: true}
       - case_accessors.each do |u|
         %option{value: u[:id], selected: u[:me]}
-          &= u[:name]
+          &= u[:name] || "User ID #{u[:id]}"
 
-          = surround ' (', ') ' do
-            ID
-            &= u[:id]
+          - unless u[:tags].empty?
+            = surround ' (', ') ' do
+              = u[:tags].map{|t| t("tag/#{t}".to_sym)}.join(', ')
 
     %button.pure-button.button.button-primary{type: 'submit'}
       %i.fa.fa-pencil-square-o= ""
