@@ -2,7 +2,7 @@ module Kukupa::Helpers::UserHelpers
   def current_token
     return nil unless session.key?(:token)
 
-    t = Kukupa::Models::Token.where(token: session[:token], :use => 'session').first
+    t = Kukupa::Models::Token.where(token: session[:token], use: 'session').first
     return nil unless t
     return nil unless t.check_validity!
 
