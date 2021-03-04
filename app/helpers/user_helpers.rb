@@ -29,53 +29,10 @@ module Kukupa::Helpers::UserHelpers
     u.email
   end
 
-  def role_matches?(query, maybe_matches, opts = {})
-    if opts[:reject]
-      maybe_matches = maybe_matches.map do |m|
-        next nil unless m.start_with?("!")
-        m[1..-1]
-      end.compact
-    end
-
-    query_parts = query.split(':')
-    maybe_parts = maybe_matches.map{|x| x.split(':')}
-
-    maybe_parts.each do |rp|
-      skip = false
-      oksofar = true
-
-      rp.each_index do |rpi|
-        next if skip
-
-        if oksofar && rp[rpi] == '*'
-          return true
-        elsif rp[rpi] != query_parts[rpi]
-          oksofar = false
-          skip = true
-        end
-      end
-
-      return true if oksofar
-    end
-
-    false
-  end
-
+  # TODO: migrate all uses of this method to directly use User#has_role?
+  # and remove this method
   def has_role?(role, opts = {})
     user = opts[:user] || current_user
-    return false unless user
-
-    user_roles = [
-      user.user_roles.map(&:role),
-      user.role_group_users.map do |ug|
-        ug.role_group.role_group_roles.map(&:role)
-      end,
-    ].flatten.compact
-
-    if role_matches?(role, user_roles, :reject => true)
-      return false
-    end
-
-    return role_matches?(role, user_roles)
+    user&.has_role?(role, opts) || false
   end
 end

@@ -5,6 +5,56 @@ class Kukupa::Models::User < Sequel::Model
   one_to_many :role_group_users
   one_to_many :tokens
 
+  def self.role_matches?(query, maybe_matches, opts = {})
+    if opts[:reject]
+      maybe_matches = maybe_matches.map do |m|
+        next nil unless m.start_with?("!")
+        m[1..-1]
+      end.compact
+    end
+
+    query_parts = query.split(':')
+    maybe_parts = maybe_matches.map{|x| x.split(':')}
+
+    maybe_parts.each do |rp|
+      skip = false
+      oksofar = true
+
+      rp.each_index do |rpi|
+        next if skip
+
+        if oksofar && rp[rpi] == '*'
+          return true
+        elsif rp[rpi] != query_parts[rpi]
+          oksofar = false
+          skip = true
+        end
+      end
+
+      return true if oksofar
+    end
+
+    false
+  end
+
+  def roles
+    [
+      self.user_roles.map(&:role),
+      self.role_group_users.map do |ug|
+        ug.role_group.role_group_roles.map(&:role)
+      end,
+    ].flatten.compact
+  end
+
+  def has_role?(role, opts = {})
+    user_roles = self.roles
+    if self.class.role_matches?(role, user_roles, :reject => true)
+      return false
+    end
+
+    return self.class.role_matches?(role, user_roles)
+  end
+
   def case_count
     Kukupa::Models::CaseAssignedAdvocate
       .where(user: self.id)
