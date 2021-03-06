@@ -1,0 +1,9 @@
+.midsplash-container
+  .midsplash.login-sso-wrong-provider-error
+    %h1= title
+    %p= t(:'auth/sso/errors/wrong_provider/content/one')
+    %p= t(:'auth/sso/errors/wrong_provider/content/two')
+
+    %a.pure-button.button.button-warning{href: url('/auth')}
+      %i.fa.fa-chevron-left= ""
+      = t(:'auth/sso/return')

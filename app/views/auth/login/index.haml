@@ -1,26 +1,34 @@
 .midsplash-container
   .midsplash.login-index
-    %h1= title
+    .pure-g
+      .pure-u-1.pure-u-md-1-2
+        %form.pure-form.pure-form-stacked.form-main.x-margin{method: 'POST'}
+          %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+          %h1= title
 
-    %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
-      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+          %label{for: 'email'}= t(:'email_address')
+          %input#email{name: 'email', type: 'email', required: true, placeholder: t(:'email_address')}
 
-      %label{for: 'email'}= t(:'email_address')
-      %input#email{name: 'email', type: 'email', required: true, placeholder: t(:'email_address')}
+          %label{for: 'password'}= t(:'password')
+          %input#password{name: 'password', type: 'password', required: true, placeholder: t(:'password')}
 
-      %label{for: 'password'}= t(:'password')
-      %input#password{name: 'password', type: 'password', required: true, placeholder: t(:'password')}
+          %button.pure-button.button.button-primary{type: 'submit'}
+            %i.fa.fa-sign-in= ""
+            = t(:'auth/login/submit')
 
-      %button.pure-button.button.button-primary{type: 'submit'}
-        %i.fa.fa-sign-in= ""
-        = t(:'auth/login/submit')
+      .pure-u-1.pure-u-md-1-2
+        .form-main.x-margin
+          %h1= t(:'auth/login/actions/title')
 
-    .page-footer.page-footer--pad
-      %span
-        %a{href: url('/auth/reset')}
-          = t(:'auth/login/to_reset')
+          - if sso_enabled
+            %a.pure-button.button{href: url('/auth/sso')}
+              %i.fa.fa-fw.fa-key= ""
+              = t(:'auth/login/actions/sso_auth')
 
-    .page-footer
-      %span
-        %a{href: url('/auth/signup')}
-          = t(:'auth/login/to_signup')
+          %a.pure-button.button{href: url('/auth/reset')}
+            %i.fa.fa-fw.fa-envelope-o= ""
+            = t(:'auth/login/actions/password_reset')
+
+          %a.pure-button.button{href: url('/auth/signup')}
+            %i.fa.fa-fw.fa-id-card-o= ""
+            = t(:'auth/login/actions/signup')

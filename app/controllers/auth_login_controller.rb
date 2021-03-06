@@ -1,18 +1,21 @@
 class Kukupa::Controllers::AuthLoginController < Kukupa::Controllers::ApplicationController
+  include Kukupa::Helpers::AuthProviderHelpers
+
   add_route :get, "/"
   add_route :post, "/"
 
   def index
-    return redirect "/" if logged_in?
-    if !request.params["next"].nil?
-      session[:after_login] = request.params["next"]
-    end
+    @next = request.params['next']&.strip
+    @next = url("/") if @next.nil? || @next&.empty?
+    return redirect url(@next) if logged_in?
+    session[:after_login] = @next
 
     @title = t(:'auth/login/title')
 
     if request.get?
       return haml(:'auth/login/index', locals: {
         :title => @title,
+        :sso_enabled => auth_providers_count.positive?,
       })
     end
 
@@ -36,6 +39,12 @@ class Kukupa::Controllers::AuthLoginController < Kukupa::Controllers::Applicatio
     unless user
       flash :error, t(:'auth/login/errors/invalid')
       return redirect request.path
+    end
+
+    # check for SSO
+    unless user.sso_method.nil?
+      flash :error, t(:'auth/login/errors/must_use_sso')
+      return redirect request.path 
     end
 
     # check password confirmation

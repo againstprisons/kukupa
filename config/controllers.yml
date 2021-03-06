@@ -13,6 +13,10 @@ controllers:
     controller: AuthLogoutController
   - path: /auth/mfa/totp
     controller: AuthMfaTotpController
+  - path: /auth/sso/magenta
+    controller: AuthSsoMagentaController
+  - path: /auth/sso
+    controller: AuthSsoController
   - path: /auth
     controller: AuthLoginController
 

@@ -1,0 +1,13 @@
+.midsplash-container
+  .midsplash.login-sso-generic-error
+    %h1= title
+    %p= t(:'auth/sso/errors/generic/content')
+
+    - if provider
+      %a.pure-button.button.button-primary{href: provider.begin_url}
+        %i.fa.fa-sign-in= ""
+        = t(:'auth/sso/errors/generic/retry', provider: provider.friendly_name)
+
+    %a.pure-button.button.button-warning{href: url('/auth')}
+      %i.fa.fa-chevron-left= ""
+      = t(:'auth/sso/return')

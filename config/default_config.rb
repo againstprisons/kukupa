@@ -78,6 +78,10 @@ module Kukupa
       :type => :time_period,
       :default => '5 days ago',
     },
+    "magenta-providers" => {
+      :type => :json,
+      :default => '[]',
+    },
   }
 
   APP_CONFIG_DEPRECATED_ENTRIES = {

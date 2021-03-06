@@ -1,4 +1,6 @@
 class Kukupa::Controllers::UserSettingsController < Kukupa::Controllers::ApplicationController
+  include Kukupa::Helpers::AuthProviderHelpers
+
   add_route :get, "/"
   add_route :post, "/change-name", method: :change_name
   add_route :post, "/change-email", method: :change_email
@@ -8,6 +10,13 @@ class Kukupa::Controllers::UserSettingsController < Kukupa::Controllers::Applica
   def before
     return halt 404 unless logged_in?
     @user = current_user
+    unless @user.sso_method.nil?
+      ptype, pname = @user.sso_method&.split(':', 2)
+      @user_sso_provider = auth_providers(filter_type: ptype.to_sym)
+        .filter {|_, prv| prv.name == pname}
+        .first
+        .last
+    end
   end
 
   def index
@@ -22,12 +31,20 @@ class Kukupa::Controllers::UserSettingsController < Kukupa::Controllers::Applica
           email: @user.email,
           case_count: @user.case_count,
           case_load_limit: @user.case_load_limit,
+          is_sso: !@user.sso_method.nil?(),
+          sso_provider: @user_sso_provider,
+          sso_identifier: [@user.sso_method, @user.sso_external_id].join("#"),
         }
       }
     end
   end
 
   def change_name
+    unless @user.sso_method.nil?
+      flash :error, t(:'usersettings/sso_provided/errors/cant_change')
+      return redirect url("/user")
+    end
+
     @name = request.params['name']&.strip
     @name = nil if @name&.empty?
 
@@ -44,6 +61,11 @@ class Kukupa::Controllers::UserSettingsController < Kukupa::Controllers::Applica
   end
 
   def change_email
+    unless @user.sso_method.nil?
+      flash :error, t(:'usersettings/sso_provided/errors/cant_change')
+      return redirect url("/user")
+    end
+
     @email = request.params['email']&.strip&.downcase
     @email = nil if @email&.empty?
 
@@ -65,6 +87,11 @@ class Kukupa::Controllers::UserSettingsController < Kukupa::Controllers::Applica
   end
 
   def change_password
+    unless @user.sso_method.nil?
+      flash :error, t(:'usersettings/sso_provided/errors/cant_change')
+      return redirect url("/user")
+    end
+
     unless @user.password_correct?(request.params['password'])
       flash :error, t(:'usersettings/change_password/errors/invalid_password')
       return redirect url("/user")

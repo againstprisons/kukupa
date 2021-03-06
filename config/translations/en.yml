@@ -152,8 +152,25 @@
 :'auth/login/success': "Welcome<% unless user_name.nil? %>, <%= e(user_name) %><% end %>! You have successfully logged in."
 :'auth/login/success_recovery': "Welcome<% unless user_name.nil? %>, <%= e(user_name) %><% end %>! You have logged in with a recovery code, so we have redirected you to the multi-factor authentication settings, to allow you to fix your MFA setup."
 :'auth/login/errors/invalid': "Invalid email address or password."
-:'auth/login/to_signup': "Have an invite code? Sign up here."
-:'auth/login/to_reset': "Forgot your password?"
+:'auth/login/errors/must_use_sso': "You must use single-sign-on to log in to your <%= e(site_name) %> account. To proceed, click the \"<%= t(:'auth/login/actions/sso_auth') %>\" button below."
+:'auth/login/actions/title': "Other options"
+:'auth/login/actions/sso_auth': "Log in with SSO"
+:'auth/login/actions/signup': "Sign up with an invite code"
+:'auth/login/actions/password_reset': "Reset your password"
+
+# Authentication - log in - SSO
+:'auth/sso/title': "Log in with single-sign-on"
+:'auth/sso/content': "To log in to <%= e(site_name) %>, choose an identity provider from the list below."
+:'auth/sso/return': "Return to the log in page"
+:'auth/sso/converted_to_sso': "Your account on <%= e(site_name) %> has been converted to use <%= e(provider) %> for logging in. From now on, you must log in with <%= e(provider) %>, rather than directly with your email address and password on <%= e(site_name) %>."
+:'auth/sso/success': "Welcome<% unless user_name.nil? %>, <%= e(user_name) %><% end %>! You have successfully logged in via <%= e(provider) %>."
+:'auth/sso/success_mfa': "You have successfully authenticated via <%= e(provider) %>. To continue logging in, please enter your multi-factor authentication code for <%= e(site_name) %>."
+:'auth/sso/errors/generic/title': "Single-sign-on error"
+:'auth/sso/errors/generic/content': "An error occurred while trying to log you in. Please try logging in again, and if the problem persists, contact the <%= e(site_name) %> administrators."
+:'auth/sso/errors/generic/retry': "Retry sign in with <%= e(provider) %>"
+:'auth/sso/errors/wrong_provider/title': "Identity provider mismatch"
+:'auth/sso/errors/wrong_provider/content/one': "It appears that you selected the wrong identity provider for your account on the log in page. You are only able to log in with the same provider as you used when you created your account on <%= e(site_name) %> (or converted your existing account to single-sign-on)."
+:'auth/sso/errors/wrong_provider/content/two': "Click the \"<%= t(:'auth/sso/return') %>\" button below to return to the log in page."
 
 # Authentication - log in - TOTP MFA
 :'auth/login/mfa/totp/title': "Multi-factor authentication"
@@ -553,6 +570,11 @@
 
 # User settings
 :'usersettings/title': "User settings"
+:'usersettings/sso_provided/title': "Settings from your SSO provider"
+:'usersettings/sso_provided/content/one': "These settings can't be updated in <%= e(site_name) %> - you have to update them in your single-sign-on provider (which is <%= e(provider) %>)."
+:'usersettings/sso_provided/content/two': "Any changes you make to these settings in your single-sign-on provider will be updated in <%= e(site_name) %> after logging out and logging back in."
+:'usersettings/sso_provided/identifier': "SSO provider ID"
+:'usersettings/sso_provided/errors/cant_change': "You can't change that setting because it is provided by your single-sign-on provider."
 :'usersettings/change_name/section_title': "Change your name"
 :'usersettings/change_name/submit': "Change name"
 :'usersettings/change_name/success': "Successfully changed your name to <%= e(name) %>."

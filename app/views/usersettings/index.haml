@@ -1,44 +1,72 @@
 #usersettings-index
   %h1= title
 
-  %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: '/user/change-name'}
-    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
-    %h1= t(:'usersettings/change_name/section_title')
+  - if user[:is_sso]
+    .form-main
+      %h1= t(:'usersettings/sso_provided/title')
+      %p= t(:'usersettings/sso_provided/content/one', provider: user[:sso_provider].friendly_name)
+      %p= t(:'usersettings/sso_provided/content/two')
 
-    %label{for: 'new-name'}= t(:'name')
-    %input#new-name{name: 'name', type: 'text', required: true, placeholder: t(:'name'), value: user[:name]}
+      %ul
+        %li
+          = succeed ': ' do
+            %strong= t(:'name')
+          %span
+            &= user[:name]
 
-    %button.pure-button.button.button-primary{type: 'submit'}
-      %i.fa.fa-pencil= ""
-      = t(:'usersettings/change_name/submit')
+        %li
+          = succeed ': ' do
+            %strong= t(:'email_address')
+          %code
+            &= user[:email]
 
-  %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: '/user/change-email'}
-    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
-    %h1= t(:'usersettings/change_email/section_title')
+        %li
+          = succeed ': ' do
+            %strong= t(:'usersettings/sso_provided/identifier')
+          %code
+            &= user[:sso_identifier]
 
-    %label{for: 'new-email'}= t(:'email_address/new')
-    %input#new-email{name: 'email', type: 'email', required: true, placeholder: t(:'email_address/new'), value: user[:email]}
+  - unless user[:is_sso]
+    %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: '/user/change-name'}
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+      %h1= t(:'usersettings/change_name/section_title')
 
-    %button.pure-button.button.button-primary{type: 'submit'}
-      %i.fa.fa-pencil= ""
-      = t(:'usersettings/change_email/submit')
+      %label{for: 'new-name'}= t(:'name')
+      %input#new-name{name: 'name', type: 'text', required: true, placeholder: t(:'name'), value: user[:name]}
 
-  %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: '/user/change-password'}
-    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
-    %h1= t(:'usersettings/change_password/section_title')
+      %button.pure-button.button.button-primary{type: 'submit'}
+        %i.fa.fa-pencil= ""
+        = t(:'usersettings/change_name/submit')
 
-    %label{for: 'changepass-current'}= t(:'password/current')
-    %input#changepass-current{name: 'password', type: 'password', required: true, placeholder: t(:'password/current')}
+  - unless user[:is_sso]
+    %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: '/user/change-email'}
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+      %h1= t(:'usersettings/change_email/section_title')
 
-    %label{for: 'changepass-new'}= t(:'password/new')
-    %input#changepass-new{name: 'newpass', type: 'password', required: true, placeholder: t(:'password/new')}
+      %label{for: 'new-email'}= t(:'email_address/new')
+      %input#new-email{name: 'email', type: 'email', required: true, placeholder: t(:'email_address/new'), value: user[:email]}
 
-    %label{for: 'changepass-new-confirm'}= t(:'password/new/confirm')
-    %input#changepass-new-confirm{name: 'newpass_confirm', type: 'password', required: true, placeholder: t(:'password/new/confirm')}
+      %button.pure-button.button.button-primary{type: 'submit'}
+        %i.fa.fa-pencil= ""
+        = t(:'usersettings/change_email/submit')
 
-    %button.pure-button.button.button-primary{type: 'submit'}
-      %i.fa.fa-pencil= ""
-      = t(:'usersettings/change_password/submit')
+  - unless user[:is_sso]
+    %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: '/user/change-password'}
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+      %h1= t(:'usersettings/change_password/section_title')
+
+      %label{for: 'changepass-current'}= t(:'password/current')
+      %input#changepass-current{name: 'password', type: 'password', required: true, placeholder: t(:'password/current')}
+
+      %label{for: 'changepass-new'}= t(:'password/new')
+      %input#changepass-new{name: 'newpass', type: 'password', required: true, placeholder: t(:'password/new')}
+
+      %label{for: 'changepass-new-confirm'}= t(:'password/new/confirm')
+      %input#changepass-new-confirm{name: 'newpass_confirm', type: 'password', required: true, placeholder: t(:'password/new/confirm')}
+
+      %button.pure-button.button.button-primary{type: 'submit'}
+        %i.fa.fa-pencil= ""
+        = t(:'usersettings/change_password/submit')
 
   %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: '/user/change-case-load-limit'}
     %input{type: 'hidden', name: '_csrf', value: session[:csrf]}

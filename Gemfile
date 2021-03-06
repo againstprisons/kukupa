@@ -22,6 +22,7 @@ gem 'sidekiq-scheduler', '~> 3.0.1'
 gem 'mimemagic', '~> 0.3.3'
 gem 'chronic', '~> 0.10.2'
 gem 'reverse_markdown', '~> 1.1.0'
+gem 'magentasso-rb', git: "https://git.sr.ht/~ren/magentasso-rb"
 gem 'base32', '~> 0.3.2'
 gem 'e2mmap', '~> 0.1.0'
 gem 'thwait', '~> 0.1.0'

@@ -1,0 +1,13 @@
+.midsplash-container
+  .midsplash.login-sso-identity-provider
+    %h1= title
+    %p= t(:'auth/sso/content')
+
+    - providers.each do |pname, prv|
+      %a.pure-button.button{href: prv.begin_url, :'data-provider' => pname}
+        %i.fa.fa-sign-in= ""
+        &= prv.friendly_name
+
+    %a.pure-button.button.button-warning{href: url('/auth')}
+      %i.fa.fa-chevron-left= ""
+      = t(:'auth/sso/return')
