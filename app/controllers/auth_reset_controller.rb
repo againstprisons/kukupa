@@ -20,6 +20,12 @@ class Kukupa::Controllers::AuthResetController < Kukupa::Controllers::Applicatio
       return redirect request.path
     end
 
+    # don't allow password resets for SSO accounts
+    unless user.sso_method.nil?
+      flash :success, t(:'auth/reset_request/success')
+      return redirect request.path
+    end
+
     # Generate the password reset token
     token = Kukupa::Models::Token.generate_long
     token.use = 'password_reset'

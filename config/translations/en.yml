@@ -197,8 +197,10 @@
 
 # Authentication - password reset request
 :'auth/reset_request/title': "Request password reset"
-:'auth/reset_request/content': "To request a password reset, enter your email address."
+:'auth/reset_request/content/one': "To request a password reset, enter your email address below."
+:'auth/reset_request/content/two': "Please note that if your account is associated with a single-sign-on provider, you must reset your password with that provider, not with <%= e(site_name) %>."
 :'auth/reset_request/submit': "Request password reset"
+:'auth/reset_request/return': "Return to the log in page"
 :'auth/reset_request/success': "If an account exists with the email address specified, you will receive an email with a password reset link shortly."
 
 # Authentication - password reset

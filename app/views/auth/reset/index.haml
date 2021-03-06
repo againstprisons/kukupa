@@ -5,7 +5,8 @@
     %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
       %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
 
-      %p.center= t(:'auth/reset_request/content')
+      %p= t(:'auth/reset_request/content/one')
+      %p= t(:'auth/reset_request/content/two')
 
       %label{for: 'email'}= t(:'email_address')
       %input#email{name: 'email', type: 'email', required: true, placeholder: t(:'email_address')}
@@ -13,3 +14,7 @@
       %button.pure-button.button.button-primary{type: 'submit'}
         %i.fa.fa-check= ""
         = t(:'auth/reset_request/submit')
+
+      %a.pure-button.button.button-secondary{href: url('/auth')}
+        %i.fa.fa-chevron-left= ""
+        = t(:'auth/reset_request/return')
