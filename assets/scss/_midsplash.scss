@@ -20,14 +20,18 @@
     box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.375);
 
     h1 {
+      font-size: 1.25rem;
       margin: 0 0 1rem 0;
-      padding: 0;
-
+      padding: 0.25rem 0;
       border-bottom: 1px solid #000;
     }
 
-    .button {
+    input:not([type = "checkbox"]), select, textarea, .button {
       width: 100%;
+    }
+
+    .button {
+      margin: 0.5rem 0;
     }
   }
 }
