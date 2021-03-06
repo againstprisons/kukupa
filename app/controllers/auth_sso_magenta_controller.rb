@@ -69,8 +69,6 @@ class Kukupa::Controllers::AuthSsoMagentaController < Kukupa::Controllers::Appli
       end
     end
 
-    @user.email = @response.email_address
-
     # if the user has no SSO method set, this is a convert user
     if @user.sso_method.nil?
       # invalidate all session tokens
@@ -95,7 +93,12 @@ class Kukupa::Controllers::AuthSsoMagentaController < Kukupa::Controllers::Appli
       })
     end
 
-    # update the user name
+    # Update the email address on the user object to the one in the Magenta
+    # response, since it might have changed (if we got our user object from
+    # the SSO params rather than by email address)
+    @user.email = @response.email_address
+
+    # Update the user's name from the Magenta response
     @user.encrypt(:name, @response.profile_name&.compact&.join(' '))
 
     # and save the user object
