@@ -8,16 +8,18 @@ class Kukupa::Application < Sinatra::Base
   enable :sessions
 
   not_found do
-    haml :'errors/not_found', :layout => :layout_minimal, :locals => {
-      :title => t(:'errors/not_found/title'),
-      :no_flash => true,
-    }
+    ctrl = Kukupa::Controllers::ErrorController.new(self)
+    ctrl.preflight
+    ctrl.before if ctrl.respond_to?(:before)
+
+    ctrl.not_found
   end
 
   error do
-    haml :'errors/internal_server_error', :layout => :layout_minimal, :locals => {
-      :title => t(:'errors/internal_server_error/title'),
-      :no_flash => true,
-    }
+    ctrl = Kukupa::Controllers::ErrorController.new(self)
+    ctrl.preflight
+    ctrl.before if ctrl.respond_to?(:before)
+
+    ctrl.server_error
   end
 end

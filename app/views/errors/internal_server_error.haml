@@ -1,0 +1,13 @@
+.midsplash-container
+  .midsplash.error-500
+    %h1= title
+    %p= t(:'errors/internal_server_error/content/one')
+    %p= t(:'errors/internal_server_error/content/two')
+
+    %a.pure-button.button.button-primary{:href => "javascript:window.location.reload()"}
+      %i.fa.fa-refresh= ""
+      = t(:'errors/internal_server_error/refresh')
+
+    %a.pure-button.button.button-primary{:href => url("/")}
+      %i.fa.fa-home= ""
+      = t(:'errors/internal_server_error/back_to_home')

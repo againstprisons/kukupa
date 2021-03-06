@@ -78,7 +78,10 @@
 :'errors/maintenance/content': "Sorry, <%= site_name %> is down for maintenance. Please check back later."
 :'errors/maintenance/admin_login_link': "Site administrators can log in by clicking here."
 :'errors/internal_server_error/title': "Internal server error"
-:'errors/internal_server_error/content': "Something went wrong while processing your request. Please contact the site administrator and tell them about this, including what you were trying to do that lead you to this error."
+:'errors/internal_server_error/content/one': "Something went wrong while processing your request. Try refreshing the page."
+:'errors/internal_server_error/content/two': "If this error persists, please contact the <%= e(site_name) %> administrators, letting them know what you were trying to do when you encountered this error."
+:'errors/internal_server_error/refresh': "Refresh the page"
+:'errors/internal_server_error/back_to_home': "Return to the home page"
 
 # Rich text editor warnings
 :'editor/loading': "Please wait while we load the text editor. If you see this message for more than a few seconds, try refreshing the page."

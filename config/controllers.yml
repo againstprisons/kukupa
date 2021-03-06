@@ -119,3 +119,10 @@ controllers:
     controller: ApiMetaController
   - path: /api/request
     controller: ApiRequestController
+
+  - path: /__errors__
+    controller: ErrorController
+    only:
+      env:
+        - development
+        - test

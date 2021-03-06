@@ -1,21 +1,17 @@
 .midsplash-container
   .midsplash.error-404
     %h1= title
-    %p.center
-      = t(:'errors/not_found/content')
+    %p= t(:'errors/not_found/content')
 
     - unless logged_in?
-      %p.center
-        = t(:'errors/not_found/not_logged_in')
+      %p= t(:'errors/not_found/not_logged_in')
 
-      %p.center
-        - login_url = Addressable::URI.parse(url("/auth"))
-        - login_url.query_values = {"next" => url(request.path)}
-        %a.pure-button.button.button-primary{:href => login_url.to_s}
-          %i.fa.fa-sign-in= ""
-          = t(:'auth/login/title')
+      - login_url = Addressable::URI.parse(url("/auth"))
+      - login_url.query_values = {"next" => url(request.path)}
+      %a.pure-button.button.button-primary{:href => login_url.to_s}
+        %i.fa.fa-sign-in= ""
+        = t(:'auth/login/title')
 
-    %p.center
-      %a.pure-button.button.button-primary{:href => url("/")}
-        %i.fa.fa-home= ""
-        = t(:'errors/not_found/back_to_home')
+    %a.pure-button.button.button-primary{:href => url("/")}
+      %i.fa.fa-home= ""
+      = t(:'errors/not_found/back_to_home')
