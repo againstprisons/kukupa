@@ -176,7 +176,7 @@
 :'auth/sso/errors/wrong_provider/content/two': "Click the \"<%= t(:'auth/sso/return') %>\" button below to return to the log in page."
 
 # Authentication - log in - TOTP MFA
-:'auth/login/mfa/totp/title': "Multi-factor authentication"
+:'auth/login/mfa/totp/title': "Multi-factor authentication for <%= e(site_name) %>"
 :'auth/login/mfa/totp/content': "To log in, enter the verification code from your authenticator app. If you have lost access to your authenticator app, you can enter a recovery code."
 :'auth/login/mfa/totp/code': "Verification code"
 :'auth/login/mfa/totp/submit': "Log in"
