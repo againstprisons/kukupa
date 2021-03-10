@@ -7,6 +7,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
   add_route :post, '/assign', method: :assign
   add_route :post, '/unassign', method: :unassign
   add_route :post, '/create-triage-task', method: :create_triage_task
+  add_route :post, '/reset-triage-task', method: :reset_triage_task
   add_route :post, '/close-case', method: :close_case
   add_route :get, '/open-case', method: :open_case
   add_route :post, '/open-case', method: :open_case
@@ -287,6 +288,26 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       name: @assignee.decrypt(:name) || t(:'unknown'),
     )
 
+    return redirect back
+  end
+
+  def reset_triage_task(cid)
+    @case = Kukupa::Models::Case[cid]
+    return halt 404 unless @case && @case.is_open
+    return halt 404 unless has_role?('case:triage:reset')
+    unless has_role?('case:view_all')
+      return halt 404 unless @case.can_access?(@user)
+    end
+
+    unless request.params['confirm']&.strip&.downcase == 'on'
+      flash :error, t(:'case/edit/triage_task/reset/errors/confirm_not_checked')
+      return redirect back
+    end
+
+    @case.triage_task = nil
+    @case.save
+
+    flash :success, t(:'case/edit/triage_task/reset/success')
     return redirect back
   end
 

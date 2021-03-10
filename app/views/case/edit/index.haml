@@ -206,6 +206,20 @@
         %i.fa.fa-link=""
         = t(:'case/edit/reconnect/submit')
 
+  - if has_role?('case:triage:reset') && !case_triage_task.nil?
+    %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: url("/case/#{case_obj.id}/edit/reset-triage-task")}
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+      %h1= t(:'case/edit/triage_task/reset/section_title')
+      %p= t(:'case/edit/triage_task/reset/content')
+
+      %label{for: 'reset_triage_confirm'}
+        %input#reset_triage_confirm{type: 'checkbox', name: 'confirm', required: true}
+        = t(:'case/edit/triage_task/reset/confirm_checkbox')
+
+      %button.pure-button.button.button-error{type: 'submit'}
+        %i.fa.fa-circle-o=""
+        = t(:'case/edit/triage_task/reset/submit')
+
   %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: url("/case/#{case_obj.id}/edit/close-case")}
     %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
     %h1= t(:'case/edit/close_case/section_title')
