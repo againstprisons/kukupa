@@ -93,6 +93,14 @@ module Kukupa::Helpers::NavbarHelpers
       }
     end
 
+    if has_role?('system:quicklinks')
+      items << {
+        link: url('/system/quick-links'),
+        text: t(:'system/quicklinks/title'),
+        selected: current_prefix?('/system/quick-links'),
+      }
+    end
+
     if has_role?('system:worker')
       items << {
         link: url('/system/worker'),

@@ -1,0 +1,19 @@
+#system-admin-quicklinks-index
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: url("/system/quick-links/create")}
+      %i.fa.fa-plus= ""
+      = t(:'system/quicklinks/actions/create')
+
+  .form-main
+    %h1= t(:'system/quicklinks/section_title')
+    %p= t(:'system/quicklinks/content')
+
+    .ql--container
+      - quick_links.each do |ql|
+        %a.pure-button.button.ql--link{href: ql[:edit_url]}
+          - if ql[:icon]
+            %i.fa{class: ql[:icon]}= ""
+          
+          &= ql[:name]

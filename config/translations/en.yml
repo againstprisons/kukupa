@@ -839,6 +839,28 @@
 :'system/mail_templates/edit/data/submit': "Save changes"
 :'system/mail_templates/edit/data/success': "Successfully saved changes to template."
 
+# System admin - quick links
+:'system/quicklinks/title': "Quick links"
+:'system/quicklinks/actions/create': "New quick link"
+:'system/quicklinks/section_title': "Existing quick links"
+:'system/quicklinks/content': "Click a quick link to edit it."
+:'system/quicklinks/field/name': "Name"
+:'system/quicklinks/field/url': "URL"
+:'system/quicklinks/field/icon': "FontAwesome 4 icon name"
+:'system/quicklinks/field/sort_order': "Sort order"
+:'system/quicklinks/edit/title': "Editing quick link: <%= e(qlid) %>"
+:'system/quicklinks/edit/section_title': "Quick link details"
+:'system/quicklinks/edit/submit': "Save quick link"
+:'system/quicklinks/edit/success': "Updated the quick link."
+:'system/quicklinks/edit/delete/section_title': "Delete quick link"
+:'system/quicklinks/edit/delete/confirm': "Check this box to confirm you wish to delete this quick link"
+:'system/quicklinks/edit/delete/submit': "Delete quick link"
+:'system/quicklinks/edit/delete/success': "Successfully deleted quick link."
+:'system/quicklinks/create/title': "New quick link"
+:'system/quicklinks/create/section_title': "Quick link details"
+:'system/quicklinks/create/submit': "Create new quick link"
+:'system/quicklinks/create/success': "Successfully created new quick link!"
+
 # System admin - workers
 :'system/worker/title': "Workers"
 :'system/worker/section_title': "Queue a job"

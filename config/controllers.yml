@@ -75,6 +75,8 @@ controllers:
 
   - path: /system/debug
     controller: SystemDebugController
+  - path: /system/quick-links
+    controller: SystemQuickLinksController
   - path: /system/mailtemplates
     controller: SystemMailTemplatesController
   - path: /system/prison

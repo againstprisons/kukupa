@@ -1,0 +1,39 @@
+.system-admin-quicklinks-edit{:'data-quicklink-id' => ql[:id]}
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: url("/system/quick-links")}
+      %i.fa.fa-chevron-left= ""
+      = t(:'back')
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'system/quicklinks/edit/section_title')
+
+    %label{for: 'name'}= t(:'system/quicklinks/field/name')
+    %input#name{type: 'text', name: 'name', required: true, placeholder: t(:'system/quicklinks/field/name'), value: ql[:name]}
+
+    %label{for: 'url'}= t(:'system/quicklinks/field/url')
+    %input#url{type: 'text', name: 'url', required: true, placeholder: t(:'system/quicklinks/field/url'), value: ql[:url]}
+
+    %label{for: 'icon'}= t(:'system/quicklinks/field/icon')
+    %input#icon{type: 'text', name: 'icon', required: false, placeholder: t(:'system/quicklinks/field/icon'), value: ql[:icon]}
+
+    %label{for: 'sort_order'}= t(:'system/quicklinks/field/sort_order')
+    %input#sort_order{type: 'number', name: 'sort_order', required: true, value: ql[:sort_order] || 0}
+
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-save= ""
+      = t(:'system/quicklinks/edit/submit')
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: url("/system/quick-links/edit/#{ql[:id]}/delete")}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'system/quicklinks/edit/delete/section_title')
+
+    %label{for: 'delete-confirm'}
+      %input#delete-confirm{type: 'checkbox', required: true, name: 'confirm'}
+      = t(:'system/quicklinks/edit/delete/confirm')
+
+    %button.pure-button.button.button-error{type: 'submit'}
+      %i.fa.fa-trash= ""
+      = t(:'system/quicklinks/edit/delete/submit')
