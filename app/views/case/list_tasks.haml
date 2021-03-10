@@ -12,15 +12,16 @@
 
 - tasks.each do |per_assignee|
   .form-main
-    - if group_by_assignee
-      %h1
-        &= per_assignee.first[:assigned_to][:name]
-
-    - else
-      %h1= t(:'case/list_tasks/tasks/section_title')
-
     - if per_assignee.empty?
       %p= t(:'case/list_tasks/tasks/no_tasks')
+
+    - else
+      - if group_by_assignee
+        %h1
+          &= per_assignee.first[:assigned_to][:name]
+
+      - else
+        %h1= t(:'case/list_tasks/tasks/section_title', casetype: per_assignee.first[:case][:type])
 
     %ul.block-list
       - per_assignee.each do |task|
@@ -28,7 +29,7 @@
           .task-list-meta
             %ul.inline-list
               %li
-                = t(:'case/list_tasks/tasks/item/case_name', name: task[:case][:name])
+                = t(:'case/list_tasks/tasks/item/case_name', name: task[:case][:name], casetype: task[:case][:type])
 
               %li
                 = succeed ': ' do

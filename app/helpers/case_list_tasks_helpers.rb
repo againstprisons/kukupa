@@ -33,6 +33,7 @@ module Kukupa::Helpers::CaseListTasksHelpers
           id: case_obj.id,
           name: case_obj.get_name,
           url: url("/case/#{case_obj.id}/view"),
+          type: case_obj.type.to_s.strip.downcase,
         }
       end
 
@@ -71,6 +72,10 @@ module Kukupa::Helpers::CaseListTasksHelpers
       return out
     end
 
-    [tasks]
+    # sort by case type
+    Kukupa::Models::Case::ALLOWED_TYPES.map do |type|
+      t = tasks.filter { |t| t[:case][:type] == type }
+      t.empty? ? nil : t
+    end.compact
   end
 end
