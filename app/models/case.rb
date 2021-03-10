@@ -57,6 +57,16 @@ class Kukupa::Models::Case < Sequel::Model
     email.save
   end
 
+  def close!
+    # remove all assigned advocates
+    Kukupa::Models::CaseAssignedAdvocate
+      .where(case: self.id)
+      .delete
+
+    self.is_open = false
+    self.save
+  end
+
   def delete!
     # notes
     Kukupa::Models::CaseNote.where(case: self.id).map(&:delete)

@@ -323,8 +323,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       return redirect back
     end
 
-    @case.is_open = false
-    @case.save
+    @case.close!
 
     flash :success, t(:'case/edit/close_case/success')
     return redirect url("/case")
