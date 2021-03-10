@@ -34,6 +34,7 @@ class Kukupa::Controllers::UserSettingsController < Kukupa::Controllers::Applica
           is_sso: !@user.sso_method.nil?(),
           sso_provider: @user_sso_provider,
           sso_identifier: [@user.sso_method, @user.sso_external_id].join("#"),
+          tags: @user.roles.map{|r| /tag\:(\w+)/.match(r)&.[](1)}.compact.uniq,
         }
       }
     end

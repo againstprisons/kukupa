@@ -81,3 +81,14 @@
     %button.pure-button.button.button-primary{type: 'submit'}
       %i.fa.fa-pencil= ""
       = t(:'usersettings/case_load/submit')
+
+  .form-main
+    %h1= t(:'usersettings/tags/section_title')
+    %p= t(:'usersettings/tags/content')
+
+    - if user[:tags].empty?
+      %p= t(:'usersettings/tags/no_tags')
+
+    %ul
+      - user[:tags].each do |t|
+        %li= t("tag/#{t}".to_sym)

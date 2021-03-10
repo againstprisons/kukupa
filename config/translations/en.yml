@@ -632,6 +632,9 @@
 :'usersettings/case_load/value': "Case load limit"
 :'usersettings/case_load/submit': "Change case load limit"
 :'usersettings/case_load/success': "Successfully set your case load limit to <%= e(limit) %>."
+:'usersettings/tags/section_title': "Your tags"
+:'usersettings/tags/content': "Tags are assigned to you by <%= e(site_name) %> administrators, as part of granting you permissions. Any tags you have are displayed beside your name when assigning cases or case tasks, and serve to let the assigner know what role(s) you have."
+:'usersettings/tags/no_tags': "You don't have any user tags."
 
 # User settings - multi-factor authentication
 :'usersettings/mfa/title': "Multi-factor authentication"
