@@ -87,11 +87,6 @@
         %input#is_private{type: 'checkbox', name: 'is_private', checked: case_obj.is_private}
         = t(:'case_is_private')
 
-    - else
-      .message.message-error
-        %i.fa.fa-warning= ""
-        = t(:'case/edit/edit/errors/invalid_type')
-
     = haml :'partials/editor', layout: false, locals: {editor_name: 'global_note', editor_label: t(:'global_note'), editor_data: case_editables[:global_note]}
     .y-margin= ""
 

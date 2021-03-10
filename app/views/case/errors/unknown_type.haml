@@ -1,0 +1,10 @@
+.midsplash-container
+  .midsplash.case-view{'data-case-id': case_obj.id}
+    %h1= title
+
+    %p= t(:'case/unknown_type/content/one', caseid: case_obj.id, casetype: case_obj.type)
+    %p= t(:'case/unknown_type/content/two', caseid: case_obj.id, casetype: case_obj.type)
+
+    %a.pure-button.button{href: url('/')}
+      %i.fa.fa-home= ""
+      = t(:'case/unknown_type/return_home')

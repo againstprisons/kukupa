@@ -238,6 +238,12 @@
 :'dashboard/unapproved_spends/item/edit': "Edit spend"
 :'dashboard/unapproved_spends/item/approve': "Approve"
 
+# Cases - unknown type error
+:'case/unknown_type/title': "Unknown case type!"
+:'case/unknown_type/content/one': "This case has an unknown type (<code><%= e(casetype) %></code>). Because we don't know how to handle this, we've stopped you from performing any actions on this case."
+:'case/unknown_type/content/two': "Please contact the <%= e(site_name) %> administrators and mention the case ID <code><%= caseid %></code>."
+:'case/unknown_type/return_home': "Return to the home page"
+
 # Cases - index
 :'case/index/title': "Cases and projects"
 :'case/index/search/section_title': "Search cases"
@@ -515,7 +521,6 @@
 :'case/edit/edit/submit': "Save case details"
 :'case/edit/edit/success': "Successfully saved details for this case."
 :'case/edit/edit/errors/missing_required': "One or more required fields was not provided."
-:'case/edit/edit/errors/invalid_type': "This case has an invalid type field. Please notify the <%= e(site_name) %> administrators."
 :'case/edit/prison/section_title': "Prison details"
 :'case/edit/prison/field_prison': "Prison"
 :'case/edit/prison/field_prisoner_number': "Prisoner number"
