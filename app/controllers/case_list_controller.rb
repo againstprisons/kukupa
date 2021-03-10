@@ -13,16 +13,19 @@ class Kukupa::Controllers::CaseListController < Kukupa::Controllers::CaseControl
   end
 
   def index
+    @is_open = request.params['closed'].to_i.zero?
     @sort = request.params['sort']&.strip&.downcase
     @sort = 'assigned' if @sort.nil? || @sort&.empty?
+    @sort = 'purpose' unless @is_open
     @sort = @sort.to_sym
 
-    @cases = case_list_get_cases(sort: @sort)
+    @cases = case_list_get_cases(sort: @sort, is_open: @is_open)
 
     @title = t(:'case/list/title')
     return haml(:'case/list', :locals => {
       cuser: @user,
       title: @title,
+      is_open: @is_open,
       sort: @sort,
       cases: @cases,
     })

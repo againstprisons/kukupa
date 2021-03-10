@@ -261,6 +261,7 @@
 # Cases - list
 :'case/list/title': "List cases"
 :'case/list/no_cases': "No cases."
+:'case/list/toggle_closed': "Toggle showing closed cases"
 :'case/list/sort/section_title': "Sorting options"
 :'case/list/sort/value': "Sort by"
 :'case/list/sort/purpose': "Case purpose"

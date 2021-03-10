@@ -3,7 +3,7 @@ module Kukupa::Helpers::CaseListHelpers
   # the portion of the case list (the value of that key).
   def case_list_get_cases(opts = {})
     opts[:sort] ||= :assigned
-    opts[:is_open] ||= true
+    opts[:is_open] = true if opts[:is_open].nil?
 
     advocates = {}
     prisons = {}

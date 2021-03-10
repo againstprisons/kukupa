@@ -5,18 +5,23 @@
     %i.fa.fa-chevron-left= ""
     = t(:'back')
 
-%form.pure-form.pure-form-stacked.form-main{method: 'GET'}
-  %h1= t(:'case/list/sort/section_title')
+  %a.pure-button.button{href: "?closed=#{is_open ? 1 : 0}"}
+    %i.fa{class: is_open ? 'fa-toggle-off' : 'fa-toggle-on'}= ""
+    = t(:'case/list/toggle_closed')
 
-  %label{for: 'sort'}= t(:'case/list/sort/value')
-  %select#sort{name: 'sort'}
-    - %w[assigned purpose].each do |so|
-      %option{value: so, selected: so == sort.to_s}
-        = t("case/list/sort/#{so}".to_sym)
+- if is_open
+  %form.pure-form.pure-form-stacked.form-main{method: 'GET'}
+    %h1= t(:'case/list/sort/section_title')
 
-  %button.pure-button.button.button-primary{type: 'submit'}
-    %i.fa.fa-sort= ""
-    = t(:'case/list/sort/submit')
+    %label{for: 'sort'}= t(:'case/list/sort/value')
+    %select#sort{name: 'sort'}
+      - %w[assigned purpose].each do |so|
+        %option{value: so, selected: so == sort.to_s}
+          = t("case/list/sort/#{so}".to_sym)
+
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-sort= ""
+      = t(:'case/list/sort/submit')
 
 - if cases.empty?
   %p= t(:'case/list/no_cases')
