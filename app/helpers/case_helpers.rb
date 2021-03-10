@@ -70,6 +70,11 @@ module Kukupa::Helpers::CaseHelpers
   def case_user_can_access?(c, u)
     c = c.id if c.respond_to?(:id)
     c = Kukupa::Models::Case[c]
+
+    unless c.type == 'case'
+      return true if !c.is_private
+    end
+
     u = u.id if u.respond_to?(:id)
     u = Kukupa::Models::User[u]
 

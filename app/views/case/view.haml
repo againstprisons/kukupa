@@ -1,30 +1,36 @@
 .case-view{'data-case-id': case_obj.id}
   %h1= title
 
-  = haml :'partials/case_header', layout: false, locals: {caseid: case_obj.id}
+  - if cuser_can_edit
+    = haml :'partials/case_header', layout: false, locals: {caseid: case_obj.id, casetype: case_obj.type}
 
   - unless case_open
     .message.message-error
       %i.fa.fa-times-circle= ""
       = t(:'case/view/case_is_closed', link: url("/case/#{case_obj.id}/edit/open-case"))
 
-  - if case_obj.get_assigned_advocates.empty?
+  - if case_obj.type == 'case' && case_obj.get_assigned_advocates.empty?
     .message.message-warning
       %i.fa.fa-warning= ""
       = t(:'case/view/no_advocate_assigned')
 
-  - unless case_obj.reconnect_id.to_i.positive?
+  - if case_obj.type == 'case' && case_obj.reconnect_id.to_i.zero?
     .message.message-warning
       %i.fa.fa-warning= ""
       = t(:'case/view/no_reconnect_link')
 
-  - if case_triage_task.nil?
+  - if case_obj.type == 'case' && case_triage_task.nil?
     .message.message-warning
       %i.fa.fa-check-square-o= ""
       = t(:'case/view/no_triage_task', link: url("/case/#{case_obj.id}/edit#triage-task"))
 
+  - if case_obj.type != 'case' && case_obj.is_private
+    .message.message-warning
+      %i.fa.fa-eye-slash= ""
+      = t(:'case/view/is_private', casetype: case_obj.type)
+
   .form-main
-    %h1= t(:'case/view/details/section_title')
+    %h1= t(:'case/view/details/section_title', casetype: case_obj.type)
 
     %ul
       %li
@@ -33,33 +39,34 @@
         %span
           &= case_obj.id
 
-      - if case_purpose
-        %li
-          = succeed ': ' do
-            = t(:'case_purpose')
-          %span
-            = t("case_purpose/#{case_purpose}".to_sym)
+      - if case_obj.type == 'case'
+        - if case_purpose
+          %li
+            = succeed ': ' do
+              = t(:'case_purpose')
+            %span
+              = t("case_purpose/#{case_purpose}".to_sym)
 
-      - if case_prison
-        %li
-          = succeed ': ' do
-            = t(:'prison')
-          %span
-            &= case_prison.decrypt(:name)
+        - if case_prison
+          %li
+            = succeed ': ' do
+              = t(:'prison')
+            %span
+              &= case_prison.decrypt(:name)
 
-      - if case_obj.prisoner_number
-        %li
-          = succeed ': ' do
-            = t(:'prisoner_number')
-          %code
-            &= case_obj.decrypt(:prisoner_number)
+        - if case_obj.prisoner_number
+          %li
+            = succeed ': ' do
+              = t(:'prisoner_number')
+            %code
+              &= case_obj.decrypt(:prisoner_number)
 
-      - if case_address
-        %li
-          = succeed ': ' do
-            = t(:'case/view/details/address')
-          %code
-            &= case_address
+        - if case_address
+          %li
+            = succeed ': ' do
+              = t(:'case/view/details/address')
+            %code
+              &= case_address
 
     - if case_global_note
       .form-main
@@ -80,10 +87,11 @@
     %h1= t(:'case/view/tasks/section_title')
 
     .inline-form
-      %a.pure-button.button{href: url("/case/#{case_obj.id}/task/add")}
-        %i.fa.fa-check-square-o= ""
-        %span
-          = t(:'case/view/actions/add_task')
+      - if cuser_can_edit
+        %a.pure-button.button{href: url("/case/#{case_obj.id}/task/add")}
+          %i.fa.fa-check-square-o= ""
+          %span
+            = t(:'case/view/actions/add_task')
 
       %a.pure-button.button{href: tasks_complete_toggle}
         %i.fa{class: "fa-toggle-#{tasks_complete ? 'on' : 'off'}"}= ""
@@ -186,15 +194,16 @@
         %span.sr-only
           = t(:'case/view/actions/to_end_of_entries')
 
-      %a.pure-button.button{href: url("/case/#{case_obj.id}/note/add")}
-        %i.fa.fa-pencil-square-o= ""
-        %span
-          = t(:'case/view/actions/add_note')
+      - if cuser_can_edit
+        %a.pure-button.button{href: url("/case/#{case_obj.id}/note/add")}
+          %i.fa.fa-pencil-square-o= ""
+          %span
+            = t(:'case/view/actions/add_note')
 
-      %a.pure-button.button{href: url("/case/#{case_obj.id}/spend/add")}
-        %i.fa.fa-dollar= ""
-        %span
-          = t(:'case/view/actions/add_spend')
+        %a.pure-button.button{href: url("/case/#{case_obj.id}/spend/add")}
+          %i.fa.fa-dollar= ""
+          %span
+            = t(:'case/view/actions/add_spend')
 
     .case-view-renderables
       - if renderables.empty?
@@ -202,7 +211,7 @@
           = t(:'case/view/entries/no_entries')
 
       - renderables.each do |rb|
-        = haml "partials/case_renderable/#{rb[:type]}".to_sym, layout: false, locals: {rb: rb}
+        = haml "partials/case_renderable/#{rb[:type]}".to_sym, layout: false, locals: {rb: rb, can_edit: cuser_can_edit}
 
       #case-view-renderables-end= ""
 

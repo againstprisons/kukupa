@@ -20,10 +20,11 @@
       %li
         = t(:'case_renderable/creation', ts: rb[:creation])
 
-      - rb[:actions]&.each do |link|
-        %li.case-renderable-action
-          %a{href: link[:url]}
-            %i.fa{class: link[:fa_icon]}= ""
+      - if can_edit
+        - rb[:actions]&.each do |link|
+          %li.case-renderable-action
+            %a{href: link[:url]}
+              %i.fa{class: link[:fa_icon]}= ""
 
   .caserenderable-content
     - if rb[:update][:type] == :edit

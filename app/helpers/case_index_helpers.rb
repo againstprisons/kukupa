@@ -3,7 +3,7 @@ module Kukupa::Helpers::CaseIndexHelpers
     cuser = current_user
     advocates = {}
 
-    ds = Kukupa::Models::Case
+    ds = Kukupa::Models::Case.where(type: 'case')
     ds = ds.where(is_open: true) unless opts[:include_closed]
 
     unless opts[:view_all]

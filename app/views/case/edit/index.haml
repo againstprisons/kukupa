@@ -1,9 +1,9 @@
 .case-edit{'data-case-id': case_obj.id}
   %h1= title
 
-  = haml :'partials/case_header', layout: false, locals: {caseid: case_obj.id}
+  = haml :'partials/case_header', layout: false, locals: {caseid: case_obj.id, casetype: case_obj.type}
 
-  - if case_triage_task.nil?
+  - if case_obj.type == 'case' && case_triage_task.nil?
     .form-main#triage-task
       %h1= t(:'case/edit/triage_task/section_title')
       %p= t(:'case/edit/triage_task/content')
@@ -44,37 +44,53 @@
     %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
     %h1= t(:'case/edit/edit/section_title')
 
-    %label{for: 'first_name'}
-      = t(:'name/first')
-      %span.badge= t(:'required')
-    %input#first_name{type: 'text', name: 'first_name', required: true, placeholder: t(:'name/first'), value: case_editables[:first_name]}
+    - if case_obj.type == 'case'
+      %label{for: 'first_name'}
+        = t(:'name/first')
+        %span.badge= t(:'required')
+      %input#first_name{type: 'text', name: 'first_name', required: true, placeholder: t(:'name/first'), value: case_editables[:first_name]}
 
-    %label{for: 'middle_name'}
-      = t(:'name/middle')
-    %input#middle_name{type: 'text', name: 'middle_name', required: false, placeholder: t(:'name/middle'), value: case_editables[:middle_name]}
+      %label{for: 'middle_name'}
+        = t(:'name/middle')
+      %input#middle_name{type: 'text', name: 'middle_name', required: false, placeholder: t(:'name/middle'), value: case_editables[:middle_name]}
 
-    %label{for: 'last_name'}
-      = t(:'name/last')
-      %span.badge= t(:'required')
-    %input#last_name{type: 'text', name: 'last_name', required: true, placeholder: t(:'name/last'), value: case_editables[:last_name]}
+      %label{for: 'last_name'}
+        = t(:'name/last')
+        %span.badge= t(:'required')
+      %input#last_name{type: 'text', name: 'last_name', required: true, placeholder: t(:'name/last'), value: case_editables[:last_name]}
 
-    %label{for: 'pseudonym'}
-      = t(:'pseudonym')
-    %input#pseudonym{type: 'text', name: 'pseudonym', required: false, placeholder: t(:'pseudonym'), value: case_editables[:pseudonym]}
+      %label{for: 'pseudonym'}
+        = t(:'pseudonym')
+      %input#pseudonym{type: 'text', name: 'pseudonym', required: false, placeholder: t(:'pseudonym'), value: case_editables[:pseudonym]}
 
-    %label{for: 'birth_date'}
-      = t(:'birth_date')
-    %input#birth_date{type: 'date', name: 'birth_date', required: false, value: case_editables[:birth_date]&.strftime('%Y-%m-%d')}
+      %label{for: 'birth_date'}
+        = t(:'birth_date')
+      %input#birth_date{type: 'date', name: 'birth_date', required: false, value: case_editables[:birth_date]&.strftime('%Y-%m-%d')}
 
-    %label{for: 'release_date'}
-      = t(:'release_date')
-    %input#release_date{type: 'date', name: 'release_date', required: false, value: case_editables[:release_date]&.strftime('%Y-%m-%d')}
+      %label{for: 'release_date'}
+        = t(:'release_date')
+      %input#release_date{type: 'date', name: 'release_date', required: false, value: case_editables[:release_date]&.strftime('%Y-%m-%d')}
 
-    %label{for: 'purpose'}= t(:'case_purpose')
-    %select#purpose{name: 'purpose'}
-      - Kukupa::Models::Case::ALLOWED_PURPOSES.each do |purpose|
-        %option{value: purpose, selected: case_editables[:case_purpose] == purpose}
-          = t("case_purpose/#{purpose}".to_sym)  
+      %label{for: 'purpose'}= t(:'case_purpose')
+      %select#purpose{name: 'purpose'}
+        - Kukupa::Models::Case::ALLOWED_PURPOSES.each do |purpose|
+          %option{value: purpose, selected: case_editables[:case_purpose] == purpose}
+            = t("case_purpose/#{purpose}".to_sym)  
+
+    - elsif case_obj.type == 'project'
+      %label{for: 'first_name'}
+        = t(:'name/project')
+        %span.badge= t(:'required')
+      %input#first_name{type: 'text', name: 'first_name', required: true, placeholder: t(:'name/project'), value: case_editables[:first_name]}
+
+      %label{for: 'is_private'}
+        %input#is_private{type: 'checkbox', name: 'is_private', checked: case_obj.is_private}
+        = t(:'case_is_private')
+
+    - else
+      .message.message-error
+        %i.fa.fa-warning= ""
+        = t(:'case/edit/edit/errors/invalid_type')
 
     = haml :'partials/editor', layout: false, locals: {editor_name: 'global_note', editor_label: t(:'global_note'), editor_data: case_editables[:global_note]}
     .y-margin= ""
@@ -83,23 +99,24 @@
       %i.fa.fa-save= ""
       = t(:'case/edit/edit/submit')
 
-  %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: url("/case/#{case_obj.id}/edit/prison")}
-    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
-    %h1= t(:'case/edit/prison/section_title')
+  - if case_obj.type == 'case'
+    %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: url("/case/#{case_obj.id}/edit/prison")}
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+      %h1= t(:'case/edit/prison/section_title')
 
-    %label{for: 'prison'}= t(:'case/edit/prison/field_prison')
-    %select#prison{name: 'prison'}
-      %option{value: 'unknown', selected: case_prison.nil?}= t(:'unknown')
-      - prisons.each do |prison|
-        %option{value: prison[:id], selected: case_prison&.id == prison[:id]}
-          &= prison[:name]
+      %label{for: 'prison'}= t(:'case/edit/prison/field_prison')
+      %select#prison{name: 'prison'}
+        %option{value: 'unknown', selected: case_prison.nil?}= t(:'unknown')
+        - prisons.each do |prison|
+          %option{value: prison[:id], selected: case_prison&.id == prison[:id]}
+            &= prison[:name]
 
-    %label{for: 'prn'}= t(:'case/edit/prison/field_prisoner_number')
-    %input#prn{name: 'prn', value: case_editables[:prn]}
+      %label{for: 'prn'}= t(:'case/edit/prison/field_prisoner_number')
+      %input#prn{name: 'prn', value: case_editables[:prn]}
 
-    %button.pure-button.button{type: 'submit'}
-      %i.fa.fa-save= ""
-      = t(:'case/edit/prison/submit')
+      %button.pure-button.button{type: 'submit'}
+        %i.fa.fa-save= ""
+        = t(:'case/edit/prison/submit')
 
   - if has_role?('case:assignees:unassign')
     .form-main
@@ -192,21 +209,22 @@
           %i.fa.fa-user-o= ""
           = t(:'case/edit/assignees/assign/submit')
 
-  .form-main
-    %h1= t(:'case/edit/reconnect/section_title')
+  - if case_obj.type == 'case'
+    .form-main
+      %h1= t(:'case/edit/reconnect/section_title')
 
-    %p
-      - if case_reconnect[:id] && case_reconnect[:id].to_i.positive?
-        = t(:'case/edit/reconnect/link_status/linked', name: case_reconnect[:name])
-      - else
-        = t(:'case/edit/reconnect/link_status/not_linked')
+      %p
+        - if case_reconnect[:id] && case_reconnect[:id].to_i.positive?
+          = t(:'case/edit/reconnect/link_status/linked', name: case_reconnect[:name])
+        - else
+          = t(:'case/edit/reconnect/link_status/not_linked')
 
-    - if has_role?('case:reconnect')
-      %a.pure-button.button{href: url("/case/#{case_obj.id}/edit/rc")}
-        %i.fa.fa-link=""
-        = t(:'case/edit/reconnect/submit')
+      - if has_role?('case:reconnect')
+        %a.pure-button.button{href: url("/case/#{case_obj.id}/edit/rc")}
+          %i.fa.fa-link=""
+          = t(:'case/edit/reconnect/submit')
 
-  - if has_role?('case:triage:reset') && !case_triage_task.nil?
+  - if case_obj.type == 'case' && has_role?('case:triage:reset') && !case_triage_task.nil?
     %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: url("/case/#{case_obj.id}/edit/reset-triage-task")}
       %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
       %h1= t(:'case/edit/triage_task/reset/section_title')

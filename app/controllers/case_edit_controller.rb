@@ -31,7 +31,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
     end
 
     @case_name = @case.get_name
-    @title = t(:'case/edit/title', name: @case_name)
+    @title = t(:'case/edit/title', name: @case_name, casetype: @case.type)
 
     @prison = Kukupa::Models::Prison[@case.decrypt(:prison).to_i]
     @first_name = @case.decrypt(:first_name)
@@ -94,14 +94,31 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       @global_note = request.params['global_note']&.strip
       @global_note = Sanitize.fragment(@global_note, Sanitize::Config::RELAXED)
       @case_purpose = request.params['purpose']&.strip&.downcase
+      @case_purpose = Kukupa::Models::Case::ALLOWED_PURPOSES.first if @case_purpose.nil? || @case_purpose&.empty?
+      @is_private = request.params['is_private']&.strip&.downcase == 'on'
 
-      if @first_name.nil? || @last_name.nil?
-        flash :error, t(:'case/edit/edit/errors/missing_required')
-        return redirect request.path
-      end
+      if @case.type == 'case'
+        if @first_name.nil? || @last_name.nil?
+          flash :error, t(:'case/edit/edit/errors/missing_required')
+          return redirect request.path
+        end
 
-      unless Kukupa::Models::Case::ALLOWED_PURPOSES.include?(@case_purpose)
-        flash :error, t(:'case/edit/edit/errors/missing_required')
+        unless Kukupa::Models::Case::ALLOWED_PURPOSES.include?(@case_purpose)
+          flash :error, t(:'case/edit/edit/errors/missing_required')
+          return redirect request.path
+        end
+
+        # normal cases are always private
+        @is_private = true
+
+      elsif @case.type == 'project'
+        if @first_name.nil?
+          flash :error, t(:'case/edit/edit/errors/missing_required')
+          return redirect request.path
+        end
+
+      else
+        flash :error, t(:'case/edit/edit/errors/invalid_type')
         return redirect request.path
       end
 
@@ -113,6 +130,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       @case.encrypt(:release_date, @release_date&.strftime('%Y-%m-%d'))
       @case.encrypt(:global_note, @global_note)
       @case.purpose = @case_purpose
+      @case.is_private = @is_private
       @case.save
 
       Kukupa::Models::CaseFilter.clear_filters_for(@case)
@@ -155,6 +173,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
   def prison(cid)
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
+    return halt 404 unless @case.type == 'case'
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
@@ -246,6 +265,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
   def create_triage_task(cid)
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
+    return halt 404 unless @case.type == 'case'
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
@@ -294,6 +314,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
   def reset_triage_task(cid)
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
+    return halt 404 unless @case.type == 'case'
     return halt 404 unless has_role?('case:triage:reset')
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)

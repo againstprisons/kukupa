@@ -1,7 +1,7 @@
 .case-send-mail{'data-case-id': case_obj.id}
   %h1= title
 
-  = haml :'partials/case_header', layout: false, locals: {caseid: case_obj.id}
+  = haml :'partials/case_header', layout: false, locals: {caseid: case_obj.id, casetype: case_obj.type}
 
   %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
     %h1= t(:'case/correspondence/send/compose/section_title')

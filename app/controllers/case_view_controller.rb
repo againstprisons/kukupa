@@ -12,12 +12,15 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
   def index(cid)
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case
-    unless has_role?('case:view_all')
-      return halt 404 unless @case.can_access?(@user)
+    if has_role?('case:view_all')
+      @can_edit = true
+    else
+      return halt 404 unless @case.can_view?(@user)
+      @can_edit = @case.can_access?(@user)
     end
 
     @case_name = @case.get_name
-    @title = t(:'case/view/title', name: @case_name)
+    @title = t(:'case/view/title', name: @case_name, casetype: @case.type)
 
     @renderable_updates = request.params['ru'].to_i.positive?
     @renderables = get_renderables(@case, {
@@ -69,10 +72,16 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
     @global_note = nil if @global_note&.strip&.empty?
 
     @case_is_new = @case.creation > Chronic.parse(Kukupa.app_config['case-new-threshold'])
-    @case_triage_task = Kukupa::Models::CaseTask[@case.triage_task]
+    @case_triage_task = Kukupa::Models::CaseTask[@case.triage_task.to_i]
+
+    @case_assigned_advocates = @case
+      .get_assigned_advocates
+      .map {|u| Kukupa::Models::User[u]}
+      .map {|u| [u.id, u.decrypt(:name)]}
 
     return haml(:'case/view', :locals => {
       title: @title,
+      cuser_can_edit: @can_edit,
       case_obj: @case,
       case_open: @case.is_open,
       case_name: @case_name,
@@ -82,6 +91,7 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
       case_purpose: @case.purpose,
       case_is_new: @case_is_new,
       case_triage_task: @case_triage_task,
+      case_assigned_advocates: @case_assigned_advocates,
       renderables: @renderables,
       renderable_updates: @renderable_updates,
       renderable_updates_toggle: @renderable_updates_toggle,

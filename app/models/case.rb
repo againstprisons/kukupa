@@ -1,4 +1,5 @@
 class Kukupa::Models::Case < Sequel::Model
+  ALLOWED_TYPES = %w[case project]
   ALLOWED_PURPOSES = %w[advocacy ppc]
 
   def self.assigned_to(user)
@@ -14,6 +15,15 @@ class Kukupa::Models::Case < Sequel::Model
       .where(case: self.id)
       .map(&:user)
   end
+
+  def can_view?(user)
+    unless self.type == 'case'
+      return true if !self.is_private
+    end
+    
+    user = user.id if user.respond_to?(:id)
+    self.get_assigned_advocates.include?(user)
+  end    
 
   def can_access?(user)
     user = user.id if user.respond_to?(:id)
@@ -99,6 +109,7 @@ class Kukupa::Models::CaseFilter < Sequel::Model
 
   def self.create_filters_for(case_)
     return [] unless [:get_name, :id].map{|x| case_.respond_to?(x)}.all?
+    return [] unless case_.type == 'case'
 
     filters = []
 

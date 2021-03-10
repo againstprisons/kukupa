@@ -21,6 +21,7 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
   def index(cid)
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
+    return halt 404 unless @case.type == 'case'
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
@@ -46,6 +47,7 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
   def sync(cid)
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
+    return halt 404 unless @case.type == 'case'
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
@@ -62,6 +64,7 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
   def unlink(cid)
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
+    return halt 404 unless @case.type == 'case'
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
@@ -79,6 +82,7 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
   def link(cid)
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
+    return halt 404 unless @case.type == 'case'
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
@@ -107,6 +111,7 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
   def manual_link(cid)
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
+    return halt 404 unless @case.type == 'case'
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end

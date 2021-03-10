@@ -9,7 +9,7 @@ module Kukupa::Helpers::CaseListHelpers
     prisons = {}
 
     ds = Kukupa::Models::Case
-      .where(is_open: opts[:is_open])
+      .where(type: 'case', is_open: opts[:is_open])
 
     # get initial case info
     cases = ds.map do |c|

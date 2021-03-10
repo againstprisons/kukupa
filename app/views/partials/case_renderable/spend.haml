@@ -19,10 +19,11 @@
           %a.case-renderable-creation-edited.case-view-task-editlink{title: t(:'case_renderable/creation', ts: rb[:edited]), href: '#'}
             = t(:'case_renderable/creation/edited')
 
-      - rb[:actions]&.each do |link|
-        %li.case-renderable-action
-          %a{href: link[:url]}
-            %i.fa{class: link[:fa_icon]}= ""
+      - if can_edit
+        - rb[:actions]&.each do |link|
+          %li.case-renderable-action
+            %a{href: link[:url]}
+              %i.fa{class: link[:fa_icon]}= ""
 
   .caserenderable-content
     %ul.inline-list

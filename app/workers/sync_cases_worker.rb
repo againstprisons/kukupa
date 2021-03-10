@@ -13,7 +13,8 @@ class Kukupa::Workers::SyncCasesWorker
     end
 
     ids = Kukupa::Models::Case
-      .select(:id, :reconnect_id)
+      .select(:id, :type, :reconnect_id)
+      .where(type: 'case')
       .exclude(reconnect_id: nil)
       .map(&:id)
 

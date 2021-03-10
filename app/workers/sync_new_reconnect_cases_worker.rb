@@ -59,7 +59,7 @@ class Kukupa::Workers::SyncNewReconnectCasesWorker
     
     # Create a new case for each of the new penpals
     unknown_rels.each do |rel|
-      c = Kukupa::Models::Case.new(is_open: true, reconnect_id: rel[:penpal_id]).save
+      c = Kukupa::Models::Case.new(type: 'case', is_open: true, reconnect_id: rel[:penpal_id]).save
       c.encrypt(:first_name, rel[:rc_data]['name'].first)
       c.encrypt(:last_name, rel[:rc_data]['name'].last)
       c.encrypt(:prisoner_number, rel[:rc_data]['prn'])
