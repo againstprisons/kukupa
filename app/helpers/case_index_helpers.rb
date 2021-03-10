@@ -127,4 +127,67 @@ module Kukupa::Helpers::CaseIndexHelpers
 
     cases
   end
+
+  def case_index_get_projects(opts = {})
+    cuser = current_user
+    projectids = []
+
+    # get projects we're assigned to
+    assigned_ds = Kukupa::Models::Case
+      .select(:id, :type, :is_open)
+      .where(type: 'project')
+
+    assigned_ds = assigned_ds.where(is_open: true) unless opts[:include_closed]
+
+    unless opts[:view_all]
+      assigned = Kukupa::Models::CaseAssignedAdvocate
+        .where(user: cuser.id)
+        .map(&:case)
+
+      assigned_ds = assigned_ds.where(id: assigned)
+    end
+
+    projectids += assigned_ds.map(&:id)
+
+    # get public projects
+    public_ds = Kukupa::Models::Case
+      .select(:id, :type, :is_open, :is_private)
+      .where(type: 'project')
+      .exclude(is_private: true)
+
+    projectids += public_ds.map(&:id)
+
+    # collate
+    projects = projectids.compact.uniq.map do |cid|
+      c = Kukupa::Models::Case[cid]
+      next nil unless c
+
+      url = Addressable::URI.parse(url("/case/#{c.id}/view"))
+
+      {
+        :obj => c,
+        :id => c.id,
+        :name => c.get_name,
+        :is_private => c.is_private,
+        :url => url.to_s,
+      }
+    end
+
+    # check assignees
+    projects.map! do |c|
+      c[:we_are_assigned] = Kukupa::Models::CaseAssignedAdvocate
+        .where(user: cuser.id, case: c[:id])
+        .count
+        .positive?
+
+      c[:assignee_count] = Kukupa::Models::CaseAssignedAdvocate
+        .where(case: c[:id])
+        .count
+        .to_i
+
+      c
+    end
+
+    projects
+  end
 end

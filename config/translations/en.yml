@@ -239,7 +239,7 @@
 :'dashboard/unapproved_spends/item/approve': "Approve"
 
 # Cases - index
-:'case/index/title': "Cases"
+:'case/index/title': "Cases and projects"
 :'case/index/search/section_title': "Search cases"
 :'case/index/search/field_type': "Search type"
 :'case/index/search/field_type/prn': "Prisoner number"
@@ -248,8 +248,8 @@
 :'case/index/search/field_type/advocate': "Advocate user ID"
 :'case/index/search/field_query': "Search query"
 :'case/index/search/submit': "Search"
-:'case/index/cases/no_cases': "No cases."
 :'case/index/cases/section_title': "Cases assigned to me"
+:'case/index/cases/no_cases': "No cases that you can see."
 :'case/index/cases/item/last_note': "Last case note"
 :'case/index/cases/item/last_note/author': "by <strong><%= e(name) %></strong>"
 :'case/index/cases/item/last_note/none': "No case notes"
@@ -263,6 +263,11 @@
 :'case/index/cases/item/total_spend/month': "This month"
 :'case/index/cases/item/total_spend/year': "This year"
 :'case/index/cases/item/total_spend/year/percent': "<%= e(sprintf('%.01f%%', (amount / max) * 100)) %> of yearly max"
+:'case/index/projects/section_title': "Projects"
+:'case/index/projects/no_projects': "No projects that you can see."
+:'case/index/projects/item/is_private': "This project is private."
+:'case/index/projects/item/assigned_count': "Users assigned to this project"
+:'case/index/projects/item/assigned_count/including_us': "(including you)"
 
 # Cases - list
 :'case/list/title': "List cases"

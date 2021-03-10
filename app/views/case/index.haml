@@ -34,7 +34,7 @@
       %i.fa.fa-search= ""
       = t(:'case/index/search/submit')
 
-.form-main
+.form-main#cases-assigned
   %h1= t(:'case/index/cases/section_title')
 
   - if cases.empty?
@@ -145,4 +145,30 @@
                 = t(:'case_renderable/spend/amount', amount: c[:total_spend][:year][:amount])
                 = surround '(', ')' do
                   = t(:'case/index/cases/item/total_spend/year/percent', c[:total_spend][:year])
+
+.form-main#projects
+  %h1= t(:'case/index/projects/section_title')
+
+  - if projects.empty?
+    %p= t(:'case/index/projects/no_projects')
+
+  %ul.block-list
+    - projects.each do |c|
+      %li
+        %a{href: c[:url]}
+          &= c[:name]
+
+        %ul
+          - if c[:is_private]
+            %li
+              = t(:'case/index/projects/item/is_private')
+
+          %li
+            = succeed ': ' do
+              = t(:'case/index/projects/item/assigned_count')
+            %code
+              = c[:assignee_count]
+
+            - if c[:we_are_assigned]
+              = t(:'case/index/projects/item/assigned_count/including_us')
 

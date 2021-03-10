@@ -12,13 +12,15 @@ class Kukupa::Controllers::CaseIndexController < Kukupa::Controllers::CaseContro
   end
 
   def index
-    @cases = case_index_get_cases()
     @title = t(:'case/index/title')
+    @cases = case_index_get_cases()
+    @projects = case_index_get_projects()
 
     return haml(:'case/index', :locals => {
       cuser: @user,
       title: @title,
       cases: @cases,
+      projects: @projects,
       stats: @stats,
     })
   end
