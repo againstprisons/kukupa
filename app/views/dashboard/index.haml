@@ -1,88 +1,102 @@
-%h1= title
-%p= t(:'dashboard/content/welcome', user_name: user[:name])
+%h1= t(:'dashboard/content/welcome', user_name: user[:name])
 
-.form-main
-  %h1= t(:'dashboard/cases/section_title')
+.pure-g
+  .pure-u-1{class: quick_links.empty? ? '' : 'pure-u-lg-2-3'}
 
-  - if cases.empty?
-    %p= t(:'dashboard/cases/no_cases')
+    .form-main
+      %h1= t(:'dashboard/cases/section_title')
 
-  %ul.block-list
-    - cases.each do |c|
-      %li
-        %a{href: c[:url]}
-          &= c[:name]
+      - if cases.empty?
+        %p= t(:'dashboard/cases/no_cases')
 
-.form-main
-  %h1= t(:'dashboard/tasks/section_title')
+      %ul.block-list
+        - cases.each do |c|
+          %li
+            %a{href: c[:url]}
+              &= c[:name]
 
-  - if tasks.empty?
-    %p= t(:'dashboard/tasks/no_tasks')
+    .form-main
+      %h1= t(:'dashboard/tasks/section_title')
 
-  %ul.block-list
-    - tasks.each do |c|
-      %li
-        .dashboard-task-meta
-          %ul.inline-list
+      - if tasks.empty?
+        %p= t(:'dashboard/tasks/no_tasks')
+
+      %ul.block-list
+        - tasks.each do |c|
+          %li
+            .dashboard-task-meta
+              %ul.inline-list
+                %li
+                  = t(:'dashboard/tasks/item/content', name: c[:case_name], casetype: c[:case_type])
+
+                %li
+                  %a.case-view-task-editlink{href: c[:edit_url]}
+                    %i.fa.fa-gear= ""
+                    %span.sr-only
+                      = t(:'dashboard/tasks/item/edit')
+
+                %li
+                  %a.case-view-task-editlink{href: "#{c[:view_url]}##{c[:anchor]}"}
+                    %i.fa.fa-external-link= ""
+                    %span.sr-only
+                      = t(:'dashboard/tasks/item/view')
+                      
+                %li
+                  %a.case-view-task-editlink{href: "#{c[:edit_url]}#mark-complete"}
+                    %i.fa.fa-check= ""
+                    %span
+                      = t(:'dashboard/tasks/item/mark_as_completed')
+
+            .dashboard-task-content
+              %blockquote
+                = c[:task_content]
+
+    - if has_role?('case:spend:can_approve')
+      .form-main
+        %h1= t(:'dashboard/unapproved_spends/section_title')
+
+        - if spends.empty?
+          %p= t(:'dashboard/unapproved_spends/no_spends')
+
+        %ul
+          - spends.each do |sp|
             %li
-              = t(:'dashboard/tasks/item/content', name: c[:case_name])
+              .dashboard-spend-meta
+                %ul.inline-list
+                  %li
+                    %span
+                      = t(:'dashboard/unapproved_spends/item/content', amount: sp[:spend_amount], name: sp[:case_name])
 
-            %li
-              %a.case-view-task-editlink{href: c[:edit_url]}
-                %i.fa.fa-gear= ""
-                %span.sr-only
-                  = t(:'dashboard/tasks/item/edit')
+                  %li
+                    %a.case-view-task-editlink{href: sp[:edit_url]}
+                      %i.fa.fa-gear= ""
+                      %span.sr-only
+                        = t(:'dashboard/unapproved_spends/item/edit')
 
-            %li
-              %a.case-view-task-editlink{href: "#{c[:view_url]}##{c[:anchor]}"}
-                %i.fa.fa-external-link= ""
-                %span.sr-only
-                  = t(:'dashboard/tasks/item/view')
-                  
-            %li
-              %a.case-view-task-editlink{href: "#{c[:edit_url]}#mark-complete"}
-                %i.fa.fa-check= ""
-                %span
-                  = t(:'dashboard/tasks/item/mark_as_completed')
+                  %li
+                    %a.case-view-task-editlink{href: "#{sp[:view_url]}##{sp[:anchor]}"}
+                      %i.fa.fa-external-link= ""
+                      %span.sr-only
+                        = t(:'dashboard/unapproved_spends/item/view')
 
-        .dashboard-task-content
-          %blockquote
-            = c[:task_content]
+                  %li
+                    %a.case-view-task-editlink{href: sp[:approve_url]}
+                      %i.fa.fa-check= ""
+                      %span
+                        = t(:'dashboard/unapproved_spends/item/approve')
 
-- if has_role?('case:spend:can_approve')
-  .form-main
-    %h1= t(:'dashboard/unapproved_spends/section_title')
+              .dashboard-spend-content
+                %blockquote
+                  = sp[:spend_content]
 
-    - if spends.empty?
-      %p= t(:'dashboard/unapproved_spends/no_spends')
+  - unless quick_links.empty?
+    .pure-u-1.pure-u-lg-1-3
+      .form-main.x-margin.ql--container
+        %h1= t(:'dashboard/quick_links/section_title')
 
-    %ul
-      - spends.each do |sp|
-        %li
-          .dashboard-spend-meta
-            %ul.inline-list
-              %li
-                %span
-                  = t(:'dashboard/unapproved_spends/item/content', amount: sp[:spend_amount], name: sp[:case_name])
-
-              %li
-                %a.case-view-task-editlink{href: sp[:edit_url]}
-                  %i.fa.fa-gear= ""
-                  %span.sr-only
-                    = t(:'dashboard/unapproved_spends/item/edit')
-
-              %li
-                %a.case-view-task-editlink{href: "#{sp[:view_url]}##{sp[:anchor]}"}
-                  %i.fa.fa-external-link= ""
-                  %span.sr-only
-                    = t(:'dashboard/unapproved_spends/item/view')
-
-              %li
-                %a.case-view-task-editlink{href: sp[:approve_url]}
-                  %i.fa.fa-check= ""
-                  %span
-                    = t(:'dashboard/unapproved_spends/item/approve')
-
-          .dashboard-spend-content
-            %blockquote
-              = sp[:spend_content]
+        - quick_links.each do |ql|
+          %a.pure-button.button.ql--link{href: ql[:url]}
+            - if ql[:icon]
+              %i.fa{class: ql[:icon]}= ""
+            
+            &= ql[:name]

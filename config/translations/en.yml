@@ -238,6 +238,7 @@
 :'dashboard/unapproved_spends/item/view': "View case"
 :'dashboard/unapproved_spends/item/edit': "Edit spend"
 :'dashboard/unapproved_spends/item/approve': "Approve"
+:'dashboard/quick_links/section_title': "Quick links"
 
 # Cases - unknown type error
 :'case/unknown_type/title': "Unknown case type!"

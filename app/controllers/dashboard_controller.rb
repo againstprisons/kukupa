@@ -8,6 +8,17 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
     end
 
     @title = t(:'dashboard/title')
+
+    @quick_links = Kukupa::Models::QuickLink.map do |ql|
+      {
+        id: ql.id,
+        name: ql.decrypt(:name),
+        url: ql.decrypt(:url),
+        icon: ql.decrypt(:icon),
+        sort_order: ql.sort_order || 0,
+      }
+    end.sort {|a, b| a[:sort_order] <=> b[:sort_order]}
+
     @user = current_user
     @user_name = @user.decrypt(:name)
     @user_name = nil if @user_name.nil? || @user_name&.empty?
@@ -21,6 +32,7 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
       {
         case: case_obj,
         case_name: case_obj.get_name,
+        case_type: case_obj.type,
         task: t,
         task_content: content,
         anchor: t.anchor,
@@ -63,10 +75,11 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
     end
 
     return haml(:'dashboard/index', :locals => {
-      :title => @title,
-      :user => {
-        :user => @user,
-        :name => @user_name,
+      title: @title,
+      quick_links: @quick_links,
+      user: {
+        user: @user,
+        name: @user_name,
       },
       cases: @my_cases,
       tasks: @my_tasks,
