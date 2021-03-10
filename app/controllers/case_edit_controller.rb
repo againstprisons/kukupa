@@ -27,6 +27,9 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
+
+    @fields = @case.field_desc
+    @show = Kukupa::Models::Case::CASE_TYPES[@case.type.to_sym][:show]
   end
 
   def index(cid)
@@ -152,6 +155,8 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       case_name: @case_name,
       case_assigned: @assigned,
       case_prison: @prison,
+      case_fields: @fields,
+      case_show: @show,
       case_editables: {
         first_name: @first_name,
         middle_name: @middle_name,
@@ -162,6 +167,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
         release_date: @release_date,
         global_note: @global_note,
         case_purpose: @case_purpose,
+        is_private: @case.is_private,
       },
       case_reconnect: {
         id: @reconnect_id,
@@ -179,7 +185,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
   def prison(cid)
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
-    return halt 404 unless @case.type == 'case'
+    return halt 404 unless @show[:prison]
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
@@ -271,7 +277,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
   def create_triage_task(cid)
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
-    return halt 404 unless @case.type == 'case'
+    return halt 404 unless @show[:triage]
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
@@ -320,7 +326,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
   def reset_triage_task(cid)
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
-    return halt 404 unless @case.type == 'case'
+    return halt 404 unless @show[:triage]
     return halt 404 unless has_role?('case:triage:reset')
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)

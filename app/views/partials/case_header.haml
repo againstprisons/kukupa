@@ -7,7 +7,7 @@
     %a{href: url("/case/#{caseid}/edit")}
       = t(:'case/nav/edit')
 
-  - if casetype == 'case'
+  - if show[:correspondence]
     %li{class: current_prefix?("/case/#{caseid}/correspondence/send")}><
       %a{href: url("/case/#{caseid}/correspondence/send")}
         = t(:'case/nav/mail')

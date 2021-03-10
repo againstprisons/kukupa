@@ -2,7 +2,7 @@
   %h1= title
 
   - if cuser_can_edit
-    = haml :'partials/case_header', layout: false, locals: {caseid: case_obj.id, casetype: case_obj.type}
+    = haml :'partials/case_header', layout: false, locals: {caseid: case_obj.id, casetype: case_obj.type, show: case_show}
 
   - unless case_open
     .message.message-error

@@ -1,6 +1,92 @@
 class Kukupa::Models::Case < Sequel::Model
-  ALLOWED_TYPES = %w[case project]
+  # Allowed case purposes
   ALLOWED_PURPOSES = %w[advocacy ppc]
+
+  # Case types
+  CASE_TYPES = {
+    # Normal cases (this is the default)
+    case: {
+      fields: [
+        :first_name,
+        :middle_name,
+        :last_name,
+        :pseudonym,
+        :birth_date,
+        :release_date,
+        :case_purpose,
+        :global_note,
+      ],
+      show: {
+        prison: true,
+        reconnect: true,
+        triage: true,
+        correspondence: true,
+      },
+    },
+
+    # Projects
+    project: {
+      fields: [
+        {
+          field: :first_name,
+          tl_key: :'name/project',
+        },
+        :is_private,
+        :global_note,
+      ],
+      show: {
+        prison: false,
+        reconnect: false,
+        triage: false,
+        correspondence: false,
+      },
+    },
+  }
+
+  # Available fields
+  CASE_FIELDS = {
+    first_name: {
+      tl_key: :'name/first',
+      type: :text,
+      required: true,
+    },
+    middle_name: {
+      tl_key: :'name/middle',
+      type: :text,
+    },
+    last_name: {
+      tl_key: :'name/last',
+      type: :text,
+      required: true,
+    },
+    pseudonym: {
+      tl_key: :'pseudonym',
+      type: :text,
+    },
+    is_private: {
+      tl_key: :'case_privacy',
+      type: :checkbox,
+    },
+    birth_date: {
+      tl_key: :'birth_date',
+      type: :date,
+    },
+    release_date: {
+      tl_key: :'release_date',
+      type: :date,
+    },
+    case_purpose: {
+      tl_key: :'case_purpose',
+      editable_name: :purpose,
+      type: :select,
+      select_options: ALLOWED_PURPOSES.map {|pr| {value: pr, tl_key: "case_purpose/#{pr}".to_sym}},
+      required: true,
+    },
+    global_note: {
+      tl_key: :'global_note',
+      type: :editor,
+    },
+  }
 
   def self.assigned_to(user)
     user = user.id if user.respond_to?(:id)
@@ -14,6 +100,26 @@ class Kukupa::Models::Case < Sequel::Model
     Kukupa::Models::CaseAssignedAdvocate
       .where(case: self.id)
       .map(&:user)
+  end
+
+  def field_desc(opts = {})
+    CASE_TYPES[self.type.to_sym][:fields].map do |fd|
+      if fd.is_a?(Symbol)
+        field = CASE_FIELDS[fd]
+        next unless field
+
+        field[:name] = fd
+        field
+
+      elsif fd.is_a?(Hash)
+        field = CASE_FIELDS[fd[:field]]
+        next unless field
+
+        field[:name] = fd[:field]
+        field[:tl_key] = fd[:tl_key] if fd.key?(:tl_key)
+        field
+      end
+    end.compact
   end
 
   def can_view?(user)

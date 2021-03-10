@@ -4,7 +4,7 @@ class Kukupa::Controllers::CaseController < Kukupa::Controllers::ApplicationCont
     @case = Kukupa::Models::Case[args.first.to_i]
     if @case
       # bail on unknown type
-      unless Kukupa::Models::Case::ALLOWED_TYPES.include?(@case.type)
+      unless Kukupa::Models::Case::CASE_TYPES.keys.include?(@case.type.to_sym)
         out = haml(:'case/errors/unknown_type', layout: :layout_minimal, locals: {
           title: t(:'case/unknown_type/title'),
           case_obj: @case,

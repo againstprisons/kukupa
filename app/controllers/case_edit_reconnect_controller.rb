@@ -21,12 +21,14 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
+
+    @show = Kukupa::Models::Case::CASE_TYPES[@case.type.to_sym][:show]
+    return halt 404 unless @show[:reconnect]
   end
 
   def index(cid)
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
-    return halt 404 unless @case.type == 'case'
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
@@ -41,6 +43,7 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
       case_obj: @case,
       case_name: @case_name,
       case_prn: @case.decrypt(:prisoner_number),
+      case_show: @show,
       case_reconnect: {
         id: @reconnect_id,
         data: @reconnect_data,
@@ -52,7 +55,6 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
   def sync(cid)
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
-    return halt 404 unless @case.type == 'case'
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
@@ -69,7 +71,6 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
   def unlink(cid)
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
-    return halt 404 unless @case.type == 'case'
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
@@ -87,7 +88,6 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
   def link(cid)
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
-    return halt 404 unless @case.type == 'case'
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
@@ -116,7 +116,6 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
   def manual_link(cid)
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
-    return halt 404 unless @case.type == 'case'
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end

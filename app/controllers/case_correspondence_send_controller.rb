@@ -17,6 +17,9 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
+
+    @show = Kukupa::Models::Case::CASE_TYPES[@case.type.to_sym][:show]
+    return halt 404 unless @show[:correspondence]
   end
 
   def index(cid)
@@ -29,6 +32,7 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
         title: @title,
         case_obj: @case,
         case_name: @case_name,
+        case_show: @show,
         reconnect_id: @reconnect_id,
         reconnect_data: @reconnect_data,
       })
@@ -90,6 +94,7 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
           title: @title,
           case_obj: @case,
           case_name: @case_name,
+          case_show: @show,
           compose_subject: @subject,
           compose_content: @content,
         })
@@ -100,6 +105,7 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
       title: @title,
       case_obj: @case,
       case_name: @case_name,
+      case_show: @show,
       template_name: @template&.decrypt(:name),
       compose_subject: @subject,
       compose_content: @content,
@@ -119,6 +125,7 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
       title: @title,
       case_obj: @case,
       case_name: @case_name,
+      case_show: @show,
       templates: @templates,
     })
   end

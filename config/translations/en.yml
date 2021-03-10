@@ -62,13 +62,13 @@
 :'case_purpose': "Case purpose"
 :'case_purpose/advocacy': "Advocacy"
 :'case_purpose/ppc': "Prisoner Political Committee"
-:'tag/coordinator': "Advocacy coordinator"
-:'tag/advocate': "Advocacy volunteer"
+:'case_privacy': "<%= t(\"case_type/#{casetype}\".to_sym) %> is private?"
 :'case_type/case': "Case"
 :'case_type/case/plural': "Cases"
 :'case_type/project': "Project"
 :'case_type/project/plural': "Projects"
-:'case_is_private': "Should this file be private?"
+:'tag/coordinator': "Advocacy coordinator"
+:'tag/advocate': "Advocacy volunteer"
 
 # Some generic stuff
 :'required_field_missing': "A required field was not provided."

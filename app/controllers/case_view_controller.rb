@@ -16,6 +16,8 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
       return halt 404 unless @case.can_view?(@user)
       @can_edit = @case.can_access?(@user)
     end
+
+    @show = Kukupa::Models::Case::CASE_TYPES[@case.type.to_sym][:show]
   end
 
   def index(cid)
@@ -83,6 +85,7 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
       title: @title,
       cuser_can_edit: @can_edit,
       case_obj: @case,
+      case_show: @show,
       case_open: @case.is_open,
       case_name: @case_name,
       case_prison: @prison,
