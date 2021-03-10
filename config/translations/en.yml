@@ -271,6 +271,7 @@
 
 # Cases - list
 :'case/list/title': "List cases"
+:'case/list/only_cases': "This view only shows cases, not projects. All projects are listed in the <a href=\"/case#projects\"><%= t(:'case/index/projects/section_title') %> section of the <strong><%= t(:'case/index/title') %></strong> page.</a>"
 :'case/list/no_cases': "No cases."
 :'case/list/toggle_closed': "Toggle showing closed cases"
 :'case/list/sort/section_title': "Sorting options"

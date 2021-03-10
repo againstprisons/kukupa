@@ -9,6 +9,10 @@
     %i.fa{class: is_open ? 'fa-toggle-off' : 'fa-toggle-on'}= ""
     = t(:'case/list/toggle_closed')
 
+.message.message-warning
+  %i.fa.fa-list= ""
+  = t(:'case/list/only_cases')
+
 - if is_open
   %form.pure-form.pure-form-stacked.form-main{method: 'GET'}
     %h1= t(:'case/list/sort/section_title')
