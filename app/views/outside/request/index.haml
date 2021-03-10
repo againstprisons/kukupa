@@ -48,7 +48,11 @@
           .x-margin
             %label{for: 'prisoner_prison'}
               = t(:'outside/request/prisoner_info/field_prison')
-            %input#prisoner_prison{name: 'prison', value: prison, required: true}
+            %select#prisoner_prison{name: 'prison', required: true}
+              %option{value: 0, disabled: true, selected: prison.nil?}= t(:'outside/request/prisoner_info/field_prison/select_one')
+              - prisons.each do |pr|
+                %option{value: pr.id, selected: pr.id == prison&.id}
+                  = pr.decrypt(:name)
 
         .pure-u-1.pure-u-md-1-2
           .x-margin

@@ -10,6 +10,11 @@ class Kukupa::Models::CaseNote < Sequel::Model
       metadata = JSON.parse(self.decrypt(:metadata) || '{}').map do |k, v|
         [k.to_sym, v]
       end.to_h
+
+      prison = Kukupa::Models::Prison[metadata[:prison].to_i]
+      if prison
+        metadata[:prison] = prison
+      end
     rescue
       metadata = {}
     end

@@ -82,6 +82,10 @@ module Kukupa
       :type => :json,
       :default => '[]',
     },
+    "prisons-hide-from-public" => {
+      :type => :json,
+      :default => '[]',
+    },
   }
 
   APP_CONFIG_DEPRECATED_ENTRIES = {

@@ -77,7 +77,15 @@
               = succeed ': ' do
                 = t(:'case_renderable/note/outside_request/prison')
               %span
-                &= rb[:metadata][:prison]
+                - if rb[:metadata][:prison].respond_to?(:id)
+                  &= rb[:metadata][:prison].decrypt(:name)
+                  = surround ' (', ') ' do
+                    Prison ID
+                    %code
+                      &= rb[:metadata][:prison].id
+
+                - else
+                  &= rb[:metadata][:prison]
 
       %blockquote.blockquote-fancy
         = rb[:content]

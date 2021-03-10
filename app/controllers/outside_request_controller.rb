@@ -4,6 +4,10 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
 
   def index
     @title = t(:'outside/request/title')
+    @prisons = Kukupa::Models::Prison
+      .exclude(id: Kukupa.app_config['prisons-hide-from-public'])
+      .all
+      .compact
 
     if request.post?
       @content = request.params['content']&.strip
@@ -21,8 +25,7 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
       @name_first = nil if @name_first&.empty?
       @name_last = request.params['name_last']&.strip
       @name_last = nil if @name_last&.empty?
-      @prison = request.params['prison']&.strip
-      @prison = nil if @prison&.empty?
+      @prison = Kukupa::Models::Prison[request.params['prison'].to_i]
       @prn = request.params['prn']&.strip&.downcase
       @prn = nil if @prn&.empty?
 
@@ -73,7 +76,7 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
           name: @requester_name,
           email: @requester_email,
           phone: @requester_phone,
-          prison: @prison,
+          prison: @prison.id,
         }
 
         # create an outside request in the given case
@@ -99,6 +102,7 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
 
     haml :'outside/request/index', :locals => {
       title: @title,
+      prisons: @prisons,
       requester_name: @requester_name,
       requester_phone: @requester_phone,
       requester_email: @requester_email,

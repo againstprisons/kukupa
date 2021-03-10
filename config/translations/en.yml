@@ -146,6 +146,7 @@
 :'outside/request/prisoner_info/field_name_first': "Prisoner's first name"
 :'outside/request/prisoner_info/field_name_last': "Prisoner's last name"
 :'outside/request/prisoner_info/field_prison': "Prison name"
+:'outside/request/prisoner_info/field_prison/select_one': "Select a prison"
 :'outside/request/prisoner_info/field_prn': "Prisoner number"
 :'outside/request/details/section_title': "Request details"
 :'outside/request/details/field_request': "Enter the details of your request"
