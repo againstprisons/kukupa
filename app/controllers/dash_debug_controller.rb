@@ -2,7 +2,7 @@ class Kukupa::Controllers::DashDebugController < Kukupa::Controllers::Applicatio
   add_route :get, "/restart", method: :restart
   add_route :get, "/lang-reload", method: :lang_reload
 
-  def before
+  def before(*args)
     return halt 404 unless settings.development?
   end
 

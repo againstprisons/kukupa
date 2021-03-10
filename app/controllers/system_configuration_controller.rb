@@ -9,7 +9,7 @@ class Kukupa::Controllers::SystemConfigurationController < Kukupa::Controllers::
   add_route :post, "/:key", method: :key_edit
   add_route :post, "/:key/delete", method: :key_delete
 
-  def before
+  def before(*args)
     return halt 404 unless logged_in?
     return halt 404 unless has_role?("system:config:access")
   end

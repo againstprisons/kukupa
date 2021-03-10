@@ -8,7 +8,7 @@ class Kukupa::Controllers::UserSettingsMfaTotpController < Kukupa::Controllers::
 
   include Kukupa::Helpers::MfaTotpHelpers
 
-  def before
+  def before(*args)
     return halt 404 unless logged_in?
 
     @title = t(:'usersettings/mfa/totp/title')

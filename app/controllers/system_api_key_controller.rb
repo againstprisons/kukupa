@@ -3,7 +3,7 @@ class Kukupa::Controllers::SystemApiKeyController < Kukupa::Controllers::SystemC
   add_route :post, '/create', method: :create
   add_route :post, '/revoke', method: :revoke
 
-  def before
+  def before(*args)
     return halt 404 unless logged_in?
     return halt 404 unless has_role?("system:apikey:access")
     @user = current_user

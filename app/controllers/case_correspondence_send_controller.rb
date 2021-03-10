@@ -8,21 +8,18 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
   include Kukupa::Helpers::CaseHelpers
   include Kukupa::Helpers::ReconnectHelpers
 
-  def before
+  def before(cid, *args)
+    super
     return halt 404 unless logged_in?
-    @user = current_user
 
-    @prisons = Kukupa::Models::Prison.get_prisons
-    @assignable_users = case_assignable_users
-  end
-
-  def index(cid)
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
+  end
 
+  def index(cid)
     @case_name = @case.get_name
     @title = t(:'case/correspondence/send/title', name: @case_name)
     @reconnect_id = @case.reconnect_id
@@ -110,12 +107,6 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
   end
   
   def templates(cid)
-    @case = Kukupa::Models::Case[cid]
-    return halt 404 unless @case && @case.is_open
-    unless has_role?('case:view_all')
-      return halt 404 unless @case.can_access?(@user)
-    end
-
     @case_name = @case.get_name
     @title = t(:'case/correspondence/send/title', name: @case_name)
     @reconnect_id = @case.reconnect_id

@@ -1,12 +1,11 @@
-class Kukupa::Controllers::CaseSearchController < Kukupa::Controllers::CaseController
+class Kukupa::Controllers::CaseSearchController < Kukupa::Controllers::ApplicationController
   add_route :get, '/'
 
   include Kukupa::Helpers::CaseHelpers
 
-  def before
+  def before(*args)
     return halt 404 unless logged_in?
     return halt 404 unless has_role?("case:search")
-    @user = current_user
   end
 
   def index

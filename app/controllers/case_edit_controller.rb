@@ -15,12 +15,18 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
   include Kukupa::Helpers::CaseHelpers
   include Kukupa::Helpers::ReconnectHelpers
 
-  def before
+  def before(cid)
+    super
     return halt 404 unless logged_in?
-    @user = current_user
 
     @prisons = Kukupa::Models::Prison.get_prisons
     @assignable_users = case_assignable_users
+
+    @case = Kukupa::Models::Case[cid]
+    return halt 404 unless @case && @case.is_open
+    unless has_role?('case:view_all')
+      return halt 404 unless @case.can_access?(@user)
+    end
   end
 
   def index(cid)

@@ -4,18 +4,18 @@ class Kukupa::Controllers::CaseTaskAddController < Kukupa::Controllers::CaseCont
 
   include Kukupa::Helpers::CaseHelpers
 
-  def before
+  def before(cid, *args)
+    super
     return halt 404 unless logged_in?
-    @user = current_user
-  end
 
-  def index(cid)
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
+  end
 
+  def index(cid)
     @accessors = case_users_with_access(@case)
     @case_name = @case.get_name
     @title = t(:'case/task/add/title', name: @case_name)

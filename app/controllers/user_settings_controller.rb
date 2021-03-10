@@ -7,7 +7,7 @@ class Kukupa::Controllers::UserSettingsController < Kukupa::Controllers::Applica
   add_route :post, "/change-password", method: :change_password
   add_route :post, "/change-case-load-limit", method: :change_case_load_limit
 
-  def before
+  def before(*args)
     return halt 404 unless logged_in?
     @user = current_user
     unless @user.sso_method.nil?

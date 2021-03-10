@@ -4,18 +4,18 @@ class Kukupa::Controllers::CaseSpendAddController < Kukupa::Controllers::CaseCon
   add_route :get, '/'
   add_route :post, '/'
 
-  def before
+  def before(cid, *args)
+    super
     return halt 404 unless logged_in?
-    @user = current_user
-  end
 
-  def index(cid)
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
+  end
 
+  def index(cid)
     @case_name = @case.get_name
     @title = t(:'case/spend/add/title', name: @case_name)
 

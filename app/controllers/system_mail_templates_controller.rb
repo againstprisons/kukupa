@@ -5,7 +5,7 @@ class Kukupa::Controllers::SystemMailTemplatesController < Kukupa::Controllers::
   add_route :get, '/edit/:tplid', method: :edit
   add_route :post, '/edit/:tplid', method: :edit
 
-  def before
+  def before(*args)
     return halt 404 unless logged_in?
     return halt 404 unless has_role?("system:mail_templates")
 

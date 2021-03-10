@@ -8,7 +8,7 @@ class Kukupa::Controllers::SystemRolesController < Kukupa::Controllers::SystemCo
 
   include Kukupa::Helpers::SystemRolesHelpers
 
-  def before
+  def before(*args)
     return halt 404 unless logged_in?
     return halt 404 unless has_role?("system:roles:access")
   end

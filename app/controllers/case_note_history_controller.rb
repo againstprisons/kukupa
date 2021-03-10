@@ -6,9 +6,15 @@ class Kukupa::Controllers::CaseNoteHistoryController < Kukupa::Controllers::Case
 
   include Kukupa::Helpers::CaseHelpers
 
-  def before
+  def before(cid, *args)
+    super
     return halt 404 unless logged_in?
-    @user = current_user
+
+    @case = Kukupa::Models::Case[cid]
+    return halt 404 unless @case && @case.is_open
+    unless has_role?('case:view_all')
+      return halt 404 unless @case.can_access?(@user)
+    end
   end
 
   def index(cid, nid)

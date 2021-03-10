@@ -3,7 +3,7 @@ class Kukupa::Controllers::SystemDashboardController < Kukupa::Controllers::Syst
   add_route :post, '/act/invite', method: :invite
   add_route :post, '/act/test-email', method: :test_email
 
-  def before
+  def before(*args)
     return halt 404 unless logged_in?
     return halt 404 unless has_role?("system:access")
     @user = current_user

@@ -3,7 +3,7 @@ class Kukupa::Controllers::UserSettingsMfaController < Kukupa::Controllers::Appl
   add_route :get, "/disable", method: :disable
   add_route :post, "/disable", method: :disable
 
-  def before
+  def before(*args)
     return halt 404 unless logged_in?
 
     @title = t(:'usersettings/mfa/title')

@@ -1,12 +1,12 @@
 require 'chronic'
 
-class Kukupa::Controllers::CaseIndexController < Kukupa::Controllers::CaseController
+class Kukupa::Controllers::CaseIndexController < Kukupa::Controllers::ApplicationController
   add_route :get, '/'
 
   include Kukupa::Helpers::CaseHelpers
   include Kukupa::Helpers::CaseIndexHelpers
 
-  def before
+  def before(*args)
     return halt 404 unless logged_in?
     @user = current_user
   end

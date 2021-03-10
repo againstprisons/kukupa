@@ -4,18 +4,21 @@ class Kukupa::Controllers::CaseNoteAddController < Kukupa::Controllers::CaseCont
   add_route :get, '/'
   add_route :post, '/'
 
-  def before
+  def before(cid)
+    super
     return halt 404 unless logged_in?
-    @user = current_user
-  end
 
-  def index(cid)
+    @prisons = Kukupa::Models::Prison.get_prisons
+    @assignable_users = case_assignable_users
+
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
+  end
 
+  def index(cid)
     @case_name = @case.get_name
     @title = t(:'case/note/add/title', name: @case_name)
 

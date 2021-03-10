@@ -3,7 +3,7 @@ class Kukupa::Controllers::AuthSsoController < Kukupa::Controllers::ApplicationC
 
   add_route :get, "/"
 
-  def before
+  def before(*args)
     @providers = auth_providers()
     return halt 404 unless @providers.count.positive?
   end

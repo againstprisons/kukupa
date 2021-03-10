@@ -5,7 +5,7 @@ class Kukupa::Controllers::SystemDebugController < Kukupa::Controllers::SystemCo
 
   include Kukupa::Helpers::SystemDebugHelpers
 
-  def before
+  def before(*args)
     return halt 404 unless logged_in?
     return halt 404 unless has_role?("system:debug")
   end

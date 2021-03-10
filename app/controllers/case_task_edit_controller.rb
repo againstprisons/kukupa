@@ -6,18 +6,18 @@ class Kukupa::Controllers::CaseTaskEditController < Kukupa::Controllers::CaseCon
 
   include Kukupa::Helpers::CaseHelpers
 
-  def before
+  def before(cid, *args)
+    super
     return halt 404 unless logged_in?
-    @user = current_user
-  end
 
-  def index(cid, tid)
-    @case = Kukupa::Models::Case[cid.to_i]
+    @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
-
+  end
+  
+  def index(cid, tid)
     @task = Kukupa::Models::CaseTask[tid.to_i]
     return halt 404 unless @task
     return halt 404 unless @task.case == @case.id
@@ -86,12 +86,6 @@ class Kukupa::Controllers::CaseTaskEditController < Kukupa::Controllers::CaseCon
   end
 
   def complete(cid, tid)
-    @case = Kukupa::Models::Case[cid.to_i]
-    return halt 404 unless @case && @case.is_open
-    unless has_role?('case:view_all')
-      return halt 404 unless @case.can_access?(@user)
-    end
-
     @task = Kukupa::Models::CaseTask[tid.to_i]
     return halt 404 unless @task
     return halt 404 unless @task.case == @case.id
@@ -126,8 +120,6 @@ class Kukupa::Controllers::CaseTaskEditController < Kukupa::Controllers::CaseCon
 
   def delete(cid, tid)
     return halt 404 unless has_role?('case:delete_entry')
-    @case = Kukupa::Models::Case[cid.to_i]
-    return halt 404 unless @case && @case.is_open
 
     @task = Kukupa::Models::CaseTask[tid.to_i]
     return halt 404 unless @task

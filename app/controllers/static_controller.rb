@@ -11,7 +11,7 @@ class Kukupa::Controllers::StaticController < Kukupa::Controllers::ApplicationCo
   add_route :get, "/vendor/*", :method => :vendor
   add_route :get, "/*"
 
-  def before
+  def before(*args)
     settings.views = {
       :scss => File.join("assets", "scss"),
       :default => File.join("app", "views"),

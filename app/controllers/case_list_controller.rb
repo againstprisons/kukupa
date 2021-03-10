@@ -1,12 +1,12 @@
 require 'chronic'
 
-class Kukupa::Controllers::CaseListController < Kukupa::Controllers::CaseController
+class Kukupa::Controllers::CaseListController < Kukupa::Controllers::ApplicationController
   add_route :get, '/'
 
   include Kukupa::Helpers::CaseHelpers
   include Kukupa::Helpers::CaseListHelpers
 
-  def before
+  def before(*args)
     return halt 404 unless logged_in?
     return halt 404 unless has_role?("case:list:cases")
     @user = current_user

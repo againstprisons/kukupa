@@ -6,7 +6,7 @@ class Kukupa::Controllers::AuthSsoMagentaController < Kukupa::Controllers::Appli
   add_route :get, "/:clientid"
   add_route :get, "/:clientid/callback", method: :callback
 
-  def before
+  def before(*args)
     return redirect url("/") if logged_in?
     @providers = auth_providers(filter_type: :magenta)
     return halt 404 unless @providers.count.positive?

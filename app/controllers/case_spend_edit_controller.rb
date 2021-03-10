@@ -5,18 +5,18 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
   add_route :post, '/'
   add_route :post, '/delete', method: :delete
 
-  def before
+  def before(cid, *args)
+    super
     return halt 404 unless logged_in?
-    @user = current_user
-  end
 
-  def index(cid, sid)
-    @case = Kukupa::Models::Case[cid.to_i]
+    @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
+  end
 
+  def index(cid, sid)
     @spend = Kukupa::Models::CaseSpend[sid.to_i]
     return halt 404 unless @spend
     return halt 404 unless @spend.case == @case.id
@@ -154,9 +154,6 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
 
   def delete(cid, sid)
     return halt 404 unless has_role?('case:delete_entry')
-
-    @case = Kukupa::Models::Case[cid.to_i]
-    return halt 404 unless @case && @case.is_open
 
     @spend = Kukupa::Models::CaseSpend[sid.to_i]
     return halt 404 unless @spend

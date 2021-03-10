@@ -44,7 +44,10 @@ module Kukupa::Route
           controller = this.new(self)
           controller.preflight()
 
-          controller.before() if controller.respond_to?(:before)
+          if controller.respond_to?(:before)
+            controller.before(*args)
+          end
+
           next controller.send(meth, *args)
         end
       end

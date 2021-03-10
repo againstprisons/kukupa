@@ -4,7 +4,7 @@ class Kukupa::Controllers::SystemWorkerController < Kukupa::Controllers::SystemC
 
   include Kukupa::Helpers::SystemWorkerHelpers
 
-  def before
+  def before(*args)
     return halt 404 unless logged_in?
     return halt 404 unless has_role?("system:worker")
     @workers = available_workers()

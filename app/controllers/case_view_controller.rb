@@ -4,12 +4,10 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
   include Kukupa::Helpers::CaseHelpers
   include Kukupa::Helpers::CaseViewHelpers
 
-  def before
+  def before(cid)
+    super
     return halt 404 unless logged_in?
-    @user = current_user
-  end
 
-  def index(cid)
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case
     if has_role?('case:view_all')
@@ -18,7 +16,9 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
       return halt 404 unless @case.can_view?(@user)
       @can_edit = @case.can_access?(@user)
     end
+  end
 
+  def index(cid)
     @case_name = @case.get_name
     @title = t(:'case/view/title', name: @case_name, casetype: @case.type)
 

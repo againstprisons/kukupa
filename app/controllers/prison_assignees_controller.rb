@@ -3,7 +3,7 @@ class Kukupa::Controllers::PrisonAssigneesController < Kukupa::Controllers::Appl
   add_route :post, "/assign", method: :assign_self
   add_route :post, "/unassign", method: :unassign_self
 
-  def before
+  def before(*args)
     unless logged_in?
       session[:after_login] = request.path
       return redirect to "/auth"

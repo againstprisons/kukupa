@@ -4,7 +4,7 @@ class Kukupa::Controllers::SystemPrisonController < Kukupa::Controllers::SystemC
   add_route :get, '/:pid/edit', method: :edit
   add_route :post, '/:pid/edit', method: :edit
 
-  def before
+  def before(*args)
     return halt 404 unless logged_in?
     return halt 404 unless has_role?("system:prison:access")
     @user = current_user

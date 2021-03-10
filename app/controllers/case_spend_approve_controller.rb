@@ -2,19 +2,18 @@ class Kukupa::Controllers::CaseSpendApproveController < Kukupa::Controllers::Cas
   add_route :get, '/'
   add_route :post, '/'
 
-  def before
+  def before(cid, *args)
+    super
     return halt 404 unless logged_in?
-    return halt 404 unless has_role?("case:spend:can_approve")
-    @user = current_user
-  end
 
-  def index(cid, sid)
-    @case = Kukupa::Models::Case[cid.to_i]
+    @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
+  end
 
+  def index(cid, sid)
     @spend = Kukupa::Models::CaseSpend[sid.to_i]
     return halt 404 unless @spend
     return halt 404 unless @spend.case == @case.id
