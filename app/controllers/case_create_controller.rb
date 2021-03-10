@@ -1,6 +1,8 @@
 class Kukupa::Controllers::CaseCreateController < Kukupa::Controllers::CaseController
   add_route :get, '/'
   add_route :post, '/'
+  add_route :get, '/project', method: :project
+  add_route :post, '/project', method: :project
 
   include Kukupa::Helpers::CaseHelpers
 
@@ -14,7 +16,7 @@ class Kukupa::Controllers::CaseCreateController < Kukupa::Controllers::CaseContr
 
   def index
     if request.get?
-      return haml(:'case/create', :locals => {
+      return haml(:'case/create/index', :locals => {
         title: @title,
       })
     end
@@ -38,7 +40,7 @@ class Kukupa::Controllers::CaseCreateController < Kukupa::Controllers::CaseContr
     # on the PRN field for our input, and redirect to the open case with that
     # PRN if one exists instead of creating a new case
 
-    @case = Kukupa::Models::Case.new(is_open: true).save
+    @case = Kukupa::Models::Case.new(type: 'case', is_open: true).save
     @case.encrypt(:first_name, first_name)
     @case.encrypt(:middle_name, middle_name) if middle_name
     @case.encrypt(:last_name, last_name)
@@ -48,6 +50,30 @@ class Kukupa::Controllers::CaseCreateController < Kukupa::Controllers::CaseContr
     Kukupa::Models::CaseFilter.create_filters_for(@case)
 
     flash :success, t(:'case/create/success', case_id: @case.id)
+    return redirect url("/case/#{@case.id}/view")
+  end
+
+  def project
+    if request.get?
+      return haml(:'case/create/project', :locals => {
+        title: @title,
+      })
+    end
+
+    project_name = request.params['name']&.strip
+    project_name = nil if project_name&.empty?
+    is_private = request.params['private']&.strip&.downcase == 'on'
+
+    if project_name.nil?
+      flash :error, t(:'required_field_missing')
+      return redirect request.path
+    end
+
+    @case = Kukupa::Models::Case.new(type: 'project', is_open: true, is_private: is_private).save
+    @case.encrypt(:first_name, project_name)
+    @case.save
+
+    flash :success, t(:'case/create/project/success', case_id: @case.id)
     return redirect url("/case/#{@case.id}/view")
   end
 end

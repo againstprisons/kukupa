@@ -299,10 +299,16 @@
 
 # Cases - create
 :'case/create/title': "Create case"
+:'case/create/switch': "Switch to project creation"
 :'case/create/section_title': "Case details"
 :'case/create/submit': "Create case"
 :'case/create/success': "Successfully created case as ID <code><%= e(case_id) %></code>."
 :'case/create/errors/prn_exists': "The prisoner number you have entered is already in use by a case."
+:'case/create/project/title': "Create project"
+:'case/create/project/switch': "Switch to case creation"
+:'case/create/project/section_title': "Project details"
+:'case/create/project/submit': "Create project"
+:'case/create/project/success': "Successfully created project as ID <code><%= e(case_id) %></code>."
 
 # Cases - case navigation
 :'case/nav/view': "Case overview"

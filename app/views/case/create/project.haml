@@ -1,0 +1,28 @@
+%h1= title
+
+.inline-form
+  %a.pure-button.button{href: url('/case')}
+    %i.fa.fa-chevron-left= ""
+    = t(:'back')
+
+  %a.pure-button.button{href: url('/case/create')}
+    %i.fa.fa-circle-o= ""
+    = t(:'case/create/project/switch')
+
+%form.pure-form.pure-form-stacked.form-main{method: "POST"}
+  %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+  %h1= t(:'case/create/project/section_title')
+
+  %label{for: 'name'}
+    = t(:'name/project')
+    %span.badge= t(:'required')
+
+  %input#name{type: 'text', name: 'name', required: true, placeholder: t(:'name/project')}
+
+  %label{for: 'is_private'}
+    %input#is_private{type: 'checkbox', name: 'is_private'}
+    = t(:'case_is_private')
+
+  %button.pure-button.button.button-primary{type: 'submit'}
+    %i.fa.fa-plus= ""
+    = t(:'case/create/project/submit')

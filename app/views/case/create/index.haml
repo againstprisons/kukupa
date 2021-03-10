@@ -5,6 +5,10 @@
     %i.fa.fa-chevron-left= ""
     = t(:'back')
 
+  %a.pure-button.button{href: url('/case/create/project')}
+    %i.fa.fa-circle-o= ""
+    = t(:'case/create/switch')
+
 %form.pure-form.pure-form-stacked.form-main{method: "POST"}
   %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
   %h1= t(:'case/create/section_title')
