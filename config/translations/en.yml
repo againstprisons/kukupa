@@ -156,6 +156,7 @@
 :'outside/request/prisoner_info/field_prn': "Prisoner number"
 :'outside/request/details/section_title': "Request details"
 :'outside/request/details/field_request': "Enter the details of your request"
+:'outside/request/agreements/section_title': "Agreements"
 :'outside/request/submit': "Submit request"
 :'outside/request/errors/missing_required': "A required field was not provided. Please fill in all the fields, then try again."
 :'outside/request/complete/title': "Advocacy request submitted!"

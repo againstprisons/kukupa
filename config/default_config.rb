@@ -94,6 +94,10 @@ module Kukupa
       :type => :json,
       :default => '[]',
     },
+    "outside-request-required-agreements" => {
+      :type => :json,
+      :default => '[]',
+    },
   }
 
   APP_CONFIG_DEPRECATED_ENTRIES = {

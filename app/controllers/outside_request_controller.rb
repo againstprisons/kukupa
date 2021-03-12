@@ -39,6 +39,14 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
         @prn.nil?,
       ]
 
+      unless Kukupa.app_config['outside-request-required-agreements'].empty?
+        Kukupa.app_config['outside-request-required-agreements'].each_index do |i|
+          unless request.params["agreement#{i}"]&.strip&.downcase == 'on'
+            errs << true
+          end
+        end
+      end
+
       if errs.none?
         # try and find a case with the given PRN
         @case_id = Kukupa::Models::CaseFilter
@@ -111,6 +119,7 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
       prison: @prison,
       prn: @prn,
       content: @content,
+      agreements: Kukupa.app_config['outside-request-required-agreements'],
     }
   end
 end

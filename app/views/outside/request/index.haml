@@ -66,6 +66,16 @@
       .x-margin
         = haml :'partials/editor', layout: false, locals: {editor_name: 'content', editor_label: t(:'outside/request/details/field_request'), editor_data: content}
 
+    - unless agreements.empty?
+      .form-main
+        %h1= t(:'outside/request/agreements/section_title')
+
+        .x-margin
+          - agreements.each_index do |i|
+            %label{for: "agreement#{i}"}
+              %input{type: 'checkbox', id: "agreement#{i}", name: "agreement#{i}", required: true}
+              &= agreements[i]
+
     .form-main
       .y-margin
         %button.pure-button.button.button-primary{type: 'submit'}
