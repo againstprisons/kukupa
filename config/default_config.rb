@@ -86,6 +86,14 @@ module Kukupa
       :type => :json,
       :default => '[]',
     },
+    "privacy-agreement-enable" => {
+      :type => :bool,
+      :default => false,
+    },
+    "privacy-agreement-content" => {
+      :type => :text,
+      :default => '<p>This is the default privacy agreement text.</p>',
+    },
   }
 
   APP_CONFIG_DEPRECATED_ENTRIES = {

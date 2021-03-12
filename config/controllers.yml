@@ -20,6 +20,8 @@ controllers:
   - path: /auth
     controller: AuthLoginController
 
+  - path: /user/privacy-agreement
+    controller: UserSettingsPrivacyAgreementController
   - path: /user/mfa/recovery
     controller: UserSettingsMfaRecoveryController
   - path: /user/mfa/totp

@@ -646,6 +646,13 @@
 :'usersettings/tags/content': "Tags are assigned to you by <%= e(site_name) %> administrators, as part of granting you permissions. Any tags you have are displayed beside your name when assigning cases or case tasks, and serve to let the assigner know what role(s) you have."
 :'usersettings/tags/no_tags': "You don't have any user tags."
 
+# User settings - privacy agreement
+:'usersettings/privacy_agreement/title': "Privacy agreement"
+:'usersettings/privacy_agreement/view': "View the privacy agreement"
+:'usersettings/privacy_agreement/submit': "I agree to the above"
+:'usersettings/privacy_agreement/logout': "I do not agree, log me out of <%= e(site_name) %>"
+:'usersettings/privacy_agreement/success': "Thank you for confirming. You can now access the rest of <%= e(site_name) %>."
+
 # User settings - multi-factor authentication
 :'usersettings/mfa/title': "Multi-factor authentication"
 :'usersettings/mfa/disabled/content': "Multi-factor authentication for your account is currently disabled."

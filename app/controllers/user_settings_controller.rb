@@ -35,7 +35,8 @@ class Kukupa::Controllers::UserSettingsController < Kukupa::Controllers::Applica
           sso_provider: @user_sso_provider,
           sso_identifier: [@user.sso_method, @user.sso_external_id].join("#"),
           tags: @user.roles.map{|r| /tag\:(\w+)/.match(r)&.[](1)}.compact.uniq,
-        }
+        },
+        agreement_enabled: Kukupa.app_config['privacy-agreement-enable'],
       }
     end
   end

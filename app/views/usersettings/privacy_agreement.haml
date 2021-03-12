@@ -1,0 +1,21 @@
+.midsplash-container
+  .midsplash.privacy-agreement
+    %h1= title
+    = agreement
+
+    - if is_okay
+      %a.pure-button.button.button-primary{href: url('/user')}
+        %i.fa.fa-chevron-left= ""
+        = t(:'back')
+
+    - else
+      %form{method: 'POST'}
+        %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+
+        %button.pure-button.button.button-primary{type: 'submit'}
+          %i.fa.fa-check= ""
+          = t(:'usersettings/privacy_agreement/submit')
+
+        %a.pure-button.button.button-error{href: url('/auth/logout')}
+          %i.fa.fa-sign-out= ""
+          = t(:'usersettings/privacy_agreement/logout')

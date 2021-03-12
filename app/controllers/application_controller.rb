@@ -24,5 +24,21 @@ class Kukupa::Controllers::ApplicationController
         return halt 403, "CSRF failed"
       end
     end
+
+    @current_user = current_user
+    if Kukupa.app_config['privacy-agreement-enable']
+      if @current_user && @current_user.has_role?('case:assignable')
+        unless @current_user.privacy_agreement_okay
+          okay = false
+          okay = true if current_prefix?('/auth') && !current?('/auth/signup')
+          okay = true if current_prefix?('/static')
+          okay = true if current?('/user/privacy-agreement')
+
+          unless okay
+            return halt redirect url("/user/privacy-agreement")
+          end
+        end
+      end
+    end
   end
 end
