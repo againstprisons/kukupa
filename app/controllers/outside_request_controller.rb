@@ -5,7 +5,7 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
   def index
     @title = t(:'outside/request/title')
     @prisons = Kukupa::Models::Prison
-      .exclude(id: Kukupa.app_config['prisons-hide-from-public'])
+      .exclude(id: Kukupa.app_config['outside-request-hide-prisons'])
       .all
       .compact
 

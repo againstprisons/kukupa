@@ -82,10 +82,6 @@ module Kukupa
       :type => :json,
       :default => '[]',
     },
-    "prisons-hide-from-public" => {
-      :type => :json,
-      :default => '[]',
-    },
     "privacy-agreement-enable" => {
       :type => :bool,
       :default => false,
@@ -94,9 +90,17 @@ module Kukupa
       :type => :text,
       :default => '<p>This is the default privacy agreement text.</p>',
     },
+    "outside-request-hide-prisons" => {
+      :type => :json,
+      :default => '[]',
+    },
   }
 
   APP_CONFIG_DEPRECATED_ENTRIES = {
+    "prisons-hide-from-public" => {
+      :in => "0.1.0-alpha.1",
+      :reason => "Changed key name to 'outside-request-hide-prisons'",
+    },
   }
 
   class Application
