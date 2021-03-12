@@ -20,8 +20,8 @@
   %input#name{type: 'text', name: 'name', required: true, placeholder: t(:'name/project')}
 
   %label{for: 'is_private'}
-    %input#is_private{type: 'checkbox', name: 'is_private'}
-    = t(:'case_is_private')
+    %input#is_private{type: 'checkbox', name: 'is_private', checked: true}
+    = t(:'case_privacy', casetype: 'project')
 
   %button.pure-button.button.button-primary{type: 'submit'}
     %i.fa.fa-plus= ""
