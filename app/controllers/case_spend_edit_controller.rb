@@ -41,6 +41,7 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
         spend_approver_self: @spend.approver == @user.id,
         spend_reimbursement: @spend.is_reimbursement,
         spend_reimbursement_info: @spend.decrypt(:reimbursement_info),
+        spend_complete: @spend.is_complete,
         spend_receipt: @receipt,
         urls: {
           delete: url("/case/#{@case.id}/spend/#{@spend.id}/delete"),
@@ -81,6 +82,9 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
       @reimbursement_info = Sanitize.fragment(@reimbursement_info, Sanitize::Config::RELAXED)
     end
 
+    # spend complete?
+    @is_complete = request.params['complete']&.strip&.downcase == "on"
+
     # replace existing receipt if one was uploaded
     if params[:file]
       begin
@@ -103,6 +107,8 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
       new_content: @content,
       old_reimbursement_info: @spend.decrypt(:reimbursement_info),
       new_reimbursement_info: @reimbursement_info,
+      old_complete: @spend.is_complete,
+      new_complete: @is_complete,
     }
 
     @spend_update = Kukupa::Models::CaseSpendUpdate.new(
@@ -118,6 +124,7 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
     @spend.encrypt(:amount, @amount.to_s)
     @spend.encrypt(:notes, @content)
     @spend.is_reimbursement = @reimbursement
+    @spend.is_complete = @is_complete
     @spend.encrypt(:reimbursement_info, @reimbursement_info)
     @spend.save
 

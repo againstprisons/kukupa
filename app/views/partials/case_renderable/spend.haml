@@ -68,3 +68,8 @@
 
     - if rb[:receipt]
       %p= t(:'case_renderable/spend/has_receipt', url: rb[:receipt])
+
+    - unless rb[:approver].nil? || rb[:approver][:id].to_i.zero?
+      - unless rb[:is_complete]
+        .message.message-warning
+          = t(:'case_renderable/spend/incomplete')

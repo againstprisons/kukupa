@@ -50,6 +50,7 @@ class Kukupa::Models::CaseSpend < Sequel::Model
       notes: self.decrypt(:notes),
       edited: edited_ts,
       receipt: receipt_url,
+      is_complete: self.is_complete,
       author: [:user, self.author],
       approver: [:user, self.approver],
       actions: actions,

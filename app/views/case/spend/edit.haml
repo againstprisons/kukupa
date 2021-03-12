@@ -60,6 +60,10 @@
 
       %input#receipt{name: 'file', type: 'file', required: false}
 
+      %label{for: 'complete'}
+        %input#complete{type: 'checkbox', name: 'complete', checked: spend_complete}
+        = t(:'case/spend/edit/edit/is_complete')
+
       %button.pure-button.button.button-primary{type: 'submit'}
         %i.fa.fa-pencil-square-o= ""
         = t(:'case/spend/edit/edit/submit')
