@@ -67,6 +67,10 @@
 :'case_type/case/plural': "Cases"
 :'case_type/project': "Project"
 :'case_type/project/plural': "Projects"
+:'case_duration': "Case duration"
+:'case_duration/short': "Short term case"
+:'case_duration/medium': "Medium term case"
+:'case_duration/long': "Long term case"
 :'tag/coordinator': "Advocacy coordinator"
 :'tag/advocate': "Advocacy volunteer"
 

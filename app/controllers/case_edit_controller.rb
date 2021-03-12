@@ -54,6 +54,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
     @release_date = Chronic.parse(@release_date, guess: true) if @release_date
     @global_note = @case.decrypt(:global_note)
     @case_purpose = @case.purpose
+    @case_duration = @case.duration
     @reconnect_id = @case.reconnect_id
     @reconnect_data = reconnect_penpal(cid: @reconnect_id) if @reconnect_id.to_i.positive?
     @case_is_new = @case.creation > Chronic.parse(Kukupa.app_config['case-new-threshold'])
@@ -104,6 +105,8 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       @global_note = Sanitize.fragment(@global_note, Sanitize::Config::RELAXED)
       @case_purpose = request.params['case_purpose']&.strip&.downcase
       @case_purpose = Kukupa::Models::Case::ALLOWED_PURPOSES.first if @case_purpose.nil? || @case_purpose&.empty?
+      @case_duration = request.params['case_duration']&.strip&.downcase
+      @case_duration = Kukupa::Models::Case::ALLOWED_DURATIONS.first if @case_duration.nil? || @case_duration&.empty?
       @is_private = request.params['is_private']&.strip&.downcase == 'on'
 
       if @case.type == 'case'
@@ -139,6 +142,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       @case.encrypt(:release_date, @release_date&.strftime('%Y-%m-%d'))
       @case.encrypt(:global_note, @global_note)
       @case.purpose = @case_purpose
+      @case.duration = @case_duration
       @case.is_private = @is_private
       @case.save
 
@@ -167,6 +171,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
         release_date: @release_date,
         global_note: @global_note,
         case_purpose: @case_purpose,
+        case_duration: @case_duration,
         is_private: @case.is_private,
       },
       case_reconnect: {

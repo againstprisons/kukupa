@@ -2,6 +2,9 @@ class Kukupa::Models::Case < Sequel::Model
   # Allowed case purposes
   ALLOWED_PURPOSES = %w[advocacy ppc]
 
+  # Allowed case durations
+  ALLOWED_DURATIONS = %w[short medium long]
+
   # Case types
   CASE_TYPES = {
     # Normal cases (this is the default)
@@ -14,6 +17,7 @@ class Kukupa::Models::Case < Sequel::Model
         :birth_date,
         :release_date,
         :case_purpose,
+        :case_duration,
         :global_note,
       ],
       show: {
@@ -79,6 +83,12 @@ class Kukupa::Models::Case < Sequel::Model
       tl_key: :'case_purpose',
       type: :select,
       select_options: ALLOWED_PURPOSES.map {|pr| {value: pr, tl_key: "case_purpose/#{pr}".to_sym}},
+      required: true,
+    },
+    case_duration: {
+      tl_key: :'case_duration',
+      type: :select,
+      select_options: ALLOWED_DURATIONS.map {|pr| {value: pr, tl_key: "case_duration/#{pr}".to_sym}},
       required: true,
     },
     global_note: {
