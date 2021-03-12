@@ -102,7 +102,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       @release_date = Chronic.parse(request.params['release_date']&.strip, guess: true)
       @global_note = request.params['global_note']&.strip
       @global_note = Sanitize.fragment(@global_note, Sanitize::Config::RELAXED)
-      @case_purpose = request.params['purpose']&.strip&.downcase
+      @case_purpose = request.params['case_purpose']&.strip&.downcase
       @case_purpose = Kukupa::Models::Case::ALLOWED_PURPOSES.first if @case_purpose.nil? || @case_purpose&.empty?
       @is_private = request.params['is_private']&.strip&.downcase == 'on'
 

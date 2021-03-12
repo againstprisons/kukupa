@@ -77,7 +77,6 @@ class Kukupa::Models::Case < Sequel::Model
     },
     case_purpose: {
       tl_key: :'case_purpose',
-      editable_name: :purpose,
       type: :select,
       select_options: ALLOWED_PURPOSES.map {|pr| {value: pr, tl_key: "case_purpose/#{pr}".to_sym}},
       required: true,
