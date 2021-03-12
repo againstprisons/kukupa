@@ -19,6 +19,18 @@ class Kukupa::Models::CaseNote < Sequel::Model
       metadata = {}
     end
 
+    file_desc = nil
+    file_id = self.decrypt(:file_id)
+    unless file_id.nil? || file_id&.empty?
+      file = Kukupa::Models::File.where(file_id: file_id).first
+      if file
+        file_desc = {
+          file_id: file.file_id,
+          original_fn: file.original_fn,
+        }
+      end
+    end
+
     actions = [
       {
         url: [:url, "/case/#{self.case}/note/#{self.id}"],
@@ -39,6 +51,8 @@ class Kukupa::Models::CaseNote < Sequel::Model
       author: [:user, self.author],
       history_url: [:url, "/case/#{self.case}/note/#{self.id}/history"],
       actions: actions,
+      file: file_desc,
+      file_url: [:url, "/case/#{self.case}/note/#{self.id}/file"],
     }
 
     items

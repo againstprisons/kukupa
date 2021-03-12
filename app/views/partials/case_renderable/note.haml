@@ -92,3 +92,8 @@
 
     - else
       = rb[:content]
+
+      - if rb[:file]
+        .message.message-warning
+          %i.fa.fa-file-o= ""
+          = t(:'case_renderable/note/attached_file', name: rb[:file][:original_fn], url: rb[:file_url])

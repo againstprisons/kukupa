@@ -7,12 +7,15 @@
       %span
         = t(:'back')
 
-  %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST', enctype: 'multipart/form-data'}
     %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
     %h1= t(:'case/note/add/section_title')
 
     = haml :'partials/editor', layout: false, locals: {editor_name: 'content', editor_label: t(:'case/note/add/note_field')}
     .y-margin= ""
+
+    %label{for: 'file'}= t(:'case/note/add/file')
+    %input#file{name: 'file', type: 'file', required: false}
 
     %button.pure-button.button.button-primary{type: 'submit'}
       %i.fa.fa-pencil-square-o= ""

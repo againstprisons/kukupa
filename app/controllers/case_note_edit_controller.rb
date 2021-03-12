@@ -3,6 +3,7 @@ require 'sanitize'
 class Kukupa::Controllers::CaseNoteEditController < Kukupa::Controllers::CaseController
   add_route :get, '/'
   add_route :post, '/'
+  add_route :get, '/file', method: :file
   add_route :post, '/delete', method: :delete
 
   def before(cid, *args)
@@ -77,6 +78,23 @@ class Kukupa::Controllers::CaseNoteEditController < Kukupa::Controllers::CaseCon
 
     flash :success, t(:'case/note/edit/edit/success')
     return redirect request.path
+  end
+
+  def file(cid, nid)
+    @case = Kukupa::Models::Case[cid.to_i]
+    return halt 404 unless @case
+
+    @note = Kukupa::Models::CaseNote[nid.to_i]
+    return halt 404 unless @note
+    return halt 404 unless @note.case == @case.id
+
+    file_id = @note.decrypt(:file_id)
+    @file = Kukupa::Models::File.where(file_id: file_id).first
+    return halt 404 unless @file
+
+    @dl_token = @file.generate_download_token(@user)
+    @url_dl = url("/filedl/#{@file.file_id}/#{@dl_token.token}")
+    return redirect @url_dl
   end
 
   def delete(cid, nid)

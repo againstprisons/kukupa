@@ -9,7 +9,6 @@ class Kukupa::Controllers::CaseNoteAddController < Kukupa::Controllers::CaseCont
     return halt 404 unless logged_in?
 
     @prisons = Kukupa::Models::Prison.get_prisons
-    @assignable_users = case_assignable_users
 
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
@@ -41,9 +40,24 @@ class Kukupa::Controllers::CaseNoteAddController < Kukupa::Controllers::CaseCont
     # run a sanitize pass
     @content = Sanitize.fragment(@content, Sanitize::Config::RELAXED)
 
+    # upload the supplied file, if one was provided
+    @file = nil
+    if params[:file]
+      begin
+        fn = params[:file][:filename]
+        params[:file][:tempfile].rewind
+        data = params[:file][:tempfile].read
+      
+        @file = Kukupa::Models::File.upload(data, filename: fn)
+      rescue
+        flash :warning, t(:'case/note/add/errors/file_upload_failed')
+      end
+    end
+
     # create note
     @note = Kukupa::Models::CaseNote.new(case: @case.id, author: @user.id).save
     @note.encrypt(:content, @content)
+    @note.encrypt(:file_id, @file&.file_id)
     @note.save
 
     # send "new note" email to the assigned advocate for this case
