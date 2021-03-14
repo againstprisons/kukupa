@@ -6,24 +6,15 @@ class Kukupa::Workers::CaseTaskReminderWorker
     Kukupa.app_config_refresh(:force => true)
 
     to_notify = []
-    threshold = Chronic.parse(Kukupa.app_config['task-overdue-notify'])
     tasks = Kukupa::Models::CaseTask
       .where(completion: nil)
-      .where{creation < threshold}
+      .where{deadline > Sequel.function(:NOW)}
       .order(Sequel.desc(:creation))
       .all
 
-    logger.info("Uncompleted tasks with creation older than threshold: #{tasks.count}")
+    logger.info("Uncompleted tasks with deadline overdue: #{tasks.count}")
 
     tasks.each do |task|
-      if task.last_updated < threshold
-        to_notify << task
-      end
-    end
-
-    logger.info("Unnotified task count: #{to_notify.count}")
-
-    to_notify.each do |task|
       logger.info("Task #{task.id}: starting")
 
       case_obj = Kukupa::Models::Case[task.case]
