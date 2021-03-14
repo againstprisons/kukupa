@@ -54,6 +54,5 @@
                       %span.sr-only
                         = t(:'case/timeline/actions/edit')
 
-          - if tl[:description]
-            .case-timeline-entry--description.rich-text-container
-              = tl[:description]
+          .case-timeline-entry--description.rich-text-container
+            = tl[:description]
