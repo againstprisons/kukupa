@@ -98,6 +98,10 @@ module Kukupa
       :type => :json,
       :default => '[]',
     },
+    "timeline-upcoming-notify" => {
+      :type => :time_period,
+      :default => 'in 1 week',
+    },
   }
 
   APP_CONFIG_DEPRECATED_ENTRIES = {
