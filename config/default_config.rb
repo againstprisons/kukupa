@@ -117,6 +117,13 @@ module Kukupa
       :in => "0.1.0-alpha.1",
       :reason => "Changed key name to 'outside-request-hide-prisons'",
     },
+    "task-overdue-notify" => {
+      :in => "0.1.0-alpha.1",
+      :reason => (
+        "Overdue tasks are now notified by the deadline on individual tasks, " \
+        "rather than by 'time since creation' as a global setting."
+      ),
+    },
   }
 
   class Application
