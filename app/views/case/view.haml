@@ -1,5 +1,8 @@
 .case-view{'data-case-id': case_obj.id}
-  %h1= title
+  %h1
+    - if case_obj.type != 'case' && case_obj.is_private
+      %i.fa.fa-lock= ""
+    = title
 
   - if cuser_can_edit
     = haml :'partials/case_header', layout: false, locals: {caseid: case_obj.id, casetype: case_obj.type, show: case_show}
@@ -26,7 +29,7 @@
 
   - if case_obj.type != 'case' && case_obj.is_private
     .message.message-warning
-      %i.fa.fa-eye-slash= ""
+      %i.fa.fa-lock= ""
       = t(:'case/view/is_private', casetype: case_obj.type)
 
   .form-main
