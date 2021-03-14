@@ -625,10 +625,12 @@
 :'case/timeline/title': "<%= t(\"case_type/#{casetype}\".to_sym) %> timeline: <%= e(name) %>"
 :'case/timeline/section_title': "Timeline"
 :'case/timeline/no_entries': "No timeline entries."
+:'case/timeline/task': "Task"
 :'case/timeline/date': "<%= e(ts.strftime('%A, %B %e, %Y')) %>"
 :'case/timeline/actions/create': "Create timeline entry"
 :'case/timeline/actions/view': "View description"
 :'case/timeline/actions/edit': "Edit entry"
+:'case/timeline/actions/jump_to_task': "Jump to task"
 
 # Cases - timeline create
 :'case/timeline/create/title': "Create timeline entry: <%= e(name) %>"
