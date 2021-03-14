@@ -113,6 +113,56 @@ class Kukupa::Models::Case < Sequel::Model
       .map(&:user)
   end
 
+  def last_updated
+    dates = []
+
+    # case notes
+    dates << Kukupa::Models::CaseNote
+      .select(:id, :case, :creation)
+      .where(case: self.id)
+      .reverse(:creation)
+      .first
+      &.creation
+
+    # case tasks
+    dates << Kukupa::Models::CaseTask
+      .select(:id, :case, :creation)
+      .where(case: self.id)
+      .reverse(:creation)
+      .first
+      &.creation
+
+    # case spends
+    dates << Kukupa::Models::CaseSpend
+      .select(:id, :case, :creation)
+      .where(case: self.id)
+      .reverse(:creation)
+      .first
+      &.creation
+
+    # case correspondence
+    dates << Kukupa::Models::CaseCorrespondence
+      .select(:id, :case, :creation)
+      .where(case: self.id)
+      .reverse(:creation)
+      .first
+      &.creation
+
+    dates.compact.sort.last
+  end
+
+  def new_mail?
+    mail_date = Kukupa::Models::CaseCorrespondence
+      .select(:id, :case, :creation, :sent_by_us)
+      .where(case: self.id, sent_by_us: false)
+      .reverse(:creation)
+      .first
+      &.creation
+
+    return false unless mail_date
+    last_updated <= mail_date
+  end
+
   def field_desc(opts = {})
     CASE_TYPES[self.type.to_sym][:fields].map do |fd|
       if fd.is_a?(Symbol)

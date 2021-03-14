@@ -51,6 +51,12 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
       }
     end
 
+    @my_cases_new_mail = @my_cases.map do |c|
+      if c[:case].new_mail?
+        c
+      end
+    end.compact
+
     if has_role?('case:spend:can_approve')
       @spends = Kukupa::Models::CaseSpend.where(approver: nil).map do |s|
         case_obj = Kukupa::Models::Case[s.case]
@@ -81,6 +87,7 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
         user: @user,
         name: @user_name,
       },
+      cases_new_mail: @my_cases_new_mail,
       cases: @my_cases,
       tasks: @my_tasks,
       spends: @spends,

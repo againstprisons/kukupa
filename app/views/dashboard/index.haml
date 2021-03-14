@@ -2,18 +2,15 @@
 
 .pure-g
   .pure-u-1{class: quick_links.empty? ? '' : 'pure-u-lg-2-3'}
+    - unless cases_new_mail.empty?
+      .form-main
+        %h1= t(:'dashboard/cases_new_mail/section_title')
 
-    .form-main
-      %h1= t(:'dashboard/cases/section_title')
-
-      - if cases.empty?
-        %p= t(:'dashboard/cases/no_cases')
-
-      %ul.block-list
-        - cases.each do |c|
-          %li
-            %a{href: c[:url]}
-              &= c[:name]
+        %ul
+          - cases_new_mail.each do |c|
+            %li
+              %a{href: c[:url]}
+                &= c[:name]
 
     .form-main
       %h1= t(:'dashboard/tasks/section_title')
@@ -88,6 +85,18 @@
               .dashboard-spend-content
                 %blockquote
                   = sp[:spend_content]
+
+    .form-main
+      %h1= t(:'dashboard/cases/section_title')
+
+      - if cases.empty?
+        %p= t(:'dashboard/cases/no_cases')
+
+      %ul.block-list
+        - cases.each do |c|
+          %li
+            %a{href: c[:url]}
+              &= c[:name]
 
   - unless quick_links.empty?
     .pure-u-1.pure-u-lg-1-3
