@@ -131,6 +131,7 @@
 :'case_renderable/task/author': "Task added by"
 :'case_renderable/task/assigned': "Assigned to"
 :'case_renderable/task/deadline': "Deadline"
+:'case_renderable/task/deadline/overdue': "Task overdue"
 :'case_renderable/task/update/assign': "Task reassigned by"
 :'case_renderable/task/update/complete': "Task completed by"
 :'case_renderable/correspondence/outgoing': "Outgoing mail"

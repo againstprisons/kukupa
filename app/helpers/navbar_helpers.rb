@@ -76,7 +76,15 @@ module Kukupa::Helpers::NavbarHelpers
         selected: current_prefix?('/system/roles'),
       }
     end
-    
+
+    if has_role?('system:outside_request')
+      items << {
+        link: url('/system/outside-request'),
+        text: t(:'system/outside_request/title'),
+        selected: current_prefix?('/system/outside-request'),
+      }
+    end
+
     if has_role?('system:prison:access')
       items << {
         link: url('/system/prison'),
@@ -114,14 +122,6 @@ module Kukupa::Helpers::NavbarHelpers
         link: url('/system/apikey'),
         text: t(:'system/apikey/title'),
         selected: current_prefix?('/system/apikey'),
-      }
-    end
-
-    if has_role?('system:outside_request')
-      items << {
-        link: url('/system/outside-request'),
-        text: t(:'system/outside_request/title'),
-        selected: current_prefix?('/system/outside-request'),
       }
     end
 

@@ -11,10 +11,14 @@
     %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
     %h1= t(:'case/task/edit/edit/section_title')
 
-    %label{for: 'description'}= t(:'case/task/edit/edit/content_field')
+    %label{for: 'description'}
+      = t(:'case/task/edit/edit/content_field')
+      %span.badge= t(:'required')
     %input#description{name: 'content', type: 'text', required: true, placeholder: t(:'case/task/edit/edit/content_field'), value: task_content}
 
-    %label{for: 'assignee'}= t(:'case/task/edit/edit/assignee_field')
+    %label{for: 'assignee'}
+      = t(:'case/task/edit/edit/assignee_field')
+      %span.badge= t(:'required')
     %select#assignee{name: 'assignee', required: true}
       - case_accessors.each do |u|
         %option{value: u[:id], selected: u[:id] == task_assignee.id}
