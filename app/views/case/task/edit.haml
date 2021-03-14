@@ -24,6 +24,11 @@
             = surround ' (', ') ' do
               = u[:tags].map{|t| t("tag/#{t}".to_sym)}.join(', ')
 
+    %label{for: 'deadline'}
+      = t(:'case/task/edit/edit/deadline_field')
+      %span.badge= t(:'required')
+    %input#deadline{type: 'date', name: 'deadline', required: true, value: task_deadline.strftime('%Y-%m-%d')}
+
     %button.pure-button.button.button-primary{type: 'submit'}
       %i.fa.fa-pencil-square-o= ""
       = t(:'case/note/edit/edit/submit')

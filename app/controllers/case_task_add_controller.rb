@@ -26,6 +26,7 @@ class Kukupa::Controllers::CaseTaskAddController < Kukupa::Controllers::CaseCont
         case_obj: @case,
         case_name: @case_name,
         case_accessors: @accessors,
+        default_deadline: Chronic.parse(Kukupa.app_config['task-default-deadline']),
       })
     end
 
@@ -45,11 +46,18 @@ class Kukupa::Controllers::CaseTaskAddController < Kukupa::Controllers::CaseCont
       return redirect request.path
     end
 
+    # get deadline
+    @deadline = Chronic.parse(request.params['deadline']&.strip&.downcase, guess: true)
+    unless @deadline
+      @deadline = Chronic.parse(Kukupa.app_config['task-default-deadline'])
+    end
+
     # create task
     @task = Kukupa::Models::CaseTask.new(
       case: @case.id,
       author: @user.id,
       assigned_to: @assignee.id,
+      deadline: @deadline,
     ).save
 
     @task.encrypt(:content, @content)

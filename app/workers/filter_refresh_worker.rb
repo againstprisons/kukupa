@@ -59,6 +59,24 @@ class Kukupa::Workers::FilterRefreshWorker
     end
 
     ###
+    # for tasks with no deadline:
+    # if already completed, set deadline to completion date
+    # if not completed, set deadline to default from today
+    ###
+
+    default_deadline = Chronic.parse(Kukupa.app_config['task-default-deadline'])
+    Kukupa::Models::CaseTask.where(deadline: nil).each do |task|
+      logger.info("Fixing deadline on CaseTask[#{task.id}]")
+      if task.completion
+        task.deadline = task.completion
+      else
+        task.deadline = default_deadline
+      end
+
+      task.save
+    end
+
+    ###
     # disable maintenance mode if it wasn't already enabled
     ###
 

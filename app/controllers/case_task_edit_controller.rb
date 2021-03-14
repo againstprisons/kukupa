@@ -36,6 +36,7 @@ class Kukupa::Controllers::CaseTaskEditController < Kukupa::Controllers::CaseCon
         task_obj: @task,
         task_assignee: Kukupa::Models::User[@task.assigned_to],
         task_content: @task.decrypt(:content),
+        task_deadline: @task.deadline || Chronic.parse(Kukupa.app_config['task-default-deadline']),
         urls: {
           complete: url("/case/#{@case.id}/task/#{@task.id}/complete"),
           delete: url("/case/#{@case.id}/task/#{@task.id}/delete"),

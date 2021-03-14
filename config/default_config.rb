@@ -58,6 +58,10 @@ module Kukupa
       :type => :time_period,
       :default => '1 month ago',
     },
+    "task-default-deadline" => {
+      :type => :time_period,
+      :default => 'in 1 week',
+    },
     "reconnect-url" => {
       :type => :text,
       :default => '',

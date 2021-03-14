@@ -43,6 +43,7 @@ class Kukupa::Models::CaseTask < Sequel::Model
       anchor: self.anchor,
       creation: self.creation,
       content: self.decrypt(:content),
+      deadline: self.deadline,
       author: [:user, self.author],
       edited: edited_ts,
       assigned_to: [:user, self.assigned_to],

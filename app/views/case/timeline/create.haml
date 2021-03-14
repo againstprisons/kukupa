@@ -19,7 +19,7 @@
     %label{for: 'date'}
       = t(:'case/timeline/create/date')
       %span.badge= t(:'required')
-    %input#name{type: 'date', name: 'date', required: true, value: DateTime.now.strftime('%Y-%m-%d')}
+    %input#date{type: 'date', name: 'date', required: true, value: DateTime.now.strftime('%Y-%m-%d')}
 
     = haml :'partials/editor', layout: false, locals: {editor_name: 'description', editor_label: t(:'case/timeline/create/description'), editor_data: nil}
     .y-margin= ""

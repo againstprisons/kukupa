@@ -19,6 +19,7 @@ module Kukupa::Helpers::CaseViewHelpers
         content: ct.decrypt(:content),
         author: advocates[ct.author.to_s],
         assigned_to: advocates[ct.assigned_to.to_s],
+        deadline: ct.deadline,
       }
     end
 

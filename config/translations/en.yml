@@ -100,6 +100,7 @@
 
 # Case renderables
 :'case_renderable/creation': "<%= e(ts.strftime('%A, %B %e, %Y at %l:%M %P')) %>"
+:'case_renderable/creation/date_only': "<%= e(ts.strftime('%A, %B %e, %Y')) %>"
 :'case_renderable/creation/edited': "(edited)"
 :'case_renderable/note/author': "Author"
 :'case_renderable/note/author/editor': "Editor"
@@ -129,6 +130,7 @@
 :'case_renderable/spend/update/edit/new_content': "New note for this spend"
 :'case_renderable/task/author': "Task added by"
 :'case_renderable/task/assigned': "Assigned to"
+:'case_renderable/task/deadline': "Deadline"
 :'case_renderable/task/update/assign': "Task reassigned by"
 :'case_renderable/task/update/complete': "Task completed by"
 :'case_renderable/correspondence/outgoing': "Outgoing mail"
@@ -466,6 +468,7 @@
 :'case/task/add/section_title': "New task details"
 :'case/task/add/content_field': "Task description"
 :'case/task/add/assignee_field': "Task assignee"
+:'case/task/add/deadline_field': "Task deadline"
 :'case/task/add/submit': "Create task"
 :'case/task/add/success': "Successfully created task."
 :'case/task/add/errors/no_content': "No task description was provided."
@@ -474,6 +477,7 @@
 :'case/task/edit/edit/section_title': "Task details"
 :'case/task/edit/edit/content_field': "Task description"
 :'case/task/edit/edit/assignee_field': "Task assignee"
+:'case/task/edit/edit/deadline_field': "Task deadline"
 :'case/task/edit/edit/submit': "Edit task"
 :'case/task/edit/edit/success': "Successfully edited task."
 :'case/task/edit/edit/errors/no_content': "No task description was provided."

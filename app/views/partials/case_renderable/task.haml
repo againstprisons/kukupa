@@ -50,5 +50,12 @@
               %i.fa.fa-user-o= ""
               = t(:'thats_you')
 
+      %li
+        = succeed ': ' do
+          = t(:'case_renderable/task/deadline')
+
+        %span.caserenderable--task-deadline
+          = t(:'case_renderable/creation/date_only', ts: rb[:deadline])
+
     %blockquote.blockquote-fancy
       &= rb[:content]

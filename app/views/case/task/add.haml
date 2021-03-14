@@ -11,10 +11,14 @@
     %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
     %h1= t(:'case/task/add/section_title')
 
-    %label{for: 'description'}= t(:'case/task/add/content_field')
+    %label{for: 'description'}
+      = t(:'case/task/add/content_field')
+      %span.badge= t(:'required')
     %input#description{name: 'content', type: 'text', required: true, placeholder: t(:'case/task/add/content_field')}
 
-    %label{for: 'assignee'}= t(:'case/task/add/assignee_field')
+    %label{for: 'assignee'}
+      = t(:'case/task/add/assignee_field')
+      %span.badge= t(:'required')
     %select#assignee{name: 'assignee', required: true}
       - case_accessors.each do |u|
         %option{value: u[:id], selected: u[:me]}
@@ -23,6 +27,11 @@
           - unless u[:tags].empty?
             = surround ' (', ') ' do
               = u[:tags].map{|t| t("tag/#{t}".to_sym)}.join(', ')
+
+    %label{for: 'deadline'}
+      = t(:'case/task/add/deadline_field')
+      %span.badge= t(:'required')
+    %input#deadline{type: 'date', name: 'deadline', required: true, value: default_deadline.strftime('%Y-%m-%d')}
 
     %button.pure-button.button.button-primary{type: 'submit'}
       %i.fa.fa-pencil-square-o= ""

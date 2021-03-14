@@ -181,19 +181,26 @@
                         = t(:'thats_you')
 
             %li
-              %ul.inline-list
-                %li
-                  = succeed ': ' do
-                    = t(:'case/view/tasks/item/added')
+              = succeed ': ' do
+                = t(:'case/view/tasks/item/added')
 
-                  = t(:'case_renderable/creation', ts: t[:creation])
+              = t(:'case_renderable/creation', ts: t[:creation])
 
-                - if t[:completion]
-                  %li
-                    = succeed ': ' do
-                      = t(:'case/view/tasks/item/completed')
+            - if t[:completion]
+              %li
+                = succeed ': ' do
+                  = t(:'case/view/tasks/item/completed')
 
-                    = t(:'case_renderable/creation', ts: t[:completion])
+                = t(:'case_renderable/creation', ts: t[:completion])
+
+            - if t[:deadline]
+              %li
+                = succeed ': ' do
+                  = t(:'case_renderable/task/deadline')
+
+                %span.case-task-deadline
+                  = t(:'case_renderable/creation/date_only', ts: t[:deadline])
+
 
   .form-main#case-view-renderables
     %h1= t(:'case/view/entries/section_title')
