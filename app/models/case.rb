@@ -25,6 +25,7 @@ class Kukupa::Models::Case < Sequel::Model
         reconnect: true,
         triage: true,
         correspondence: true,
+        timeline: false,
       },
     },
 
@@ -43,6 +44,7 @@ class Kukupa::Models::Case < Sequel::Model
         reconnect: false,
         triage: false,
         correspondence: false,
+        timeline: true,
       },
     },
   }

@@ -1,0 +1,39 @@
+.case-timeline-entry
+{
+  margin-bottom: 0.25rem;
+
+  .case-timeline-entry--meta {
+    margin-bottom: 0.25rem;
+  }
+
+  &.case-timeline-entry--complete
+  {
+    color: $color_foreground_dimmed;
+
+    .case-timeline-entry--date
+    {
+      text-decoration: line-through;
+    }
+  }
+
+  .case-timeline-entry--description
+  {
+    opacity: 0;
+    margin: 0;
+    padding: 0;
+    height: 0px;
+    transition: height 0.5s, padding 0.5s;
+  }
+
+  &:target {
+    .case-timeline-entry--meta {
+      background: $color_highlight;
+    }
+
+    .case-timeline-entry--description {
+      opacity: 1;
+      padding: 1rem;
+      height: auto;
+    }
+  }
+}

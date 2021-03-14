@@ -3,6 +3,11 @@
     %a{href: url("/case/#{caseid}/view")}
       = t(:'case/nav/view')
 
+  - if show[:timeline]
+    %li{class: current_prefix?("/case/#{caseid}/timeline")}><
+      %a{href: url("/case/#{caseid}/timeline")}
+        = t(:'case/nav/timeline')
+
   %li{class: current?("/case/#{caseid}/edit")}><
     %a{href: url("/case/#{caseid}/edit")}
       = t(:'case/nav/edit')

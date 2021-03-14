@@ -1,0 +1,31 @@
+.case-timeline-add{'data-case-id': case_obj.id}
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: url("/case/#{case_obj.id}/timeline")}
+      %i.fa.fa-chevron-left= ""
+      %span
+        = t(:'back')
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'case/timeline/create/section_title')
+
+    %label{for: 'name'}
+      = t(:'case/timeline/create/name')
+      %span.badge= t(:'required')
+    %input#name{type: 'text', name: 'name', required: true, placeholder: t(:'case/timeline/create/name')}
+
+    %label{for: 'date'}
+      = t(:'case/timeline/create/date')
+      %span.badge= t(:'required')
+    %input#name{type: 'date', name: 'date', required: true, value: DateTime.now.strftime('%Y-%m-%d')}
+
+    = haml :'partials/editor', layout: false, locals: {editor_name: 'description', editor_label: t(:'case/timeline/create/description'), editor_data: nil}
+    .y-margin= ""
+
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-plus= ""
+      = t(:'case/timeline/create/submit')
+
+.async-load{:'data-sources' => JSON.generate(['/static/editor.bundle.js'])}

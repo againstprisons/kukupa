@@ -1,0 +1,46 @@
+.case-timeline{'data-case-id': case_obj.id}
+  %h1= title
+
+  = haml :'partials/case_header', layout: false, locals: {caseid: case_obj.id, casetype: case_obj.type, show: case_show}
+
+  .form-main
+    %h1= t(:'case/timeline/section_title')
+
+    .inline-form
+      %a.pure-button.button{href: url("/case/#{case_obj.id}/timeline/create")}
+        %i.fa.fa-plus= ""
+        = t(:'case/timeline/actions/create')
+
+    - if entries.empty?
+      %p= t(:'case/timeline/no_entries')
+
+    %ul
+      - entries.each do |tl|
+        %li.case-timeline-entry{class: [tl[:in_past] && 'case-timeline-entry--complete'], id: tl[:anchor]}
+          .case-timeline-entry--meta
+            %ul.inline-list
+              %li
+                %strong.case-timeline-entry--date><
+                  = t(:'case/timeline/date', ts: tl[:date])
+
+              %li
+                &= tl[:name]
+
+              - if tl[:description]
+                %li
+                  %a.case-view-task-editlink{href: "##{tl[:anchor]}", title: t(:'case/timeline/actions/view')}
+                    %span
+                      %i.fa.fa-eye= ""
+                      %span.sr-only
+                        = t(:'case/timeline/actions/view')
+
+              %li
+                %a.case-view-task-editlink{href: url("/case/#{case_obj.id}/timeline/#{tl[:id]}"), title: t(:'case/timeline/actions/edit')}
+                  %span
+                    %i.fa.fa-pencil= ""
+                    %span.sr-only
+                      = t(:'case/timeline/actions/edit')
+
+          - if tl[:description]
+            .case-timeline-entry--description.rich-text-container
+              = tl[:description]

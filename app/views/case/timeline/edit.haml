@@ -1,0 +1,45 @@
+.case-timeline-edit{'data-case-id': case_obj.id, 'data-timeline-entry-id': entry.id}
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: url("/case/#{case_obj.id}/timeline")}
+      %i.fa.fa-chevron-left= ""
+      %span
+        = t(:'back')
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'case/timeline/edit/section_title')
+
+    %label{for: 'name'}
+      = t(:'case/timeline/edit/name')
+      %span.badge= t(:'required')
+    %input#name{type: 'text', name: 'name', required: true, placeholder: t(:'case/timeline/create/name'), value: entry_name}
+
+    %label{for: 'date'}
+      = t(:'case/timeline/edit/date')
+      %span.badge= t(:'required')
+    %input#name{type: 'date', name: 'date', required: true, value: entry_date.strftime('%Y-%m-%d')}
+
+    = haml :'partials/editor', layout: false, locals: {editor_name: 'description', editor_label: t(:'case/timeline/create/description'), editor_data: entry_description}
+    .y-margin= ""
+
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-save= ""
+      = t(:'case/timeline/edit/submit')
+
+  - if has_role?('case:delete_entry')
+    %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: url("/case/#{case_obj.id}/timeline/#{entry.id}/delete")}
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+      %h1= t(:'case/timeline/delete/section_title')
+      %p= t(:'case/timeline/delete/content')
+
+      %label{for: 'delete_confirm'}
+        %input#delete_confirm{type: 'checkbox', name: 'confirm', required: true}
+        = t(:'case/timeline/delete/confirm_checkbox')
+
+      %button.pure-button.button.button-error{type: 'submit'}
+        %i.fa.fa-trash= ""
+        = t(:'case/timeline/delete/submit')
+
+.async-load{:'data-sources' => JSON.generate(['/static/editor.bundle.js'])}

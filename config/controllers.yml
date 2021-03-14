@@ -59,6 +59,8 @@ controllers:
     controller: CaseEditReconnectController
   - path: /case/:case_id/edit
     controller: CaseEditController
+  - path: /case/:case_id/timeline
+    controller: CaseTimelineController
   - path: /case/:case_id/view
     controller: CaseViewController
   - path: /case/create

@@ -335,6 +335,7 @@
 :'case/nav/view': "Case overview"
 :'case/nav/edit': "Edit case"
 :'case/nav/mail': "Send mail"
+:'case/nav/timeline': "Timeline"
 
 # Cases - view
 :'case/view/title': "<%= t(\"case_type/#{casetype}\".to_sym) %>: <%= e(name) %>"
@@ -607,6 +608,39 @@
 :'case/edit/open_case/content': "To re-open the case for <strong><%= e(name) %></strong>, click the button below."
 :'case/edit/open_case/submit': "Re-open case"
 :'case/edit/open_case/success': "Successfully re-opened the case."
+
+# Cases - timeline
+:'case/timeline/title': "<%= t(\"case_type/#{casetype}\".to_sym) %> timeline: <%= e(name) %>"
+:'case/timeline/section_title': "Timeline"
+:'case/timeline/no_entries': "No timeline entries."
+:'case/timeline/date': "<%= e(ts.strftime('%A, %B %e, %Y')) %>"
+:'case/timeline/actions/create': "Create timeline entry"
+:'case/timeline/actions/view': "View description"
+:'case/timeline/actions/edit': "Edit entry"
+
+# Cases - timeline create
+:'case/timeline/create/title': "Create timeline entry: <%= e(name) %>"
+:'case/timeline/create/section_title': "Timeline entry details"
+:'case/timeline/create/name': "Entry name"
+:'case/timeline/create/date': "Entry date"
+:'case/timeline/create/description': "Entry description"
+:'case/timeline/create/submit': "Create timeline entry"
+:'case/timeline/create/success': "Successfully created timeline entry with ID <code><%= e(id) %></code>."
+
+# Cases - timeline edit
+:'case/timeline/edit/title': "Edit timeline entry <%= e(tlid) %>: <%= e(name) %>"
+:'case/timeline/edit/section_title': "Timeline entry details"
+:'case/timeline/edit/name': "Entry name"
+:'case/timeline/edit/date': "Entry date"
+:'case/timeline/edit/description': "Entry description"
+:'case/timeline/edit/submit': "Save timeline entry"
+:'case/timeline/edit/success': "Succesfully updated timeline entry."
+:'case/timeline/delete/section_title': "Delete timeline entry"
+:'case/timeline/delete/content': "To delete this timeline entry, check the confirmation box, and click the button below."
+:'case/timeline/delete/confirm_checkbox': "Yes, I wish to delete this timeline entry"
+:'case/timeline/delete/submit': "Delete timeline entry"
+:'case/timeline/delete/success': "Successfully deleted timeline entry."
+:'case/timeline/delete/errors/confirm_not_checked': "Refusing to delete this timeline entry as the confirmation checkbox was not checked."
 
 # Prison assignee list
 :'prison_signup/title': "Prison assignees"
