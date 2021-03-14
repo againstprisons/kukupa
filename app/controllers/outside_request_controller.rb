@@ -80,6 +80,12 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
           @sysnote.save
         end
 
+        # save updated prison on case
+        if Kukupa.app_config['outside-request-save-provided-prison']
+          @case.encrypt(:prison, @prison.id)
+          @case.save
+        end
+
         @req_categories = []
         @categories.each_index do |i|
           if request.params["category#{i}"]&.strip&.downcase == 'on'
