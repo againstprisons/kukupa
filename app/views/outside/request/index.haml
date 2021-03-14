@@ -60,6 +60,21 @@
               = t(:'outside/request/prisoner_info/field_prn')
             %input#prisoner_prn{name: 'prn', value: prn, required: true}
 
+    - unless categories.empty?
+      .form-main
+        %h1= t(:'outside/request/categories/section_title')
+
+        .x-margin
+          %p
+            = t(:'outside/request/categories/content')
+            %span.badge
+              = t(:'select_multiple')
+
+          - categories.each_index do |i|
+            %label{for: "category#{i}"}
+              %input{type: 'checkbox', id: "category#{i}", name: "category#{i}"}
+              &= categories[i]
+
     .form-main
       %h1= t(:'outside/request/details/section_title')
 

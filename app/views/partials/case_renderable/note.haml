@@ -90,6 +90,18 @@
       %blockquote.blockquote-fancy
         = rb[:content]
 
+      - if rb[:metadata][:categories].nil? || rb[:metadata][:categories]&.empty?
+        %p= t(:'case_renderable/note/outside_request/categories/none')
+
+      - else
+        = succeed ": " do
+          = t(:'case_renderable/note/outside_request/categories')
+
+        %ul
+          - rb[:metadata][:categories].each do |cat|
+            %li
+              &= cat
+
     - else
       = rb[:content]
 

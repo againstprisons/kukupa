@@ -4,6 +4,7 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
 
   def index
     @title = t(:'outside/request/title')
+    @categories = Kukupa.app_config['outside-request-categories']
     @prisons = Kukupa::Models::Prison
       .exclude(id: Kukupa.app_config['outside-request-hide-prisons'])
       .all
@@ -79,12 +80,20 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
           @sysnote.save
         end
 
+        @req_categories = []
+        @categories.each_index do |i|
+          if request.params["category#{i}"]&.strip&.downcase == 'on'
+            @req_categories << @categories[i]
+          end
+        end
+
         # create request metadata object
         @metadata = {
           name: @requester_name,
           email: @requester_email,
           phone: @requester_phone,
           prison: @prison.id,
+          categories: @req_categories,
         }
 
         # create an outside request in the given case
@@ -119,6 +128,7 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
       prison: @prison,
       prn: @prn,
       content: @content,
+      categories: @categories,
       agreements: Kukupa.app_config['outside-request-required-agreements'],
     }
   end
