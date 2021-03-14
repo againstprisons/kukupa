@@ -106,6 +106,7 @@ class Kukupa::Controllers::CaseSpendAddController < Kukupa::Controllers::CaseCon
         case: @case.id,
         author: nil,
         assigned_to: @user.id,
+        deadline: Chronic.parse(Kukupa.app_config['task-default-deadline'], guess: true),
       ).save
 
       @task.encrypt(:content, t(:'case/spend/add/upload_receipt_task',

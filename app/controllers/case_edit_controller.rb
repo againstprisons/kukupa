@@ -305,6 +305,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       case: @case.id,
       author: nil,
       assigned_to: @assignee.id,
+      deadline: Chronic.parse(Kukupa.app_config['task-default-deadline'], guess: true),
     ).save
 
     @task.encrypt(:content, t(

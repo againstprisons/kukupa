@@ -60,10 +60,17 @@ class Kukupa::Controllers::CaseTaskEditController < Kukupa::Controllers::CaseCon
       return redirect request.path
     end
 
+    # get deadline
+    @deadline = Chronic.parse(request.params['deadline']&.strip&.downcase, guess: true)
+    unless @deadline
+      @deadline = @task.deadline
+    end
+
     @previous_assignee = @task.assigned_to
 
     # save task
     @task.assigned_to = @assignee.id
+    @task.deadline = @deadline
     @task.encrypt(:content, @content)
     @task.save
 
