@@ -201,6 +201,12 @@
                 %span.case-task-deadline
                   = t(:'case_renderable/creation/date_only', ts: t[:deadline])
 
+                  - unless t[:completion]
+                    - if t[:deadline] < Time.now
+                      %span.badge
+                        %i.fa.fa-clock-o= ""
+                        = t(:'case_renderable/task/deadline/overdue')
+
 
   .form-main#case-view-renderables
     %h1= t(:'case/view/entries/section_title')
