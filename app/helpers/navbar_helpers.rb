@@ -117,6 +117,14 @@ module Kukupa::Helpers::NavbarHelpers
       }
     end
 
+    if has_role?('system:outside_request')
+      items << {
+        link: url('/system/outside-request'),
+        text: t(:'system/outside_request/title'),
+        selected: current_prefix?('/system/outside-request'),
+      }
+    end
+
     if has_role?('system:debug')
       items << {
         link: url('/system/debug'),

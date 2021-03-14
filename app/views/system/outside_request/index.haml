@@ -1,0 +1,94 @@
+#system-admin-outside-request
+  %h1= title
+
+  .message.message-warning
+    = t(:'system/outside_request/requires_refresh')
+    - if has_role?('system:config:refresh')
+      = t(:'system/outside_request/requires_refresh/can_refresh')
+    - else 
+      = t(:'system/outside_request/requires_refresh/can_not_refresh')
+ 
+  .form-main
+    %h1= t(:'system/outside_request/hide_prisons/section_title')
+
+    - if hide_prisons.empty?
+      %p= t(:'system/outside_request/hide_prisons/none')
+
+    %ul
+      - hide_prisons.each do |prison|
+        %li
+          .inline-form.system-admin-outside-request-hideprisons-actions
+            %form.inline-form{method: 'POST', action: url("/system/outside-request/hide-prisons/delete")}
+              %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+              %input{type: 'hidden', name: 'prison', value: prison[:id]}
+              %button.pure-button.button.button-error{type: 'submit'}
+                %i.fa.fa-trash= ""
+                = t(:'system/outside_request/hide_prisons/actions/delete')
+
+            &nbsp;
+
+            %a{href: url("/system/prison/#{prison[:id]}")}><
+              &= prison[:name]
+
+    %form.pure-form.pure-form-stacked{method: 'POST', action: url("/system/outside-request/hide-prisons/add")}
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+      %select{name: 'prison', required: true}
+        - prisons.each do |prison|
+          %option{value: prison[:id]}
+            &= prison.decrypt(:name)
+
+      %button.pure-button.button.button-primary{type: 'submit'}
+        %i.fa.fa-plus= ""
+        = t(:'system/outside_request/hide_prisons/add/submit')
+
+  .form-main
+    %h1= t(:'system/outside_request/categories/section_title')
+
+    - if categories.empty?
+      %p= t(:'system/outside_request/categories/none')
+
+    %ul
+      - categories.each_index do |i|
+        %li
+          .inline-form.system-admin-outside-request-category-actions
+            %form.inline-form{method: 'POST', action: url("/system/outside-request/category/delete")}
+              %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+              %input{type: 'hidden', name: 'category', value: i}
+              %button.pure-button.button.button-error{type: 'submit'}
+                %i.fa.fa-trash= ""
+                = t(:'system/outside_request/categories/actions/delete')
+          &nbsp;
+          &= categories[i]
+
+    %form.pure-form.pure-form-stacked{method: 'POST', action: url("/system/outside-request/category/add")}
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+      %input{type: 'text', name: 'text', placeholder: t(:'system/outside_request/categories/add/text'), required: true}
+      %button.pure-button.button.button-primary{type: 'submit'}
+        %i.fa.fa-plus= ""
+        = t(:'system/outside_request/categories/add/submit')
+
+  .form-main
+    %h1= t(:'system/outside_request/agreements/section_title')
+
+    - if categories.empty?
+      %p= t(:'system/outside_request/agreements/none')
+
+    %ul
+      - agreements.each_index do |i|
+        %li
+          .inline-form.system-admin-outside-request-agreement-actions
+            %form.inline-form{method: 'POST', action: url("/system/outside-request/agreement/delete")}
+              %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+              %input{type: 'hidden', name: 'agreement', value: i}
+              %button.pure-button.button.button-error{type: 'submit'}
+                %i.fa.fa-trash= ""
+                = t(:'system/outside_request/agreements/actions/delete')
+          &nbsp;
+          &= agreements[i]
+
+    %form.pure-form.pure-form-stacked{method: 'POST', action: url("/system/outside-request/agreement/add")}
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+      %input{type: 'text', name: 'text', placeholder: t(:'system/outside_request/agreements/add/text'), required: true}
+      %button.pure-button.button.button-primary{type: 'submit'}
+        %i.fa.fa-plus= ""
+        = t(:'system/outside_request/agreements/add/submit')

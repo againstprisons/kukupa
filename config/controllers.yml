@@ -79,6 +79,8 @@ controllers:
 
   - path: /system/debug
     controller: SystemDebugController
+  - path: /system/outside-request
+    controller: SystemOutsideRequestController
   - path: /system/quick-links
     controller: SystemQuickLinksController
   - path: /system/mailtemplates
