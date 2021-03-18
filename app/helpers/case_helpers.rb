@@ -54,9 +54,12 @@ module Kukupa::Helpers::CaseHelpers
     uids = c.get_assigned_advocates
 
     # all users with `case:*` or `case:view_all` roles
-    uids << Kukupa::Models::UserRole.where(role: "*").map(&:user_id).to_a
-    uids << Kukupa::Models::UserRole.where(role: "case:*").map(&:user_id).to_a
-    uids << Kukupa::Models::UserRole.where(role: "case:view_all").map(&:user_id).to_a
+    ['*', 'case:*', 'case:view_all'].each do |role|
+      uids << Kukupa::Models::UserRole.where(role: role).map(&:user_id).to_a
+      Kukupa::Models::RoleGroupRole.where(role: role).each do |rgr|
+        uids << rgr.role_group.role_group_users.map(&:user_id).to_a
+      end
+    end
 
     # get user objects
     advocates = {}
