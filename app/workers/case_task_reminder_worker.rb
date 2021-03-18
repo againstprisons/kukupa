@@ -8,7 +8,7 @@ class Kukupa::Workers::CaseTaskReminderWorker
     to_notify = []
     tasks = Kukupa::Models::CaseTask
       .where(completion: nil, reminded: nil)
-      .where{deadline > Sequel.function(:NOW)}
+      .where{deadline < Sequel.function(:NOW)}
       .order(Sequel.desc(:creation))
       .all
 
