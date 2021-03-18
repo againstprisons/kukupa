@@ -78,6 +78,8 @@ class Kukupa::Controllers::CaseCorrespondenceDownloadController < Kukupa::Contro
       return redirect back
     end
 
+    @content = @content.force_encoding("UTF-8")
+
     haml(:'case/correspondence/print/index', layout: false, locals: {title: @title, case_obj: @case, ccobj: @ccobj}) do
       @content
     end
