@@ -18,7 +18,7 @@
       - if can_edit
         - rb[:actions]&.each do |link|
           %li.case-renderable-action
-            %a{href: link[:url]}
+            %a{href: link[:url], target: link[:target]}
               %i.fa{class: link[:fa_icon]}= ""
 
   .caserenderable-content

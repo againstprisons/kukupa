@@ -1,0 +1,10 @@
+!!!html
+%html
+  %head
+    = haml :'case/correspondence/print/head', layout: false, locals: {title: title}
+
+  %body
+    = yield
+
+    .footer
+      = haml :'case/correspondence/print/footer', layout: false, locals: {cid: case_obj.id, ccid: ccobj.id}

@@ -538,6 +538,8 @@
 :'case/correspondence/download/actions/download': "Download correspondence"
 :'case/correspondence/download/errors/no_reconnect_response': "The re:connect instance did not respond to the request to download this correspondence. Either the re:connect instance could not be contacted, or the file does not exist on re:connect. Please try again later, and if this persists, contact the administrator of the re:connect instance."
 :'case/correspondence/download/errors/unknown_error': "An unknown error occurred when trying to retrieve the file to download."
+:'case/correspondence/download/print/title': "Printing correspondence <%= e(ccid) %>"
+:'case/correspondence/download/print/errors/invalid_mime': "The correspondence is of a type that we can't generate a print view of. You can try downloading the correspondence normally and printing it."
 
 # Cases - edit
 :'case/edit/title': "Edit <%= t(\"case_type/#{casetype}\".to_sym) %>: <%= e(name) %>"

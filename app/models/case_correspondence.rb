@@ -16,6 +16,14 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
       },
     ]
 
+    if self.sent_by_us
+      actions.unshift({
+        url: [:url, "/case/#{self.case}/correspondence/#{self.id}/dl/print"],
+        fa_icon: 'fa-print',
+        target: '_blank',
+      })
+    end
+
     items << {
       type: :correspondence,
       id: "CaseCorrespondence[#{self.id}]",
@@ -36,7 +44,7 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
   end
   
   def get_download_url_local(opts = {})
-    file = Kukupa::Models::File.where(file_id: self.file_id)
+    file = Kukupa::Models::File.where(file_id: self.file_id).first
     return nil unless file
     
     token = file.generate_download_token(opts[:user])
@@ -69,6 +77,27 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
 
     return nil unless data['success']
     data['url']
+  end
+
+  def get_file_content(opts = {})
+    meth = "get_file_content_#{self.file_type}".to_sym
+    return self.send(meth, opts) if self.respond_to?(meth)
+    nil
+  end
+  
+  def get_file_content_local(opts = {})
+    file = Kukupa::Models::File.where(file_id: self.file_id).first
+    return nil unless file
+    file.decrypt_file
+  end
+
+  def get_file_content_reconnect(opts = {})
+    url = self.get_download_url_reconnect
+    return nil unless url
+
+    out = Typhoeus.get(url)
+    return nil unless out.response_code == 200
+    out.body
   end
   
   def send_incoming_alert_email!(opts = {})
