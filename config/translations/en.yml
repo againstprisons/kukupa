@@ -99,8 +99,8 @@
 :'editor/failed': "Failed to load the text editor. Any text you enter may not be saved correctly. Refresh the page to try loading the editor again."
 
 # Case renderables
-:'case_renderable/creation': "<%= e(ts.strftime('%A, %B %e, %Y at %l:%M %P')) %>"
-:'case_renderable/creation/date_only': "<%= e(ts.strftime('%A, %B %e, %Y')) %>"
+:'case_renderable/creation': "<%= e(ts&.strftime('%A, %B %e, %Y at %l:%M %P')) %>"
+:'case_renderable/creation/date_only': "<%= e(ts&.strftime('%A, %B %e, %Y')) %>"
 :'case_renderable/creation/edited': "(edited)"
 :'case_renderable/note/author': "Author"
 :'case_renderable/note/author/editor': "Editor"
