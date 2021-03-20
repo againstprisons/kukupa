@@ -41,6 +41,7 @@ class Kukupa::Controllers::CaseCreateController < Kukupa::Controllers::Applicati
     # PRN if one exists instead of creating a new case
 
     @case = Kukupa::Models::Case.new(type: 'case', is_open: true).save
+    @case.email_identifier = Kukupa::Crypto.generate_token_short
     @case.encrypt(:first_name, first_name)
     @case.encrypt(:middle_name, middle_name) if middle_name
     @case.encrypt(:last_name, last_name)

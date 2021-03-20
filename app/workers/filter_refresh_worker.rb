@@ -19,6 +19,14 @@ class Kukupa::Workers::FilterRefreshWorker
     maint_cfg.save
 
     ###
+    # assign email identifiers to cases that don't have them
+    ###
+
+    Kukupa::Models::Case.where(email_identifier: nil).each do |c|
+      c.update(email_identifier: Kukupa::Crypto.generate_token_short)
+    end
+
+    ###
     # penpal filters
     ###
 
