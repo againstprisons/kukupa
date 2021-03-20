@@ -24,6 +24,8 @@ GEM
       temple (>= 0.8.0)
       tilt
     json (2.5.1)
+    kramdown (2.3.1)
+      rexml
     magentasso-rb (0.1.0)
       base32 (~> 0.3.4)
       json (~> 2.5.1)
@@ -58,6 +60,7 @@ GEM
     redis (4.2.5)
     reverse_markdown (1.1.0)
       nokogiri
+    rexml (3.2.4)
     rotp (4.0.2)
       addressable (~> 2.5)
     rqrcode (1.2.0)
@@ -109,6 +112,7 @@ DEPENDENCIES
   dotenv (~> 2.5.0)
   e2mmap (~> 0.1.0)
   haml (~> 5.2.1)
+  kramdown (~> 2.3.1)
   magentasso-rb (~> 0.1.0)
   mail (~> 2.7.1)
   memoist (~> 0.16.0)
