@@ -23,8 +23,20 @@ class Kukupa::Workers::EmailQueueSendWorker
       qm.queue_status = 'sending'
       qm.save
 
+      # get message opts from JSON on the email queue object
       begin
-        chunks = qm.generate_messages_chunked
+        messageopts = qm.decrypt(:message_opts)
+        messageopts = '{}' if messageopts.nil? || messageopts&.empty?
+        messageopts = JSON.parse(messageopts).map do |k, v|
+          [k.to_sym, v]
+        end.to_h
+      rescue => e
+        logger.warn("Message #{qm.id}: messageopts failed: #{e.class.name}: #{e}")
+        messageopts = {}
+      end
+
+      begin
+        chunks = qm.generate_messages_chunked(messageopts)
         logger.info("Message #{qm.id}: chunk count #{chunks.count}")
 
         chunks.each_index do |i|

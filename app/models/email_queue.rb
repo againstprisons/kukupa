@@ -112,12 +112,12 @@ class Kukupa::Models::EmailQueue < Sequel::Model(:email_queue)
     self.class.recipients_list(data)
   end
 
-  def generate_messages_chunked
+  def generate_messages_chunked(opts = {})
     out = []
 
     chunks = self.generate_recipients_list.each_slice(EMAIL_CHUNK_SIZE).to_a
     chunks.each do |chunk|
-      m = self.generate_message_no_recipients
+      m = self.generate_message_no_recipients(opts)
       m.bcc = chunk
 
       out << m
@@ -126,7 +126,7 @@ class Kukupa::Models::EmailQueue < Sequel::Model(:email_queue)
     out
   end
 
-  def generate_message_no_recipients
+  def generate_message_no_recipients(opts = {})
     this = self
 
     m = Mail.new do
@@ -160,8 +160,14 @@ class Kukupa::Models::EmailQueue < Sequel::Model(:email_queue)
       end
     end
 
-    m.header["Return-Path"] = "<>"
-    m.header["Auto-Submitted"] = "auto-generated"
+    if opts[:reply_to]
+      m.reply_to = opts[:reply_to]
+    end
+
+    unless opts[:no_autogen_headers]
+      m.header["Return-Path"] = "<>"
+      m.header["Auto-Submitted"] = "auto-generated"
+    end
 
     m
   end
