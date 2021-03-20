@@ -38,6 +38,16 @@ class Kukupa::Models::CaseNote < Sequel::Model
       }
     ]
 
+    if self.is_outside_request && metadata[:email]
+      reply_url = Addressable::URI.parse("/case/#{self.case}/correspondence/send")
+      reply_url.query_values = {email: metadata[:email]}
+
+      actions.unshift({
+        url: [:url, reply_url],
+        fa_icon: 'fa-mail-reply',
+      })
+    end
+
     items << {
       type: :note,
       id: "CaseNote[#{self.id}]",
