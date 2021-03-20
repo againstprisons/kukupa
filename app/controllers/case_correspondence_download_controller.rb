@@ -2,6 +2,8 @@ class Kukupa::Controllers::CaseCorrespondenceDownloadController < Kukupa::Contro
   add_route :get, '/'
   add_route :get, '/print', method: :print
 
+  include Kukupa::Helpers::EmailTemplateHelpers
+
   def before(cid, *args)
     super
     return halt 404 unless logged_in?
@@ -80,8 +82,57 @@ class Kukupa::Controllers::CaseCorrespondenceDownloadController < Kukupa::Contro
 
     @content = @content.force_encoding("UTF-8")
 
-    haml(:'case/correspondence/print/index', layout: false, locals: {title: @title, case_obj: @case, ccobj: @ccobj}) do
-      @content
+    if @ccobj.correspondence_type == 'email'
+      ###
+      # XXX: This is hacky as hell.
+      #
+      # Basically what we're doing here is  replicating what happens 
+      # inside the EmailQueue#new_from_template function - rendering the
+      # HTML version of the email reply template with our correspondence
+      # content embedded, and the case's email identifier passed in, so
+      # the result looks pretty much like what the actual email looks like. 
+      #
+      # Because we want the output of this to act like the print view for
+      # normal correspondence, we render the content of the <head> section 
+      # of the normal print view, embedded in a literal-string Haml call to
+      # render the <head> element itself, and then we prepend that to the
+      # email template render output.
+      #
+      # If I were to refactor this, I'd make a separate view (something like
+      # :'case/correspondence/print/email_reply' maybe), and use the proper
+      # Sinatra-provided ERB renderer to render the email reply template,
+      # rather than using the `new_tilt_template_from_fn` function from the
+      # EmailTemplateHelpers. For now, this works. 
+      ###
+
+      # create the EmailData instance with our case email identifier
+      template_data = Kukupa::Models::EmailQueue::EmailData.new({
+        email_identifier: @case.email_identifier,
+      })
+
+      # create the email reply layout using the email helpers, and render the
+      # template with our correspondence content embedded
+      template = new_tilt_template_from_fn('reply_layout.html.erb')
+      output = template.render(template_data) { @content }
+
+      # render the normal print view <head> section
+      html_head = haml("!!!html5\n%head= yield", layout: false) do
+        haml(:'case/correspondence/print/head', layout: false, locals: {title: @title})
+      end
+
+      # return the combination of the print view <head> and our email template
+      return [html_head, output].join("\n")
+
+    else
+      locals = {
+        title: @title,
+        case_obj: @case,
+        ccobj: @ccobj
+      }
+
+      haml(:'case/correspondence/print/index', layout: false, locals: locals) do
+        @content
+      end
     end
   end
 end
