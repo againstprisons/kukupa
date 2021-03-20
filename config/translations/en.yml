@@ -135,7 +135,9 @@
 :'case_renderable/task/update/assign': "Task reassigned by"
 :'case_renderable/task/update/complete': "Task completed by"
 :'case_renderable/correspondence/outgoing': "Outgoing mail"
+:'case_renderable/correspondence/outgoing/email': "Outgoing email to"
 :'case_renderable/correspondence/incoming': "Incoming mail"
+:'case_renderable/correspondence/incoming/email': "Incoming email from"
 :'case_renderable/correspondence/subject': "Mail subject"
 :'case_renderable/correspondence/subject/none': "No subject"
 

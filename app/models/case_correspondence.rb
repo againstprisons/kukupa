@@ -4,6 +4,9 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
   end
 
   def renderables(opts = {})
+    target_email = self.decrypt(:target_email)
+    target_email = nil if target_email&.empty?
+
     items = []
     actions = [
       {
@@ -31,6 +34,8 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
       creation: self.creation,
       subject: self.decrypt(:subject),
       outgoing: self.sent_by_us,
+      correspondence_type: self.correspondence_type,
+      target_email: target_email,
       actions: actions,
     }
 

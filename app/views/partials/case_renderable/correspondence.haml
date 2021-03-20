@@ -6,10 +6,21 @@
           %i.fa.fa-envelope-o.fa-fw= ""
 
       %span
-        - if rb[:outgoing]
-          = t(:'case_renderable/correspondence/outgoing')
-        - else 
-          = t(:'case_renderable/correspondence/incoming')
+        - if rb[:correspondence_type] == 'email'
+          = succeed ': ' do
+            - if rb[:outgoing]
+              = t(:'case_renderable/correspondence/outgoing/email')
+            - else 
+              = t(:'case_renderable/correspondence/incoming/email')
+
+          %code
+            &= rb[:target_email]
+
+        - elsif rb[:correspondence_type] == 'prisoner'
+          - if rb[:outgoing]
+            = t(:'case_renderable/correspondence/outgoing')
+          - else 
+            = t(:'case_renderable/correspondence/incoming')
 
     %ul.inline-list
       %li
