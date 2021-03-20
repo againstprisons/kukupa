@@ -9,7 +9,7 @@ class Kukupa::Workers::CaseTaskReminderWorker
     tasks = Kukupa::Models::CaseTask
       .where(completion: nil, reminded: nil)
       .exclude(deadline: nil, content: nil)
-      .where{deadline < Sequel.function(:NOW)}
+      .where{deadline < Time.now}
       .order(Sequel.desc(:creation))
       .all
 
