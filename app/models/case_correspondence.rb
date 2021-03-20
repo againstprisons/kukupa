@@ -1,4 +1,76 @@
+require 'mail'
+require 'kramdown'
+
 class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
+  def self.new_from_incoming_email(message)
+    return nil unless message.is_a?(Mail::Message)
+    creation = DateTime.now
+
+    # check if we have a CaseCorrespondence entry with this message's
+    # Message-Id header, and if we do, just return that
+    existing = self.where(email_messageid: message.message_id).first
+    return existing if existing
+
+    # create a regexp from the configured email-outgoing-reply-to value,
+    # substituting the identifier marker with a capture group
+    to_address_re = Regexp.new Kukupa.app_config['email-outgoing-reply-to']
+      .gsub(/\+/, '\\\\+')
+      .gsub(/\./, '\\\\.')
+      .gsub('%IDENTIFIER%', '(\w+)')
+
+    # try to match the message To address against the reply-to pattern,
+    # returning early if there's no match
+    tm = nil
+    message.to.each do |to|
+      tm = to_address_re.match(to)
+      break if tm
+    end
+    return nil unless tm
+
+    # find the case with the email identifier from the To address,
+    # returning early if we can't find one
+    case_obj = Kukupa::Models::Case.where(email_identifier: tm[1]).first
+    return nil unless case_obj
+
+    # okay, we have a case! let's get the message content.
+    message_html = message.html_part&.body&.raw_source
+    unless message_html
+      message_text = message.text_part&.body&.raw_source
+      message_html = Kramdown::Document.new(message_text).to_html
+    end
+
+    # we've got the message html, let's check for our banner
+    our_banner = "[[[ Please keep your reply above this line | #{case_obj.email_identifier} ]]]"
+    banner_idx = message_html.index(our_banner)
+
+    # if we found our banner, grab everything before it. if we didn't find
+    # our banner, just use the whole message text (just as a safety measure)
+    if banner_idx
+      message_html = message_html[0..(banner_idx - 1)]
+    end
+
+    # do a sanitize pass on the resulting html, which will strip out all of
+    # the stuff we don't want to store, including the HTML before the banner
+    # in our original email. this is the easiest way to get rid of all that!
+    message_html = Sanitize.fragment(message_html, Sanitize::Config::BASIC)
+
+    # store the message HTML as a local file
+    filename = "incomingemail-#{creation.strftime('%s')}-case#{case_obj.id}.html"
+    file_obj = Kukupa::Models::File.upload(message_html, filename: filename)
+
+    # okay, let's create a CaseCorrespondence entry!
+    ccobj = self.new(case: case_obj.id, sent_by_us: false, correspondence_type: 'email', creation: creation).save
+    ccobj.email_messageid = message.message_id
+    ccobj.file_type = 'local'
+    ccobj.file_id = file_obj.file_id
+    ccobj.encrypt(:target_email, message.from.first)
+    ccobj.encrypt(:subject, message.subject)
+    ccobj.save
+
+    # we're done here! return the CaseCorrespondence entry
+    ccobj
+  end
+
   def anchor
     "CaseCorrespondence-#{self.id}"
   end
