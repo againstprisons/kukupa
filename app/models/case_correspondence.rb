@@ -33,10 +33,17 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     return nil unless case_obj
 
     # okay, we have a case! let's get the message content.
-    message_html = message.html_part&.body&.raw_source
+    message_html = message.html_part&.body&.to_s
+    message_html = nil if message_html&.empty?
     unless message_html
-      message_text = message.text_part&.body&.raw_source
-      message_html = Kramdown::Document.new(message_text).to_html
+      message_text = message.text_part&.body&.to_s
+      message_text = nil if message_text&.empty?
+
+      if message_text
+        message_html = Kramdown::Document.new(message_text).to_html
+      else
+        message_html = '<p><strong>WARNING:</strong> This incoming email did not contain a readable body.</p>'
+      end
     end
 
     # we've got the message html, let's check for our banner
