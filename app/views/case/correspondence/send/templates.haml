@@ -1,7 +1,7 @@
 .case-send-mail-templates{'data-case-id': case_obj.id}
   %h1= title
 
-  = haml :'partials/case_header', layout: false, locals: {caseid: case_obj.id, casetype: case_obj.type}
+  = haml :'partials/case_header', layout: false, locals: {caseid: case_obj.id, casetype: case_obj.type, show: case_show}
 
   .form-main
     %h1= t(:'case/correspondence/send/templates/section_title')
