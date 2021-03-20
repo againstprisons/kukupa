@@ -63,7 +63,7 @@ class Kukupa::Controllers::CaseCreateController < Kukupa::Controllers::Applicati
 
     project_name = request.params['name']&.strip
     project_name = nil if project_name&.empty?
-    is_private = request.params['private']&.strip&.downcase == 'on'
+    is_private = request.params['is_private']&.strip&.downcase == 'on'
 
     if project_name.nil?
       flash :error, t(:'required_field_missing')
