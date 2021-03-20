@@ -26,6 +26,10 @@ module Kukupa
       :type => :text,
       :default => 'advocacy@example.com',
     },
+    "email-outgoing-reply-to" => {
+      :type => :text,
+      :default => 'advocacy+%IDENTIFIER%@example.com',
+    },
     "email-smtp-host" => {
       :type => :text,
       :default => 'logger',
