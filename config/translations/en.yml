@@ -503,6 +503,7 @@
 :'case/correspondence/send/compose/section_title': "Compose mail"
 :'case/correspondence/send/compose/subject': "Mail subject"
 :'case/correspondence/send/compose/content': "Mail content"
+:'case/correspondence/send/compose/is_email': "Currently sending an email to: <code><%= e(email) %></code>"
 :'case/correspondence/send/compose/is_template': "The mail composer has been populated with the template <em><%= e(name) %></em>. <a href=\"?tpl=0\">Click here to clear the template.</a>"
 :'case/correspondence/send/compose/submit': "Continue"
 :'case/correspondence/send/confirm/section_title': "Confirm mail content"
@@ -518,7 +519,9 @@
 :'case/correspondence/send/mail_disabled/no_association': "This case is not associated with a re:connect profile."
 :'case/correspondence/send/mail_disabled/reconnect_data_nil': "The re:connect instance could not be reached to verify this case's information."
 :'case/correspondence/send/errors/reconnect_err': "An error occurred syncing this correspondence with re:connect. Please give your system administrator this error identifier: <code><%= e(error_id) %></code>"
+:'case/correspondence/send/errors/no_email_identifier': "This case does not have an email identifier. Please ask your system administrator to run the FilterRefreshWorker."
 :'case/correspondence/send/success': "Successfully sent correspondence."
+:'case/correspondence/send/success/email': "Successfully sent email."
 
 # Cases - correspondence edit
 :'case/correspondence/edit/title': "Case correspondence <%= e(ccid) %>: <%= e(name) %>"

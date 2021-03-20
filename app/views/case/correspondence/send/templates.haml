@@ -6,7 +6,7 @@
   .form-main
     %h1= t(:'case/correspondence/send/templates/section_title')
 
-    %a.pure-button.button{href: url("/case/#{case_obj.id}/correspondence/send")}
+    %a.pure-button.button{href: url("/case/#{case_obj.id}/correspondence/send?email=#{compose_email}")}
       %i.fa.fa-chevron-left= ""
       = t(:'case/correspondence/send/templates/back_without_template')
 
@@ -20,5 +20,5 @@
       %ul
         - templates.each do |tpl|
           %li
-            %a{href: url("/case/#{case_obj.id}/correspondence/send?tpl=#{tpl[:id]}")}
+            %a{href: tpl[:url]}
               &= tpl[:name]

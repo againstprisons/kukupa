@@ -3,6 +3,12 @@
 
   .form-main
     %h1= t(:'case/correspondence/send/confirm/section_title')
+
+    - if compose_email
+      .message.message-warning
+        %i.fa.fa-envelope-o= ""
+        = t(:'case/correspondence/send/compose/is_email', email: compose_email)
+
     %p= t(:'case/correspondence/send/confirm/subject', subject: compose_subject)
 
     .case-send-mail-preview.rich-text-container.y-margin
@@ -14,6 +20,7 @@
       %input{type: 'hidden', name: 'preview', value: '0'}
       %input{type: 'hidden', name: 'subject', value: compose_subject}
       %input{type: 'hidden', name: 'content', value: compose_content}
+      %input{type: 'hidden', name: 'email', value: compose_email}
 
       %button.pure-button.button.button-primary{type: 'submit'}
         %i.fa.fa-pencil= ""
@@ -25,6 +32,7 @@
       %input{type: 'hidden', name: 'preview', value: '0'}
       %input{type: 'hidden', name: 'subject', value: compose_subject}
       %input{type: 'hidden', name: 'content', value: compose_content}
+      %input{type: 'hidden', name: 'email', value: compose_email}
 
       %button.pure-button.button.button-primary{type: 'submit'}
         %i.fa.fa-envelope-open-o= ""

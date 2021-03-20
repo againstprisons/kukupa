@@ -5,8 +5,13 @@
 
   %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
     %h1= t(:'case/correspondence/send/compose/section_title')
+
+    - if compose_email
+      .message.message-warning
+        %i.fa.fa-envelope-o= ""
+        = t(:'case/correspondence/send/compose/is_email', email: compose_email)
     
-    %a.pure-button.button{href: url("/case/#{case_obj.id}/correspondence/send/templates")}
+    %a.pure-button.button{href: template_url}
       %i.fa.fa-list= ""
       = t(:'case/correspondence/send/templates/view_templates')
 
@@ -15,6 +20,7 @@
 
     %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
     %input{type: 'hidden', name: 'preview', value: '1'}
+    %input{type: 'hidden', name: 'email', value: compose_email}
 
     %label{for: 'subject'}= t(:'case/correspondence/send/compose/subject')
     %input#subject{type: 'text', name: 'subject', required: true, placeholder: t(:'case/correspondence/send/compose/subject'), value: compose_subject}

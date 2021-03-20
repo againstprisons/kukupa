@@ -1,0 +1,24 @@
+<style>
+*, *:before, *:after { box-sizing: border-box; }
+a { color: inherit; text-decoration: underline; }
+a:hover, a:focus { text-decoration: none; border-bottom: 1px solid #000; }
+h1, h2, h3, h4, h5, h6 { padding: 0; margin: 0.5em auto 0 auto; text-align: center; }
+</style>
+
+<body style="max-width: 52rem; font-family: sans-serif; margin: 0 auto; padding: 1rem;">
+    <div style="color: #888; border: 2px solid #888; border-radius: 2px; text-align: center; padding: 0.25rem;">
+        [[[ Please keep your reply above this line | <%= email_identifier %> ]]]
+    </div>
+
+    <div class="main-content">
+        <%= yield %>
+    </div>
+
+    <div style="border-top: 2px solid #000; text-align: center; padding: 1rem 0;">
+        <p>
+            This email was sent through
+            <a href="<%= base_url %>"><%= site_name %></a>
+            on behalf of <%= org_name %>.
+        </p>
+    </div>
+</body>

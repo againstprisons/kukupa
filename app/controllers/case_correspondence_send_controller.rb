@@ -1,4 +1,5 @@
 require 'sanitize'
+require 'reverse_markdown'
 
 class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controllers::CaseController
   add_route :get, '/'
@@ -25,9 +26,16 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
   def index(cid)
     @case_name = @case.get_name
     @title = t(:'case/correspondence/send/title', name: @case_name)
+
+    # is this an email to an outside requester?
+    @email = request.params['email']&.strip&.downcase
+    @email = nil if @email&.empty?
+
+    # get re:connect data, and halt if there is none EXCEPT in the case
+    # that this is an email to an outside requester
     @reconnect_id = @case.reconnect_id
     @reconnect_data = reconnect_penpal(cid: @reconnect_id) if @reconnect_id.to_i.positive?
-    if @reconnect_data.nil?
+    if @email.nil? && @reconnect_data.nil?
       return haml(:'case/correspondence/send/no_reconnect', :locals => {
         title: @title,
         case_obj: @case,
@@ -42,6 +50,9 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
 
     # construct URL to template page with email address 
     @template_url = Addressable::URI.parse(url("/case/#{@case.id}/correspondence/send/templates"))
+    if @email
+      @template_url.query_values = {email: @email}
+    end
 
     # Pull in template data if we've selected a template
     if request.params['tpl'].to_i.positive?
@@ -56,38 +67,105 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
       @subject = request.params['subject']&.strip || ''
       @content = request.params['content']&.strip || ''
       @content = Sanitize.fragment(@content, Sanitize::Config::RELAXED)
+      @content_text = ReverseMarkdown.convert(@content)
 
       @preview = request.params['preview'].to_i.positive?
 
       # send the mail
       if request.params['confirm'].to_i.positive?
-        begin
-          data = reconnect_send_mail(@reconnect_id, @content)
+        # is this an outside request email?
+        if @email
 
-          case_id = @case.id
-          cm = Kukupa::Models::CaseCorrespondence.find_or_create(reconnect_id: data['id'].to_i) do |cm|
-            cm.case = case_id
-            cm.creation = Chronic.parse(data['creation'])
-            cm.file_type = 'reconnect'
-            cm.file_id = data['file_id']
-            cm.sent_by_us = (data['sending_penpal']['id'].to_s == Kukupa.app_config['reconnect-penpal-id'].to_s)
-          end.save
+          # if we have an email identifier, continue sending
+          if @case.email_identifier
+            # store email content as a file
+            file = Kukupa::Models::File.upload(
+              @content,
+              filename: "kukupa_emailcompose_#{DateTime.now.strftime('%s')}.html",
+              mime_type: 'text/html',
+            )
 
-          cm.encrypt(:subject, @subject)
-          cm.save
+            # create correspondence entry
+            cm = Kukupa::Models::CaseCorrespondence.new(
+              case: @case.id,
+              file_type: 'local',
+              file_id: file.file_id,
+              sent_by_us: true,
+              correspondence_type: 'email',
+            ).save
 
-          flash :success, t(:'case/correspondence/send/success')
-          return redirect to "/case/#{@case.id}/view##{cm.anchor}"
+            cm.encrypt(:target_email, @email)
+            cm.encrypt(:subject, @subject)
+            cm.save
 
-        rescue => e
-          error_id = Kukupa::Crypto.generate_token_short
-          $stderr.puts "----- Error ID #{error_id} -----"
-          $stderr.puts e.inspect
-          $stderr.puts e.backtrace
-          $stderr.flush
+            # create email queue entry
+            eq = Kukupa::Models::EmailQueue.new_from_template(nil, {
+              # layout
+              layout: {
+                html: "reply_layout.html.erb",
+                text: "reply_layout.txt.erb",
+              },
 
-          flash :error, t(:'case/correspondence/send/errors/reconnect_err', error_id: error_id)
-          @preview = true
+              # content
+              content_text: @content_text,
+              content_html: @content,
+
+              # template data
+              email_identifier: @case.email_identifier,
+            })
+
+            eq.queue_status = 'queued'
+            eq.encrypt(:subject, @subject)
+            eq.encrypt(:recipients, JSON.generate({
+              mode: 'list',
+              list: [@email],
+            }))
+            eq.encrypt(:message_opts, JSON.generate({
+              no_autogen_headers: true,
+              reply_to: Kukupa.app_config['email-outgoing-reply-to'].gsub('%IDENTIFIER%', @case.email_identifier),
+            }))
+
+            eq.save
+
+            flash :success, t(:'case/correspondence/send/success/email')
+            return redirect to "/case/#{@case.id}/view##{cm.anchor}"
+
+          # else, no email identifier
+          else 
+            flash :error, t(:'case/correspondence/send/errors/no_email_identifier')
+            @preview = true
+          end
+
+        # else, this is a re:connect mail send
+        else
+          begin
+            data = reconnect_send_mail(@reconnect_id, @content)
+
+            case_id = @case.id
+            cm = Kukupa::Models::CaseCorrespondence.find_or_create(reconnect_id: data['id'].to_i) do |cm|
+              cm.case = case_id
+              cm.creation = Chronic.parse(data['creation'])
+              cm.file_type = 'reconnect'
+              cm.file_id = data['file_id']
+              cm.sent_by_us = (data['sending_penpal']['id'].to_s == Kukupa.app_config['reconnect-penpal-id'].to_s)
+            end.save
+
+            cm.encrypt(:subject, @subject)
+            cm.save
+
+            flash :success, t(:'case/correspondence/send/success')
+            return redirect to "/case/#{@case.id}/view##{cm.anchor}"
+
+          rescue => e
+            error_id = Kukupa::Crypto.generate_token_short
+            $stderr.puts "----- Error ID #{error_id} -----"
+            $stderr.puts e.inspect
+            $stderr.puts e.backtrace
+            $stderr.flush
+
+            flash :error, t(:'case/correspondence/send/errors/reconnect_err', error_id: error_id)
+            @preview = true
+          end
         end
       end
 
@@ -100,6 +178,7 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
           case_show: @show,
           compose_subject: @subject,
           compose_content: @content,
+          compose_email: @email,
         })
       end
     end
@@ -113,6 +192,7 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
       template_name: @template&.decrypt(:name),
       compose_subject: @subject,
       compose_content: @content,
+      compose_email: @email,
     })
   end
   
