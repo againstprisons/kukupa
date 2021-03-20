@@ -45,12 +45,12 @@ class Kukupa::Models::EmailQueue < Sequel::Model(:email_queue)
     html_wrapper = entry.new_tilt_template_from_fn(data.layout[:html])
 
     # render wrappers, passing in rendered output from above
-    text_output = text_wrapper.render(data) { text_output } if text_wrapper
-    html_output = html_wrapper.render(data) { html_output } if html_wrapper
+    text_output = text_wrapper.render(data) { text_output.force_encoding('UTF-8') } if text_wrapper
+    html_output = html_wrapper.render(data) { html_output.force_encoding('UTF-8') } if html_wrapper
 
     # save data on EmailQueue instance created earlier
-    entry.encrypt(:content_text, text_output) if text_output
-    entry.encrypt(:content_html, html_output) if html_output
+    entry.encrypt(:content_text, text_output.force_encoding('UTF-8')) if text_output
+    entry.encrypt(:content_html, html_output.force_encoding('UTF-8')) if html_output
 
     entry
   end
