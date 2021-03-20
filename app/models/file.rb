@@ -9,7 +9,7 @@ class Kukupa::Models::File < Sequel::Model
       fileid = Kukupa::Crypto.generate_token_long
     end
 
-    obj = self.new(file_id: fileid, creation: Sequel.function(:NOW))
+    obj = self.new(file_id: fileid, creation: Sequel.function(:NOW)).save
     obj.replace(opts[:filename], data)
     obj.mime_type = opts[:mime_type] if opts[:mime_type]
     obj.save
