@@ -1,4 +1,4 @@
-module Kukupa::Config::Mail
+module Kukupa::Config::EmailSmtp
   module_function
 
   def order

@@ -34,6 +34,10 @@ module Kukupa
       :type => :text,
       :default => 'logger',
     },
+    "email-imap-host" => {
+      :type => :text,
+      :default => 'none',
+    },
     "email-subject-prefix" => {
       :type => :text,
       :default => 'site-name-brackets',
