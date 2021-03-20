@@ -27,9 +27,12 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
     @case_name = @case.get_name
     @title = t(:'case/correspondence/send/title', name: @case_name)
 
-    # is this an email to an outside requester?
-    @email = request.params['email']&.strip&.downcase
-    @email = nil if @email&.empty?
+    # if email correspondence is enabled, get the `email` parameter -
+    # if set, this is an email to an outside requester
+    if Kukupa.app_config['feature-case-correspondence-email']
+      @email = request.params['email']&.strip&.downcase
+      @email = nil if @email&.empty?
+    end
 
     # get re:connect data, and halt if there is none EXCEPT in the case
     # that this is an email to an outside requester

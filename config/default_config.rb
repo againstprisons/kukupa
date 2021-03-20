@@ -114,6 +114,10 @@ module Kukupa
       :type => :time_period,
       :default => 'in 1 week',
     },
+    "feature-case-correspondence-email" => {
+      :type => :bool,
+      :default => false,
+    }
   }
 
   APP_CONFIG_DEPRECATED_ENTRIES = {

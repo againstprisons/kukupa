@@ -38,14 +38,19 @@ class Kukupa::Models::CaseNote < Sequel::Model
       }
     ]
 
-    if self.is_outside_request && metadata[:email]
-      reply_url = Addressable::URI.parse("/case/#{self.case}/correspondence/send")
-      reply_url.query_values = {email: metadata[:email]}
+    # if email correspondence is enabled, this is an outside request,
+    # and the request metadata includes an email address, then show
+    # a reply button
+    if Kukupa.app_config['feature-case-correspondence-email']
+      if self.is_outside_request && metadata[:email]
+        reply_url = Addressable::URI.parse("/case/#{self.case}/correspondence/send")
+        reply_url.query_values = {email: metadata[:email]}
 
-      actions.unshift({
-        url: [:url, reply_url],
-        fa_icon: 'fa-mail-reply',
-      })
+        actions.unshift({
+          url: [:url, reply_url],
+          fa_icon: 'fa-mail-reply',
+        })
+      end
     end
 
     items << {

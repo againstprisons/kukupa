@@ -27,14 +27,19 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
       })
     end
 
-    if !self.sent_by_us && self.correspondence_type == 'email' && target_email
-      reply_url = Addressable::URI.parse("/case/#{self.case}/correspondence/send")
-      reply_url.query_values = {email: target_email}
+    # if email correspondence is enabled, this correspondence is of
+    # type `email`, this correspondence was not sent by us, and the
+    # `target_email` field is not `nil`, show a reply button
+    if Kukupa.app_config['feature-case-correspondence-email']
+      if self.correspondence_type == 'email' && !self.sent_by_us && target_email
+        reply_url = Addressable::URI.parse("/case/#{self.case}/correspondence/send")
+        reply_url.query_values = {email: target_email}
 
-      actions.unshift({
-        url: [:url, reply_url],
-        fa_icon: 'fa-mail-reply',
-      })
+        actions.unshift({
+          url: [:url, reply_url],
+          fa_icon: 'fa-mail-reply',
+        })
+      end
     end
 
     items << {
