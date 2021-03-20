@@ -40,6 +40,9 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
 
     @subject = @content = ''
 
+    # construct URL to template page with email address 
+    @template_url = Addressable::URI.parse(url("/case/#{@case.id}/correspondence/send/templates"))
+
     # Pull in template data if we've selected a template
     if request.params['tpl'].to_i.positive?
       @template = Kukupa::Models::MailTemplate[request.params['tpl'].to_i]
@@ -106,6 +109,7 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
       case_obj: @case,
       case_name: @case_name,
       case_show: @show,
+      template_url: @template_url.to_s,
       template_name: @template&.decrypt(:name),
       compose_subject: @subject,
       compose_content: @content,
@@ -115,11 +119,20 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
   def templates(cid)
     @case_name = @case.get_name
     @title = t(:'case/correspondence/send/title', name: @case_name)
+
+    # is this an email to an outside requester?
+    @email = request.params['email']&.strip&.downcase
+    @email = nil if @email&.empty?
+
     @reconnect_id = @case.reconnect_id
     @reconnect_data = reconnect_penpal(cid: @reconnect_id) if @reconnect_id.to_i.positive?
-    return redirect url("/case/#{@case.id}/correspondence/send") unless @reconnect_data
+    if @email.nil? && @reconnect_data.nil?
+      return redirect url("/case/#{@case.id}/correspondence/send")
+    end
 
-    @templates = Kukupa::Models::MailTemplate.template_list.reject { |tpl| !tpl[:enabled] }
+    @templates = Kukupa::Models::MailTemplate
+      .template_list(@case, email: @email)
+      .reject { |tpl| !tpl[:enabled] }
     
     return haml(:'case/correspondence/send/templates', :locals => {
       title: @title,
@@ -127,6 +140,7 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
       case_name: @case_name,
       case_show: @show,
       templates: @templates,
+      compose_email: @email,
     })
   end
 end
