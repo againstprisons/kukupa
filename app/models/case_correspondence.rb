@@ -61,6 +61,10 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     # in our original email. this is the easiest way to get rid of all that!
     message_html = Sanitize.fragment(message_html, Sanitize::Config::BASIC)
 
+    # prepend a doctype and a meta charset tag to the message html so it
+    # renders properly in the FileDownloadController view mode
+    message_html = "<!DOCTYPE html>\n<head><meta charset=\"utf-8\"></head>\n#{message_html}"
+
     # store the message HTML as a local file
     filename = "incomingemail-#{creation.strftime('%s')}-case#{case_obj.id}.html"
     file_obj = Kukupa::Models::File.upload(message_html, filename: filename)
