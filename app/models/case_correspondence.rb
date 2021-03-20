@@ -27,6 +27,16 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
       })
     end
 
+    if !self.sent_by_us && self.correspondence_type == 'email' && target_email
+      reply_url = Addressable::URI.parse("/case/#{self.case}/correspondence/send")
+      reply_url.query_values = {email: target_email}
+
+      actions.unshift({
+        url: [:url, reply_url],
+        fa_icon: 'fa-mail-reply',
+      })
+    end
+
     items << {
       type: :correspondence,
       id: "CaseCorrespondence[#{self.id}]",
