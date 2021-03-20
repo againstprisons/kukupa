@@ -11,7 +11,7 @@ class Kukupa::Workers::SyncIncomingEmailWorker
     end
 
     count = {retrieved: 0, populated: 0, errored: 0}
-    Mail.find_and_delete(what: :first, count: 20, search_charset: 'UTF-8') do |message|
+    Mail.find_and_delete(what: :first, count: 50, search_charset: 'UTF-8') do |message|
       count[:retrieved] += 1
 
       ccobj = Kukupa::Models::CaseCorrespondence.new_from_incoming_email(message)
