@@ -13,7 +13,7 @@ class Kukupa::Controllers::SystemMailTemplatesController < Kukupa::Controllers::
   end
 
   def index
-    @templates = Kukupa::Models::MailTemplate.template_list
+    @templates = Kukupa::Models::MailTemplate.template_list(nil)
 
     return haml(:'system/layout', locals: {title: @title}) do
       haml(:'system/mail_templates/index', layout: false, locals: {
