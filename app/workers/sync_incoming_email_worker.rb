@@ -15,7 +15,7 @@ class Kukupa::Workers::SyncIncomingEmailWorker
       count[:retrieved] += 1
 
       ccobj = Kukupa::Models::CaseCorrespondence.new_from_incoming_email(message)
-      if ccobj
+      if ccobj.is_a?(Kukupa::Models::CaseCorrespondence)
         count[:populated] += 1
         logger.info("Message #{message.message_id}: populated CaseCorrespondence[#{ccobj.id}]")
 
@@ -27,7 +27,7 @@ class Kukupa::Workers::SyncIncomingEmailWorker
 
       else
         count[:errored] += 1
-        logger.warn("Message #{message.message_id}: parse did not return CaseCorrespondence :(")
+        logger.warn("Message #{message.message_id}: parse did not return CaseCorrespondence: #{ccobj.inspect}")
       end
     end
 

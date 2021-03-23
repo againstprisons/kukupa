@@ -25,12 +25,12 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
       tm = to_address_re.match(to)
       break if tm
     end
-    return nil unless tm
+    return :no_re_match unless tm
 
     # find the case with the email identifier from the To address,
     # returning early if we can't find one
     case_obj = Kukupa::Models::Case.where(email_identifier: tm[1]).first
-    return nil unless case_obj
+    return :no_case_obj unless case_obj
 
     # okay, we have a case! let's get the message content.
     message_html = message.html_part&.body&.to_s
@@ -72,9 +72,14 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     filename = "incomingemail-#{creation.strftime('%s')}-case#{case_obj.id}.html"
     file_obj = Kukupa::Models::File.upload(message_html, filename: filename)
 
+    # and store the original message as a local file
+    eml_filename = "incomingemail-#{creation.strftime('%s')}-case#{case_obj.id}.eml"
+    eml_file_obj = Kukupa::Models::File.upload(message.to_s, filename: eml_filename)
+
     # okay, let's create a CaseCorrespondence entry!
     ccobj = self.new(case: case_obj.id, sent_by_us: false, correspondence_type: 'email', creation: creation).save
     ccobj.email_messageid = message.message_id
+    ccobj.email_original_fileid = eml_file_obj.file_id
     ccobj.file_type = 'local'
     ccobj.file_id = file_obj.file_id
     ccobj.encrypt(:target_email, message.from.first)
