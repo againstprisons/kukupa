@@ -3,9 +3,8 @@ class Kukupa::Models::MailTemplate < Sequel::Model
     self.all.map do |tpl|
       url = nil
       if case_obj
-        url = Addressable::URI.parse(url("/case/#{case_obj.id}/correspondence/send"))
-        url.query_values = {tpl: tpl.id}
-        url.query_values[:email] = opts[:email] if opts[:email]
+        url = Addressable::URI.parse("/case/#{case_obj.id}/correspondence/send")
+        url.query_values = opts.merge({tpl: tpl.id})
       end
 
       {
