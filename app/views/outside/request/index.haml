@@ -27,6 +27,11 @@
               = t(:'outside/request/requester_info/field_phone')
             %input#requester_phone{name: 'requester_phone', value: requester_phone}
 
+      .x-margin
+        %label{for: 'requester_relationship'}
+          = t(:'outside/request/requester_info/field_relationship')
+        %input#requester_relationship{name: 'requester_relationship', required: true, value: requester_relationship}
+
     .form-main
       %h1= t(:'outside/request/prisoner_info/section_title')
 

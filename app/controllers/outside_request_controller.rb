@@ -21,6 +21,8 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
       @requester_email = nil if @requester_email&.empty?
       @requester_phone = request.params['requester_phone']&.strip&.downcase
       @requester_phone = nil if @requester_phone&.empty?
+      @requester_relationship = request.params['requester_relationship']&.strip&.downcase
+      @requester_relationship = nil if @requester_relationship&.empty?
 
       @name_first = request.params['name_first']&.strip
       @name_first = nil if @name_first&.empty?
@@ -34,6 +36,7 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
         @content.nil?,
         @requester_name.nil?,
         @requester_phone.nil? && @requester_email.nil?,
+        @requester_relationship.nil?,
         @name_first.nil?,
         @name_last.nil?,
         @prison.nil?,
@@ -98,6 +101,7 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
           name: @requester_name,
           email: @requester_email,
           phone: @requester_phone,
+          relationship: @requester_relationship,
           prison: @prison.id,
           categories: @req_categories,
         }
@@ -129,6 +133,7 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
       requester_name: @requester_name,
       requester_phone: @requester_phone,
       requester_email: @requester_email,
+      requester_relationship: @requester_relationship,
       name_first: @name_first,
       name_last: @name_last,
       prison: @prison,

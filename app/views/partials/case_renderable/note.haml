@@ -70,6 +70,13 @@
               %span
                 &= rb[:metadata][:email]
 
+          - if rb[:metadata][:relationship]
+            %li
+              = succeed ': ' do
+                = t(:'case_renderable/note/outside_request/relationship')
+              %span
+                &= rb[:metadata][:relationship]
+
       - if rb[:metadata][:prison]
         .cr-outsidereq-meta-prison
           %ul.inline-list
