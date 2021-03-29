@@ -73,8 +73,8 @@ module Kukupa::Helpers::CaseListTasksHelpers
     end
 
     # sort by case type
-    Kukupa::Models::Case::ALLOWED_TYPES.map do |type|
-      t = tasks.filter { |t| t[:case][:type] == type }
+    Kukupa::Models::Case::CASE_TYPES.keys.map do |type|
+      t = tasks.filter { |t| t[:case][:type] == type.to_s }
       t.empty? ? nil : t
     end.compact
   end
