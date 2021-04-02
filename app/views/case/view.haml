@@ -211,22 +211,36 @@
   .form-main#case-view-renderables
     %h1= t(:'case/view/entries/section_title')
 
-    .inline-form
-      %a.pure-button.button{href: "#case-view-renderables-end", title: t(:'case/view/actions/to_end_of_entries')}
-        %i.fa.fa-arrow-down= ""
-        %span.sr-only
-          = t(:'case/view/actions/to_end_of_entries')
+    .case-view-either-side
+      .inline-form
+        %a.pure-button.button{href: "#case-view-renderables-end", title: t(:'case/view/actions/to_end_of_entries')}
+          %i.fa.fa-arrow-down= ""
+          %span.sr-only
+            = t(:'case/view/actions/to_end_of_entries')
 
-      - if cuser_can_edit
-        %a.pure-button.button{href: url("/case/#{case_obj.id}/note/add")}
-          %i.fa.fa-pencil-square-o= ""
-          %span
-            = t(:'case/view/actions/add_note')
+        - if cuser_can_edit
+          %a.pure-button.button{href: url("/case/#{case_obj.id}/note/add")}
+            %i.fa.fa-pencil-square-o= ""
+            %span
+              = t(:'case/view/actions/add_note')
 
-        %a.pure-button.button{href: url("/case/#{case_obj.id}/spend/add")}
-          %i.fa.fa-dollar= ""
-          %span
-            = t(:'case/view/actions/add_spend')
+          %a.pure-button.button{href: url("/case/#{case_obj.id}/spend/add")}
+            %i.fa.fa-dollar= ""
+            %span
+              = t(:'case/view/actions/add_spend')
+
+      .inline-form
+        = t(:'pagination/count', page: page_state[:page], count: page_state[:pages])
+
+        %a.pure-button.button{href: page_prev, disabled: page_state[:page] <= 1}
+          %i.fa.fa-chevron-left= ""
+          %span.sr-only
+            = t(:'pagination/prev')
+
+        %a.pure-button.button{href: page_next, disabled: page_state[:page] >= page_state[:pages]}
+          %i.fa.fa-chevron-right= ""
+          %span.sr-only
+            = t(:'pagination/next')
 
     .case-view-renderables
       - if renderables.empty?
@@ -238,11 +252,25 @@
 
       #case-view-renderables-end= ""
 
-    .inline-form
-      %a.pure-button.button{href: "#case-view-renderables", title: t(:'case/view/actions/to_start_of_entries')}
-        %i.fa.fa-arrow-up= ""
-        %span.sr-only
-          = t(:'case/view/actions/to_start_of_entries')
+    .case-view-either-side
+      .inline-form
+        %a.pure-button.button{href: "#case-view-renderables", title: t(:'case/view/actions/to_start_of_entries')}
+          %i.fa.fa-arrow-up= ""
+          %span.sr-only
+            = t(:'case/view/actions/to_start_of_entries')
+
+      .inline-form
+        = t(:'pagination/count', page: page_state[:page], count: page_state[:pages])
+
+        %a.pure-button.button{href: page_prev, disabled: page_state[:page] <= 1}
+          %i.fa.fa-chevron-left= ""
+          %span.sr-only
+            = t(:'pagination/prev')
+
+        %a.pure-button.button{href: page_next, disabled: page_state[:page] >= page_state[:pages]}
+          %i.fa.fa-chevron-right= ""
+          %span.sr-only
+            = t(:'pagination/next')
 
     .page-footer
       %ul.inline-list

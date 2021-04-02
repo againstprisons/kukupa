@@ -127,7 +127,12 @@ module Kukupa::Helpers::CaseViewHelpers
 
     items = items.flatten.compact.sort { |a, b| b[:creation] <=> a[:creation] }
 
+    page_state = {page: 1, pages: 1}
     if opts[:pagination]
+      pages = (items.count / opts[:pagination_items]).to_i
+      pages = 1 if pages.zero?
+      page_state = {page: opts[:page], pages: pages}
+
       offset_start = opts[:pagination_items] * (opts[:page] - 1)
       offset_finish = opts[:pagination_items] * opts[:page]
 
@@ -209,6 +214,6 @@ module Kukupa::Helpers::CaseViewHelpers
     # And return the result!
     ###
 
-    renderables
+    [page_state, renderables]
   end
 end

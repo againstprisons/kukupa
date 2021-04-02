@@ -21,6 +21,17 @@
   }
 }
 
+.case-view-either-side {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: baseline;
+  justify-content: flex-start;
+
+  @media screen and (min-width: $responsive_width) {
+    justify-content: space-between;
+  }
+}
+
 .case-view-task-editlink {
   color: $case_renderable_header_foreground;
   text-decoration: none;

@@ -80,6 +80,11 @@
 :'invalid_action': "The provided action was invalid."
 :'must_log_in': "You must log in to perform this action."
 
+# Pagination
+:'pagination/count': "Page <%= e(page.to_i) %> of <%= e(count.to_i) %>"
+:'pagination/prev': "Previous page"
+:'pagination/next': "Next page"
+
 # Errors
 :'errors/not_found/title': "Page not found"
 :'errors/not_found/content': "The page you have requested could not be found."

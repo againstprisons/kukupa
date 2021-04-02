@@ -25,7 +25,9 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
     @title = t(:'case/view/title', name: @case_name, casetype: @case.type)
 
     @renderable_updates = request.params['ru'].to_i.positive?
-    @renderables = get_renderables(@case, {
+    @page_state, @renderables = get_renderables(@case, {
+      pagination: true,
+      page: request.params['p'].to_i,
       include_updates: @renderable_updates,
       renderable_opts: {
         spend_can_approve: has_role?('case:spend:can_approve'),
@@ -49,22 +51,29 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
     end
 
     @this_url = Addressable::URI.parse(url(request.path))
-    @this_url.query_values = {
-      'tc' => @tasks_complete ? '1' : '0',
-      'ru' => @renderable_updates ? '1' : '0',
+    @this_url.query_values = @this_url_query_values = {
+      p: @page_state[:page],
+      tc: @tasks_complete ? '1' : '0',
+      ru: @renderable_updates ? '1' : '0',
      }
 
+    @page_prev = @this_url.dup
+    @page_prev.fragment = "case-view-renderables"
+    @page_prev.query_values =
+      @this_url_query_values.merge({p: (@page_state[:page] - 1)})
+
+    @page_next = @this_url.dup
+    @page_next.fragment = "case-view-renderables"
+    @page_next.query_values =
+      @this_url_query_values.merge({p: (@page_state[:page] + 1)})
+
     @renderable_updates_toggle = @this_url.dup
-    @renderable_updates_toggle.query_values = {
-      'tc' => @tasks_complete ? '1' : '0',
-      'ru' => @renderable_updates ? '0' : '1',
-    }
+    @renderable_updates_toggle.query_values =
+      @this_url_query_values.merge({ru: @renderable_updates ? '0' : '1'})
 
     @tasks_complete_toggle = @this_url.dup
-    @tasks_complete_toggle.query_values = {
-      'tc' => @tasks_complete ? '0' : '1',
-      'ru' => @renderable_updates ? '1' : '0',
-    }
+    @tasks_complete_toggle.query_values =
+      @this_url_query_values.merge({tc: @tasks_complete ? '0' : '1'})
 
     @spend_year_max = Kukupa.app_config['fund-max-spend-per-case-year'].to_f
     @spend_year = Kukupa::Models::CaseSpendAggregate.get_case_year_total(@case, DateTime.now)
@@ -83,6 +92,9 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
 
     return haml(:'case/view', :locals => {
       title: @title,
+      page_state: @page_state,
+      page_prev: @page_prev,
+      page_next: @page_next,
       cuser_can_edit: @can_edit,
       case_obj: @case,
       case_show: @show,
