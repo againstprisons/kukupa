@@ -43,3 +43,7 @@
 
         - else
           = t(:'case_renderable/correspondence/subject/none')
+
+    - if rb[:outgoing] && rb[:approval] == false
+      .message.message-warning
+        = t(:'case_renderable/correspondence/not_approved')

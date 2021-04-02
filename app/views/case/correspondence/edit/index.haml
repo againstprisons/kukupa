@@ -18,6 +18,18 @@
       %i.fa.fa-pencil= ""
       = t(:'case/correspondence/edit/edit/submit')
 
+  - if has_role?('case:correspondence:can_approve')
+    .form-main
+      %h1= t(:'case/correspondence/edit/approve/section_title')
+
+      - if cc_approved
+        %p= t(:'case/correspondence/edit/approve/is_approved')
+
+      - else
+        %a.pure-button.button.button-primary{href: urls[:approve]}
+          %i.fa.fa-check= ""
+          = t(:'case/correspondence/edit/approve/submit')
+
   - if has_role?('case:delete_entry')
     %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: urls[:delete]}
       %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
@@ -29,4 +41,3 @@
       %button.pure-button.button.button-error{type: 'submit'}
         %i.fa.fa-trash= ""
         = t(:'case/correspondence/edit/delete/submit')
-

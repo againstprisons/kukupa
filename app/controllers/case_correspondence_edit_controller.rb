@@ -2,6 +2,8 @@ class Kukupa::Controllers::CaseCorrespondenceEditController < Kukupa::Controller
   add_route :get, '/'
   add_route :post, '/'
   add_route :post, '/delete', method: :delete
+  add_route :get, '/approve', method: :approve
+  add_route :post, '/approve', method: :approve
 
   def before(cid, *args)
     super
@@ -33,13 +35,15 @@ class Kukupa::Controllers::CaseCorrespondenceEditController < Kukupa::Controller
       flash :success, t(:'case/correspondence/edit/edit/success')
     end
 
-    return haml(:'case/correspondence/edit', :locals => {
+    return haml(:'case/correspondence/edit/index', :locals => {
       title: @title,
       case_obj: @case,
       case_name: @case_name,
       cc_obj: @cc_obj,
       cc_subject: @cc_subject,
+      cc_approved: @cc_obj.approved,
       urls: {
+        approve: url("/case/#{@case.id}/correspondence/#{@cc_obj.id}/approve"),
         delete: url("/case/#{@case.id}/correspondence/#{@cc_obj.id}/delete"),
       }
     })
@@ -62,5 +66,44 @@ class Kukupa::Controllers::CaseCorrespondenceEditController < Kukupa::Controller
 
     flash :success, t(:'case/correspondence/edit/delete/success', ccid: @cc_obj.id)
     return redirect url("/case/#{@case.id}/view")
+  end
+
+  def approve(cid, ccid)
+    return halt 404 unless has_role?('case:correspondence:can_approve')
+
+    @cc_obj = Kukupa::Models::CaseCorrespondence[ccid.to_i]
+    return halt 404 unless @cc_obj
+    return halt 404 unless @cc_obj.case == @case.id
+    return halt 418 if @cc_obj.approved
+
+    if request.post?
+      @cc_obj.update(approved: true, approved_by: current_user.id)
+
+      result = @cc_obj.send_correspondence_to_target!
+      if result == true
+        flash :success, t(:'case/correspondence/approve/success')
+        return redirect url("/case/#{@case.id}/view##{@cc_obj.anchor}")
+
+      else
+        flash :success, t(:'case/correspondence/approve/errors/send_failed', error: result.inspect)
+        @cc_obj.update(approved: false)
+      end
+    end
+
+    @cc_content = @cc_obj.get_file_content
+    @cc_subject = @cc_obj.decrypt(:subject)
+    @case_name = @case.get_name
+    @title = t(:'case/correspondence/approve/title', ccid: @cc_obj.id, name: @case_name)
+
+    return haml(:'case/correspondence/edit/approve', :locals => {
+      title: @title,
+      case_obj: @case,
+      case_name: @case_name,
+      cc_obj: @cc_obj,
+      cc_type: @cc_obj.correspondence_type,
+      cc_email: @cc_obj.decrypt(:target_email),
+      cc_subject: @cc_subject,
+      cc_content: @cc_content,
+    })
   end
 end

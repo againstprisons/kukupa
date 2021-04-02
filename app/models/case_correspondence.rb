@@ -2,6 +2,10 @@ require 'mail'
 require 'kramdown'
 
 class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
+  class ReconnectHelpers
+    extend Kukupa::Helpers::ReconnectHelpers
+  end
+
   def self.new_from_incoming_email(message)
     return nil unless message.is_a?(Mail::Message)
     creation = DateTime.now
@@ -133,6 +137,11 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
       end
     end
 
+    approval = false
+    if self.approved
+      approval = [:user, self.approved_by]
+    end
+
     items << {
       type: :correspondence,
       id: "CaseCorrespondence[#{self.id}]",
@@ -142,6 +151,7 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
       outgoing: self.sent_by_us,
       correspondence_type: self.correspondence_type,
       target_email: target_email,
+      approval: approval,
       actions: actions,
     }
 
@@ -149,12 +159,12 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
   end
 
   def get_download_url(opts = {})
-    meth = "get_download_url_#{self.file_type}".to_sym
+    meth = "get_download_url__#{self.file_type}".to_sym
     return self.send(meth, opts) if self.respond_to?(meth)
     nil
   end
   
-  def get_download_url_local(opts = {})
+  def get_download_url__local(opts = {})
     file = Kukupa::Models::File.where(file_id: self.file_id).first
     return nil unless file
     
@@ -165,7 +175,7 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     url.to_s
   end
 
-  def get_download_url_reconnect(opts = {})
+  def get_download_url__reconnect(opts = {})
     api_url = Addressable::URI.parse(Kukupa.app_config['reconnect-url'])
     api_url += '/api/dltoken'
 
@@ -191,19 +201,19 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
   end
 
   def get_file_content(opts = {})
-    meth = "get_file_content_#{self.file_type}".to_sym
+    meth = "get_file_content__#{self.file_type}".to_sym
     return self.send(meth, opts) if self.respond_to?(meth)
     nil
   end
   
-  def get_file_content_local(opts = {})
+  def get_file_content__local(opts = {})
     file = Kukupa::Models::File.where(file_id: self.file_id).first
     return nil unless file
     file.decrypt_file
   end
 
-  def get_file_content_reconnect(opts = {})
-    url = self.get_download_url_reconnect
+  def get_file_content__reconnect(opts = {})
+    url = self.get_download_url__reconnect
     return nil unless url
 
     out = Typhoeus.get(url)
@@ -211,6 +221,92 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     out.body
   end
   
+  def send_correspondence_to_target!(opts = {})
+    return unless self.sent_by_us # just for outgoing mail
+    return unless self.approved # only send approved mail
+    unless opts[:send_again]
+      # return if we've already sent this correspondence, unless we have
+      # a "send again" override flag
+      return if self.has_been_sent 
+    end
+
+    case_obj = Kukupa::Models::Case[self.case]
+    return unless case_obj
+
+    meth = "send_correspondence_to_target__#{self.correspondence_type}".to_sym
+    return send(meth, case_obj, opts) if respond_to?(meth)
+    :unknown_type
+  end
+
+  def send_correspondence_to_target__email(case_obj, opts = {})
+    target_email = self.decrypt(:target_email)
+    target_email = nil if target_email&.empty?
+    return :email_no_target unless target_email
+
+    content = self.get_file_content
+    content = '' if content&.empty?
+    content_text = ReverseMarkdown.convert(content)
+
+    eq = Kukupa::Models::EmailQueue.new_from_template(nil, {
+      # layout
+      layout: {
+        html: "reply_layout.html.erb",
+        text: "reply_layout.txt.erb",
+      },
+
+      # content
+      content_text: content_text,
+      content_html: content,
+
+      # template data
+      email_identifier: case_obj.email_identifier,
+    })
+
+    eq.queue_status = 'queued'
+    eq.encrypt(:subject, self.decrypt(:subject))
+    eq.encrypt(:recipients, JSON.generate({mode: 'list', list: [target_email]}))
+    eq.encrypt(:message_opts, JSON.generate({
+      no_autogen_headers: true,
+      reply_to: Kukupa.app_config['email-outgoing-reply-to'].gsub('%IDENTIFIER%', case_obj.email_identifier),
+    }))
+
+    eq.save
+
+    self.has_been_sent = true
+    self.save
+
+    true
+  end
+
+  def send_correspondence_to_target__prisoner(case_obj, opts = {})
+    content = self.get_file_content
+    content = '' if content&.empty?
+
+    reconnect_id = case_obj.reconnect_id
+    return :prisoner_no_reconnect_id unless reconnect_id
+
+    begin
+      result = ReconnectHelpers.reconnect_send_mail(reconnect_id, content)
+    rescue => e
+      error_id = Kukupa::Crypto.generate_token_short
+      $stderr.puts "----- Error ID #{error_id} -----"
+      $stderr.puts e.inspect
+      $stderr.puts e.backtrace
+      $stderr.flush
+
+      return "reconnect_exception__#{error_id}".to_sym
+    end
+
+    reconnect_id = result['id'].to_i
+    return :reconnect_id_zero if reconnect_id.zero?
+
+    self.reconnect_id = reconnect_id
+    self.has_been_sent = true
+    self.save
+
+    true
+  end
+
   def send_incoming_alert_email!(opts = {})
     return if self.sent_by_us # this is just for incoming mail
 

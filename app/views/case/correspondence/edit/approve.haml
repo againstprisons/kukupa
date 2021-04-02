@@ -1,0 +1,47 @@
+.case-correspondence-edit-approve{'data-case-id': case_obj.id}
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: url("/case/#{case_obj.id}/correspondence/#{cc_obj.id}")}
+      %i.fa.fa-chevron-left= ""
+      %span
+        = t(:'back')
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'case/correspondence/approve/section_title')
+
+    %ul
+      %li
+        = succeed ': ' do
+          %strong= t(:'case/correspondence/approve/field/type')
+
+        = t("case/correspondence/approve/field/type/#{cc_type}".to_sym)
+
+      - if cc_type == 'email'
+        %li
+          = succeed ': ' do
+            %strong= t(:'case/correspondence/approve/field/email_address')
+
+          %code&= cc_email
+
+      %li
+        = succeed ': ' do
+          %strong= t(:'case/correspondence/approve/field/subject')
+          - if cc_type == 'email'
+            = t(:'case/correspondence/approve/field/subject/email')
+
+        %blockquote
+          &= cc_subject
+
+      %li
+        = succeed ': ' do
+          %strong= t(:'case/correspondence/approve/field/content')
+
+        %blockquote
+          = cc_content
+
+    %p= t(:'case/correspondence/approve/content')
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-envelope-o= ""
+      = t(:'case/correspondence/approve/submit')

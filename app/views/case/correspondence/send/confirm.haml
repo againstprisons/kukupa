@@ -35,8 +35,22 @@
       %input{type: 'hidden', name: 'email', value: compose_email}
 
       %button.pure-button.button.button-primary{type: 'submit'}
-        %i.fa.fa-envelope-open-o= ""
+        %i.fa.fa-envelope-o= ""
         = t(:'case/correspondence/send/confirm/submit')
+
+    - if has_role?('case:correspondence:send_without_approval')
+      %form.pure-form.pure-form-stacked{method: 'POST'}
+        %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+        %input{type: 'hidden', name: 'confirm', value: '1'}
+        %input{type: 'hidden', name: 'preview', value: '0'}
+        %input{type: 'hidden', name: 'subject', value: compose_subject}
+        %input{type: 'hidden', name: 'content', value: compose_content}
+        %input{type: 'hidden', name: 'email', value: compose_email}
+        %input{type: 'hidden', name: 'approve_self', value: '1'}
+
+        %button.pure-button.button.button-primary{type: 'submit'}
+          %i.fa.fa-envelope= ""
+          = t(:'case/correspondence/send/confirm/submit/immediate')
 
 .async-load{:'data-sources' => JSON.generate(['/static/editor.bundle.js'])}
     
