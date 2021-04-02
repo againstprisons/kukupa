@@ -55,6 +55,7 @@
               = t(:'outside/request/prisoner_info/field_prison')
             %select#prisoner_prison{name: 'prison', required: true}
               %option{value: 0, disabled: true, selected: prison.nil?}= t(:'outside/request/prisoner_info/field_prison/select_one')
+              %option{value: 0}= t(:'outside/request/prisoner_info/field_prison/unknown_prison')
               - prisons.each do |pr|
                 %option{value: pr.id, selected: pr.id == prison&.id}
                   = pr.decrypt(:name)

@@ -29,6 +29,7 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
       @name_last = request.params['name_last']&.strip
       @name_last = nil if @name_last&.empty?
       @prison = Kukupa::Models::Prison[request.params['prison'].to_i]
+      @prison = t(:'unknown', force_language: true) if @prison.nil?
       @prn = request.params['prn']&.strip&.downcase
       @prn = nil if @prn&.empty?
 
@@ -85,8 +86,10 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
 
         # save updated prison on case
         if Kukupa.app_config['outside-request-save-provided-prison']
-          @case.encrypt(:prison, @prison.id)
-          @case.save
+          if @prison.respond_to?(:id)
+            @case.encrypt(:prison, @prison.id)
+            @case.save
+          end
         end
 
         @req_categories = []
@@ -102,7 +105,7 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
           email: @requester_email,
           phone: @requester_phone,
           relationship: @requester_relationship,
-          prison: @prison.id,
+          prison: @prison.respond_to?(:id) ? @prison.id : @prison,
           categories: @req_categories,
         }
 

@@ -164,6 +164,7 @@
 :'outside/request/prisoner_info/field_name_last': "Prisoner's last name"
 :'outside/request/prisoner_info/field_prison': "Prison name"
 :'outside/request/prisoner_info/field_prison/select_one': "Select a prison"
+:'outside/request/prisoner_info/field_prison/unknown_prison': "Don't know / unsure"
 :'outside/request/prisoner_info/field_prn': "Prisoner number"
 :'outside/request/details/section_title': "Request details"
 :'outside/request/categories/section_title': "Request categories"
