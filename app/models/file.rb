@@ -1,5 +1,4 @@
 require 'mimemagic'
-require 'mimemagic/overlay'
 require 'digest'
 
 class Kukupa::Models::File < Sequel::Model
