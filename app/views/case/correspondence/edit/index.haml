@@ -14,6 +14,11 @@
     %label{for: 'subject'}= t(:'case/correspondence/edit/edit/subject')
     %input#subject{name: 'subject', type: 'text', required: false, value: cc_subject}
 
+    - if cc_edit_content
+      .async-load{:'data-sources' => JSON.generate(['/static/editor.bundle.js'])}
+      = haml :'partials/editor', layout: false, locals: {editor_name: 'content', editor_label: t(:'case/correspondence/edit/edit/content'), editor_data: cc_content}
+      .y-margin= ""
+
     %button.pure-button.button.button-primary{type: 'submit'}
       %i.fa.fa-pencil= ""
       = t(:'case/correspondence/edit/edit/submit')

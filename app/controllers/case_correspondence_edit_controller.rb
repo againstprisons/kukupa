@@ -21,17 +21,37 @@ class Kukupa::Controllers::CaseCorrespondenceEditController < Kukupa::Controller
     return halt 404 unless @cc_obj
     return halt 404 unless @cc_obj.case == @case.id
 
+    @cc_edit_content = false
+    if has_role?("case:correspondence:edit_content")
+      @cc_edit_content = !@cc_obj.has_been_sent
+    end
+
     @cc_subject = @cc_obj.decrypt(:subject)
     @case_name = @case.get_name
     @title = t(:'case/correspondence/edit/title', ccid: @cc_obj.id, name: @case_name)
 
+    if @cc_edit_content && @cc_obj.file_type == 'local'
+      @cc_content = @cc_obj.get_file_content__local
+    end
+
     if request.post?
       @cc_subject = request.params['subject']&.strip
       @cc_subject = nil if @cc_subject&.empty?
-
       @cc_obj.encrypt(:subject, @cc_subject)
-      @cc_obj.save
 
+      if @cc_edit_content && @cc_obj.file_type == 'local'
+        @cc_content = request.params['content']&.strip
+        @cc_content = Sanitize.fragment(@cc_content, Sanitize::Config::RELAXED)
+
+        file = Kukupa::Models::File.where(file_id: @cc_obj.file_id).first
+        file.replace(
+          "kukupa_emailedit_#{DateTime.now.strftime('%s')}.html",
+          @cc_content,
+        )
+        file.save
+      end
+
+      @cc_obj.save
       flash :success, t(:'case/correspondence/edit/edit/success')
     end
 
@@ -41,6 +61,8 @@ class Kukupa::Controllers::CaseCorrespondenceEditController < Kukupa::Controller
       case_name: @case_name,
       cc_obj: @cc_obj,
       cc_subject: @cc_subject,
+      cc_content: @cc_content,
+      cc_edit_content: @cc_edit_content,
       cc_approved: @cc_obj.approved,
       urls: {
         approve: url("/case/#{@case.id}/correspondence/#{@cc_obj.id}/approve"),
