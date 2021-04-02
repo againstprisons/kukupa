@@ -7,6 +7,10 @@
       %span
         = t(:'back')
 
+  .case-view-renderables
+    - renderables.each do |rb|
+      = haml "partials/case_renderable/#{rb[:type]}".to_sym, layout: false, locals: {rb: rb, can_edit: false}
+
   %form.pure-form.pure-form-stacked.form-main{method: 'POST', enctype: 'multipart/form-data'}
     %h1= t(:'case/spend/edit/edit/section_title')
 

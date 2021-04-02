@@ -6,6 +6,8 @@ class Kukupa::Controllers::CaseNoteEditController < Kukupa::Controllers::CaseCon
   add_route :get, '/file', method: :file
   add_route :post, '/delete', method: :delete
 
+  include Kukupa::Helpers::CaseViewHelpers
+
   def before(cid, *args)
     super
     return halt 404 unless logged_in?
@@ -30,6 +32,7 @@ class Kukupa::Controllers::CaseNoteEditController < Kukupa::Controllers::CaseCon
         title: @title,
         case_obj: @case,
         case_name: @case_name,
+        renderables: renderable_post_process(@note.renderables),
         note_obj: @note,
         note_content: @note.decrypt(:content),
         urls: {

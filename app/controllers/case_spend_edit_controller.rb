@@ -5,6 +5,8 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
   add_route :post, '/'
   add_route :post, '/delete', method: :delete
 
+  include Kukupa::Helpers::CaseViewHelpers
+
   def before(cid, *args)
     super
     return halt 404 unless logged_in?
@@ -34,6 +36,7 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
         title: @title,
         case_obj: @case,
         case_name: @case_name,
+        renderables: renderable_post_process(@spend.renderables),
         spend_obj: @spend,
         spend_notes: @spend.decrypt(:notes),
         spend_amount: @spend.decrypt(:amount).to_f,

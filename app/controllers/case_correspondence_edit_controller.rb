@@ -5,6 +5,8 @@ class Kukupa::Controllers::CaseCorrespondenceEditController < Kukupa::Controller
   add_route :get, '/approve', method: :approve
   add_route :post, '/approve', method: :approve
 
+  include Kukupa::Helpers::CaseViewHelpers
+
   def before(cid, *args)
     super
     return halt 404 unless logged_in?
@@ -59,6 +61,7 @@ class Kukupa::Controllers::CaseCorrespondenceEditController < Kukupa::Controller
       title: @title,
       case_obj: @case,
       case_name: @case_name,
+      renderables: renderable_post_process(@cc_obj.renderables),
       cc_obj: @cc_obj,
       cc_subject: @cc_subject,
       cc_content: @cc_content,

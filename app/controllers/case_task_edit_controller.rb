@@ -5,6 +5,7 @@ class Kukupa::Controllers::CaseTaskEditController < Kukupa::Controllers::CaseCon
   add_route :post, '/delete', method: :delete
 
   include Kukupa::Helpers::CaseHelpers
+  include Kukupa::Helpers::CaseViewHelpers
 
   def before(cid, *args)
     super
@@ -33,6 +34,7 @@ class Kukupa::Controllers::CaseTaskEditController < Kukupa::Controllers::CaseCon
         case_obj: @case,
         case_name: @case_name,
         case_accessors: @accessors,
+        renderables: renderable_post_process(@task.renderables),
         task_obj: @task,
         task_assignee: Kukupa::Models::User[@task.assigned_to],
         task_content: @task.decrypt(:content),
