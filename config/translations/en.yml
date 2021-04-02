@@ -260,6 +260,12 @@
 :'dashboard/unapproved_spends/item/view': "View case"
 :'dashboard/unapproved_spends/item/edit': "Edit spend"
 :'dashboard/unapproved_spends/item/approve': "Approve"
+:'dashboard/unapproved_correspondence/section_title': "Unapproved correspondence"
+:'dashboard/unapproved_correspondence/no_correspondence': "No unapproved correspondence."
+:'dashboard/unapproved_correspondence/item/content': "Correspondence in case for <%= e(name) %>"
+:'dashboard/unapproved_correspondence/item/view': "View case"
+:'dashboard/unapproved_correspondence/item/edit': "Edit correspondence"
+:'dashboard/unapproved_correspondence/item/approve': "Approve"
 :'dashboard/quick_links/section_title': "Quick links"
 
 # Cases - unknown type error

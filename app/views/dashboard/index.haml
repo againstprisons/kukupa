@@ -86,6 +86,44 @@
                 %blockquote
                   = sp[:spend_content]
 
+    - if has_role?('case:correspondence:can_approve')
+      .form-main
+        %h1= t(:'dashboard/unapproved_correspondence/section_title')
+
+        - if correspondence.empty?
+          %p= t(:'dashboard/unapproved_correspondence/no_spends')
+
+        %ul
+          - correspondence.each do |sp|
+            %li
+              .dashboard-correspondence-meta
+                %ul.inline-list
+                  %li
+                    %span
+                      = t(:'dashboard/unapproved_correspondence/item/content', name: sp[:case_name])
+
+                  %li
+                    %a.case-view-task-editlink{href: sp[:edit_url]}
+                      %i.fa.fa-gear= ""
+                      %span.sr-only
+                        = t(:'dashboard/unapproved_correspondence/item/edit')
+
+                  %li
+                    %a.case-view-task-editlink{href: "#{sp[:view_url]}##{sp[:anchor]}"}
+                      %i.fa.fa-external-link= ""
+                      %span.sr-only
+                        = t(:'dashboard/unapproved_correspondence/item/view')
+
+                  %li
+                    %a.case-view-task-editlink{href: sp[:approve_url]}
+                      %i.fa.fa-check= ""
+                      %span
+                        = t(:'dashboard/unapproved_correspondence/item/approve')
+
+              .dashboard-spend-content
+                %blockquote
+                  = sp[:cc_subject]
+
     .form-main
       %h1= t(:'dashboard/cases/section_title')
 

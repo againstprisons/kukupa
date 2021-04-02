@@ -80,6 +80,28 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
       end
     end
 
+    if has_role?('case:correspondence:can_approve')
+      @correspondence = Kukupa::Models::CaseCorrespondence.where(sent_by_us: true, approved: false).map do |cc|
+        case_obj = Kukupa::Models::Case[cc.case]
+        next unless case_obj
+
+        view_url = Addressable::URI.parse(url("/case/#{case_obj.id}/view"))
+        edit_url = Addressable::URI.parse(url("/case/#{case_obj.id}/correspondence/#{cc.id}"))
+        approve_url = Addressable::URI.parse(url("/case/#{case_obj.id}/correspondence/#{cc.id}/approve"))
+
+        {
+          case: case_obj,
+          case_name: case_obj.get_name,
+          cc_obj: cc,
+          cc_subject: cc.decrypt(:subject),
+          anchor: cc.anchor,
+          edit_url: edit_url,
+          view_url: view_url,
+          approve_url: approve_url,
+        }
+      end
+    end
+
     return haml(:'dashboard/index', :locals => {
       title: @title,
       quick_links: @quick_links,
@@ -91,6 +113,7 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
       cases: @my_cases,
       tasks: @my_tasks,
       spends: @spends,
+      correspondence: @correspondence,
     })
   end
 end
