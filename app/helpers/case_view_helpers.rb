@@ -1,4 +1,6 @@
 module Kukupa::Helpers::CaseViewHelpers
+  include Kukupa::Helpers::CaseHelpers
+
   def get_tasks(c, opts = {})
     c = c.id if c.respond_to?(:id)
     advocates = {}
@@ -155,6 +157,21 @@ module Kukupa::Helpers::CaseViewHelpers
 
     ###
     # Item value post-processing
+    ###
+
+    renderables = renderable_post_process(renderables)
+
+
+    ###
+    # And return the result!
+    ###
+
+    [page_state, renderables]
+  end
+
+  def renderable_post_process(renderables)
+    ###
+    # Item value post-processing
     #
     # If a value of the renderable hash is an array, and the first item in
     # that array is one of the known post-process types, we take the last
@@ -210,10 +227,6 @@ module Kukupa::Helpers::CaseViewHelpers
       end
     end
 
-    ###
-    # And return the result!
-    ###
-
-    [page_state, renderables]
+    renderables
   end
 end
