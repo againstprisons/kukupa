@@ -3,33 +3,59 @@
 
   = haml :'partials/case_header', layout: false, locals: {caseid: case_obj.id, casetype: case_obj.type, show: case_show}
 
-  %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
-    %h1= t(:'case/correspondence/send/compose/section_title')
+  .pure-g
+    .pure-u-1.pure-u-lg-1-4
+      .form-main.x-margin
+        %h1= t(:'case/correspondence/send/templates/section_title')
 
-    - if compose_email
-      .message.message-warning
-        %i.fa.fa-envelope-o= ""
-        = t(:'case/correspondence/send/compose/is_email', email: compose_email)
-    
-    %a.pure-button.button{href: template_url}
-      %i.fa.fa-list= ""
-      = t(:'case/correspondence/send/templates/view_templates')
+        - if template_name
+          %p= t(:'case/correspondence/send/compose/is_template', name: template_name)
 
-    - if template_name
-      %p= t(:'case/correspondence/send/compose/is_template', name: template_name)
+          %a.pure-button.button{href: template_clear_url}
+            %i.fa.fa-list= ""
+            = t(:'case/correspondence/send/compose/is_template/clear')
 
-    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
-    %input{type: 'hidden', name: 'preview', value: '1'}
-    %input{type: 'hidden', name: 'email', value: compose_email}
+        - else
+          %a.pure-button.button{href: template_url}
+            %i.fa.fa-list= ""
+            = t(:'case/correspondence/send/templates/view_templates')
 
-    %label{for: 'subject'}= t(:'case/correspondence/send/compose/subject')
-    %input#subject{type: 'text', name: 'subject', required: true, placeholder: t(:'case/correspondence/send/compose/subject'), value: compose_subject}
+      %form.pure-form.pure-form-stacked.form-main.x-margin{method: 'GET'}
+        %h1= t(:'case/correspondence/send/compose/email/section_title')
+        - if compose_email
+          %input{type: 'hidden', name: 'email', value: ''}
+          %button.pure-button.button{type: 'submit'}
+            %i.fa.fa-refresh= ""
+            = t(:'case/correspondence/send/compose/email/clear')
 
-    = haml :'partials/editor', layout: false, locals: {editor_name: 'content', editor_label: t(:'case/correspondence/send/compose/content'), editor_data: compose_content}
-    .y-margin= ""
+        - else
+          %label.sr-only{name: 'compose_email'}= t(:'email_address')
+          %input#compose_email{name: 'email', type: 'email', value: compose_email, placeholder: t(:'email_address')}
+          %button.pure-button.button{type: 'submit'}
+            %i.fa.fa-arrow-right= ""
+            = t(:'case/correspondence/send/compose/email/submit')
 
-    %button.pure-button.button.button-primary{type: 'submit'}
-      %i.fa.fa-arrow-right= ""
-      = t(:'case/correspondence/send/compose/submit')
+    .pure-u-1.pure-u-lg-3-4
+      %form.pure-form.pure-form-stacked.form-main.x-margin{method: 'POST'}
+        %h1= t(:'case/correspondence/send/compose/section_title')
+
+        - if compose_email
+          .message.message-warning
+            %i.fa.fa-envelope-o= ""
+            = t(:'case/correspondence/send/compose/email/is_email', email: compose_email)
+        
+        %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+        %input{type: 'hidden', name: 'preview', value: '1'}
+        %input{type: 'hidden', name: 'email', value: compose_email}
+
+        %label{for: 'subject'}= t(:'case/correspondence/send/compose/subject')
+        %input#subject{type: 'text', name: 'subject', required: true, placeholder: t(:'case/correspondence/send/compose/subject'), value: compose_subject}
+
+        = haml :'partials/editor', layout: false, locals: {editor_name: 'content', editor_label: t(:'case/correspondence/send/compose/content'), editor_data: compose_content}
+        .y-margin= ""
+
+        %button.pure-button.button.button-primary{type: 'submit'}
+          %i.fa.fa-arrow-right= ""
+          = t(:'case/correspondence/send/compose/submit')
 
 .async-load{:'data-sources' => JSON.generate(['/static/editor.bundle.js'])}

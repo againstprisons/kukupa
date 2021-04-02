@@ -51,7 +51,7 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
 
     @subject = @content = ''
 
-    # construct URL to template page with email address 
+   # construct URL to template page with email address 
     @template_url = Addressable::URI.parse(url("/case/#{@case.id}/correspondence/send/templates"))
     if @email
       @template_url.query_values = {email: @email}
@@ -65,6 +65,16 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
         @content = @template.decrypt(:content)
       end
     end
+
+    @this_url = Addressable::URI.parse(url("/case/#{@case.id}/correspondence/send"))
+    @this_url.query_values = @this_url_query_values = {
+      tpl: @template&.id,
+      email: @email,
+    }
+
+    @template_clear_url = @this_url.dup
+    @template_clear_url.query_values =
+      @this_url_query_values.merge({tpl: 0})
 
     if request.post?
       @subject = request.params['subject']&.strip || ''
@@ -151,10 +161,12 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
 
     return haml(:'case/correspondence/send/index', :locals => {
       title: @title,
+      this_url: @this_url.to_s,
       case_obj: @case,
       case_name: @case_name,
       case_show: @show,
       template_url: @template_url.to_s,
+      template_clear_url: @template_clear_url.to_s,
       template_name: @template&.decrypt(:name),
       compose_subject: @subject,
       compose_content: @content,
