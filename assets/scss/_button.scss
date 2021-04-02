@@ -1,0 +1,27 @@
+.button,
+.pure-button
+{
+  &.button-primary
+  {
+    color: $symbolic_primary_foreground;
+    background-color: $symbolic_primary_background;
+  }
+
+  &.button-success
+  {
+    color: $symbolic_success_foreground;
+    background: $symbolic_success_background;
+  }
+
+  &.button-warning
+  {
+    color: $symbolic_warning_foreground;
+    background: $symbolic_warning_background;
+  }
+
+  &.button-error
+  {
+    color: $symbolic_error_foreground;
+    background: $symbolic_error_background;
+  }
+}
