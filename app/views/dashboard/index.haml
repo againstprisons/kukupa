@@ -48,12 +48,9 @@
               %blockquote
                 = c[:task_content]
 
-    - if has_role?('case:spend:can_approve')
+    - if has_role?('case:spend:can_approve') && !spends.empty?
       .form-main
         %h1= t(:'dashboard/unapproved_spends/section_title')
-
-        - if spends.empty?
-          %p= t(:'dashboard/unapproved_spends/no_spends')
 
         %ul
           - spends.each do |sp|
@@ -86,12 +83,9 @@
                 %blockquote
                   = sp[:spend_content]
 
-    - if has_role?('case:correspondence:can_approve')
+    - if has_role?('case:correspondence:can_approve') && !correspondence.empty?
       .form-main
         %h1= t(:'dashboard/unapproved_correspondence/section_title')
-
-        - if correspondence.empty?
-          %p= t(:'dashboard/unapproved_correspondence/no_spends')
 
         %ul
           - correspondence.each do |sp|
