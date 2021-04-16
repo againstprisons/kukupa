@@ -129,6 +129,8 @@ controllers:
     controller: ApiMetaController
   - path: /api/request
     controller: ApiRequestController
+  - path: /api/user-search
+    controller: ApiUserSearchController
 
   - path: /__errors__
     controller: ErrorController
