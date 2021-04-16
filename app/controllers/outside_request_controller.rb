@@ -86,7 +86,7 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
         end
 
         # save updated prison on case
-        if Kukupa.app_config['outside-request-save-provided-prison']
+        if @case_is_new || Kukupa.app_config['outside-request-save-provided-prison']
           if @prison.respond_to?(:id)
             @case.encrypt(:prison, @prison.id)
             @case.save
