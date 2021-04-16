@@ -107,11 +107,3 @@
     %ul
       - user[:tags].each do |t|
         %li= t("tag/#{t}".to_sym)
-
-  - if agreement_enabled
-    .form-main
-      %h1= t(:'usersettings/privacy_agreement/title')
-
-      %a.pure-button.button{href: url('/user/privacy-agreement')}
-        %i.fa.fa-file-text-o= ""
-        = t(:'usersettings/privacy_agreement/view')

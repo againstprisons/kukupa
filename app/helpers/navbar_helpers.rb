@@ -48,6 +48,14 @@ module Kukupa::Helpers::NavbarHelpers
       text: t(:'usersettings/mfa/title'),
       selected: current_prefix?('/user/mfa'),
     }
+
+    if Kukupa.app_config['privacy-agreement-enable']
+      items << {
+        link: url('/user/privacy-agreement'),
+        text: t(:'usersettings/privacy_agreement/title'),
+        selected: current_prefix?('/user/privacy-agreement'),
+      }
+    end
     
     items
   end
