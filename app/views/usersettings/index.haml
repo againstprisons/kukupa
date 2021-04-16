@@ -82,6 +82,21 @@
       %i.fa.fa-pencil= ""
       = t(:'usersettings/case_load/submit')
 
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: '/user/change-style-options'}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'usersettings/change_style_options/section_title')
+    
+    %p= t(:'usersettings/change_style_options/content')
+
+    - %w[full_width].each do |cb|
+      %label{for: cb}
+        %input{type: 'checkbox', name: cb, id: cb, checked: user[:style_options][cb.to_sym]}
+        = t("usersettings/change_style_options/field_#{cb}".to_sym)
+
+    %button.pure-button.button{type: 'submit'}
+      %i.fa.fa-pencil= ""
+      = t(:'usersettings/change_style_options/submit')
+
   .form-main
     %h1= t(:'usersettings/tags/section_title')
     %p= t(:'usersettings/tags/content')

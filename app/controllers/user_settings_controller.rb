@@ -6,6 +6,7 @@ class Kukupa::Controllers::UserSettingsController < Kukupa::Controllers::Applica
   add_route :post, "/change-email", method: :change_email
   add_route :post, "/change-password", method: :change_password
   add_route :post, "/change-case-load-limit", method: :change_case_load_limit
+  add_route :post, "/change-style-options", method: :change_style_options
 
   def before(*args)
     return halt 404 unless logged_in?
@@ -35,6 +36,7 @@ class Kukupa::Controllers::UserSettingsController < Kukupa::Controllers::Applica
           sso_provider: @user_sso_provider,
           sso_identifier: [@user.sso_method, @user.sso_external_id].join("#"),
           tags: @user.roles.map{|r| /tag\:(\w+)/.match(r)&.[](1)}.compact.uniq,
+          style_options: @user.style_options,
         },
         agreement_enabled: Kukupa.app_config['privacy-agreement-enable'],
       }
@@ -128,6 +130,19 @@ class Kukupa::Controllers::UserSettingsController < Kukupa::Controllers::Applica
     @user.save
     
     flash :success, t(:'usersettings/case_load/success', limit: @new_limit == 0 ? '∞' : @new_limit.to_s)
+    redirect url("/user")
+  end
+
+  def change_style_options
+    @style_options = @user.style_options
+    @style_options[:full_width] = request.params['full_width']&.strip&.downcase == 'on'
+    @style_options[:dark_mode] = request.params['dark_mode']&.strip&.downcase == 'on'
+    @style_options[:dyslexia_font] = request.params['dyslexia_font']&.strip&.downcase == 'on'
+
+    @user.style_options = @style_options
+    @user.save
+
+    flash :success, t(:'usersettings/change_style_options/success')
     redirect url("/user")
   end
 end

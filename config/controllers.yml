@@ -110,6 +110,8 @@ controllers:
 
   - path: /-/language
     controller: DashLanguageController
+  - path: /-/userstyles
+    controller: DashUserStylesController
   - path: /-/debug
     controller: DashDebugController
     only:

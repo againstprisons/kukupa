@@ -38,4 +38,24 @@ module Kukupa::Helpers::ApplicationHelpers
   def current?(path = '/')
     request.path == path ? 'current' : nil
   end
+
+  def style_options_to_css(opts)
+    raw_output = []
+    root_vars = {}
+
+    ###
+    # Collate options
+    ###    
+
+    if opts[:full_width]
+      root_vars['--body-container-width'] = '100vw'
+    end
+
+    ###
+    # Put together the root var list and return the output CSS
+    ###
+
+    raw_output << ":root{#{root_vars.map{|k, v| "#{k}:#{v}"}.join(';')}}"
+    raw_output.join("\n")
+  end
 end

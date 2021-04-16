@@ -1,6 +1,12 @@
 require 'addressable'
 
 class Kukupa::Models::User < Sequel::Model
+  DEFAULT_STYLE_OPTIONS = {
+    full_width: false,
+    dark_mode: false,
+    dyslexia_font: false,
+  }
+
   one_to_many :user_roles
   one_to_many :role_group_users
   one_to_many :tokens
@@ -86,6 +92,21 @@ class Kukupa::Models::User < Sequel::Model
       self.decrypt(:totp_secret),
       issuer: Kukupa.app_config['site-name']
     )
+  end
+
+  def style_options
+    opts = self.decrypt(:style_options_hash)
+    return DEFAULT_STYLE_OPTIONS if opts.nil? || opts&.strip&.empty?
+
+    JSON.parse(opts).map do |k, v|
+      [k.to_sym, v]
+    end.to_h
+  end
+
+  def style_options=(v)
+    v = DEFAULT_STYLE_OPTIONS.merge(v)
+    self.encrypt(:style_options_hash, JSON.generate(v))
+    v
   end
 
   def password=(pw)
