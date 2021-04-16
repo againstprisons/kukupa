@@ -86,6 +86,10 @@ module Kukupa
       :type => :time_period,
       :default => '5 days ago',
     },
+    "case-default-summary" => {
+      :type => :html,
+      :default => '<p></p>',
+    },
     "magenta-providers" => {
       :type => :json,
       :default => '[]',

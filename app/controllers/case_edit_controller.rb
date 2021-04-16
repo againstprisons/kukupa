@@ -52,13 +52,20 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
     @birth_date = Chronic.parse(@birth_date, guess: true) if @birth_date
     @release_date = @case.decrypt(:release_date)
     @release_date = Chronic.parse(@release_date, guess: true) if @release_date
-    @global_note = @case.decrypt(:global_note)
     @case_purpose = @case.purpose
     @case_duration = @case.duration
     @reconnect_id = @case.reconnect_id
     @reconnect_data = reconnect_penpal(cid: @reconnect_id) if @reconnect_id.to_i.positive?
     @case_is_new = @case.creation > Chronic.parse(Kukupa.app_config['case-new-threshold'])
     @case_triage_task = Kukupa::Models::CaseTask[@case.triage_task]
+    @global_note = @case.decrypt(:global_note)
+    if @case.type.to_sym == :case
+      if @global_note.nil? || @global_note&.empty?
+        @global_note = Kukupa.app_config['case-default-summary']
+      elsif Sanitize.fragment(@global_note)&.strip&.empty?
+        @global_note = Kukupa.app_config['case-default-summary']
+      end
+    end
 
     @assigned = @case.get_assigned_advocates.map do |aa|
       user = Kukupa::Models::User[aa]
