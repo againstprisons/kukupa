@@ -99,7 +99,7 @@ module Kukupa
       :default => false,
     },
     "privacy-agreement-content" => {
-      :type => :text,
+      :type => :html,
       :default => '<p>This is the default privacy agreement text.</p>',
     },
     "outside-request-hide-prisons" => {
