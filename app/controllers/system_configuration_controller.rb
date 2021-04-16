@@ -113,7 +113,7 @@ class Kukupa::Controllers::SystemConfigurationController < Kukupa::Controllers::
     end
 
     type = request.params["type"]&.strip&.downcase
-    unless %w[bool text number json time_period].include?(type)
+    unless %w[bool text number html json time_period].include?(type)
       flash :error, t(:'system/config/edit/errors/type_invalid')
       return redirect request.path
     end
@@ -126,6 +126,8 @@ class Kukupa::Controllers::SystemConfigurationController < Kukupa::Controllers::
         flash :error, t(:'system/config/edit/errors/value_not_bool')
         return redirect request.path
       end
+    elsif type == "html"
+      value = Sanitize.fragment(value, Sanitize::Config::RELAXED)
     end
 
     if entry.nil?

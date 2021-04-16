@@ -24,13 +24,21 @@
         = t(:'system/config/edit/type/text')
       %option{:value => 'number', :selected => (type == "number")}
         = t(:'system/config/edit/type/number')
+      %option{:value => 'html', :selected => (type == "html")}
+        = t(:'system/config/edit/type/html')
       %option{:value => 'json', :selected => (type == "json")}
         = t(:'system/config/edit/type/json')
       %option{:value => 'json', :selected => (type == "time_period")}
         = t(:'system/config/edit/type/time_period')
 
-    %label{:for => 'value'}= t(:'system/config/edit/value')
-    %input#value{:name => 'value', :required => true, :value => value}
+    - if type == 'html'
+      = haml :'partials/editor', layout: false, locals: {editor_name: 'value', editor_label: t(:'system/config/edit/value'), editor_data: value}
+      .y-margin= ""
+      .async-load{:'data-sources' => JSON.generate(['/static/editor.bundle.js'])}
+
+    - else
+      %label{:for => 'value'}= t(:'system/config/edit/value')
+      %input#value{:name => 'value', :required => true, :value => value}
 
     %button.pure-button.button.button-primary{:type => 'submit'}
       %i.fa.fa-pencil= ""
