@@ -1,4 +1,5 @@
 module Kukupa::Helpers::CaseViewHelpers
+  require_relative './case_helpers'
   include Kukupa::Helpers::CaseHelpers
 
   def get_tasks(c, opts = {})
