@@ -9,33 +9,38 @@
   .form-main
     %h1= t(:'system/mail_templates/enabled_section_title')
     
-    - if templates_enabled.empty?
-      %p= t(:'system/mail_templates/no_templates')
+    %ul
+      - templates_enabled.each do |group, tpls|
+        %li
+          %strong
+            &= group
 
-    - else
-      %ul
-        - templates_enabled.each do |tpl|
-          %li
-            %a{href: url("/system/mailtemplates/edit/#{tpl[:id]}")}><
-              &= tpl[:name]
+          %ul
+            - tpls.each do |tpl|
+              %li
+                %a{href: url("/system/mailtemplates/edit/#{tpl[:id]}")}><
+                  &= tpl[:name]
 
-            %span
-              = surround ' (', ') ' do
-                = "ID #{tpl[:id]}"
+                %span
+                  = surround ' (', ') ' do
+                    = "ID #{tpl[:id]}"
 
   .form-main
     %h1= t(:'system/mail_templates/disabled_section_title')
     
-    - if templates_disabled.empty?
-      %p= t(:'system/mail_templates/no_templates')
+    %ul
+      - templates_disabled.each do |group, tpls|
+        %li
+          %strong
+            &= group
 
-    - else
-      %ul
-        - templates_disabled.each do |tpl|
-          %li
-            %a{href: url("/system/mailtemplates/edit/#{tpl[:id]}")}><
-              &= tpl[:name]
+          %ul
+            - tpls.each do |tpl|
+              %li
+                %a{href: url("/system/mailtemplates/edit/#{tpl[:id]}")}><
+                  &= tpl[:name]
 
-            %span
-              = surround ' (', ') ' do
-                = "ID #{tpl[:id]}"
+                %span
+                  = surround ' (', ') ' do
+                    = "ID #{tpl[:id]}"
+

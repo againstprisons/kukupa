@@ -18,7 +18,13 @@
         = t(:'case/correspondence/send/templates/content')
 
       %ul
-        - templates.each do |tpl|
+        - grouped_templates.each do |group, tpls|
           %li
-            %a{href: tpl[:url]}
-              &= tpl[:name]
+            %strong
+              &= group
+
+            %ul
+              - tpls.each do |tpl|
+                %li
+                  %a{href: tpl[:url]}
+                    &= tpl[:name]

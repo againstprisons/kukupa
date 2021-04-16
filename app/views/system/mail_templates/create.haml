@@ -13,6 +13,12 @@
     %label{for: 'name'}= t(:'system/mail_templates/create/template_name')
     %input#name{type: 'text', name: 'name', required: true, placeholder: t(:'system/mail_templates/create/template_name')}
     
+    %label{for: 'group'}= t(:'system/mail_templates/create/template_group')
+    %select#group{name: 'group', required: true}
+      %option{value: '-1', selected: true}= t(:'unknown')
+      - groups.each_index do |gi|
+        %option{value: gi}&= groups[gi]
+
     %button.pure-button.button.button-primary{type: 'submit'}
       %i.fa.fa-plus= ""
       = t(:'system/mail_templates/create/submit')

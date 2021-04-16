@@ -10,6 +10,7 @@ class Kukupa::Models::MailTemplate < Sequel::Model
       {
         id: tpl.id,
         name: tpl.decrypt(:name),
+        group: tpl.decrypt(:group),
         enabled: tpl.enabled,
         url: url,
       }

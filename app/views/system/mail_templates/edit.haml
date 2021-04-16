@@ -13,6 +13,12 @@
     %label{for: 'name'}= t(:'system/mail_templates/edit/data/template_name')
     %input#name{type: 'text', name: 'name', required: true, placeholder: t(:'system/mail_templates/edit/data/template_name'), value: template_name}
     
+    %label{for: 'group'}= t(:'system/mail_templates/edit/data/template_group')
+    %select#group{name: 'group', required: true}
+      %option{value: '-1', selected: template_group.nil?}= t(:'unknown')
+      - groups.each_index do |gi|
+        %option{value: gi, selected: template_group == gi}&= groups[gi]
+
     = haml :'partials/editor', layout: false, locals: {editor_name: 'content', editor_label: t(:'system/mail_templates/edit/data/template_content'), editor_data: template_content}
     .y-margin= ""
     

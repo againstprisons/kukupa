@@ -191,6 +191,16 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
     @templates = Kukupa::Models::MailTemplate
       .template_list(@case, email: @email)
       .reject { |tpl| !tpl[:enabled] }
+
+    @grouped_templates = Kukupa.app_config['case-mail-template-groups'].map{|x| [x, []]}.to_h
+    @grouped_templates[t(:'unknown')] = []
+    @templates.each do |tpl|
+      if @grouped_templates.key?(tpl[:group])
+        @grouped_templates[tpl[:group]] << tpl
+      else
+        @grouped_templates[t(:'unknown')] << tpl
+      end
+    end
     
     return haml(:'case/correspondence/send/templates', :locals => {
       title: @title,
@@ -198,6 +208,7 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
       case_name: @case_name,
       case_show: @show,
       templates: @templates,
+      grouped_templates: @grouped_templates,
       compose_email: @email,
     })
   end

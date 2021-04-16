@@ -90,6 +90,10 @@ module Kukupa
       :type => :html,
       :default => '<p></p>',
     },
+    "case-mail-template-groups" => {
+      :type => :json,
+      :default => '[]',
+    },
     "magenta-providers" => {
       :type => :json,
       :default => '[]',
