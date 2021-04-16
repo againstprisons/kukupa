@@ -1,0 +1,48 @@
+#system-admin-outside-request-hideprisons
+  .message.message-warning
+    = t(:'system/outside_request/requires_refresh')
+    - if has_role?('system:config:refresh')
+      = t(:'system/outside_request/requires_refresh/can_refresh')
+    - else 
+      = t(:'system/outside_request/requires_refresh/can_not_refresh')
+
+  %h1= title
+
+  %a.pure-button.button{href: url('/system/outside-request')}
+    %i.fa.fa-chevron-left= ""
+    = t(:'back')
+
+  .form-main
+    %h1= t(:'system/outside_request/hide_prisons/hidden/section_title')
+
+    - if hide_prisons.empty?
+      %p= t(:'system/outside_request/hide_prisons/hidden/none')
+
+    %ul
+      - hide_prisons.each do |prison|
+        %li
+          .inline-form.system-admin-outside-request-hideprisons-actions
+            %form.inline-form{method: 'POST', action: url("/system/outside-request/hide-prisons/delete")}
+              %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+              %input{type: 'hidden', name: 'prison', value: prison[:id]}
+              %button.pure-button.button.button-error{type: 'submit'}
+                %i.fa.fa-trash= ""
+                = t(:'system/outside_request/hide_prisons/hidden/actions/delete')
+
+            &nbsp;
+
+            %a{href: url("/system/prison/#{prison[:id]}")}><
+              &= prison[:name]
+
+  %form.form-main.pure-form.pure-form-stacked{method: 'POST', action: url("/system/outside-request/hide-prisons/add")}
+    %h1= t(:'system/outside_request/hide_prisons/add/section_title')
+
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %select{name: 'prison', required: true}
+      - prisons.each do |prison|
+        %option{value: prison[:id]}
+          &= prison.decrypt(:name)
+
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-plus= ""
+      = t(:'system/outside_request/hide_prisons/add/submit')

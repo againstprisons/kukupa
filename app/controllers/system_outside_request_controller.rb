@@ -1,5 +1,6 @@
 class Kukupa::Controllers::SystemOutsideRequestController < Kukupa::Controllers::SystemController
   add_route :get, '/'
+  add_route :get, '/hide-prisons', method: :hide_prisons
   add_route :post, '/hide-prisons/add', method: :hide_prisons_add
   add_route :post, '/hide-prisons/delete', method: :hide_prisons_delete
   add_route :post, '/category/add', method: :category_add
@@ -42,6 +43,19 @@ class Kukupa::Controllers::SystemOutsideRequestController < Kukupa::Controllers:
         hide_prisons: @hide_prisons,
         categories: @categories,
         agreements: @agreements,
+
+  def hide_prisons
+    @title = t(:'system/outside_request/hide_prisons/title')
+    @prisons = Kukupa::Models::Prison
+      .exclude(id: (@hide_prisons.map {|pr| pr[:id]}))
+      .all
+      .compact
+
+    return haml(:'system/layout', locals: {title: @title}) do
+      haml(:'system/outside_request/hide_prisons', layout: false, locals: {
+        title: @title,
+        prisons: @prisons,
+        hide_prisons: @hide_prisons,
       })
     end
   end
@@ -84,7 +98,7 @@ class Kukupa::Controllers::SystemOutsideRequestController < Kukupa::Controllers:
     Kukupa.app_config_refresh_pending << 'outside-request-hide-prisons'
     session[:we_changed_app_config] = true
 
-    flash :success, t(:'system/outside_request/hide_prisons/actions/delete/success', name: prison.decrypt(:name))
+    flash :success, t(:'system/outside_request/hide_prisons/hidden/actions/delete/success', name: prison.decrypt(:name))
     return redirect back
   end
 
