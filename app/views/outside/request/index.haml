@@ -1,7 +1,8 @@
 #outside-request
   %h1= title
 
-  %p= t(:'outside/request/content/one')
+  - override_tl[:content].each do |ctl|
+    %p= t(ctl)
 
   %form.pure-form.pure-form-stacked{method: 'POST'}
     %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
@@ -12,6 +13,7 @@
       .x-margin
         %label{for: 'requester_name'}
           = t(:'outside/request/requester_info/field_name')
+          %span.badge= t(:'required')
         %input#requester_name{name: 'requester_name', required: true, value: requester_name}
 
       .pure-g
@@ -19,6 +21,7 @@
           .x-margin
             %label{for: 'requester_email'}
               = t(:'outside/request/requester_info/field_email')
+              %span.badge= t(:'required')
             %input#requester_email{name: 'requester_email', value: requester_email}
 
         .pure-u-1.pure-u-md-1-2
@@ -30,6 +33,7 @@
       .x-margin
         %label{for: 'requester_relationship'}
           = t(:'outside/request/requester_info/field_relationship')
+          %span.badge= t(:'required')
         %input#requester_relationship{name: 'requester_relationship', required: true, value: requester_relationship}
 
     .form-main
@@ -40,12 +44,14 @@
           .x-margin
             %label{for: 'prisoner_name_first'}
               = t(:'outside/request/prisoner_info/field_name_first')
+              %span.badge= t(:'required')
             %input#prisoner_name_first{name: 'name_first', value: name_first, required: true}
 
         .pure-u-1.pure-u-md-1-2
           .x-margin
             %label{for: 'prisoner_name_last'}
               = t(:'outside/request/prisoner_info/field_name_last')
+              %span.badge= t(:'required')
             %input#prisoner_name_last{name: 'name_last', value: name_last, required: true}
 
       .pure-g
@@ -53,6 +59,7 @@
           .x-margin
             %label{for: 'prisoner_prison'}
               = t(:'outside/request/prisoner_info/field_prison')
+              %span.badge= t(:'required')
             %select#prisoner_prison{name: 'prison', required: true}
               %option{value: 0, disabled: true, selected: prison.nil?}= t(:'outside/request/prisoner_info/field_prison/select_one')
               %option{value: 0}= t(:'outside/request/prisoner_info/field_prison/unknown_prison')
@@ -64,11 +71,24 @@
           .x-margin
             %label{for: 'prisoner_prn'}
               = t(:'outside/request/prisoner_info/field_prn')
+              %span.badge= t(:'required')
             %input#prisoner_prn{name: 'prn', value: prn, required: true}
+
+    - unless extra_metadata.empty?
+      .form-main
+        %h1= t(override_tl[:extra_metadata])
+
+        .x-margin
+          - extra_metadata.each_index do |i|
+            %label{for: "extrametadata_#{i}"}
+              &= extra_metadata[i][:friendly_name]
+              - if extra_metadata[i][:required]
+                %span.badge= t(:'required')
+            %input{type: extra_metadata[i][:type], id: "extrametadata_#{i}", name: "extrametadata_#{i}", value: extra_metadata[i][:value], required: extra_metadata[i][:required]}
 
     - unless categories.empty?
       .form-main
-        %h1= t(:'outside/request/categories/section_title')
+        %h1= t(override_tl[:categories])
 
         .x-margin
           %p
@@ -82,14 +102,14 @@
               &= categories[i]
 
     .form-main
-      %h1= t(:'outside/request/details/section_title')
+      %h1= t(override_tl[:details])
 
       .x-margin
-        = haml :'partials/editor', layout: false, locals: {editor_name: 'content', editor_label: t(:'outside/request/details/field_request'), editor_data: content}
+        = haml :'partials/editor', layout: false, locals: {editor_name: 'content', editor_label: "#{t(override_tl[:details_field])} <span class=\"badge\">#{t(:'required')}</span>", editor_data: content}
 
     - unless agreements.empty?
       .form-main
-        %h1= t(:'outside/request/agreements/section_title')
+        %h1= t(override_tl[:agreements])
 
         .x-margin
           - agreements.each_index do |i|

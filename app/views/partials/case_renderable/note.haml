@@ -10,7 +10,11 @@
 
       - if rb[:author].nil? || rb[:author][:id].to_i.zero?
         - if rb[:outside_request]
-          = t(:'case_renderable/note/author/outside_request')
+          = succeed ': ' do
+            = t(:'case_renderable/note/author/outside_request')
+
+          %span
+            = t(rb[:outside_request_form][:tl_names][:renderable])
 
         - else
           = succeed ': ' do
@@ -96,6 +100,20 @@
 
       %blockquote.blockquote-fancy
         = rb[:content]
+
+      - if rb[:metadata].key?(:extra_metadata) && !(rb[:metadata][:extra_metadata].empty?())
+        = succeed ': ' do
+          = t(:'case_renderable/note/outside_request/extra_metadata')
+
+        %ul
+          - rb[:metadata][:extra_metadata].each do |k, v|
+            %li
+              %span
+                = succeed ': ' do
+                  &= k
+
+              %code
+                &= v
 
       - if rb[:metadata][:categories].nil? || rb[:metadata][:categories]&.empty?
         %p= t(:'case_renderable/note/outside_request/categories/none')

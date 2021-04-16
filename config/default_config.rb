@@ -102,13 +102,36 @@ module Kukupa
       :type => :json,
       :default => '[]',
     },
+    "outside-request-forms" => {
+      :type => :json,
+      :default => '{"default": {"title": "outside/request/title", "renderable": "outside/request/renderable_title"}}',
+    },
+    "outside-request-override-tl" => {
+      :type => :json,
+      :default => JSON.generate({
+        :default => {
+          :content => [
+            :'outside/request/content/one',
+          ],
+          :extra_metadata => :'outside/request/extra_metadata/section_title',
+          :categories => :'outside/request/categories/section_title',
+          :details => :'outside/request/details/section_title',
+          :details_field => :'outside/request/details/field_request',
+          :agreements => :'outside/request/agreements/section_title',
+        },
+      }),
+    },
+    "outside-request-extra-metadata" => {
+      :type => :json,
+      :default => '{"default": []}',
+    },
     "outside-request-required-agreements" => {
       :type => :json,
-      :default => '[]',
+      :default => '{"default": []}',
     },
     "outside-request-categories" => {
       :type => :json,
-      :default => '[]',
+      :default => '{"default": []}',
     },
     "outside-request-save-provided-prison" => {
       :type => :bool,

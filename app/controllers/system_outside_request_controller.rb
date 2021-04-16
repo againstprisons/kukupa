@@ -1,12 +1,13 @@
 class Kukupa::Controllers::SystemOutsideRequestController < Kukupa::Controllers::SystemController
   add_route :get, '/'
+  add_route :get, '/form/:form_name', method: :form_edit
+  add_route :post, '/form/:form_name/category/add', method: :category_add
+  add_route :post, '/form/:form_name/category/delete', method: :category_delete
+  add_route :post, '/form/:form_name/agreement/add', method: :agreement_add
+  add_route :post, '/form/:form_name/agreement/delete', method: :agreement_delete
   add_route :get, '/hide-prisons', method: :hide_prisons
   add_route :post, '/hide-prisons/add', method: :hide_prisons_add
   add_route :post, '/hide-prisons/delete', method: :hide_prisons_delete
-  add_route :post, '/category/add', method: :category_add
-  add_route :post, '/category/delete', method: :category_delete
-  add_route :post, '/agreement/add', method: :agreement_add
-  add_route :post, '/agreement/delete', method: :agreement_delete
 
   include Kukupa::Helpers::SystemOutsideRequestHelpers
 
@@ -25,11 +26,19 @@ class Kukupa::Controllers::SystemOutsideRequestController < Kukupa::Controllers:
       }
     end
 
+    @forms = config_key_json('outside-request-forms')
     @categories = config_key_json('outside-request-categories')
     @agreements = config_key_json('outside-request-required-agreements')
+    @extra_metadata = config_key_json('outside-request-extra-metadata')
   end
 
   def index
+    form = request.params['form']&.strip&.downcase
+    form = 'default' if form.nil? || form&.empty?
+    return redirect url("/system/outside-request/form/#{form}")
+  end
+
+  def form_edit(form_name)
     @title = t(:'system/outside_request/title')
     @prisons = Kukupa::Models::Prison
       .exclude(id: (@hide_prisons.map {|pr| pr[:id]}))
@@ -41,8 +50,14 @@ class Kukupa::Controllers::SystemOutsideRequestController < Kukupa::Controllers:
         title: @title,
         prisons: @prisons,
         hide_prisons: @hide_prisons,
+        forms: @forms,
+        this_form: form_name,
         categories: @categories,
         agreements: @agreements,
+        extra_metadata: @extra_metadata,
+      })
+    end
+  end
 
   def hide_prisons
     @title = t(:'system/outside_request/hide_prisons/title')
@@ -102,7 +117,7 @@ class Kukupa::Controllers::SystemOutsideRequestController < Kukupa::Controllers:
     return redirect back
   end
 
-  def category_add
+  def category_add(form_name)
     category = request.params['text']&.strip
     category = nil if category&.empty?
     if category.nil?
@@ -113,8 +128,10 @@ class Kukupa::Controllers::SystemOutsideRequestController < Kukupa::Controllers:
     entry = Kukupa::Models::Config.where(key: 'outside-request-categories').first
     return halt 500 unless entry
     data = JSON.parse(entry.value)
-    data << category
-    entry.value = JSON.generate(data.uniq)
+    data[form_name] ||= []
+    data[form_name] << category
+    data[form_name] = data[form_name].uniq
+    entry.value = JSON.generate(data)
     entry.save
 
     Kukupa.app_config_refresh_pending << 'outside-request-categories'
@@ -124,7 +141,7 @@ class Kukupa::Controllers::SystemOutsideRequestController < Kukupa::Controllers:
     return redirect back
   end
 
-  def category_delete
+  def category_delete(form_name)
     category = request.params['category']&.strip
     category = nil if category&.empty?
     if category.nil?
@@ -136,9 +153,10 @@ class Kukupa::Controllers::SystemOutsideRequestController < Kukupa::Controllers:
     entry = Kukupa::Models::Config.where(key: 'outside-request-categories').first
     return halt 500 unless entry
     data = JSON.parse(entry.value)
-    cat_name = data[category]
-    data.delete_at(category)
-    entry.value = JSON.generate(data.uniq)
+    cat_name = data[form_name][category]
+    data[form_name].delete_at(category)
+    data[form_name] = data[form_name].uniq
+    entry.value = JSON.generate(data)
     entry.save
 
     Kukupa.app_config_refresh_pending << 'outside-request-categories'
@@ -148,7 +166,7 @@ class Kukupa::Controllers::SystemOutsideRequestController < Kukupa::Controllers:
     return redirect back
   end
 
-  def agreement_add
+  def agreement_add(form_name)
     agreement = request.params['text']&.strip
     agreement = nil if agreement&.empty?
     if agreement.nil?
@@ -159,8 +177,10 @@ class Kukupa::Controllers::SystemOutsideRequestController < Kukupa::Controllers:
     entry = Kukupa::Models::Config.where(key: 'outside-request-required-agreements').first
     return halt 500 unless entry
     data = JSON.parse(entry.value)
-    data << agreement
-    entry.value = JSON.generate(data.uniq)
+    data[form_name] ||= []
+    data[form_name] << agreement
+    data[form_name] = data[form_name].uniq
+    entry.value = JSON.generate(data)
     entry.save
 
     Kukupa.app_config_refresh_pending << 'outside-request-required-agreements'
@@ -170,7 +190,7 @@ class Kukupa::Controllers::SystemOutsideRequestController < Kukupa::Controllers:
     return redirect back
   end
 
-  def agreement_delete
+  def agreement_delete(form_name)
     agreement = request.params['agreement']&.strip
     agreement = nil if agreement&.empty?
     if agreement.nil?
@@ -182,9 +202,10 @@ class Kukupa::Controllers::SystemOutsideRequestController < Kukupa::Controllers:
     entry = Kukupa::Models::Config.where(key: 'outside-request-required-agreements').first
     return halt 500 unless entry
     data = JSON.parse(entry.value)
-    agreement_name = data[agreement]
-    data.delete_at(agreement)
-    entry.value = JSON.generate(data.uniq)
+    agreement_name = data[form_name][agreement]
+    data[form_name].delete_at(agreement)
+    data[form_name] = data[form_name].uniq
+    entry.value = JSON.generate(data)
     entry.save
 
     Kukupa.app_config_refresh_pending << 'outside-request-required-agreements'

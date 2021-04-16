@@ -12,30 +12,46 @@
     %i.fa.fa-eye-slash=""
     = t(:'system/outside_request/hide_prisons/action_button')
 
+  %form.form-main.pure-form.pure-form-stacked{method: 'GET', action: url("/system/outside-request")}
+    %h1= t(:'system/outside_request/choose_form/section_title')
 
+    %select{required: true, name: 'form'}
+      %option{value: 'default', selected: this_form == 'default'}
+        &= t(forms['default']['title'].to_sym)
+        = surround ' (', ') ' do
+          &= t(forms['default']['renderable'].to_sym)
 
+      - forms.keys.each do |form|
+        - next if form == 'default'
+        %option{value: form, selected: this_form == form}
+          &= t(forms[form]['title'].to_sym)
+          = surround ' (', ') ' do
+            &= t(forms[form]['renderable'].to_sym)
 
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-folder-o= ""
+      = t(:'system/outside_request/choose_form/submit')
 
   .form-main
     %h1= t(:'system/outside_request/categories/section_title')
 
-    - if categories.empty?
+    - if categories[this_form].empty?
       %p= t(:'system/outside_request/categories/none')
 
     %ul
-      - categories.each_index do |i|
+      - categories[this_form].each_index do |i|
         %li
           .inline-form.system-admin-outside-request-category-actions
-            %form.inline-form{method: 'POST', action: url("/system/outside-request/category/delete")}
+            %form.inline-form{method: 'POST', action: url("/system/outside-request/form/#{this_form}/category/delete")}
               %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
               %input{type: 'hidden', name: 'category', value: i}
               %button.pure-button.button.button-error{type: 'submit'}
                 %i.fa.fa-trash= ""
                 = t(:'system/outside_request/categories/actions/delete')
           &nbsp;
-          &= categories[i]
+          &= categories[this_form][i]
 
-    %form.pure-form.pure-form-stacked{method: 'POST', action: url("/system/outside-request/category/add")}
+    %form.pure-form.pure-form-stacked{method: 'POST', action: url("/system/outside-request/form/#{this_form}/category/add")}
       %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
       %input{type: 'text', name: 'text', placeholder: t(:'system/outside_request/categories/add/text'), required: true}
       %button.pure-button.button.button-primary{type: 'submit'}
@@ -45,23 +61,23 @@
   .form-main
     %h1= t(:'system/outside_request/agreements/section_title')
 
-    - if categories.empty?
+    - if agreements[this_form].empty?
       %p= t(:'system/outside_request/agreements/none')
 
     %ul
-      - agreements.each_index do |i|
+      - agreements[this_form].each_index do |i|
         %li
           .inline-form.system-admin-outside-request-agreement-actions
-            %form.inline-form{method: 'POST', action: url("/system/outside-request/agreement/delete")}
+            %form.inline-form{method: 'POST', action: url("/system/outside-request/form/#{this_form}/agreement/delete")}
               %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
               %input{type: 'hidden', name: 'agreement', value: i}
               %button.pure-button.button.button-error{type: 'submit'}
                 %i.fa.fa-trash= ""
                 = t(:'system/outside_request/agreements/actions/delete')
           &nbsp;
-          &= agreements[i]
+          &= agreements[this_form][i]
 
-    %form.pure-form.pure-form-stacked{method: 'POST', action: url("/system/outside-request/agreement/add")}
+    %form.pure-form.pure-form-stacked{method: 'POST', action: url("/system/outside-request/form/#{this_form}/agreement/add")}
       %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
       %input{type: 'text', name: 'text', placeholder: t(:'system/outside_request/agreements/add/text'), required: true}
       %button.pure-button.button.button-primary{type: 'submit'}

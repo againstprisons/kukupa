@@ -1,10 +1,21 @@
 class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::ApplicationController
   add_route :get, "/"
   add_route :post, "/"
+  add_route :get, "/:form_name"
+  add_route :post, "/:form_name"
 
-  def index
-    @title = t(:'outside/request/title')
-    @categories = Kukupa.app_config['outside-request-categories']
+  include Kukupa::Helpers::OutsideRequestHelpers
+
+  def index(form_name = "default")
+    @this_form = outside_request_get_form(form_name)
+    unless @this_form
+      return halt 404
+    end
+
+    @extra_metadata = @this_form[:extra_metadata]
+    @override_tl = @this_form[:override_tl]
+    @title = t(@this_form[:tl_names][:title])
+
     @prisons = Kukupa::Models::Prison
       .exclude(id: Kukupa.app_config['outside-request-hide-prisons'])
       .all
@@ -33,6 +44,13 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
       @prn = request.params['prn']&.strip&.downcase
       @prn = nil if @prn&.empty?
 
+      @extra_metadata.each_index do |i|
+        val = request.params["extrametadata_#{i}"]&.strip
+        val = nil if val&.empty?
+
+        @extra_metadata[i][:value] = val
+      end
+
       errs = [
         @content.nil?,
         @requester_name.nil?,
@@ -44,8 +62,14 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
         @prn.nil?,
       ]
 
-      unless Kukupa.app_config['outside-request-required-agreements'].empty?
-        Kukupa.app_config['outside-request-required-agreements'].each_index do |i|
+      @extra_metadata.each do |em|
+        if em[:required]
+          errs << em[:value].nil?
+        end
+      end
+
+      unless @this_form[:agreements].empty?
+        @this_form[:agreements].each_index do |i|
           unless request.params["agreement#{i}"]&.strip&.downcase == 'on'
             errs << true
           end
@@ -94,20 +118,22 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
         end
 
         @req_categories = []
-        @categories.each_index do |i|
+        @this_form[:categories].each_index do |i|
           if request.params["category#{i}"]&.strip&.downcase == 'on'
-            @req_categories << @categories[i]
+            @req_categories << @this_form[:categories][i]
           end
         end
 
         # create request metadata object
         @metadata = {
+          form_name: @this_form[:name],
           name: @requester_name,
           email: @requester_email,
           phone: @requester_phone,
           relationship: @requester_relationship,
           prison: @prison.respond_to?(:id) ? @prison.id : @prison,
           categories: @req_categories,
+          extra_metadata: @extra_metadata.map{|em| [em[:friendly_name], em[:value]]}.to_h,
         }
 
         # create an outside request in the given case
@@ -133,6 +159,8 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
 
     haml :'outside/request/index', :locals => {
       title: @title,
+      this_form: @this_form,
+      override_tl: @override_tl,
       prisons: @prisons,
       requester_name: @requester_name,
       requester_phone: @requester_phone,
@@ -143,8 +171,9 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
       prison: @prison,
       prn: @prn,
       content: @content,
-      categories: @categories,
-      agreements: Kukupa.app_config['outside-request-required-agreements'],
+      categories: @this_form[:categories],
+      agreements: @this_form[:agreements],
+      extra_metadata: @extra_metadata,
     }
   end
 end

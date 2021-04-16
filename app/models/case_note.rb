@@ -1,4 +1,6 @@
 class Kukupa::Models::CaseNote < Sequel::Model
+  include Kukupa::Helpers::OutsideRequestHelpers
+
   def anchor
     "CaseNote-#{self.id}"
   end
@@ -53,6 +55,12 @@ class Kukupa::Models::CaseNote < Sequel::Model
       end
     end
 
+    # get the outside request form construction data
+    outside_request_form = {}
+    if self.is_outside_request
+      outside_request_form = outside_request_get_form(metadata[:form_name] || 'default')
+    end
+
     items << {
       type: :note,
       id: "CaseNote[#{self.id}]",
@@ -62,6 +70,7 @@ class Kukupa::Models::CaseNote < Sequel::Model
       edited: self.edited,
       content: self.decrypt(:content),
       outside_request: self.is_outside_request,
+      outside_request_form: outside_request_form,
       metadata: metadata,
       author: [:user, self.author],
       history_url: [:url, "/case/#{self.case}/note/#{self.id}/history"],
