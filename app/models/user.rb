@@ -155,3 +155,57 @@ class Kukupa::Models::User < Sequel::Model
     self.delete
   end
 end
+
+class Kukupa::Models::UserFilter < Sequel::Model
+  def self.clear_filters_for(user)
+    user = user.id if user.respond_to?(:id)
+    self.where(user: user).delete
+  end
+
+  def self.create_filters_for(user)
+    return [] unless user.is_a?(Kukupa::Models::User)
+    filters = []
+
+    # full name
+    user_name = user.decrypt(:name)&.strip&.downcase
+    unless user_name.nil? || user_name&.empty?
+      user_name = user_name.encode(Encoding::UTF_8, invalid: :replace, undef: :replace, replace: "")
+
+      full_name = user_name.dup
+      Kukupa.filter_strip_chars.each {|x| full_name.gsub!(x, "")}
+
+      # filter on full name
+      e = Kukupa::Crypto.index("User", "name", full_name)
+      filters << self.new(user: user.id, filter_label: "name", filter_value: e)
+
+      # filter on partial name
+      user_name.split(" ").map{|x| x.split("-")}.flatten.each do |partial|
+        Kukupa.filter_strip_chars.each {|x| partial.gsub!(x, "")}
+
+        e = Kukupa::Crypto.index("User", "name", partial)
+        filters << self.new(user: user.id, filter_label: "name", filter_value: e)
+      end
+    end
+
+    filters.map(&:save)
+    filters
+  end
+
+  def self.perform_filter(column, search)
+    column = column
+      .to_s
+      .strip
+      .downcase
+
+    search = search
+      .to_s
+      .strip
+      .downcase
+      .encode(Encoding::UTF_8, invalid: :replace, undef: :replace, replace: "")
+
+    Kukupa.filter_strip_chars.each {|x| search.gsub!(x, "")}
+
+    e = Kukupa::Crypto.index("User", column, search)
+    self.where(filter_label: column, filter_value: e)
+  end
+end

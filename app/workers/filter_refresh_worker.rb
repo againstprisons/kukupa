@@ -52,6 +52,31 @@ class Kukupa::Workers::FilterRefreshWorker
     logger.info("Generated #{pp_count[:filters]} filters for #{pp_count[:cases]} cases.")
 
     ###
+    # user filters
+    ###
+
+    logger.info("Refreshing user filters...")
+
+    u_count = {:users => 0, :filters => 0}
+    Kukupa::Models::User.each do |user|
+      if u_count[:users] % 10 == 0
+        logger.info("Refreshing: processed #{u_count[:users]} so far")
+      end
+
+      begin
+        Kukupa::Models::UserFilter.clear_filters_for(user)
+        filters = Kukupa::Models::UserFilter.create_filters_for(user)
+        u_count[:filters] += filters.length
+      rescue => e
+        logger.warn("Refreshing failed for user ID #{user.id}: #{e.class.name}: #{e.message}")
+      end
+
+      u_count[:users] += 1
+    end
+
+    logger.info("Generated #{u_count[:filters]} filters for #{u_count[:users]} users.")
+
+    ###
     # fix task update type values
     # TODO: this is temporary, remove this later!
     ###
