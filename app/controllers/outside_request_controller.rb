@@ -66,6 +66,7 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
           @case_is_new = true
 
           @case = Kukupa::Models::Case.new(is_open: true).save
+          @case.email_identifier = Kukupa::Crypto.generate_token_short
           @case.encrypt(:first_name, @name_first)
           @case.encrypt(:last_name, @name_last)
           @case.encrypt(:prisoner_number, @prn)
