@@ -106,21 +106,13 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     actions = [
       {
         url: [:url, "/case/#{self.case}/correspondence/#{self.id}/dl"],
-        fa_icon: 'fa-download',
+        fa_icon: (self.file_type == 'local' && self.sent_by_us) ? 'fa-eye' : 'fa-download',
       },
       {
         url: [:url, "/case/#{self.case}/correspondence/#{self.id}"],
         fa_icon: 'fa-gear',
       },
     ]
-
-    if self.sent_by_us
-      actions.unshift({
-        url: [:url, "/case/#{self.case}/correspondence/#{self.id}/dl/print"],
-        fa_icon: 'fa-print',
-        target: '_blank',
-      })
-    end
 
     # if email correspondence is enabled, this correspondence is of
     # type `email`, this correspondence was not sent by us, and the

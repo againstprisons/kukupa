@@ -1,5 +1,6 @@
 class Kukupa::Controllers::CaseCorrespondenceDownloadController < Kukupa::Controllers::CaseController
   add_route :get, '/'
+  add_route :get, '/view', method: :view
   add_route :get, '/print', method: :print
 
   include Kukupa::Helpers::EmailTemplateHelpers
@@ -21,8 +22,11 @@ class Kukupa::Controllers::CaseCorrespondenceDownloadController < Kukupa::Contro
     return halt 404 unless @ccobj.case == @case.id
 
     @type = @ccobj.file_type
-    @download_url = @ccobj.get_download_url(user: @user)
+    if @type == "local" && @ccobj.sent_by_us && request.params['noredir'].to_i.zero?
+      return redirect url("/case/#{@case.id}/correspondence/#{@ccobj.id}/dl/view")
+    end
 
+    @download_url = @ccobj.get_download_url(user: @user)
     unless @download_url
       case @type
       when "reconnect"
@@ -34,13 +38,17 @@ class Kukupa::Controllers::CaseCorrespondenceDownloadController < Kukupa::Contro
       return redirect back
     end
 
-    @view_url = Addressable::URI.parse(@download_url)
-    @view_url.query_values = {v: 1}
+    if @type == "local"
+      @view_url = url("/case/#{@case.id}/correspondence/#{@ccobj.id}/dl/view")
+    else
+      @view_url = Addressable::URI.parse(@download_url)
+      @view_url.query_values = {v: 1}
+    end
 
     @case_name = @case.get_name
     @title = t(:'case/correspondence/download/title', name: @case_name, ccid: @ccobj.id)
 
-    return haml(:'case/correspondence/download', :locals => {
+    return haml(:'case/correspondence/download/index', :locals => {
       title: @title,
       case_obj: @case,
       case_name: @case_name,
@@ -48,6 +56,63 @@ class Kukupa::Controllers::CaseCorrespondenceDownloadController < Kukupa::Contro
       cc_type: @type,
       view_url: @view_url,
       download_url: @download_url,
+    })
+  end
+
+  def view(cid, ccid)
+    @ccobj = Kukupa::Models::CaseCorrespondence[ccid.to_i]
+    return halt 404 unless @ccobj
+    return halt 404 unless @ccobj.case == @case.id
+
+    @target_email = @ccobj.decrypt(:target_email)
+    @target_email = nil if @target_email&.empty?
+    @target_email = nil unless @ccobj.correspondence_type == 'email'
+
+    @url_case = url("/case/#{@case.id}/view##{@ccobj.anchor}")
+    @url_edit = url("/case/#{@case.id}/correspondence/#{@ccobj.id}")
+    @url_dl = url("/case/#{@case.id}/correspondence/#{@ccobj.id}/dl?noredir=1")
+    @url_print = url("/case/#{@case.id}/correspondence/#{@ccobj.id}/dl/print")
+
+    @type = @ccobj.file_type
+    return redirect @url_dl unless @type == "local"
+
+    @content = @ccobj.get_file_content
+    unless @content
+      flash :error, t(:'case/correspondence/download/view/errors/unknown_error', caseid: @case.id, ccid: @ccobj.id)
+      return redirect @url_edit
+    end
+
+    @mime = MimeMagic.by_magic(@content)&.type
+    if @content&.include?('<p>') && @content&.include?('</p>')
+      @mime = 'text/html'
+    end
+
+    unless %w[text/html text/plain].include?(@mime)
+      flash :error, t(:'case/correspondence/download/view/errors/invalid_mime')
+      return redirect @url_dl
+    end
+
+    @content = @content.force_encoding("UTF-8")
+    @subject = @ccobj.decrypt(:subject)
+    @subject = nil if @subject&.strip&.empty?
+
+    @case_name = @case.get_name
+    @title = t(:'case/correspondence/download/view/title', ccid: @ccobj.id, name: @case_name)
+    return haml(:'case/correspondence/download/view', :locals => {
+      title: @title,
+      case_obj: @case,
+      case_name: @case_name,
+      cc_obj: @ccobj,
+      cc_type: @type,
+      cc_subject: @subject,
+      cc_content: @content,
+      cc_target_email: @target_email,
+      urls: {
+        case: @url_case,
+        edit: @url_edit,
+        download: @url_dl,
+        print: @url_print,
+      },
     })
   end
 

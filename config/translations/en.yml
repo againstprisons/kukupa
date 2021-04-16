@@ -588,6 +588,17 @@
 :'case/correspondence/download/print/title': "Printing correspondence <%= e(ccid) %>"
 :'case/correspondence/download/print/errors/invalid_mime': "The correspondence is of a type that we can't generate a print view of. You can try downloading the correspondence normally and printing it."
 
+# Cases - correspondence download (local view)
+:'case/correspondence/download/view/title': "View correspondence <%= e(ccid) %>: <%= e(name) %>"
+:'case/correspondence/download/view/section_title': "View correspondence"
+:'case/correspondence/download/view/actions/back_to_case': "Back to case"
+:'case/correspondence/download/view/actions/download': "Download"
+:'case/correspondence/download/view/actions/print': "Print"
+:'case/correspondence/download/view/actions/edit': "Edit correspondence"
+:'case/correspondence/download/view/is_email': "This correspondence was sent as an email to: <code><%= e(email) %></code>"
+:'case/correspondence/download/view/errors/unknown_error': "An unknown error occurred when trying to retrieve the local file to view. Please contact your system administrator, and give them this code: <code>case:<%= e(caseid) %>/cc:<%= e(ccid) %></code>"
+:'case/correspondence/download/view/errors/invalid_mime': "The correspondence is of a type that we can't generate a local view of (meaning it's probably a PDF, and not a text document). We've redirected you to the correspondence download page - you can download it and try to view it that way, rather than viewing it on <%= e(site_name) %> directly."
+
 # Cases - edit
 :'case/edit/title': "Edit <%= t(\"case_type/#{casetype}\".to_sym) %>: <%= e(name) %>"
 :'case/edit/edit/section_title': "Case details"

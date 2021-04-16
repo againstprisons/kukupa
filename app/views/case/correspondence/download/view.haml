@@ -1,0 +1,40 @@
+.case-correspondence-download-view{'data-case-id': case_obj.id}
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: urls[:case]}
+      %i.fa.fa-chevron-left= ""
+      %span
+        = t(:'case/correspondence/download/view/actions/back_to_case')
+
+    %a.pure-button.button{href: urls[:download]}
+      %i.fa.fa-download= ""
+      %span.sr-only
+        = t(:'case/correspondence/download/view/actions/download')
+
+    %a.pure-button.button{href: urls[:print], target: '_blank'}
+      %i.fa.fa-print= ""
+      %span.sr-only
+        = t(:'case/correspondence/download/view/actions/print')
+
+    %a.pure-button.button{href: urls[:edit]}
+      %i.fa.fa-cog= ""
+      %span.sr-only
+        = t(:'case/correspondence/download/view/actions/edit')
+
+  - if cc_target_email
+    .message.message-warning
+      %i.fa.fa-envelope-o= ""
+      = t(:'case/correspondence/download/view/is_email', email: cc_target_email)
+
+  %p
+    = succeed ': ' do
+      = t(:'case_renderable/correspondence/subject')
+    %span
+      - if cc_subject
+        &= cc_subject
+      - else
+        = t(:'case_renderable/correspondence/subject/none')
+
+  .rich-text-container.y-margin
+    = cc_content
