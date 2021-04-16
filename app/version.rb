@@ -9,7 +9,7 @@ module Kukupa
     def version
       gitrev = `sh -c 'command -v git >/dev/null && git describe --always --tags --abbrev --dirty'`.strip
       if gitrev != ""
-        "v#{VERSION} rev #{gitrev}"
+        "v#{VERSION}+git-#{gitrev}"
       else
         "v#{VERSION}"
       end
