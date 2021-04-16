@@ -169,22 +169,25 @@
         %label{for: 'assignee'}= t(:'case/edit/assignees/assign/assignee_field')
         %select#assignee{name: 'assignee', required: true}
           - assigned_ids = case_assigned.map { |x| x[:id] }
-          - assignable_users.each do |u|
-            - u_disabled = assigned_ids.include?(u[:id]) || u[:is_at_case_limit]
-            %option{value: u[:id], disabled: u_disabled}
-              &= u[:name] || "User ID #{u[:id]}"
 
-              - unless u[:tags].empty?
-                = surround ' (', ') ' do
-                  = u[:tags].map{|t| t("tag/#{t}".to_sym)}.join(', ')
+          - assignable_users_grouped.each do |tag, users|
+            %option{value: '-1', disabled: true}
+              = precede '🏷️ ' do
+                = t("tag/#{tag}".to_sym)
 
-              - if assigned_ids.include?(u[:id])
-                = surround ' [', '] ' do
-                  = t(:'case/edit/assignees/assign/item_disabled/already_assigned')
+            - users.each do |u|
+              - u_disabled = assigned_ids.include?(u[:id]) || u[:is_at_case_limit]
+              %option{value: u[:id], disabled: u_disabled}
+                = precede '&emsp;&emsp;' do
+                  &= u[:name] || "User ID #{u[:id]}"
 
-              - if u[:is_at_case_limit]
-                = surround ' [', '] ' do
-                  = t(:'case/edit/assignees/assign/item_disabled/case_limit')
+                - if assigned_ids.include?(u[:id])
+                  = surround ' [', '] ' do
+                    = t(:'case/edit/assignees/assign/item_disabled/already_assigned')
+
+                - if u[:is_at_case_limit]
+                  = surround ' [', '] ' do
+                    = t(:'case/edit/assignees/assign/item_disabled/case_limit')
 
         %button.pure-button.button.button-primary{type: 'submit'}
           %i.fa.fa-user-o= ""

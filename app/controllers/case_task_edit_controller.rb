@@ -34,6 +34,7 @@ class Kukupa::Controllers::CaseTaskEditController < Kukupa::Controllers::CaseCon
         case_obj: @case,
         case_name: @case_name,
         case_accessors: @accessors,
+        case_accessors_grouped: case_users_group_by_tag(@accessors),
         renderables: renderable_post_process(@task.renderables),
         task_obj: @task,
         task_assignee: Kukupa::Models::User[@task.assigned_to],

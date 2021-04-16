@@ -21,6 +21,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
 
     @prisons = Kukupa::Models::Prison.get_prisons
     @assignable_users = case_assignable_users
+    @assignable_users_grouped = case_users_group_by_tag(@assignable_users)
 
     @case = Kukupa::Models::Case[cid]
     return halt 404 unless @case && @case.is_open
@@ -189,6 +190,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       case_is_new: @case_is_new,
       case_triage_task: @case_triage_task,
       assignable_users: @assignable_users,
+      assignable_users_grouped: @assignable_users_grouped,
       assignable_suggested: @suggested_advocates,
       prisons: @prisons,
     })

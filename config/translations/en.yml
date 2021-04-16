@@ -72,6 +72,7 @@
 :'case_duration/short': "Short term case"
 :'case_duration/medium': "Medium term case"
 :'case_duration/long': "Long term case"
+:'tag/no_tags': "Users with no tags"
 :'tag/coordinator': "Advocacy coordinator"
 :'tag/advocate': "Advocacy volunteer"
 

@@ -26,6 +26,7 @@ class Kukupa::Controllers::CaseTaskAddController < Kukupa::Controllers::CaseCont
         case_obj: @case,
         case_name: @case_name,
         case_accessors: @accessors,
+        case_accessors_grouped: case_users_group_by_tag(@accessors),
         default_deadline: Chronic.parse(Kukupa.app_config['task-default-deadline']),
       })
     end

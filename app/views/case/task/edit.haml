@@ -24,13 +24,15 @@
       = t(:'case/task/edit/edit/assignee_field')
       %span.badge= t(:'required')
     %select#assignee{name: 'assignee', required: true}
-      - case_accessors.each do |u|
-        %option{value: u[:id], selected: u[:id] == task_assignee.id}
-          &= u[:name] || "User ID #{u[:id]}"
+      - case_accessors_grouped.each do |tag, users|
+        %option{value: '-1', disabled: true}
+          = precede '🏷️ ' do
+            = t("tag/#{tag}".to_sym)
 
-          - unless u[:tags].empty?
-            = surround ' (', ') ' do
-              = u[:tags].map{|t| t("tag/#{t}".to_sym)}.join(', ')
+        - users.each do |u|
+          %option{value: u[:id], selected: u[:id] == task_assignee.id}
+            = precede '&emsp;&emsp;' do
+              &= u[:name] || "User ID #{u[:id]}"
 
     %label{for: 'deadline'}
       = t(:'case/task/edit/edit/deadline_field')

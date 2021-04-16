@@ -86,4 +86,22 @@ module Kukupa::Helpers::CaseHelpers
 
     false
   end
+
+  def case_users_group_by_tag(advocates)
+    tagged = {}
+
+    advocates.each do |adv|
+      adv[:tags].each do |tag|
+        tagged[tag] ||= []
+        tagged[tag] << adv
+      end
+
+      if adv[:tags].empty?
+        tagged['no_tags'] ||= []
+        tagged['no_tags'] << adv
+      end
+    end
+
+    tagged
+  end
 end
