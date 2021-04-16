@@ -4,6 +4,7 @@ class Kukupa::Controllers::ApiController
 
   def initialize(app)
     @app = app
+    @api_token_check_params = {}
   end
 
   def method_missing(meth, *args, &bk)
@@ -22,7 +23,8 @@ class Kukupa::Controllers::ApiController
       })
     end
 
-    unless valid_api_token?
+    valid_token, @current_user = valid_api_token?(@api_token_check_params)
+    unless valid_token
       return halt 401, api_json({
         success: false,
         error: 'Invalid API token',
