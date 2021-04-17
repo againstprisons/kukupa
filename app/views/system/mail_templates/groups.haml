@@ -1,0 +1,39 @@
+#system-admin-mailtemplates-groups
+  .message.message-warning
+    = t(:'system/mail_templates/groups/requires_refresh')
+
+  %h1= title
+
+  .inline-form
+    %a.pure-button.button{href: url('/system/mailtemplates')}
+      %i.fa.fa-chevron-left= ""
+      = t(:'back')
+
+  .form-main
+    %h1= t(:'system/mail_templates/groups/list/section_title')
+
+    %ul.block-list
+      - groups.each do |group|
+        %li
+          .block-form
+            %form.inline-form{method: 'POST', action: url("/system/mailtemplates/groups/remove")}
+              %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+              %input{type: 'hidden', name: 'group', value: group}
+              %button.pure-button.button.button-error{type: 'submit'}
+                %i.fa.fa-trash= ""
+                = t(:'system/mail_templates/groups/list/actions/remove')
+
+            &nbsp;
+            &= group
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: url("/system/mailtemplates/groups/add")}
+    %h1= t(:'system/mail_templates/groups/add/section_title')
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+
+    %label{for: 'group_name'}
+      = t(:'system/mail_templates/groups/add/field_name')
+    %input#group_name{name: 'group', type: 'text', required: true, placeholder: t(:'system/mail_templates/groups/add/field_name')}
+
+    %button.pure-button.button.button-success{type: 'submit'}
+      %i.fa.fa-plus= ""
+      = t(:'system/mail_templates/groups/add/submit')

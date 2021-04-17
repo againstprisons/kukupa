@@ -4,6 +4,11 @@ class Kukupa::Controllers::SystemMailTemplatesController < Kukupa::Controllers::
   add_route :post, '/create', method: :create
   add_route :get, '/edit/:tplid', method: :edit
   add_route :post, '/edit/:tplid', method: :edit
+  add_route :get, '/groups', method: :group_list
+  add_route :post, '/groups/add', method: :group_add
+  add_route :post, '/groups/remove', method: :group_remove
+
+  include Kukupa::Helpers::SystemConfigurationAttributeHelpers
 
   def before(*args)
     return halt 404 unless logged_in?
@@ -129,5 +134,73 @@ class Kukupa::Controllers::SystemMailTemplatesController < Kukupa::Controllers::
         template_content: @template_content,
       })
     end
+  end
+
+  def group_list
+    @title = t(:'system/mail_templates/groups/title')
+    @groups = config_key_json('case-mail-template-groups')
+
+    return haml(:'system/layout', locals: {title: @title}) do
+      haml(:'system/mail_templates/groups', layout: false, locals: {
+        title: @title,
+        groups: @groups,
+      })
+    end
+  end
+
+  def group_add
+    @groups = config_key_json('case-mail-template-groups')
+
+    group = request.params['group']&.strip
+    group = nil if group&.empty?
+    if group.nil?
+      flash :error, t(:'required_field_missing')
+      return redirect back
+    end
+
+    unless @groups.map(&:downcase).index(group.downcase).nil?
+      flash :error, t(:'system/mail_templates/groups/add/errors/already_exists')
+      return redirect back
+    end
+
+    entry = Kukupa::Models::Config.where(key: 'case-mail-template-groups').first
+    return halt 500 unless entry
+    @groups << group
+    entry.value = JSON.generate(@groups.uniq)
+    entry.save
+
+    Kukupa.app_config_refresh_pending << 'case-mail-template-groups'
+    session[:we_changed_app_config] = true
+
+    flash :success, t(:'system/mail_templates/groups/add/success', group: group)
+    return redirect back
+  end
+
+  def group_remove
+    @groups = config_key_json('case-mail-template-groups')
+
+    group = request.params['group']&.strip
+    group = nil if group&.empty?
+    if group.nil?
+      flash :error, t(:'required_field_missing')
+      return redirect back
+    end
+
+    if @groups.map(&:downcase).index(group.downcase).nil?
+      flash :error, t(:'required_field_missing')
+      return redirect back
+    end
+
+    entry = Kukupa::Models::Config.where(key: 'case-mail-template-groups').first
+    return halt 500 unless entry
+    @groups.delete(group)
+    entry.value = JSON.generate(@groups.uniq)
+    entry.save
+
+    Kukupa.app_config_refresh_pending << 'case-mail-template-groups'
+    session[:we_changed_app_config] = true
+
+    flash :success, t(:'system/mail_templates/groups/list/actions/remove/success', group: group)
+    return redirect back
   end
 end

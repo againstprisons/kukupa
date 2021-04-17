@@ -973,6 +973,16 @@
 :'system/mail_templates/edit/data/template_enabled': "Enable this template?"
 :'system/mail_templates/edit/data/submit': "Save changes"
 :'system/mail_templates/edit/data/success': "Successfully saved changes to template."
+:'system/mail_templates/groups/title': "Mail template groups"
+:'system/mail_templates/groups/requires_refresh': "Any changes to groups on this screen will not take effect until you (or your system administrator) perform a configuration refresh."
+:'system/mail_templates/groups/list/section_title': "Existing groups"
+:'system/mail_templates/groups/list/actions/remove': "Remove"
+:'system/mail_templates/groups/list/actions/remove/success': "Successfully removed group: <%= e(group) %>"
+:'system/mail_templates/groups/add/section_title': "Add new group"
+:'system/mail_templates/groups/add/field_name': "Group name"
+:'system/mail_templates/groups/add/submit': "Add group"
+:'system/mail_templates/groups/add/success': "Successfully added group: <%= e(group) %>"
+:'system/mail_templates/groups/add/errors/already_exists': "A group with this name already exists."
 
 # System admin - quick links
 :'system/quicklinks/title': "Quick links"
