@@ -1,4 +1,4 @@
-module Kukupa::Helpers::SystemOutsideRequestHelpers
+module Kukupa::Helpers::SystemConfigurationAttributeHelpers
   def config_key_json(key)
     entry = Kukupa::Models::Config.where(key: key).first
     return [] unless entry

@@ -9,7 +9,7 @@ class Kukupa::Controllers::SystemOutsideRequestController < Kukupa::Controllers:
   add_route :post, '/hide-prisons/add', method: :hide_prisons_add
   add_route :post, '/hide-prisons/delete', method: :hide_prisons_delete
 
-  include Kukupa::Helpers::SystemOutsideRequestHelpers
+  include Kukupa::Helpers::SystemConfigurationAttributeHelpers
 
   def before(*args)
     return halt 404 unless logged_in?
