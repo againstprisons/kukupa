@@ -193,11 +193,11 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
       .reject { |tpl| !tpl[:enabled] }
 
     @grouped_templates = Kukupa.app_config['case-mail-template-groups'].map{|x| [x, []]}.to_h
-    @grouped_templates[t(:'unknown')] = []
     @templates.each do |tpl|
       if @grouped_templates.key?(tpl[:group])
         @grouped_templates[tpl[:group]] << tpl
       else
+        @grouped_templates[t(:'unknown')] = []
         @grouped_templates[t(:'unknown')] << tpl
       end
     end

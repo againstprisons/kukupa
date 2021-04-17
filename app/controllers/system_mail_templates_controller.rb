@@ -18,22 +18,22 @@ class Kukupa::Controllers::SystemMailTemplatesController < Kukupa::Controllers::
 
     # get grouped enabled
     @grouped_enabled = @groups.map{|x| [x, []]}.to_h
-    @grouped_enabled [t(:'unknown')] = []
     @templates.filter{|tpl| tpl[:enabled]}.each do |tpl|
       if @grouped_enabled.key?(tpl[:group])
         @grouped_enabled[tpl[:group]] << tpl
       else
+        @grouped_enabled[t(:'unknown')] ||= []
         @grouped_enabled[t(:'unknown')] << tpl
       end
     end
 
     # get grouped disabled
     @grouped_disabled = @groups.map{|x| [x, []]}.to_h
-    @grouped_disabled [t(:'unknown')] = []
     @templates.reject{|tpl| tpl[:enabled]}.each do |tpl|
       if @grouped_disabled.key?(tpl[:group])
         @grouped_disabled[tpl[:group]] << tpl
       else
+        @grouped_disabled[t(:'unknown')] ||= []
         @grouped_disabled[t(:'unknown')] << tpl
       end
     end

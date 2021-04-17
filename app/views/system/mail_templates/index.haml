@@ -16,6 +16,9 @@
             &= group
 
           %ul
+            - if tpls.empty?
+              %li= t(:'system/mail_templates/no_templates')
+
             - tpls.each do |tpl|
               %li
                 %a{href: url("/system/mailtemplates/edit/#{tpl[:id]}")}><
@@ -35,6 +38,9 @@
             &= group
 
           %ul
+            - if tpls.empty?
+              %li= t(:'system/mail_templates/no_templates')
+
             - tpls.each do |tpl|
               %li
                 %a{href: url("/system/mailtemplates/edit/#{tpl[:id]}")}><
