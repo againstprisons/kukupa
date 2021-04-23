@@ -289,6 +289,10 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
 
       return "reconnect_exception__#{error_id}".to_sym
     end
+    
+    unless result['success']
+      return "reconnect_no_success__#{result['message']&.tr(' ', '_')&.downcase}".to_sym
+    end
 
     reconnect_id = result['id'].to_i
     return :reconnect_id_zero if reconnect_id.zero?
