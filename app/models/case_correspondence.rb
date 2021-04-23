@@ -272,7 +272,8 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
 
   def send_correspondence_to_target__prisoner(case_obj, opts = {})
     content = self.get_file_content
-    content = '' if content&.empty?
+    content = nil if content&.empty?
+    return :correspondence_no_content unless content
 
     reconnect_id = case_obj.reconnect_id
     return :prisoner_no_reconnect_id unless reconnect_id
