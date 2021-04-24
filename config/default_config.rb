@@ -82,6 +82,10 @@ module Kukupa
       :type => :time_period,
       :default => '10 minutes ago',
     },
+    "reconnect-create-penpals" => {
+      :type => :bool,
+      :default => false,
+    },
     "case-new-threshold" => {
       :type => :time_period,
       :default => '5 days ago',

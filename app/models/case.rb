@@ -98,6 +98,10 @@ class Kukupa::Models::Case < Sequel::Model
       type: :editor,
     },
   }
+  
+  class ReconnectHelpers
+    extend Kukupa::Helpers::ReconnectHelpers
+  end
 
   def self.assigned_to(user)
     user = user.id if user.respond_to?(:id)
@@ -210,6 +214,34 @@ class Kukupa::Models::Case < Sequel::Model
     ps = self.decrypt(:first_name) unless ps
 
     ps
+  end
+  
+  def create_in_reconnect!(opts = {})
+    return :not_enabled unless Kukupa.app_config['reconnect-create-penpals']
+
+    unless opts[:skip_penpal_creation]
+      res = ReconnectHelpers.reconnect_create_penpal_from_case(self)
+      return :penpal_res_nil if res.nil?
+      return :penpal_success_false unless res['success']
+      penpal_id = res['penpal'].to_i
+      return :penpal_no_id unless penpal_id.positive?
+    
+      self.reconnect_id = penpal_id
+      self.save
+    end
+    
+    unless opts[:skip_relationship_creation]
+      return :relationship_no_reconnect_id unless self.reconnect_id.to_i.positive?
+      res = ReconnectHelpers.reconnect_create_relationship(
+        self.reconnect_id.to_i,
+        Kukupa.app_config['reconnect-penpal-id'].to_i,
+      )
+      return :relationship_res_nil if res.nil?
+      return :relationship_success_false unless res['success']
+      return :relationship_no_id unless res['relationship'].to_i.positive?
+    end
+
+    true
   end
   
   def send_imported_case_email!(opts = {})
