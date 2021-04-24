@@ -5,6 +5,7 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
   add_route :post, '/link', method: :link
   add_route :get, '/manual-link', method: :manual_link
   add_route :post, '/manual-link', method: :manual_link
+  add_route :post, '/create', method: :create
 
   include Kukupa::Helpers::CaseHelpers
   include Kukupa::Helpers::ReconnectHelpers
@@ -116,5 +117,25 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
       case_obj: @case,
       case_name: @case_name,
     })
+  end
+  
+  def create(cid)
+    create_opts = {}
+    if @case.reconnect_id.to_i.positive?
+      reconnect_data = reconnect_penpal(cid: @case.reconnect_id.to_i)
+      if reconnect_data['success'] && reconnect_data['id'].to_i == @case.reconnect_id.to_i
+        flash :warning, t(:'case/edit/reconnect/index/create/warnings/penpal_exists')
+        create_opts[:skip_penpal_creation] = true
+      end
+    end
+    
+    res = @case.create_in_reconnect!(create_opts)
+    if res == true
+      flash :success, t(:'case/edit/reconnect/index/create/success', penpal_id: @case.reconnect_id)
+    else
+      flash :error, t(:'case/edit/reconnect/index/create/errors/return_value', res: res)
+    end
+    
+    return redirect url("/case/#{@case.id}/edit/rc")
   end
 end
