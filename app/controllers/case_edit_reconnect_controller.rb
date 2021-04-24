@@ -27,12 +27,6 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
   end
 
   def index(cid)
-    @case = Kukupa::Models::Case[cid]
-    return halt 404 unless @case && @case.is_open
-    unless has_role?('case:view_all')
-      return halt 404 unless @case.can_access?(@user)
-    end
-
     @reconnect_id = @case.reconnect_id
     @reconnect_data = reconnect_penpal(cid: @reconnect_id) if @reconnect_id.to_i.positive?
     @case_name = @case.get_name
@@ -53,12 +47,6 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
   end
 
   def sync(cid)
-    @case = Kukupa::Models::Case[cid]
-    return halt 404 unless @case && @case.is_open
-    unless has_role?('case:view_all')
-      return halt 404 unless @case.can_access?(@user)
-    end
-
     @case.reconnect_last_sync = nil
     @case.save
 
@@ -69,12 +57,6 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
   end
 
   def unlink(cid)
-    @case = Kukupa::Models::Case[cid]
-    return halt 404 unless @case && @case.is_open
-    unless has_role?('case:view_all')
-      return halt 404 unless @case.can_access?(@user)
-    end
-
     if request.params['confirm'].to_i.positive?
       @case.reconnect_id = nil
       @case.save
@@ -86,12 +68,6 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
   end
 
   def link(cid)
-    @case = Kukupa::Models::Case[cid]
-    return halt 404 unless @case && @case.is_open
-    unless has_role?('case:view_all')
-      return halt 404 unless @case.can_access?(@user)
-    end
-
     @prn = @case.decrypt(:prisoner_number)
     @reconnect_data = reconnect_penpal(prn: @prn)
     unless @reconnect_data
@@ -114,12 +90,6 @@ class Kukupa::Controllers::CaseEditReconnectController < Kukupa::Controllers::Ca
   end
 
   def manual_link(cid)
-    @case = Kukupa::Models::Case[cid]
-    return halt 404 unless @case && @case.is_open
-    unless has_role?('case:view_all')
-      return halt 404 unless @case.can_access?(@user)
-    end
-
     if request.post?
       @penpal_id = request.params['cid']&.to_i
       @reconnect_data = reconnect_penpal(cid: @penpal_id)
