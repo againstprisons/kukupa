@@ -149,6 +149,10 @@ module Kukupa
       :type => :bool,
       :default => :true,
     },
+    "outside-request-create-reconnect-penpal" => {
+      :type => :bool,
+      :default => true,
+    },
     "timeline-upcoming-notify" => {
       :type => :time_period,
       :default => 'in 1 week',

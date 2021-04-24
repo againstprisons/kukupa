@@ -116,6 +116,20 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
             @case.save
           end
         end
+        
+        # create re:connect penpal (if enabled)
+        if Kukupa.app_config['outside-request-create-reconnect-penpal']
+          if @case.decrypt(:prison).to_i.positive?
+            res = @case.create_in_reconnect!
+            unless res == true
+              error_id = Kukupa::Crypto.generate_token_short
+              $stderr.puts "----- Error ID #{error_id} -----"
+              $stderr.puts "OutsideRequestController: Case#create_in_reconnect returned non-true"
+              $stderr.puts "Case #{@case.id}, result: #{res.inspect}"
+              $stderr.flush
+            end
+          end
+        end
 
         @req_categories = []
         @this_form[:categories].each_index do |i|
