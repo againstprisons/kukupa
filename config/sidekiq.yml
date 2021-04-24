@@ -26,3 +26,7 @@
   sync_new_cases:
     cron: '*/30 * * * *'
     class: "Kukupa::Workers::SyncNewReconnectCasesWorker"
+
+  create_penpals:
+    cron: '*/30 * * * *'
+    class: "Kukupa::Workers::CreateReconnectPenpalsWorker"
