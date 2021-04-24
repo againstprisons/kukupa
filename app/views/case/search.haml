@@ -39,7 +39,7 @@
                         %a{href: url("/case/search?type=advocate&query=#{ad[:id]}"), title: "User[#{ad[:id]}]"}><
                           &= ad[:name]
 
-                        - if cuser.id == ad[:id]
+                        - if cuser&.id == ad[:id]
                           &nbsp;
                           %span.badge
                             %i.fa.fa-user-o= ""
