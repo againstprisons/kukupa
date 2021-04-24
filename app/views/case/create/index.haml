@@ -13,6 +13,9 @@
   %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
   %h1= t(:'case/create/section_title')
 
+  .message.message-warning
+    = t(:'case/create/warnings/use_test_prn')
+
   %label{for: 'first_name'}
     = t(:'name/first')
     %span.badge= t(:'required')

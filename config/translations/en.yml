@@ -354,6 +354,7 @@
 :'case/create/section_title': "Case details"
 :'case/create/submit': "Create case"
 :'case/create/success': "Successfully created case as ID <code><%= e(case_id) %></code>."
+:'case/create/warnings/use_test_prn': "If this is a case for testing purposes, please make sure you enter a PRN that starts with the word <code>test</code> (for example, <code>test1312</code>), so that the system knows the difference between test cases and real ones."
 :'case/create/errors/prn_exists': "The prisoner number you have entered is already in use by a case."
 :'case/create/project/title': "Create project"
 :'case/create/project/switch': "Switch to case creation"
