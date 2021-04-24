@@ -19,10 +19,14 @@
   - if Kukupa.app_config['reconnect-create-penpals']
     %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: url("/case/#{case_obj.id}/edit/rc/create")}
       %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
-      %h1= t(:'case/edit/reconnect/index/create/section_title')
-    
+      %h1
+        - if case_reconnect[:id] && case_reconnect[:id].to_i.positive?
+          = t(:'case/edit/reconnect/index/create/section_title/relationship')
+        - else
+          = t(:'case/edit/reconnect/index/create/section_title/penpal')
+
       %p= t(:'case/edit/reconnect/index/create/content/one')
-    
+
       %button.pure-button.button.button-success{type: 'submit'}
         %i.fa.fa-plus= ""
         = t(:'case/edit/reconnect/index/create/submit')
