@@ -1,0 +1,16 @@
+.midsplash-container
+  .midsplash.error-418
+    %h1= title
+    %p= t(:'errors/teapot/content/one')
+    %p= t(:'errors/teapot/content/two')
+
+    %a.pure-button.button.button-primary{:href => "javascript:window.history.back()"}
+      %i.fa.fa-chevron-left= ""
+      = t(:'errors/teapot/back_one')
+
+    %a.pure-button.button.button-primary{:href => url("/")}
+      %i.fa.fa-home= ""
+      = t(:'errors/teapot/back_to_home')
+
+    .y-margin.center
+      %img{src: url("/static/images/teapot.png"), alt: "A teapot"}

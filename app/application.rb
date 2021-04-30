@@ -15,6 +15,14 @@ class Kukupa::Application < Sinatra::Base
     ctrl.not_found
   end
 
+  error 418 do
+    ctrl = Kukupa::Controllers::ErrorController.new(self)
+    ctrl.preflight
+    ctrl.before if ctrl.respond_to?(:before)
+
+    ctrl.teapot
+  end
+
   error do
     ctrl = Kukupa::Controllers::ErrorController.new(self)
     ctrl.preflight

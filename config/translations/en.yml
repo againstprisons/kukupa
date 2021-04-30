@@ -99,6 +99,11 @@
 :'errors/internal_server_error/content/two': "If this error persists, please contact the <%= e(site_name) %> administrators, letting them know what you were trying to do when you encountered this error."
 :'errors/internal_server_error/refresh': "Refresh the page"
 :'errors/internal_server_error/back_to_home': "Return to the home page"
+:'errors/teapot/title': "I'm a teapot!"
+:'errors/teapot/content/one': "This error means that something within <%= e(site_name) %> has reached a state that should be impossible to reach."
+:'errors/teapot/content/two': "Please return to the previous page (or the home page) and try your action again. If this error persists, please contact your site administrators, telling them you reached a teapot and giving them the URL of this page."
+:'errors/teapot/back_one': "Go back to the previous page"
+:'errors/teapot/back_to_home': "Return to the home page"
 
 # Rich text editor warnings
 :'editor/loading': "Please wait while we load the text editor. If you see this message for more than a few seconds, try refreshing the page."
