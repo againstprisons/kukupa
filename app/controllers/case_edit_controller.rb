@@ -30,7 +30,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
     end
 
     @fields = @case.field_desc
-    @show = Kukupa::Models::Case::CASE_TYPES[@case.type.to_sym][:show]
+    @show = @case.show_desc
   end
 
   def index(cid)

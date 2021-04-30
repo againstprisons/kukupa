@@ -23,7 +23,7 @@ class Kukupa::Controllers::CaseTimelineController < Kukupa::Controllers::CaseCon
       return halt 404 unless @case.can_access?(@user)
     end
 
-    @show = Kukupa::Models::Case::CASE_TYPES[@case.type.to_sym][:show]
+    @show = @case.show_desc
     return halt 404 unless @show[:timeline]
   end
 

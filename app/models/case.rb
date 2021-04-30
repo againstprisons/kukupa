@@ -167,6 +167,20 @@ class Kukupa::Models::Case < Sequel::Model
     last_updated <= mail_date
   end
 
+  def show_desc
+    show = CASE_TYPES[self.type.to_sym][:show]
+
+    unless self.show_overrides.nil?
+      overrides = JSON.parse(self.show_overrides)
+        .map { |k, v| [k.to_sym, v] }
+        .to_h
+
+      show.merge!(overrides)
+    end
+    
+    show
+  end
+
   def field_desc(opts = {})
     CASE_TYPES[self.type.to_sym][:fields].map do |fd|
       if fd.is_a?(Symbol)
