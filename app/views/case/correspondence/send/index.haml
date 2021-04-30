@@ -20,20 +20,21 @@
             %i.fa.fa-list= ""
             = t(:'case/correspondence/send/templates/view_templates')
 
-      %form.pure-form.pure-form-stacked.form-main.x-margin{method: 'GET'}
-        %h1= t(:'case/correspondence/send/compose/email/section_title')
-        - if compose_email
-          %input{type: 'hidden', name: 'email', value: ''}
-          %button.pure-button.button{type: 'submit'}
-            %i.fa.fa-refresh= ""
-            = t(:'case/correspondence/send/compose/email/clear')
+      - if Kukupa.app_config['feature-case-correspondence-email']
+        %form.pure-form.pure-form-stacked.form-main.x-margin{method: 'GET'}
+          %h1= t(:'case/correspondence/send/compose/email/section_title')
+          - if compose_email
+            %input{type: 'hidden', name: 'email', value: ''}
+            %button.pure-button.button{type: 'submit'}
+              %i.fa.fa-refresh= ""
+              = t(:'case/correspondence/send/compose/email/clear')
 
-        - else
-          %label.sr-only{name: 'compose_email'}= t(:'email_address')
-          %input#compose_email{name: 'email', type: 'email', value: compose_email, placeholder: t(:'email_address')}
-          %button.pure-button.button{type: 'submit'}
-            %i.fa.fa-arrow-right= ""
-            = t(:'case/correspondence/send/compose/email/submit')
+          - else
+            %label.sr-only{name: 'compose_email'}= t(:'email_address')
+            %input#compose_email{name: 'email', type: 'email', value: compose_email, placeholder: t(:'email_address')}
+            %button.pure-button.button{type: 'submit'}
+              %i.fa.fa-arrow-right= ""
+              = t(:'case/correspondence/send/compose/email/submit')
 
     .pure-u-1.pure-u-lg-3-4
       %form.pure-form.pure-form-stacked.form-main.x-margin{method: 'POST'}
