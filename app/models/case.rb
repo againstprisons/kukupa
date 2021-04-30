@@ -303,7 +303,7 @@ end
 class Kukupa::Models::CaseFilter < Sequel::Model
   def self.clear_filters_for(case_)
     case_ = case_.id if case_.respond_to?(:id)
-    self.where(case: case_).all.map(&:delete)
+    self.where(case: case_).delete
   end
 
   def self.create_filters_for(case_)
