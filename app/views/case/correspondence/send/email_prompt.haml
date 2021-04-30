@@ -1,0 +1,14 @@
+.case-send-mail-email-prompt{'data-case-id': case_obj.id}
+  %h1= title
+
+  = haml :'partials/case_header', layout: false, locals: {caseid: case_obj.id, casetype: case_obj.type, show: case_show}
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'GET'}
+    %h1= t(:'case/correspondence/send/email_prompt/section_title')
+    %p= t(:'case/correspondence/send/email_prompt/content', casetype: case_obj.type)
+
+    %label{name: 'compose_email'}= t(:'email_address')
+    %input#compose_email{name: 'email', type: 'email', placeholder: t(:'email_address')}
+    %button.pure-button.button{type: 'submit'}
+      %i.fa.fa-arrow-right= ""
+      = t(:'case/correspondence/send/email_prompt/submit')

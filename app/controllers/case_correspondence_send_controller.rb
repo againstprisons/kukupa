@@ -34,6 +34,29 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
       @email = nil if @email&.empty?
     end
 
+    # if @show[:reconnect] is false, email correspondence is enabled,
+    # and we don't already have an email address to send to, show a
+    # prompt for an email address before doing anything else.
+    if Kukupa.app_config['feature-case-correspondence-email'] && @email.nil?
+      unless @show[:reconnect]
+        return haml(:'case/correspondence/send/email_prompt', :locals => {
+          title: @title,
+          this_url: @this_url.to_s,
+          case_obj: @case,
+          case_name: @case_name,
+          case_show: @show,
+        })
+      end
+    end
+
+    # if we have no email address (or email is disabled), and @show[:reconnect]
+    # is disabled, return a teapot (because users can't reach this state w/o
+    # browsing to `/case/:id/correspondence/send` manually - it's hidden in
+    # the user interface)
+    if @email.nil? && !@show[:reconnect]
+      return halt 418
+    end    
+
     # get re:connect data, and halt if there is none EXCEPT in the case
     # that this is an email to an outside requester
     @reconnect_id = @case.reconnect_id
@@ -49,9 +72,10 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
       })
     end
 
-    @subject = @content = ''
+    @subject = ''
+    @content = ''
 
-   # construct URL to template page with email address 
+    # construct URL to template page with email address 
     @template_url = Addressable::URI.parse(url("/case/#{@case.id}/correspondence/send/templates"))
     if @email
       @template_url.query_values = {email: @email}

@@ -524,6 +524,9 @@
 
 # Cases - correspondence send
 :'case/correspondence/send/title': "Send mail to case: <%= e(name) %>"
+:'case/correspondence/send/email_prompt/section_title': "Enter an email address to send to"
+:'case/correspondence/send/email_prompt/content': "Sending prisoner mail via re:connect is disabled for this <%= t(\"case_type/#{casetype}\".to_sym) %>. Enter an email address below to send an email associated with this <%= t(\"case_type/#{casetype}\".to_sym) %>."
+:'case/correspondence/send/email_prompt/submit': "Continue"
 :'case/correspondence/send/compose/section_title': "Compose mail"
 :'case/correspondence/send/compose/subject': "Mail subject"
 :'case/correspondence/send/compose/content': "Mail content"
