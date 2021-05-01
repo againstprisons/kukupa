@@ -78,6 +78,25 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
           approve_url: approve_url,
         }
       end
+      
+      @spends_incomplete = Kukupa::Models::CaseSpend.where(is_complete: false).exclude(approver: nil).map do |s|
+        case_obj = Kukupa::Models::Case[s.case]
+        next unless case_obj
+
+        view_url = Addressable::URI.parse(url("/case/#{case_obj.id}/view"))
+        edit_url = Addressable::URI.parse(url("/case/#{case_obj.id}/spend/#{s.id}"))
+
+        {
+          case: case_obj,
+          case_name: case_obj.get_name,
+          spend: s,
+          spend_amount: s.decrypt(:amount).to_f,
+          spend_content: s.decrypt(:notes),
+          anchor: s.anchor,
+          edit_url: edit_url,
+          view_url: view_url,
+        }
+      end
     end
 
     if has_role?('case:correspondence:can_approve')
@@ -113,6 +132,7 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
       cases: @my_cases,
       tasks: @my_tasks,
       spends: @spends,
+      spends_incomplete: @spends_incomplete,
       correspondence: @correspondence,
     })
   end

@@ -83,6 +83,35 @@
                 %blockquote
                   = sp[:spend_content]
 
+    - if has_role?('case:spend:can_approve') && !spends_incomplete.empty?
+      .form-main
+        %h1= t(:'dashboard/incomplete_spends/section_title')
+      
+        %ul
+          - spends_incomplete.each do |sp|
+            %li
+              .dashboard-spend-meta
+                %ul.inline-list
+                  %li
+                    %span
+                      = t(:'dashboard/incomplete_spends/item/content', amount: sp[:spend_amount], name: sp[:case_name])
+
+                  %li
+                    %a.case-view-task-editlink{href: sp[:edit_url]}
+                      %i.fa.fa-gear= ""
+                      %span.sr-only
+                        = t(:'dashboard/incomplete_spends/item/edit')
+
+                  %li
+                    %a.case-view-task-editlink{href: "#{sp[:view_url]}##{sp[:anchor]}"}
+                      %i.fa.fa-external-link= ""
+                      %span.sr-only
+                        = t(:'dashboard/incomplete_spends/item/view')
+
+              .dashboard-spend-content
+                %blockquote
+                  = sp[:spend_content]
+
     - if has_role?('case:correspondence:can_approve') && !correspondence.empty?
       .form-main
         %h1= t(:'dashboard/unapproved_correspondence/section_title')
