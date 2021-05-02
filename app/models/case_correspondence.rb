@@ -51,7 +51,12 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     end
 
     # force encoding on the message content
-    message_html = message_html.force_encoding('UTF-8')
+    message_html = message_html.encode(
+      Encoding::UTF_8,
+      invalid: :replace,
+      undef: :replace,
+      replace: "\uFFFD",
+    )
 
     # we've got the message html, let's check for our banner
     our_banner = "[[[ Please keep your reply above this line | #{case_obj.email_identifier} ]]]"
