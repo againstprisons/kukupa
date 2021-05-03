@@ -83,7 +83,10 @@ module Kukupa::Helpers::ReconnectHelpers
     %w[reconnect-api-key reconnect-url reconnect-penpal-id].each do |k|
       return nil unless Kukupa.app_config[k]
     end
-    
+
+    return nil unless penpal_one
+    return nil unless penpal_two
+
     req_opts = {
       method: :post,
       body: {
@@ -113,7 +116,12 @@ module Kukupa::Helpers::ReconnectHelpers
     %w[reconnect-api-key reconnect-url reconnect-penpal-id].each do |k|
       return nil unless Kukupa.app_config[k]
     end
-    
+
+    # Check that our required fields are in place
+    %i[name_first name_last prn prison].each do |k|
+      return nil if opts[k].nil? || opts[k]&.empty?
+    end
+
     req_body = opts.merge({
       token: Kukupa.app_config['reconnect-api-key'],
       note: "<p>This penpal was created automatically by Kūkupa.</p>",
@@ -150,6 +158,7 @@ module Kukupa::Helpers::ReconnectHelpers
     prn = case_obj.decrypt(:prisoner_number)&.strip
     prn = nil if prn&.empty?
     prison = Kukupa::Models::Prison[case_obj.decrypt(:prison).to_i]
+    prison = nil unless prison&.reconnect_id.to_i.positive?
 
     reconnect_create_penpal({
       name_first: pp_name_first,
