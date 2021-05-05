@@ -119,7 +119,7 @@ module Kukupa::Helpers::ReconnectHelpers
 
     # Check that our required fields are in place
     %i[name_first name_last prn prison].each do |k|
-      return nil if opts[k].nil? || opts[k]&.empty?
+      return nil if opts[k].nil? || (opts[k].is_a?(String) && opts[k].empty?)
     end
 
     req_body = opts.merge({
