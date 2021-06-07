@@ -52,6 +52,7 @@ export const enableUserSearch = (searchField) => {
     parentElement: searchField.parentElement,
     displayElement: displayElement,
     onlyAssignable: parseInt(searchField.getAttribute('data-only-assignable')) > 0,
+    onlyCaseAssigned: parseInt(searchField.getAttribute('data-only-case-assigned')),
   }
 
   window.kukupa.user_search[fieldId].searchAgainOnClickHandler = (e) => {
@@ -125,6 +126,10 @@ export const enableUserSearch = (searchField) => {
       if (window.kukupa.user_search[fieldId].onlyAssignable) {
         formData.append('only_assignable', '1')
       }
+      if (window.kukupa.user_search[fieldId].onlyCaseAssigned > 0) {
+        formData.append('only_case_assigned', window.kukupa.user_search[fieldId].onlyCaseAssigned)
+      }
+
       fetch('/api/user-search', {
         method: 'POST',
         body: formData,
