@@ -1,3 +1,6 @@
+require 'active_model'
+require 'email_validator'
+
 class Kukupa::Controllers::ApiUserSearchController < Kukupa::Controllers::ApiController
   add_route :get, '/'
   add_route :post, '/'
@@ -32,12 +35,25 @@ class Kukupa::Controllers::ApiUserSearchController < Kukupa::Controllers::ApiCon
 
     # get potential user IDs for each query part
     query_parts = query.split(' ').map do |qp|
+      qp.strip!
+      next nil if qp.empty?
+
+      # is this a user ID?
       if (uid = /\#(\d+)/.match(qp)&.[](1).to_i).positive?
         [uid]
+
+      # is this an email address?
+      elsif EmailValidator.valid?(qp)
+        Kukupa::Models::User
+          .select(:id, :email)
+          .where(email: qp)
+          .map(&:id)
+
+      # nothing above matched, treat as a partial name
       else
         Kukupa::Models::UserFilter.perform_filter(:name, qp).map(&:user)
       end
-    end
+    end.compact
 
     # pick out users that match all query parts
     users = query_parts.flatten.compact.uniq.map do |uid|
