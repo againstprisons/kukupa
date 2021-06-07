@@ -108,7 +108,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       @global_note = request.params['global_note']&.strip
       @global_note = Sanitize.fragment(@global_note, Sanitize::Config::RELAXED)
       @case_purpose = [request.params['case_purpose']].flatten.compact.map(&:strip).map(&:downcase)
-      @case_purpose = Kukupa::Models::Case::ALLOWED_PURPOSES.first if @case_purpose.nil? || @case_purpose&.empty?
+      @case_purpose = [Kukupa.app_config['case-purposes'].first] if @case_purpose.empty? 
       @case_duration = request.params['case_duration']&.strip&.downcase
       @case_duration = Kukupa::Models::Case::ALLOWED_DURATIONS.first if @case_duration.nil? || @case_duration&.empty?
       @is_private = request.params['is_private']&.strip&.downcase == 'on'
