@@ -23,16 +23,7 @@
     %label{for: 'assignee'}
       = t(:'case/task/edit/edit/assignee_field')
       %span.badge= t(:'required')
-    %select#assignee{name: 'assignee', required: true}
-      - case_accessors_grouped.each do |tag, users|
-        %option{value: '-1', disabled: true}
-          = precede '🏷️ ' do
-            = t("tag/#{tag}".to_sym)
-
-        - users.each do |u|
-          %option{value: u[:id], selected: u[:id] == task_assignee.id}
-            = precede '&emsp;&emsp;' do
-              &= u[:name] || "User ID #{u[:id]}"
+    %input.user-search-field#assignee{name: 'assignee', type: 'text', required: true, placeholder: t(:'user_id'), 'data-only-case-assigned': case_obj.id.to_s}
 
     %label{for: 'deadline'}
       = t(:'case/task/edit/edit/deadline_field')
@@ -71,3 +62,5 @@
       %button.pure-button.button.button-error{type: 'submit'}
         %i.fa.fa-trash= ""
         = t(:'case/task/edit/delete/submit')
+
+.async-load{:'data-sources' => JSON.generate(['/static/user_search.bundle.js'])}
