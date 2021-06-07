@@ -106,6 +106,7 @@ class Kukupa::Controllers::CaseCorrespondenceEditController < Kukupa::Controller
 
       result = @cc_obj.send_correspondence_to_target!
       if result == true
+        @cc_obj.create_outgoing_print_task!
         flash :success, t(:'case/correspondence/approve/success')
         return redirect url("/case/#{@case.id}/view##{@cc_obj.anchor}")
 

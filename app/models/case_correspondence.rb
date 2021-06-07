@@ -217,7 +217,7 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     return nil unless out.response_code == 200
     out.body
   end
-  
+
   def send_correspondence_to_target!(opts = {})
     return unless self.sent_by_us # just for outgoing mail
     return unless self.approved # only send approved mail
@@ -307,6 +307,31 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     self.save
 
     true
+  end
+
+  def create_outgoing_print_task!
+    return unless self.approved
+    if Kukupa.app_config['correspondence-print-only-prisoner']
+      return unless self.correspondence_type == 'prisoner'
+    end
+
+    language = Kukupa::Helpers::LanguageHelpers::LanguageData.new
+    assignee = Kukupa.app_config['correspondence-print-users'].sample
+
+    task = Kukupa::Models::CaseTask.new({
+      case: self.case,
+      author: nil,
+      assigned_to: assignee,
+      deadline: Chronic.parse(Kukupa.app_config['task-default-deadline']),
+    }).save
+
+    task.encrypt(:content, language.t(:'case/correspondence/send/automatic_task', {
+      cid: self.id,
+      url: Kukupa.app_config['base-url'] + "/case/#{self.case}/correspondence/#{self.id}/dl/view",
+      force_language: true,
+    }))
+
+    task.save
   end
 
   def send_incoming_alert_email!(opts = {})

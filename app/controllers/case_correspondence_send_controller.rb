@@ -148,6 +148,7 @@ class Kukupa::Controllers::CaseCorrespondenceSendController < Kukupa::Controller
 
               result = cm.send_correspondence_to_target!
               if result == true
+                cm.create_outgoing_print_task!
                 flash :success, t(:'case/correspondence/send/success')
               else
                 flash :success, t(:'case/correspondence/send/errors/send_failed', error: result.inspect)

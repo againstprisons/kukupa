@@ -160,7 +160,15 @@ module Kukupa
     "feature-case-correspondence-email" => {
       :type => :bool,
       :default => false,
-    }
+    },
+    "correspondence-print-only-prisoner" => {
+      :type => :bool,
+      :default => true,
+    },
+    "correspondence-print-users" => {
+      :type => :uid_list,
+      :default => '',
+    },
   }
 
   APP_CONFIG_DEPRECATED_ENTRIES = {

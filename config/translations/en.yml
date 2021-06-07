@@ -559,6 +559,7 @@
 :'case/correspondence/send/errors/send_failed': "Sending this correspondence failed with the error code <code><%= e(error) %></code>. To try sending this correspondence again, ask an administrator to approve this correspondence."
 :'case/correspondence/send/success': "Successfully sent correspondence."
 :'case/correspondence/send/success/unapproved': "This correspondence has been queued for administrator approval."
+:'case/correspondence/send/automatic_task': "Please print and mail a physical copy of <a href=\"<%= e(url) %>\">this correspondence (ID <%= e(cid) %>)</a> to the address in the \"Case details\" section of this case, or re-assign this task. [automatic task]"
 
 # Cases - correspondence edit
 :'case/correspondence/edit/title': "Case correspondence <%= e(ccid) %>: <%= e(name) %>"
