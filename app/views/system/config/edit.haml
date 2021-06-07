@@ -30,6 +30,8 @@
         = t(:'system/config/edit/type/json')
       %option{:value => 'json', :selected => (type == "time_period")}
         = t(:'system/config/edit/type/time_period')
+      %option{:value => 'uid_list', :selected => (type == "uid_list")}
+        = t(:'system/config/edit/type/uid_list')
 
     - if type == 'html'
       = haml :'partials/editor', layout: false, locals: {editor_name: 'value', editor_label: t(:'system/config/edit/value'), editor_data: value}
