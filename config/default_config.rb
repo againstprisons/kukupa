@@ -94,6 +94,10 @@ module Kukupa
       :type => :html,
       :default => '<p></p>',
     },
+    "case-purposes" => {
+      :type => :json,
+      :default => '["advocacy", "ppc"]',
+    },
     "case-mail-template-groups" => {
       :type => :json,
       :default => '[]',

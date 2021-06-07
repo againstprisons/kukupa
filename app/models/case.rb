@@ -1,7 +1,4 @@
 class Kukupa::Models::Case < Sequel::Model
-  # Allowed case purposes
-  ALLOWED_PURPOSES = %w[advocacy ppc]
-
   # Allowed case durations
   ALLOWED_DURATIONS = %w[short medium long]
 
@@ -82,15 +79,17 @@ class Kukupa::Models::Case < Sequel::Model
       type: :date,
     },
     case_purpose: {
+      field_name: 'case_purpose[]',
       tl_key: :'case_purpose',
       type: :select,
-      select_options: ALLOWED_PURPOSES.map {|pr| {value: pr, tl_key: "case_purpose/#{pr}".to_sym}},
+      select_options: proc { Kukupa.app_config['case-purposes'].map {|pr| {value: pr, tl_key: "case_purpose/#{pr}".to_sym}} }, 
       required: true,
+      multiple: true,
     },
     case_duration: {
       tl_key: :'case_duration',
       type: :select,
-      select_options: ALLOWED_DURATIONS.map {|pr| {value: pr, tl_key: "case_duration/#{pr}".to_sym}},
+      select_options: proc { ALLOWED_DURATIONS.map {|pr| {value: pr, tl_key: "case_duration/#{pr}".to_sym}} },
       required: true,
     },
     global_note: {
@@ -98,7 +97,7 @@ class Kukupa::Models::Case < Sequel::Model
       type: :editor,
     },
   }
-  
+
   class ReconnectHelpers
     extend Kukupa::Helpers::ReconnectHelpers
   end
@@ -229,7 +228,13 @@ class Kukupa::Models::Case < Sequel::Model
 
     ps
   end
-  
+
+  def get_purposes
+    _purpose = [self.purpose&.split(',')&.map(&:strip)].flatten.compact
+    _purpose = [Kukupa.app_config['case-purposes'].first] if _purpose.empty?
+    _purpose
+  end
+
   def create_in_reconnect!(opts = {})
     return :not_enabled unless Kukupa.app_config['reconnect-create-penpals']
 

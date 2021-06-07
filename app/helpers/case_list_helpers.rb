@@ -25,7 +25,7 @@ module Kukupa::Helpers::CaseListHelpers
         :open => c.is_open,
         :prison => prisons[prison.to_s],
         :prn => c.decrypt(:prisoner_number),
-        :purpose => c.purpose,
+        :purpose => c.get_purposes,
       }
     end
 
@@ -54,8 +54,10 @@ module Kukupa::Helpers::CaseListHelpers
     when :purpose
       purposes = {}
       cases.each do |c|
-        purposes["case_purpose/#{c[:purpose]}".to_sym] ||= []
-        purposes["case_purpose/#{c[:purpose]}".to_sym] << c
+        c[:purpose].each do |pr|
+          purposes["case_purpose/#{pr}".to_sym] ||= []
+          purposes["case_purpose/#{pr}".to_sym] << c
+        end
       end
 
       purposes

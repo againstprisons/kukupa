@@ -57,23 +57,25 @@
             %span.badge= t(:'required')
 
       - if %i[text number date].include?(fd[:type])
-        %input{type: fd[:type], name: fd[:name], id: fd[:name], required: fd[:required] || false, placeholder: friendly, value: value}
+        %input{type: fd[:type], name: fd[:field_name] || fd[:name], id: fd[:name], required: fd[:required] || false, placeholder: friendly, value: value}
 
       - elsif fd[:type] == :select
-        %select{name: fd[:name], id: fd[:name], required: fd[:required]}
-          - fd[:select_options].each do |opt|
-            %option{value: opt[:value], selected: value == opt[:value]}
+        %select{name: fd[:field_name] || fd[:name], id: fd[:name], required: fd[:required] || false, multiple: fd[:multiple] || false}
+          - select_options = fd[:select_options]
+          - select_options = select_options.call() if select_options.is_a?(Proc)
+          - select_options.each do |opt|
+            %option{value: opt[:value], selected: value.is_a?(Array) ? value.include?(opt[:value]) : value == opt[:value]}
               = t(opt[:tl_key], casetype: case_obj.type)
 
       - elsif fd[:type] == :checkbox
         %label{for: fd[:name]}
-          %input{type: :checkbox, name: fd[:name], id: fd[:name], checked: value}
+          %input{type: :checkbox, name: fd[:field_name] || fd[:name], id: fd[:name], checked: value}
           = friendly
           - if fd[:required]
             %span.badge= t(:'required')
 
       - elsif fd[:type] == :editor
-        = haml :'partials/editor', layout: false, locals: {editor_name: fd[:name], editor_label: friendly, editor_data: value}
+        = haml :'partials/editor', layout: false, locals: {editor_name: fd[:field_name] || fd[:name], editor_label: friendly, editor_data: value}
         .y-margin= ""
 
     %button.pure-button.button.button-primary{type: 'submit'}

@@ -104,7 +104,7 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
       case_address: @address,
       case_global_note: @global_note,
       case_duration: @case.duration,
-      case_purpose: @case.purpose,
+      case_purpose: @case.get_purposes,
       case_is_new: @case_is_new,
       case_triage_task: @case_triage_task,
       case_assigned_advocates: @case_assigned_advocates,
