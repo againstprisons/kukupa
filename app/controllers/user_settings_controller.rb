@@ -59,6 +59,9 @@ class Kukupa::Controllers::UserSettingsController < Kukupa::Controllers::Applica
 
     @user.encrypt(:name, @name)
     @user.save
+    
+    Kukupa::Models::UserFilter.clear_filters_for(@user)
+    Kukupa::Models::UserFilter.create_filters_for(@user)
 
     flash :success, t(:'usersettings/change_name/success', name: @name)
     redirect url("/user")

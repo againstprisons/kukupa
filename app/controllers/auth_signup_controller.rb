@@ -79,6 +79,9 @@ class Kukupa::Controllers::AuthSignupController < Kukupa::Controllers::Applicati
     # invalidate the invite token
     @token.invalidate!
 
+    # Generate filters
+    Kukupa::Models::UserFilter.create_filters_for(@user)
+
     # redirect to login
     flash :success, t(:'auth/signup/success')
     redirect to("/auth")
