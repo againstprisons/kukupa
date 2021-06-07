@@ -1,9 +1,21 @@
 import h from 'vhtml'
 /** @jsx h */
 
+export const SearchHelp = ({ children, ...props }) => (
+  <div>
+    You can search by a partial name, an email address, or a user ID.
+    <ul className="usersearch--helplist">
+      <li>To search by name, enter at least one word.</li>
+      <li>To search by email address, enter the full email address.</li>
+      <li>To search by user ID, enter it, prefixed by a <code>#</code> character.</li>
+    </ul>
+  </div>
+)
+
 export const UserItem = ({ children, user, ...props }) => (
   <li id={`usersearch--uid${user.uid}`} className="usersearch--user" data-uid={user.uid} data-name={user.name} {...props}>
-    <strong className="usersearch--user--name">{user.name}</strong>
+    <i className="fa fa-user" />&nbsp;
+    <span className="usersearch--user--name">{user.name}</span>
     <ul className="usersearch--user--tags inline-list">
       {user.tags.map(tag => (
         <li className="usersearch--user--tags--tag">
@@ -46,7 +58,9 @@ export const enableUserSearch = (searchField) => {
 
     let selectedElement = document.getElementById(`usersearch--selected${fieldId}`)
     if (typeof selectedElement !== "undefined") {
-      selectedElement.innerHTML = ''
+      selectedElement.innerHTML = (
+        <SearchHelp />
+      )
     }
 
     let searchElement = document.getElementById(`usersearch--search${fieldId}`)
@@ -78,8 +92,11 @@ export const enableUserSearch = (searchField) => {
             {el.attributes['data-name'].value}
             &nbsp;(ID {el.attributes['data-uid'].value})
           </span>
-          <span className="badge x-margin" onclick={`window.kukupa.user_search['${fieldId}'].searchAgainOnClickHandler(event)`}>
-            <i className="fa fa-search" />
+          <span
+            className="usersearch--selecteduser--again usersearch-smolbutton"
+            onclick={`window.kukupa.user_search['${fieldId}'].searchAgainOnClickHandler(event)`}
+          >
+            <i className="fa fa-search" />&nbsp;
             Search again
           </span>
         </div>
@@ -110,7 +127,7 @@ export const enableUserSearch = (searchField) => {
       })
       .then(response => response.json())
       .then(result => {
-        if (result.users.length == 0) {
+        if (typeof result.users === "undefined" || result.users.length == 0) {
           listElement.innerHTML = (
             <li className="usersearch--user usersearch--user--invalid">
               <span>No results</span>
@@ -133,10 +150,12 @@ export const enableUserSearch = (searchField) => {
 
   displayElement.innerHTML = (
     <div>
-      <div id={`usersearch--selected${fieldId}`} className="usersearch--selecteduser inline-form"/>
+      <div id={`usersearch--selected${fieldId}`} className="usersearch--selecteduser inline-form">
+        <SearchHelp />
+      </div>
       <input
         id={`usersearch--search${fieldId}`} className="usersearch--search" type="search"
-        placeholder="Start typing a name to search…"
+        placeholder="Start typing to search…"
         onsubmit={`event.preventDefault()`}
         onchange={`window.kukupa.user_search['${fieldId}'].onChangeHandler(event)`} />
 
