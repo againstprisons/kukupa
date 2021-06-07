@@ -11,8 +11,10 @@
     %h1= t(:'system/roles/groups/add_user/section_title')
 
     %label{for: 'user'}= t(:'system/roles/groups/add_user/user_id')
-    %input#user{type: 'number', name: 'user', required: true, placeholder: t(:'system/roles/groups/add_user/user_id')}
+    %input.user-search-field#user{type: 'number', name: 'user', required: true, placeholder: t(:'system/roles/groups/add_user/user_id')}
 
     %button.pure-button.button.button-primary{type: 'submit'}
       %i.fa.fa-user-plus= ""
       = t(:'system/roles/groups/add_user/submit')
+
+.async-load{:'data-sources' => JSON.generate(['/static/user_search.bundle.js'])}
