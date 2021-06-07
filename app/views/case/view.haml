@@ -48,7 +48,7 @@
             = succeed ': ' do
               = t(:'case_purpose')
             %span
-              = t("case_purpose/#{case_purpose}".to_sym)
+              = case_purpose.map{|pr| t("case_purpose/#{pr}".to_sym)}.join(', ')
 
         - if case_duration
           %li

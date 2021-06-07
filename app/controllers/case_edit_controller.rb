@@ -49,7 +49,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
     @birth_date = Chronic.parse(@birth_date, guess: true) if @birth_date
     @release_date = @case.decrypt(:release_date)
     @release_date = Chronic.parse(@release_date, guess: true) if @release_date
-    @case_purpose = @case.purpose
+    @case_purpose = @case.get_purposes
     @case_duration = @case.duration
     @reconnect_id = @case.reconnect_id
     @reconnect_data = reconnect_penpal(cid: @reconnect_id) if @reconnect_id.to_i.positive?
@@ -107,7 +107,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       @release_date = Chronic.parse(request.params['release_date']&.strip, guess: true)
       @global_note = request.params['global_note']&.strip
       @global_note = Sanitize.fragment(@global_note, Sanitize::Config::RELAXED)
-      @case_purpose = request.params['case_purpose']&.strip&.downcase
+      @case_purpose = [request.params['case_purpose']].flatten.compact.map(&:strip).map(&:downcase)
       @case_purpose = Kukupa::Models::Case::ALLOWED_PURPOSES.first if @case_purpose.nil? || @case_purpose&.empty?
       @case_duration = request.params['case_duration']&.strip&.downcase
       @case_duration = Kukupa::Models::Case::ALLOWED_DURATIONS.first if @case_duration.nil? || @case_duration&.empty?
@@ -119,9 +119,11 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
           return redirect request.path
         end
 
-        unless Kukupa::Models::Case::ALLOWED_PURPOSES.include?(@case_purpose)
-          flash :error, t(:'case/edit/edit/errors/missing_required')
-          return redirect request.path
+        @case_purpose.each do |purpose|
+          unless Kukupa.app_config['case-purposes'].include?(purpose)
+            flash :error, t(:'case/edit/edit/errors/missing_required')
+            return redirect request.path
+          end
         end
 
         # normal cases are always private
@@ -145,7 +147,7 @@ class Kukupa::Controllers::CaseEditController < Kukupa::Controllers::CaseControl
       @case.encrypt(:birth_date, @birth_date&.strftime('%Y-%m-%d'))
       @case.encrypt(:release_date, @release_date&.strftime('%Y-%m-%d'))
       @case.encrypt(:global_note, @global_note)
-      @case.purpose = @case_purpose
+      @case.purpose = @case_purpose.join(',')
       @case.duration = @case_duration
       @case.is_private = @is_private
       @case.save

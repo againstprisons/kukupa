@@ -229,7 +229,13 @@ class Kukupa::Models::Case < Sequel::Model
 
     ps
   end
-  
+
+  def get_purposes
+    _purpose = [self.purpose&.split(',')&.map(&:strip)].flatten.compact
+    _purpose = [ALLOWED_PURPOSES.first] if _purpose.empty?
+    _purpose
+  end
+
   def create_in_reconnect!(opts = {})
     return :not_enabled unless Kukupa.app_config['reconnect-create-penpals']
 
