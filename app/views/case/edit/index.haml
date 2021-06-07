@@ -61,8 +61,10 @@
 
       - elsif fd[:type] == :select
         %select{name: fd[:name], id: fd[:name], required: fd[:required]}
-          - fd[:select_options].each do |opt|
-            %option{value: opt[:value], selected: value == opt[:value]}
+          - select_options = fd[:select_options]
+          - select_options = select_options.call() if select_options.is_a?(Proc)
+          - select_options.each do |opt|
+            %option{value: opt[:value], selected: value.is_a?(Array) ? value.include?(opt[:value]) : value == opt[:value]}
               = t(opt[:tl_key], casetype: case_obj.type)
 
       - elsif fd[:type] == :checkbox

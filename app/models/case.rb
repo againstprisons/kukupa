@@ -90,7 +90,7 @@ class Kukupa::Models::Case < Sequel::Model
     case_duration: {
       tl_key: :'case_duration',
       type: :select,
-      select_options: ALLOWED_DURATIONS.map {|pr| {value: pr, tl_key: "case_duration/#{pr}".to_sym}},
+      select_options: proc { ALLOWED_DURATIONS.map {|pr| {value: pr, tl_key: "case_duration/#{pr}".to_sym}} },
       required: true,
     },
     global_note: {
