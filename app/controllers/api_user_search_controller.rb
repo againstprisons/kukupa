@@ -1,6 +1,6 @@
 class Kukupa::Controllers::ApiUserSearchController < Kukupa::Controllers::ApiController
   add_route :get, '/'
-  # add_route :post, '/'
+  add_route :post, '/'
 
   def initialize(*args)
     super
