@@ -89,6 +89,16 @@ class Kukupa::Controllers::ApiUserSearchController < Kukupa::Controllers::ApiCon
       end
     end.compact
 
+    # if we've been asked to only show assignable users, filter the user
+    # list by whether the users have the "case:assignable" role
+    if request.params['only_assignable'].to_i.positive?
+      users = users.map do |user|
+        next nil unless user.has_role?('case:assignable')
+        next nil if user.is_at_case_limit?
+        user
+      end.compact
+    end
+
     # gather user information
     users.map! do |user|
       tags = user.roles.map{|r| /tag\:(\w+)/.match(r)&.[](1)}.compact.uniq.map do |tag|
