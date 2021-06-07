@@ -3,11 +3,17 @@ import h from 'vhtml'
 
 export const SearchHelp = ({ children, ...props }) => (
   <div>
-    You can search by a partial name, an email address, or a user ID.
+    You can search by a partial name, an email address, a partial tag, or a user ID:
     <ul className="usersearch--helplist">
-      <li>To search by name, enter at least one word.</li>
+      <li>To search by partial name, enter at least one word of the name.</li>
       <li>To search by email address, enter the full email address.</li>
-      <li>To search by user ID, enter it, prefixed by a <code>#</code> character.</li>
+      <li>To search by partial tag, enter a <code>!</code> character, followed by part of the tag.</li>
+      <li>To search by user ID, enter a <code>#</code> character, followed by the user ID.</li>
+    </ul>
+    You can specify multiple search terms to filter the results, for example:
+    <ul className="usersearch--helplist">
+      <li>To see all advocacy volunteers: <code>!advo !vol</code></li>
+      <li>To see users with "test" in their name who are also NRER volunteers: <code>test !nrer</code></li>
     </ul>
   </div>
 )
