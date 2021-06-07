@@ -10,7 +10,7 @@
     %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
     %h1= t(:'system/roles/groups/add_user/section_title')
 
-    %label{for: 'user'}= t(:'system/roles/groups/add_user/user_id')
+    %label.sr-only{for: 'user'}= t(:'system/roles/groups/add_user/user_id')
     %input.user-search-field#user{type: 'number', name: 'user', required: true, placeholder: t(:'system/roles/groups/add_user/user_id')}
 
     %button.pure-button.button.button-primary{type: 'submit'}
