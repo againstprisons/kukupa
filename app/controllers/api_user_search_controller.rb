@@ -48,6 +48,33 @@ class Kukupa::Controllers::ApiUserSearchController < Kukupa::Controllers::ApiCon
           .select(:id, :email)
           .where(email: qp)
           .map(&:id)
+      
+      # is this a partial tag?
+      elsif !((partialtag = /\!(\w+)/.match(qp)&.[](1)&.downcase).nil?)
+        partialtag_uids = []
+
+        tags = Kukupa.languages[Kukupa.default_language].keys.map do |tlkey|
+          tag = /^tag\/(\w+)$/.match(tlkey.to_s)&.[](1)&.downcase
+          next nil unless tag
+
+          unless tag.include?(partialtag)
+            unless t(tlkey).downcase.include?(partialtag)
+              next nil
+            end
+          end
+
+          tlkey.to_s.gsub('/', ':')
+        end.compact
+        
+        tags.each do |role|
+          partialtag_uids << Kukupa::Models::UserRole.where(role: role).map(&:user_id)
+
+          Kukupa::Models::RoleGroupRole.where(role: role).map do |rgr|
+            partialtag_uids << rgr.role_group.role_group_users.map(&:user_id)
+          end
+        end
+
+        partialtag_uids.flatten.compact.uniq
 
       # nothing above matched, treat as a partial name
       else
