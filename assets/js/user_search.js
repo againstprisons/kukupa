@@ -62,7 +62,9 @@ export const enableUserSearch = (searchField) => {
     e.preventDefault()
 
     let el = e.target
-    while ((el = el.parentElement) && !el.classList.contains('usersearch--user')) {}
+    if (!el.classList.contains('usersearch--user')) {
+      while ((el = el.parentElement) && !el.classList.contains('usersearch--user')) {}
+    }
 
     let uid = el.attributes['data-uid'].value
     searchField.setAttribute('value', uid)
