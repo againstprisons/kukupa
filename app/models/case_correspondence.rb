@@ -25,7 +25,7 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     # try to match the message To address against the reply-to pattern,
     # returning early if there's no match
     tm = nil
-    message.to.each do |to|
+    [message.to, message.cc].flatten.compact.each do |to|
       tm = to_address_re.match(to)
       break if tm
     end
