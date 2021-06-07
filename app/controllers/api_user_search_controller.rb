@@ -99,6 +99,19 @@ class Kukupa::Controllers::ApiUserSearchController < Kukupa::Controllers::ApiCon
       end.compact
     end
 
+    # if we've been asked to only show users assigned to the given case,
+    # filter by CaseAssignedAdvocate
+    if (case_id = request.params['only_case_assigned'].to_i).positive?
+      users = users.map do |user|
+        next nil unless Kukupa::Models::CaseAssignedAdvocate
+          .where(case: case_id, user: user.id)
+          .count
+          .positive?
+
+        user
+      end.compact
+    end
+
     # gather user information
     users.map! do |user|
       tags = user.roles.map{|r| /tag\:(\w+)/.match(r)&.[](1)}.compact.uniq.map do |tag|
