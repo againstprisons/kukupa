@@ -29,6 +29,8 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
       edit_url = Addressable::URI.parse(url("/case/#{case_obj.id}/task/#{t.id}"))
       content = Sanitize.fragment(t.decrypt(:content).to_s, Sanitize::Config::RESTRICTED)
 
+      next nil if t.deadline > Chronic.parse('in 2 weeks')
+
       {
         case: case_obj,
         case_name: case_obj.get_name,
@@ -39,7 +41,7 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
         view_url: view_url,
         edit_url: edit_url,
       }
-    end
+    end.compact
 
     @my_cases = Kukupa::Models::Case.assigned_to(@user).map do |c|
       url = Addressable::URI.parse(url("/case/#{c.id}/view"))
