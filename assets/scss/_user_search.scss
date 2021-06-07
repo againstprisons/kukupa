@@ -1,0 +1,38 @@
+.usersearch-hidden {
+  display: none !important;
+}
+
+.usersearch {
+  border: 1px solid $color_foreground_dimmed;
+  border-radius: 4px;
+  padding: 0.25rem;
+}
+
+.usersearch--selecteduser {
+  &:empty {
+    display: none;
+  }
+  
+  padding: 0.25rem 0.5rem;
+}
+
+.usersearch--list {
+  list-style: none outside none;
+  margin: 0;
+  padding: 0;
+
+  &:not(:empty) {
+    border: 1px solid $color_foreground_dimmed;
+    border-radius: 4px; 
+  }
+
+  .usersearch--user {
+    list-style: none outside none;
+    margin: 0.25rem 0;
+    padding: 0.25rem 0.5rem;
+    
+    &:not(:last-child) {
+      border-bottom: 1px solid $color_foreground_dimmed;
+    }
+  }
+}

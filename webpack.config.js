@@ -10,6 +10,7 @@ const config = {
   entry: {
     index: path.resolve(__dirname, 'assets', 'js', 'index.js'),
     editor: path.resolve(__dirname, 'assets', 'js', 'editor.js'),
+    user_search: path.resolve(__dirname, 'assets', 'js', 'user_search.js'),
   },
  
   output: {
@@ -25,7 +26,17 @@ const config = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env']
+            presets: [
+              '@babel/preset-env',
+              [
+                '@babel/preset-react',
+                {
+                  pragma: "h",
+                  pragmaFrag: "h",
+                  runtime: "classic",
+                }
+              ],
+            ]
           }
         }
       }
