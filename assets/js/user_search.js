@@ -18,8 +18,13 @@ export const SearchHelp = ({ children, ...props }) => (
   </div>
 )
 
-export const UserItem = ({ children, user, ...props }) => (
-  <li id={`usersearch--uid${user.uid}`} className="usersearch--user" data-uid={user.uid} data-name={user.name} {...props}>
+export const UserItem = ({ children, user, fieldId, ...props }) => (
+  <li
+    id={`usersearch--uid${user.uid}`} className="usersearch--user"
+    data-uid={user.uid} data-name={user.name}
+    role="button" aria-controls={`usersearch--selected${fieldId} ${fieldId}`}
+    {...props}
+  >
     <i className="fa fa-user" />&nbsp;
     <span className="usersearch--user--name">{user.name}</span>
     <ul className="usersearch--user--tags inline-list">
@@ -114,11 +119,13 @@ export const enableUserSearch = (searchField) => {
     let listElement = document.getElementById(`usersearch--list${fieldId}`)
     if (typeof listElement !== "undefined") {
       listElement.innerHTML = ''
+      listElement.setAttribute('aria-hidden', 'true')
     }
     
     let searchElement = document.getElementById(`usersearch--search${fieldId}`)
     if (typeof searchElement !== "undefined") {
       searchElement.classList.add('usersearch-hidden')
+      searchElement.setAttribute('aria-hidden', 'true')
     }
 
     return false
@@ -150,7 +157,10 @@ export const enableUserSearch = (searchField) => {
           )
         } else {
           listElement.innerHTML = result.users.map(user => (
-            <UserItem user={user} onclick={`window.kukupa.user_search['${fieldId}'].itemOnClickHandler(event)`} />
+            <UserItem
+              user={user} fieldId={fieldId}
+              onclick={`window.kukupa.user_search['${fieldId}'].itemOnClickHandler(event)`}
+            />
           )).join('')
         }
       })
@@ -171,8 +181,10 @@ export const enableUserSearch = (searchField) => {
       <input
         id={`usersearch--search${fieldId}`} className="usersearch--search" type="search"
         placeholder="Start typing to search…"
+        aria-haspopup="listbox"
         onsubmit={`event.preventDefault()`}
-        onchange={`window.kukupa.user_search['${fieldId}'].onChangeHandler(event)`} />
+        onchange={`window.kukupa.user_search['${fieldId}'].onChangeHandler(event)`} 
+      />
 
       <ul className="usersearch--list" id={`usersearch--list${fieldId}`} />
     </div>
