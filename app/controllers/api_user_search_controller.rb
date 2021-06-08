@@ -103,10 +103,16 @@ class Kukupa::Controllers::ApiUserSearchController < Kukupa::Controllers::ApiCon
     # filter by CaseAssignedAdvocate
     if (case_id = request.params['only_case_assigned'].to_i).positive?
       users = users.map do |user|
-        next nil unless Kukupa::Models::CaseAssignedAdvocate
+        is_assigned = Kukupa::Models::CaseAssignedAdvocate
           .where(case: case_id, user: user.id)
           .count
           .positive?
+
+        unless is_assigned
+          unless user.has_role?('case:view_all')
+            next nil
+          end
+        end
 
         user
       end.compact
