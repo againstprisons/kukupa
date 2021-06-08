@@ -1,0 +1,88 @@
+.userinfo-view{'data-user-id': user[:obj].id}
+  %h1= title
+
+  - if has_role?('system:roles:access')
+    %a.pure-button.button{href: url("/system/roles/edit/#{user[:obj].id}"), target: '_blank'}
+      %i.fa.fa-list-alt= ""
+      = t(:'userinfo/view/actions/role_management')
+
+  .form-main
+    %h1= t(:'userinfo/view/details/section_title')
+
+    %ul
+      %li
+        = succeed ': ' do
+          %strong= t(:'user_id')
+        %code
+          &= user[:obj].id
+
+      %li
+        = succeed ': ' do
+          %strong= t(:'email_address')
+        %code
+          &= user[:obj].email
+
+      %li
+        = succeed ': ' do
+          %strong= t(:'userinfo/view/details/tags')
+        %ul
+          - user[:tags].each do |t|
+            %li= t("tag/#{t}".to_sym)
+      
+  .form-main
+    %h1= t(:'userinfo/view/assigned_cases/section_title')
+
+    - if user[:cases].empty?
+      %p= t(:'userinfo/view/assigned_cases/none')
+
+    %ul
+      - user[:cases].each do |c|
+        %li
+          %a{href: url("/case/#{c[:obj].id}/view"), target: '_blank'}
+            %strong
+              &= c[:name]
+            %span
+              = surround ' (', ') ' do
+                &= c[:pseudonym]
+
+          %ul
+            %li
+              = succeed ': ' do
+                %strong= t(:'case_type')
+              %span
+                = t("case_type/#{c[:type]}".to_sym)
+
+            %li
+              = succeed ': ' do
+                %strong= t(:'case_purpose')
+              %span
+                = c[:purposes].map{|p| t("case_purpose/#{p}".to_sym)}.join(', ')
+
+  .form-main
+    %h1= t(:'userinfo/view/assigned_tasks/section_title')
+
+    - if user[:tasks].empty?
+      %p= t(:'userinfo/view/assigned_tasks/none')
+
+    %ul
+      - user[:tasks].each do |ct|
+        %li
+          %a{href: url("/case/#{ct[:case][:obj].id}/task/#{ct[:obj].id}"), target: '_blank'}
+            &= ct[:content]
+
+        %ul
+          %li
+            = succeed ': ' do
+              %strong= t("case_type/#{ct[:case][:type]}".to_sym)
+            %a{href: url("/case/#{ct[:case][:obj].id}/view"), target: '_blank'}
+              &= ct[:case][:name]
+
+          %li
+            = succeed ': ' do
+              %strong= t(:'case_renderable/task/deadline')
+            %span
+              = t(:'case_renderable/creation/date_only', ts: ct[:obj].deadline)
+            - if ct[:obj].deadline < Time.now
+              %span.badge
+                %i.fa.fa-clock-o= ""
+                = t(:'case_renderable/task/deadline/overdue')

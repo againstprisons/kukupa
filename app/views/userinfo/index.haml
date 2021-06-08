@@ -1,0 +1,15 @@
+#userinfo-index
+  %h1= title
+  
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'userinfo/index/section_title')
+
+    %label{for: 'uid'}= t(:'userinfo/index/field')
+    %input.user-search-field#uid{name: 'uid', type: 'text', required: true, placeholder: t(:'user_id')}
+    
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-arrow-right= ""
+      = t(:'userinfo/index/submit')
+
+.async-load{:'data-sources' => JSON.generate(['/static/user_search.bundle.js'])}

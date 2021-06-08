@@ -64,6 +64,7 @@
 :'case_purpose/advocacy': "Advocacy"
 :'case_purpose/ppc': "Prisoner Political Committee"
 :'case_privacy': "<%= t(\"case_type/#{casetype}\".to_sym) %> is private?"
+:'case_type': "Case type"
 :'case_type/case': "Case"
 :'case_type/case/plural': "Cases"
 :'case_type/project': "Project"
@@ -839,6 +840,23 @@
 :'usersettings/mfa/disable/success': "Successfully disabled multi-factor authentication."
 :'usersettings/mfa/disable/errors/has_roles': "You can not disable multi-factor authentication as your account has permissions granted that require it to be enabled."
 :'usersettings/mfa/disable/errors/password_incorrect': "Your password was incorrect. Please try again."
+
+# User info - index
+:'userinfo/index/title': "Users"
+:'userinfo/index/section_title': "Find a user"
+:'userinfo/index/field': "Search query"
+:'userinfo/index/submit': "Jump to user"
+:'userinfo/index/errors/not_found': "The user you have tried to inspect could not be found."
+
+# User info - view
+:'userinfo/view/title': "Viewing user: <%= e(name) %>"
+:'userinfo/view/actions/role_management': "Role management"
+:'userinfo/view/details/section_title': "User details"
+:'userinfo/view/details/tags': "Assigned tags"
+:'userinfo/view/assigned_cases/section_title': "Assigned cases / projects"
+:'userinfo/view/assigned_cases/none': "This user is not assigned to any cases."
+:'userinfo/view/assigned_tasks/section_title': "Incomplete tasks"
+:'userinfo/view/assigned_tasks/none': "No incomplete tasks!"
 
 # System admin - dashboard
 :'system/index/title': "System admin"
