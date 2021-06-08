@@ -15,7 +15,12 @@ class Kukupa::Controllers::ApiUserSearchController < Kukupa::Controllers::ApiCon
 
   def index
     if @current_user
-      unless @current_user.has_role?('user:search')
+      allowed_perms = [
+        @current_user.has_role?('user:search'),
+        @current_user.has_role?('case:assignable'),
+      ]
+
+      if allowed_perms.none?
         return api_json({
           success: false,
           error: 'NO_PERMISSIONS',
@@ -34,7 +39,7 @@ class Kukupa::Controllers::ApiUserSearchController < Kukupa::Controllers::ApiCon
     end
 
     # get potential user IDs for each query part
-    query_parts = query.split(' ').map do |qp|
+    query_parts = query.split(/\s+/).map do |qp|
       qp.strip!
       next nil if qp.empty?
 
