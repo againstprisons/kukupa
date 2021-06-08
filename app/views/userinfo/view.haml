@@ -26,6 +26,8 @@
         = succeed ': ' do
           %strong= t(:'userinfo/view/details/tags')
         %ul
+          - if user[:tags].empty?
+            %li= t(:'tag/no_tags')
           - user[:tags].each do |t|
             %li= t("tag/#{t}".to_sym)
 
