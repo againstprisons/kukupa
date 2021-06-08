@@ -224,7 +224,7 @@ class Kukupa::Models::Case < Sequel::Model
 
   def get_pseudonym
     ps = self.decrypt(:pseudonym)
-    ps = self.decrypt(:first_name) unless ps
+    ps = self.decrypt(:first_name) if ps.nil? || ps&.empty?
 
     ps
   end
