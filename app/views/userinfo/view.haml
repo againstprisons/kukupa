@@ -28,7 +28,18 @@
         %ul
           - user[:tags].each do |t|
             %li= t("tag/#{t}".to_sym)
-      
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: url("/uinfo/#{user[:obj].id}/-/admin-notes")}
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %h1= t(:'userinfo/view/admin_notes/section_title')
+
+    = haml :'partials/editor', layout: false, locals: {editor_name: 'notes', editor_label: t(:'userinfo/view/admin_notes/field'), editor_data: user[:notes]}
+    .y-margin= ""
+
+    %button.pure-button.button.button-primary{type: 'submit'}
+      %i.fa.fa-pencil-square-o= ""
+      = t(:'userinfo/view/admin_notes/submit')
+
   .form-main
     %h1= t(:'userinfo/view/assigned_cases/section_title')
 
@@ -86,3 +97,5 @@
               %span.badge
                 %i.fa.fa-clock-o= ""
                 = t(:'case_renderable/task/deadline/overdue')
+
+.async-load{:'data-sources' => JSON.generate(['/static/editor.bundle.js'])}

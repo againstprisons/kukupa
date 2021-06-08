@@ -2,7 +2,7 @@ require 'chronic'
 
 class Kukupa::Controllers::UserInfoViewController < Kukupa::Controllers::ApplicationController
   add_route :get, '/'
-  add_route :post, '/'
+  add_route :post, '/-/admin-notes', method: :admin_notes
 
   def before(uid)
     return halt 404 unless logged_in?
@@ -48,9 +48,21 @@ class Kukupa::Controllers::UserInfoViewController < Kukupa::Controllers::Applica
         obj: @user,
         name: @user_name,
         tags: @user.roles.map{|r| /tag\:(\w+)/.match(r)&.[](1)}.compact.uniq,
+        notes: @user.decrypt(:admin_notes),
         cases: @user_cases,
         tasks: @user_tasks,
       },
     })
+  end
+  
+  def admin_notes(uid)
+    @notes = request.params['notes']&.strip
+    @notes = nil if @notes&.empty?
+    
+    @user.encrypt(:admin_notes, @notes)
+    @user.save
+    
+    flash :success, t(:'userinfo/view/admin_notes/success')
+    redirect url("/uinfo/#{@user.id}")
   end
 end
