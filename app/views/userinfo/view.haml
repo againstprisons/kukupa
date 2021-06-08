@@ -65,11 +65,12 @@
               %span
                 = t("case_type/#{c[:type]}".to_sym)
 
-            %li
-              = succeed ': ' do
-                %strong= t(:'case_purpose')
-              %span
-                = c[:purposes].map{|p| t("case_purpose/#{p}".to_sym)}.join(', ')
+            - if c[:type] == 'case'
+              %li
+                = succeed ': ' do
+                  %strong= t(:'case_purpose')
+                %span
+                  = c[:purposes].map{|p| t("case_purpose/#{p}".to_sym)}.join(', ')
 
   .form-main
     %h1= t(:'userinfo/view/incomplete_tasks/section_title')
