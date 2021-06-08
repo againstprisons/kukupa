@@ -2,11 +2,13 @@ $responsive_width: 64rem;
 $midsplash_width: 48rem;
 
 $color_background: #fff;
-$color_background_dimmed: #f0f0f0;
+$color_background_dimmed: #e6e6e6;
 $color_foreground: #000;
 $color_foreground_dimmed: #606060;
 $color_accent: #0aa;
 $color_highlight: #ffe690;
+
+$button_hover_background: linear-gradient(transparent, rgba(0, 0, 0, 0.05) 40%, rgba(0, 0, 0, 0.1));
 
 $symbolic_primary_foreground: #fff;
 $symbolic_primary_background: #0078e7;

@@ -1,0 +1,75 @@
+.usersearch-hidden {
+  display: none !important;
+}
+
+.usersearch-smolbutton
+{
+  display: inline-block;
+  vertical-align: baseline;
+
+  padding: 0.25em 0.5em;
+  margin: 0 0.5rem;
+
+  background-color: $color_background_dimmed;
+  color: $color_foreground;
+
+  border: 1px solid transparent;
+  border-radius: 2px;
+
+  &:hover {
+    cursor: pointer;
+    background-image: $button_hover_background;
+  }
+}
+
+.usersearch {
+  border: 1px solid $color_foreground_dimmed;
+  border-radius: 4px;
+  padding: 0.25rem;
+}
+
+.usersearch--selecteduser {
+  &:empty {
+    display: none;
+  }
+
+  padding: 0.25rem 0.5rem;
+}
+
+.usersearch--helplist {
+  margin: 0.25rem 0;
+}
+
+.usersearch--list {
+  list-style: none outside none;
+  margin: 0;
+  padding: 0;
+
+  &:not(:empty) {
+    border: 1px solid transparent;
+    border-radius: 2px; 
+  }
+
+  .usersearch--user {
+    list-style: none outside none;
+    margin: 0;
+    padding: 0.5rem 0.5rem;
+    border-radius: 2px;
+
+    color: $color_foreground;
+    background-color: $color_background;
+
+    &:not(.usersearch--user--invalid) {
+      background-color: $color_background_dimmed;
+
+      &:hover {
+        cursor: pointer;
+        background-image: $button_hover_background;
+      }
+    }
+
+    &:not(:last-child) {
+      margin-bottom: 0.25rem;
+    }
+  }
+}

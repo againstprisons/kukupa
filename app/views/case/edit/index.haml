@@ -169,27 +169,7 @@
         %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
 
         %label{for: 'assignee'}= t(:'case/edit/assignees/assign/assignee_field')
-        %select#assignee{name: 'assignee', required: true}
-          - assigned_ids = case_assigned.map { |x| x[:id] }
-
-          - assignable_users_grouped.each do |tag, users|
-            %option{value: '-1', disabled: true}
-              = precede '🏷️ ' do
-                = t("tag/#{tag}".to_sym)
-
-            - users.each do |u|
-              - u_disabled = assigned_ids.include?(u[:id]) || u[:is_at_case_limit]
-              %option{value: u[:id], disabled: u_disabled}
-                = precede '&emsp;&emsp;' do
-                  &= u[:name] || "User ID #{u[:id]}"
-
-                - if assigned_ids.include?(u[:id])
-                  = surround ' [', '] ' do
-                    = t(:'case/edit/assignees/assign/item_disabled/already_assigned')
-
-                - if u[:is_at_case_limit]
-                  = surround ' [', '] ' do
-                    = t(:'case/edit/assignees/assign/item_disabled/case_limit')
+        %input.user-search-field#assignee{name: 'assignee', type: 'text', required: true, placeholder: t(:'user_id'), 'data-only-assignable': 1}
 
         %button.pure-button.button.button-primary{type: 'submit'}
           %i.fa.fa-user-o= ""
@@ -237,4 +217,4 @@
       %i.fa.fa-times-circle=""
       = t(:'case/edit/close_case/submit')
 
-.async-load{:'data-sources' => JSON.generate(['/static/editor.bundle.js'])}
+.async-load{:'data-sources' => JSON.generate(['/static/editor.bundle.js', '/static/user_search.bundle.js'])}
