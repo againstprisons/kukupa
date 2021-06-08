@@ -23,7 +23,7 @@
     %label{for: 'assignee'}
       = t(:'case/task/edit/edit/assignee_field')
       %span.badge= t(:'required')
-    %input.user-search-field#assignee{name: 'assignee', type: 'text', required: true, placeholder: t(:'user_id'), 'data-only-case-assigned': case_obj.id.to_s}
+    %input.user-search-field#assignee{name: 'assignee', type: 'text', required: true, placeholder: t(:'user_id'), value: task_assignee.id, 'data-only-case-assigned': case_obj.id.to_s}
 
     %label{for: 'deadline'}
       = t(:'case/task/edit/edit/deadline_field')
