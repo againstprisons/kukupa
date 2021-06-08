@@ -28,11 +28,13 @@ class Kukupa::Controllers::UserInfoViewController < Kukupa::Controllers::Applica
       }
     end
   
-    @user_tasks = Kukupa::Models::CaseTask.where(assigned_to: @user.id, completion: nil).map do |ct|
+    @user_tasks = Kukupa::Models::CaseTask.where(assigned_to: @user.id).map do |ct|
       case_obj = Kukupa::Models::Case[ct.case]
 
       {
         obj: ct,
+        creation: ct.creation,
+        completion: ct.completion,
         content: ct.decrypt(:content),
         case: {
           obj: case_obj,
@@ -40,7 +42,7 @@ class Kukupa::Controllers::UserInfoViewController < Kukupa::Controllers::Applica
           name: case_obj.get_name,
         }
       }
-    end
+    end.sort{|a, b| b[:creation] <=> a[:creation]}
 
     return haml(:'userinfo/view', :locals => {
       title: @title,
@@ -50,7 +52,10 @@ class Kukupa::Controllers::UserInfoViewController < Kukupa::Controllers::Applica
         tags: @user.roles.map{|r| /tag\:(\w+)/.match(r)&.[](1)}.compact.uniq,
         notes: @user.decrypt(:admin_notes),
         cases: @user_cases,
-        tasks: @user_tasks,
+        tasks: {
+          incomplete: @user_tasks.filter {|ct| ct[:completion].nil?},
+          complete: @user_tasks.reject {|ct| ct[:completion].nil?},
+        },
       },
     })
   end

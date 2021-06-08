@@ -70,14 +70,15 @@
                 = c[:purposes].map{|p| t("case_purpose/#{p}".to_sym)}.join(', ')
 
   .form-main
-    %h1= t(:'userinfo/view/assigned_tasks/section_title')
+    %h1= t(:'userinfo/view/incomplete_tasks/section_title')
+    
+    - if user[:tasks][:incomplete].empty?
+      %p= t(:'userinfo/view/incomplete_tasks/none')
 
-    - if user[:tasks].empty?
-      %p= t(:'userinfo/view/assigned_tasks/none')
-
-    %ul
-      - user[:tasks].each do |ct|
+    %ul.fa-ul
+      - user[:tasks][:incomplete].each do |ct|
         %li
+          %i.fa.fa-fw.fa-square-o= ""
           %a{href: url("/case/#{ct[:case][:obj].id}/task/#{ct[:obj].id}"), target: '_blank'}
             &= ct[:content]
 
@@ -97,5 +98,37 @@
               %span.badge
                 %i.fa.fa-clock-o= ""
                 = t(:'case_renderable/task/deadline/overdue')
+
+  .form-main
+    %h1= t(:'userinfo/view/complete_tasks/section_title')
+    
+    - if user[:tasks][:complete].empty?
+      %p= t(:'userinfo/view/complete_tasks/none')
+
+    %ul.fa-ul
+      - user[:tasks][:complete].each do |ct|
+        %li
+          %i.fa.fa-fw.fa-check-square-o= ""
+          %a{href: url("/case/#{ct[:case][:obj].id}/task/#{ct[:obj].id}"), target: '_blank'}
+            &= ct[:content]
+
+        %ul
+          %li
+            = succeed ': ' do
+              %strong= t("case_type/#{ct[:case][:type]}".to_sym)
+            %a{href: url("/case/#{ct[:case][:obj].id}/view"), target: '_blank'}
+              &= ct[:case][:name]
+
+          %li
+            = succeed ': ' do
+              %strong= t(:'case_renderable/task/completed')
+            %span
+              = t(:'case_renderable/creation/date_only', ts: ct[:completion])
+
+          %li
+            = succeed ': ' do
+              %strong= t(:'case_renderable/task/deadline')
+            %span
+              = t(:'case_renderable/creation/date_only', ts: ct[:obj].deadline)
 
 .async-load{:'data-sources' => JSON.generate(['/static/editor.bundle.js'])}
