@@ -1,5 +1,13 @@
 .usersearch-hidden {
-  display: none !important;
+  position: relative !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 1px !important;
+  width: 1px !important;
+  opacity: 0;
+  overflow: hidden;
+  clip: rect(1px 1px 1px 1px); /* IE 7+ use clip without commas */
+  clip: rect(1px, 1px, 1px, 1px); /* all other browsers use clip with commas */
 }
 
 .usersearch-smolbutton

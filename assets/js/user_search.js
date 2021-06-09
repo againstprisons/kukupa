@@ -56,7 +56,7 @@ export const enableUserSearch = (searchField) => {
   searchField.parentElement.insertBefore(displayElement, searchField)
 
   // Hide the original element
-  searchField.setAttribute('type', 'hidden')
+  searchField.classList.add('usersearch-hidden')
 
   window.kukupa.user_search[fieldId] = {
     fieldElement: searchField,
