@@ -32,3 +32,13 @@
     width: auto !important;
   }
 }
+
+.sr-only
+{
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px 1px 1px 1px); /* IE 7+ use clip without commas */
+  clip: rect(1px, 1px, 1px, 1px); /* all other browsers use clip with commas */
+}
