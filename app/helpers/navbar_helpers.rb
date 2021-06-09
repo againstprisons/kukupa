@@ -16,6 +16,14 @@ module Kukupa::Helpers::NavbarHelpers
       }
     end
 
+    if has_role?('userinfo:access')
+      items << {
+        :link => url('/uinfo'),
+        :text => t(:'userinfo/index/title'),
+        :selected => current_prefix?('/uinfo'),
+      }
+    end
+
     if has_role?('system:access')
       items << {
         :link => url('/system'),

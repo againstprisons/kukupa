@@ -77,6 +77,11 @@ controllers:
   - path: /prison-assignees
     controller: PrisonAssigneesController
 
+  - path: /uinfo
+    controller: UserInfoIndexController
+  - path: /uinfo/:uid
+    controller: UserInfoViewController
+
   - path: /system/debug
     controller: SystemDebugController
   - path: /system/outside-request
