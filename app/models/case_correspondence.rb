@@ -50,7 +50,12 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
       end
     end
 
-    # force encoding on the message content
+    # force encode message body to the transport encoding
+    if (ct = /charset=([a-zA-Z0-9_-]+)/.match((message.html_part || message.text_part)&.content_type)&.[](1))
+      message_html.force_encoding(ct)
+    end
+
+    # re-encode message body to UTF-8
     message_html = message_html.encode(
       Encoding::UTF_8,
       invalid: :replace,
