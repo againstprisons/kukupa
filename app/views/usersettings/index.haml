@@ -88,10 +88,17 @@
     
     %p= t(:'usersettings/change_style_options/content')
 
-    - %w[full_width].each do |cb|
+    - %w[full_width line_height].each do |cb|
       %label{for: cb}
         %input{type: 'checkbox', name: cb, id: cb, checked: user[:style_options][cb.to_sym]}
         = t("usersettings/change_style_options/field_#{cb}".to_sym)
+
+    %label{for: 'alternate_font'}
+      = t(:'usersettings/change_style_options/field_alternate_font')
+    %select#alternate_font{name: 'alternate_font'}
+      - {'default' => 'Default', 'opendyslexic' => 'OpenDyslexic', 'comicsans' => 'Comic Sans'}.each do |k, v|
+        %option{value: k, selected: user[:style_options][:alternate_font] == k}
+          &= v
 
     %button.pure-button.button{type: 'submit'}
       %i.fa.fa-pencil= ""

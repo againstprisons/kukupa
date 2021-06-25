@@ -51,6 +51,21 @@ module Kukupa::Helpers::ApplicationHelpers
       root_vars['--body-container-width'] = '100vw'
     end
 
+    if opts[:line_height]
+      root_vars['--body-line-height'] = '200%';
+    end
+
+    if opts[:alternate_font]
+      root_vars['--body-font-family'] = case opts[:alternate_font]
+      when 'opendyslexic'
+        '"opendyslexic", "OpenDyslexic", sans-serif'
+      when 'comicsans'
+        '"Comic Sans MS", sans-serif'
+      else
+        'sans-serif'
+      end
+    end
+
     ###
     # Put together the root var list and return the output CSS
     ###

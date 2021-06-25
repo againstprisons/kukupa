@@ -1,7 +1,3 @@
-:root {
-  --body-container-width: #{$body_container_width};
-}
-
 .body-container {
   width: 100%;
   max-width: var(--body-container-width);

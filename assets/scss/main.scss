@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+*:not(.fa) {
+  line-height: var(--body-line-height);
+  font-family: var(--body-font-family);
+}
+
 @import 'header';
 @import 'footer';
 @import 'subpage_nav';
@@ -21,3 +26,5 @@
 @import 'button';
 
 @import 'user_search';
+
+@import 'font_opendyslexic';

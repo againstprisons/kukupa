@@ -63,3 +63,9 @@ $case_renderable_header_border: $color_foreground_dimmed;
 $blockquote_quote_color: $color_foreground_dimmed;
 $blockquote_left_margin: 1em;
 $blockquote_left_border: 6px solid $blockquote_quote_color;
+
+:root {
+  --body-container-width: #{$body_container_width};
+  --body-font-family: "sans-serif";
+  --body-line-height: 100%;
+}

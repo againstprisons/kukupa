@@ -140,7 +140,9 @@ class Kukupa::Controllers::UserSettingsController < Kukupa::Controllers::Applica
     @style_options = @user.style_options
     @style_options[:full_width] = request.params['full_width']&.strip&.downcase == 'on'
     @style_options[:dark_mode] = request.params['dark_mode']&.strip&.downcase == 'on'
-    @style_options[:dyslexia_font] = request.params['dyslexia_font']&.strip&.downcase == 'on'
+    @style_options[:line_height] = request.params['line_height']&.strip&.downcase == 'on'
+    @style_options[:alternate_font] = request.params['alternate_font']&.strip&.downcase
+    @style_options[:alternate_font] = nil if @style_options[:alternate_font]&.empty?
 
     @user.style_options = @style_options
     @user.save
