@@ -45,7 +45,7 @@
           = t(:'case_renderable/correspondence/subject/none')
 
     - if rb[:attachment]
-      .message
+      .message.message-primary
         = t(:'case_renderable/correspondence/has_attachments')
 
     - if rb[:outgoing] && rb[:approval] == false

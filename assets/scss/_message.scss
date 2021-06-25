@@ -10,6 +10,13 @@
   border: 1px solid #ccc;
   border-radius: 4px;
 
+  &.message-primary
+  {
+    border-color: $symbolic_primary_border;
+    background: $symbolic_primary_background;
+    color: $symbolic_primary_foreground;
+  }
+
   &.message-success
   {
     border-color: $symbolic_success_border;
