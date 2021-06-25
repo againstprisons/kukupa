@@ -285,6 +285,71 @@ class Kukupa::Models::Case < Sequel::Model
     email.save
   end
 
+  def merge!(other_case)
+    other_case = other_case.id if other_case.respond_to?(:id)
+    other_case = Kukupa::Models::Case[other_case]
+
+    our_id = self.id
+
+    # Clear filters for other case
+    Kukupa::Models::CaseFilter.clear_filters_for(other_case)
+
+    # Move all case notes from other case
+    Kukupa::Models::CaseNote.where(case: other_case.id).map do |obj|
+      obj.case = our_id
+      obj.save
+    end
+
+    # Move all case spends from other case
+    Kukupa::Models::CaseSpend.where(case: other_case.id).map do |obj|
+      obj.case = our_id
+      obj.save
+    end
+
+    # Move all case tasks from other case
+    Kukupa::Models::CaseTask.where(case: other_case.id).map do |obj|
+      obj.case = our_id
+      obj.save
+    end
+
+    # Move all case correspondence from other case
+    Kukupa::Models::CaseCorrespondence.where(case: other_case.id).map do |obj|
+      obj.case = our_id
+      obj.save
+    end
+
+    # Move all case timeline entries from other case
+    Kukupa::Models::CaseTimelineEntry.where(case: other_case.id).map do |obj|
+      obj.case = our_id
+      obj.save
+    end
+
+    # Move all case assigned advocates from other case
+    Kukupa::Models::CaseAssignedAdvocate.where(case: other_case.id).map do |obj|
+      # Delete the object if a CaseAssignedAdvocate already exists for
+      # this case with the same user
+      if Kukupa::Models::CaseAssignedAdvocate.where(case: our_id, user: obj.user).count.positive?
+        obj.delete!
+      else
+        obj.case = our_id
+        obj.save
+      end
+    end    
+
+    # Add case note to this case saying the merge has happened
+    merge_note = Kukupa::Models::CaseNote.new(case: our_id, author: nil).save
+    merge_note.encrypt(:content, [
+      "<p>This case has been merged with the case for #{other_case.get_name} (ID #{other_case.id})</p>",
+      "<p>Previous case summary:<blockquote>",
+      other_case.decrypt(:global_note),
+      "</blockquote></p>",
+    ].join("\n"))
+    merge_note.save
+
+    # Delete other case
+    other_case.delete!
+  end
+
   def close!
     # remove all assigned advocates
     Kukupa::Models::CaseAssignedAdvocate
