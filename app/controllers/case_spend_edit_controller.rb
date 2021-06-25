@@ -3,11 +3,12 @@ require 'sanitize'
 class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseController
   add_route :get, '/'
   add_route :post, '/'
+  add_route :post, '/details', method: :details
   add_route :post, '/delete', method: :delete
 
   include Kukupa::Helpers::CaseViewHelpers
 
-  def before(cid, *args)
+  def before(cid, sid, *args)
     super
     return halt 404 unless logged_in?
 
@@ -16,13 +17,13 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
     unless has_role?('case:view_all')
       return halt 404 unless @case.can_access?(@user)
     end
-  end
 
-  def index(cid, sid)
     @spend = Kukupa::Models::CaseSpend[sid.to_i]
     return halt 404 unless @spend
     return halt 404 unless @spend.case == @case.id
+  end
 
+  def index(cid, sid)
     receipt_file = @spend.decrypt(:receipt_file)
     if receipt_file
       @receipt = Kukupa::Models::File.where(file_id: receipt_file).first
@@ -47,6 +48,7 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
         spend_complete: @spend.is_complete,
         spend_receipt: @receipt,
         urls: {
+          details: url("/case/#{@case.id}/spend/#{@spend.id}/details"),
           delete: url("/case/#{@case.id}/spend/#{@spend.id}/delete"),
         }
       })
@@ -76,31 +78,9 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
 
     # run a sanitize pass
     @content = Sanitize.fragment(@content, Sanitize::Config::RELAXED)
-    
-    # is this a reimbursement?
-    @reimbursement_info = nil
-    @reimbursement = request.params['reimbursement']&.strip&.downcase == "on"
-    if @reimbursement
-      @reimbursement_info = request.params['reimbursement_info']&.strip || ""
-      @reimbursement_info = Sanitize.fragment(@reimbursement_info, Sanitize::Config::RELAXED)
-    end
 
     # spend complete?
     @is_complete = request.params['complete']&.strip&.downcase == "on"
-
-    # replace existing receipt if one was uploaded
-    if params[:file]
-      begin
-        fn = params[:file][:filename]
-        params[:file][:tempfile].rewind
-        data = params[:file][:tempfile].read
-      
-        @receipt = Kukupa::Models::File.upload(data, filename: fn)
-        @spend.encrypt(:receipt_file, @receipt.file_id)
-      rescue
-        flash :warning, t(:'case/spend/edit/edit/errors/receipt_upload_failed')
-      end
-    end
 
     # create a CaseSpendUpdate with the edited content
     @spend_update_data = {
@@ -109,7 +89,7 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
       old_content: @spend.decrypt(:notes),
       new_content: @content,
       old_reimbursement_info: @spend.decrypt(:reimbursement_info),
-      new_reimbursement_info: @reimbursement_info,
+      new_reimbursement_info: @spend.decrypt(:reimbursement_info),
       old_complete: @spend.is_complete,
       new_complete: @is_complete,
     }
@@ -126,9 +106,7 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
     # save the spend
     @spend.encrypt(:amount, @amount.to_s)
     @spend.encrypt(:notes, @content)
-    @spend.is_reimbursement = @reimbursement
     @spend.is_complete = @is_complete
-    @spend.encrypt(:reimbursement_info, @reimbursement_info)
     @spend.save
 
     # if <= auto-approve threshold AND aggregate for this year is below max,
@@ -162,12 +140,70 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
     return redirect request.path
   end
 
+  def details(cid, sid)
+    unless [@spend.author, @spend.approver].include?(@current_user.id)
+      unless has_role?('case:spend:can_approve')
+        flash :error, t(:'case/spend/edit/reimbursement_details/errors/not_creator')
+        return redirect back
+      end
+    end
+
+    # get existing receipt
+    receipt_file = @spend.decrypt(:receipt_file)
+    if receipt_file
+      @receipt = Kukupa::Models::File.where(file_id: receipt_file).first
+    end
+
+    # get reimbursement info data
+    @reimbursement_info = request.params['reimbursement_info']&.strip || ""
+    @reimbursement_info = Sanitize.fragment(@reimbursement_info, Sanitize::Config::RELAXED)
+
+    # replace existing receipt if one was uploaded
+    if params[:file]
+      begin
+        fn = params[:file][:filename]
+        params[:file][:tempfile].rewind
+        data = params[:file][:tempfile].read
+      
+        @receipt = Kukupa::Models::File.upload(data, filename: fn)
+      rescue
+        flash :warning, t(:'case/spend/edit/edit/errors/receipt_upload_failed')
+      end
+    end
+
+    # create a CaseSpendUpdate with the edited content
+    @spend_update_data = {
+      old_amount: @spend.decrypt(:amount).to_s,
+      new_amount: @spend.decrypt(:amount).to_s,
+      old_content: @spend.decrypt(:notes),
+      new_content: @spend.decrypt(:notes),
+      old_reimbursement_info: @spend.decrypt(:reimbursement_info),
+      new_reimbursement_info: @reimbursement_info,
+      old_complete: @spend.is_complete,
+      new_complete: @spend.is_complete,
+    }
+
+    @spend_update = Kukupa::Models::CaseSpendUpdate.new(
+      spend: @spend.id,
+      author: @user.id,
+      update_type: 'edit',
+    ).save
+
+    @spend_update.encrypt(:data, JSON.generate(@spend_update_data))
+    @spend_update.save
+
+    # save the spend
+    @spend.is_reimbursement = true
+    @spend.encrypt(:reimbursement_info, @reimbursement_info)
+    @spend.encrypt(:receipt_file, @receipt&.file_id)
+    @spend.save
+
+    flash :success, t(:'case/spend/edit/reimbursement_details/success')
+    return redirect url("/case/#{@case.id}/spend/#{@spend.id}")
+  end
+
   def delete(cid, sid)
     return halt 404 unless has_role?('case:delete_entry')
-
-    @spend = Kukupa::Models::CaseSpend[sid.to_i]
-    return halt 404 unless @spend
-    return halt 404 unless @spend.case == @case.id
 
     unless request.params['confirm']&.strip == "DELETE"
       flash :error, t(:'case/note/edit/delete/errors/no_confirm')

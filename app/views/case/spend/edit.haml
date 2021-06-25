@@ -49,21 +49,6 @@
       = haml :'partials/editor', layout: false, locals: {editor_name: 'content', editor_label: t(:'case/spend/edit/edit/note_field'), editor_data: spend_notes}
       .y-margin= ""
     
-      %label{for: 'reimbursement'}
-        %input#reimbursement{type: 'checkbox', name: 'reimbursement', checked: spend_reimbursement}
-        = t(:'case/spend/edit/edit/is_reimbursement')
-
-      = haml :'partials/editor', layout: false, locals: {editor_name: 'reimbursement_info', editor_label: t(:'case/spend/edit/edit/reimbursement_info'), editor_data: spend_reimbursement_info}
-      .y-margin= ""
-
-      %label{for: 'receipt'}
-        = t(:'case/spend/add/receipt_file')
-        - if spend_receipt
-          %strong
-            = t(:'case/spend/edit/edit/receipt_file/will_replace')
-
-      %input#receipt{name: 'file', type: 'file', required: false}
-
       %label{for: 'complete'}
         %input#complete{type: 'checkbox', name: 'complete', checked: spend_complete}
         = t(:'case/spend/edit/edit/is_complete')
@@ -71,6 +56,36 @@
       %button.pure-button.button.button-primary{type: 'submit'}
         %i.fa.fa-pencil-square-o= ""
         = t(:'case/spend/edit/edit/submit')
+
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: urls[:details], enctype: 'multipart/form-data'}
+    %h1= t(:'case/spend/edit/reimbursement_details/section_title')
+
+    - unless [spend_obj.author, spend_obj.approver].include?(current_user.id) || has_role?('case:spend:can_approve')
+      .message.message-warning
+        %i.fa.fa-warning= ""
+        = t(:'case/spend/edit/reimbursement_details/errors/not_creator')
+
+    - else
+      - unless spend_reimbursement
+        .message.message-warning
+          = t(:'case/spend/edit/reimbursement_details/not_already_reimbursement')
+
+    = haml :'partials/editor', layout: false, locals: {editor_name: 'reimbursement_info', editor_label: t(:'case/spend/edit/reimbursement_details/reimbursement_info'), editor_data: spend_reimbursement_info}
+    .y-margin= ""
+
+    %label{for: 'receipt'}
+      = t(:'case/spend/edit/reimbursement_details/receipt_file')
+      - if spend_receipt
+        %strong
+          = t(:'case/spend/edit/reimbursement_details/receipt_file/will_replace')
+
+    %input#receipt{name: 'file', type: 'file', required: false}
+
+    - if [spend_obj.author, spend_obj.approver].include?(current_user.id) || has_role?('case:spend:can_approve')
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+      %button.pure-button.button{type: 'submit'}
+        %i.fa.fa-pencil-square-o= ""
+        = t(:'case/spend/edit/reimbursement_details/submit')
 
   - if has_role?('case:delete_entry')
     %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: urls[:delete]}
