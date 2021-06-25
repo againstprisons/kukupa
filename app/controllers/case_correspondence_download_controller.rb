@@ -45,6 +45,15 @@ class Kukupa::Controllers::CaseCorrespondenceDownloadController < Kukupa::Contro
       @view_url.query_values = {v: 1}
     end
 
+    @attachments = @ccobj.get_email_attachments.map do |file|
+      token = file.generate_download_token(current_user)
+
+      {
+        original_fn: file.original_fn,
+        url: url("/filedl/#{file.file_id}/#{token.token}"),
+      }
+    end
+
     @case_name = @case.get_name
     @title = t(:'case/correspondence/download/title', name: @case_name, ccid: @ccobj.id)
 
@@ -54,6 +63,7 @@ class Kukupa::Controllers::CaseCorrespondenceDownloadController < Kukupa::Contro
       case_name: @case_name,
       cc_obj: @ccobj,
       cc_type: @type,
+      attachments: @attachments,
       view_url: @view_url,
       download_url: @download_url,
     })

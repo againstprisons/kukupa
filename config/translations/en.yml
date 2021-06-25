@@ -156,6 +156,7 @@
 :'case_renderable/correspondence/subject': "Mail subject"
 :'case_renderable/correspondence/subject/none': "No subject"
 :'case_renderable/correspondence/not_approved': "This correspondence has not yet been approved for sending."
+:'case_renderable/correspondence/has_attachments': "This correspondence has one or more email attachments."
 
 # Maintenance
 :'maintenance/warning': "Maintenance mode is enabled!"
@@ -609,6 +610,8 @@
 :'case/correspondence/download/errors/unknown_error': "An unknown error occurred when trying to retrieve the file to download."
 :'case/correspondence/download/print/title': "Printing correspondence <%= e(ccid) %>"
 :'case/correspondence/download/print/errors/invalid_mime': "The correspondence is of a type that we can't generate a print view of. You can try downloading the correspondence normally and printing it."
+:'case/correspondence/download/attachments/section_title': "Email attachments"
+:'case/correspondence/download/attachments/content': "Click on the name of an attachment to download it."
 
 # Cases - correspondence download (local view)
 :'case/correspondence/download/view/title': "View correspondence <%= e(ccid) %>: <%= e(name) %>"

@@ -95,6 +95,19 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     eml_filename = "incomingemail-#{creation.strftime('%s')}-case#{case_obj.id}.eml"
     eml_file_obj = Kukupa::Models::File.upload(message.to_s, filename: eml_filename)
 
+    # check for attachments
+    attachment_files = []
+    message.attachments.each do |at|
+      at_content_type = at.content_type&.split(';')&.first&.strip
+      at_filename = /filename=(.*)/.match(at.content_disposition)&.[](1)&.strip
+      at_file = Kukupa::Models::File.upload(at.body.to_s, {
+        filename: at_filename,
+        mime_type: at_content_type,
+      })
+
+      attachment_files << at_file.file_id
+    end
+
     # okay, let's create a CaseCorrespondence entry!
     ccobj = self.new(case: case_obj.id, sent_by_us: false, correspondence_type: 'email', creation: creation).save
     ccobj.email_messageid = message.message_id
@@ -104,6 +117,7 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     ccobj.encrypt(:target_email, message.from.first)
     ccobj.encrypt(:subject, message.subject)
     ccobj.encrypt(:email_reply_to, email_reply_to.join(','))
+    ccobj.encrypt(:email_attachments, attachment_files.join(','))
     ccobj.save
 
     # we're done here! return the CaseCorrespondence entry
@@ -166,6 +180,7 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
       target_email: target_email,
       approval: approval,
       actions: actions,
+      attachment: self.get_email_attachments.count.positive?,
     }
 
     items
@@ -332,6 +347,12 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     self.save
 
     true
+  end
+
+  def get_email_attachments
+    (self.decrypt(:email_attachments) || '').split(',').map do |file_id|
+      Kukupa::Models::File.where(file_id: file_id).first
+    end
   end
 
   def create_outgoing_print_task!

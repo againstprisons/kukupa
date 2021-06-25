@@ -20,3 +20,14 @@
     %a.pure-button.button{target: '_blank', href: download_url}
       %i.fa.fa-download= ""
       = t(:'case/correspondence/download/actions/download')
+
+  - if attachments.count.positive?
+    .form-main
+      %h1= t(:'case/correspondence/download/attachments/section_title')
+      %p= t(:'case/correspondence/download/attachments/content')
+
+      %ul
+        - attachments.each do |at|
+          %li
+            %a{href: at[:url], target: '_blank'}
+              &= at[:original_fn]
