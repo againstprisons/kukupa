@@ -378,6 +378,9 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     }))
 
     task.save
+    task.send_creation_email!
+
+    task
   end
 
   def send_incoming_alert_email!(opts = {})
