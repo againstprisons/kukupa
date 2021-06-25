@@ -30,8 +30,10 @@
               = t(:'case/correspondence/send/compose/email/clear')
 
           - else
+            %p= t(:'case/correspondence/send/compose/email/multiple_email')
+
             %label.sr-only{name: 'compose_email'}= t(:'email_address')
-            %input#compose_email{name: 'email', type: 'email', value: compose_email, placeholder: t(:'email_address')}
+            %input#compose_email{name: 'email', type: 'text', value: compose_email, placeholder: t(:'email_address')}
             %button.pure-button.button{type: 'submit'}
               %i.fa.fa-arrow-right= ""
               = t(:'case/correspondence/send/compose/email/submit')

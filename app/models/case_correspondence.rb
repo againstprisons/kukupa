@@ -36,6 +36,11 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     case_obj = Kukupa::Models::Case.where(email_identifier: tm[1]).first
     return :no_case_obj unless case_obj
 
+    # gather the list of [From, To, Cc], excluding our own email address
+    email_reply_to = [message.from, message.to, message.cc].compact.flatten.reject do |em|
+      em == Kukupa.app_config['email-outgoing-reply-to'].gsub('%IDENTIFIER%', case_obj.email_identifier)
+    end
+
     # okay, we have a case! let's get the message content.
     message_html = message.html_part&.body&.to_s
     message_html = nil if message_html&.empty?
@@ -98,6 +103,7 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     ccobj.file_id = file_obj.file_id
     ccobj.encrypt(:target_email, message.from.first)
     ccobj.encrypt(:subject, message.subject)
+    ccobj.encrypt(:email_reply_to, email_reply_to.join(','))
     ccobj.save
 
     # we're done here! return the CaseCorrespondence entry
@@ -129,8 +135,13 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     # `target_email` field is not `nil`, show a reply button
     if Kukupa.app_config['feature-case-correspondence-email']
       if self.correspondence_type == 'email' && !self.sent_by_us && target_email
+        reply_to = self.decrypt(:email_reply_to)
+        if reply_to.nil? || reply_to&.empty?
+          reply_to = target_email
+        end
+
         reply_url = Addressable::URI.parse("/case/#{self.case}/correspondence/send")
-        reply_url.query_values = {email: target_email}
+        reply_url.query_values = {email: reply_to}
 
         actions.unshift({
           url: [:url, reply_url],
@@ -245,6 +256,15 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     target_email = nil if target_email&.empty?
     return :email_no_target unless target_email
 
+    # Split target email list by comma, remove empty entries,
+    # and keep only unique email addresses
+    target_email_list = target_email
+      .split(',')
+      .map(&:strip)
+      .map{ |x| x.empty?() ? nil : x }
+      .compact
+      .uniq
+
     content = self.get_file_content
     content = '' if content&.empty?
     content_text = ReverseMarkdown.convert(content)
@@ -266,7 +286,7 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
 
     eq.queue_status = 'queued'
     eq.encrypt(:subject, self.decrypt(:subject))
-    eq.encrypt(:recipients, JSON.generate({mode: 'list', list: [target_email]}))
+    eq.encrypt(:recipients, JSON.generate({mode: 'list', list: target_email_list}))
     eq.encrypt(:message_opts, JSON.generate({
       no_autogen_headers: true,
       reply_to: Kukupa.app_config['email-outgoing-reply-to'].gsub('%IDENTIFIER%', case_obj.email_identifier),

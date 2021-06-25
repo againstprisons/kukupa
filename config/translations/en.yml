@@ -541,6 +541,7 @@
 :'case/correspondence/send/compose/subject': "Mail subject"
 :'case/correspondence/send/compose/content': "Mail content"
 :'case/correspondence/send/compose/email/section_title': "External email"
+:'case/correspondence/send/compose/email/multiple_email': "To send to multiple email addresses, enter them separated by commas."
 :'case/correspondence/send/compose/email/is_email': "Currently sending an email to: <code><%= e(email) %></code>"
 :'case/correspondence/send/compose/email/clear': "Clear email address"
 :'case/correspondence/send/compose/email/submit': "Switch to email send"
