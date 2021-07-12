@@ -1,6 +1,8 @@
 import h from 'vhtml'
 /** @jsx h */
 
+import { debounce } from 'debounce'
+
 export const SearchHelp = ({ children, ...props }) => (
   <div>
     You can search by a partial name, an email address, a partial tag, or a user ID:
@@ -167,6 +169,12 @@ export const enableUserSearch = (searchField) => {
     }
   }
 
+  window.kukupa.user_search[fieldId].onInputHandler = debounce((e) => {
+    e.preventDefault()
+    window.kukupa.user_search[fieldId].doSearch(e.target.value)
+    return false
+  }, 300)
+
   window.kukupa.user_search[fieldId].onChangeHandler = (e) => {
     e.preventDefault()
     window.kukupa.user_search[fieldId].doSearch(e.target.value)
@@ -184,6 +192,7 @@ export const enableUserSearch = (searchField) => {
         aria-haspopup="listbox"
         onsubmit={`event.preventDefault()`}
         onchange={`window.kukupa.user_search['${fieldId}'].onChangeHandler(event)`} 
+        oninput={`window.kukupa.user_search['${fieldId}'].onInputHandler(event)`} 
       />
 
       <ul className="usersearch--list" id={`usersearch--list${fieldId}`} />
