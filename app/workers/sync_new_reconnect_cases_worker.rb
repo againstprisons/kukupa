@@ -84,6 +84,7 @@ class Kukupa::Workers::SyncNewReconnectCasesWorker
 
       # Add "system" case note saying this case was imported from re:connect
       sysnote = Kukupa::Models::CaseNote.new(case: c.id).save
+      sysnote.hidden_admin_only = true
       sysnote.encrypt(:content, helpers.t(
         :'reconnect_sync/automatic_case_creation',
         force_language: true,

@@ -63,6 +63,7 @@ class Kukupa::Controllers::ApiRequestController < Kukupa::Controllers::ApiContro
 
       # Add "system" case note with the prison
       @sysnote = Kukupa::Models::CaseNote.new(case: @case.id).save
+      @sysnote.hidden_admin_only = true
       @sysnote.encrypt(:content, t(
         :'outside/request/system_case_note_creation',
         force_language: true,

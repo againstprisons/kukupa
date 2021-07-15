@@ -338,6 +338,7 @@ class Kukupa::Models::Case < Sequel::Model
 
     # Add case note to this case saying the merge has happened
     merge_note = Kukupa::Models::CaseNote.new(case: our_id, author: nil).save
+    merge_note.hidden_admin_only = true
     merge_note.encrypt(:content, [
       "<p>This case has been merged with the case for #{other_case.get_name} (ID #{other_case.id})</p>",
       "<p>Previous case summary:<blockquote>",
