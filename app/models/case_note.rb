@@ -71,6 +71,8 @@ class Kukupa::Models::CaseNote < Sequel::Model
       content: self.decrypt(:content),
       outside_request: self.is_outside_request,
       outside_request_form: outside_request_form,
+      hidden_admin_only: self.hidden_admin_only,
+      hidden_collapsed: self.hidden_collapsed,
       metadata: metadata,
       author: [:user, self.author],
       history_url: [:url, "/case/#{self.case}/note/#{self.id}/history"],

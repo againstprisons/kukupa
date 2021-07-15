@@ -1,6 +1,9 @@
 .caserenderable-container{'data-rb-type': rb[:type], id: rb[:anchor]}
   .caserenderable-header
     %span.caserenderable-header-author
+      - if rb[:hidden_admin_only]
+        %i.fa.fa-lock= ""
+
       %a.caserenderable-header-iconlink{href: "##{rb[:anchor]}"}
         %span{title: rb[:id]}
           - if rb[:case_note].is_outside_request

@@ -28,6 +28,19 @@
         %i.fa.fa-pencil-square-o= ""
         = t(:'case/note/edit/edit/submit')
 
+  - if has_role?('case:change_object_visibility')
+    %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: urls[:visibility]}
+      %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+      %h1= t(:'case/note/edit/visibility/section_title')
+
+      %label{for: 'visibility-admin'}
+        %input#visibility-admin{name: 'admin_only', type: 'checkbox', checked: note_obj.hidden_admin_only}
+        = t(:'case/note/edit/visibility/admin_only')
+
+      %button.pure-button.button{type: 'submit'}
+        %i.fa.fa-check= ""
+        = t(:'case/note/edit/visibility/submit')
+
   - if has_role?('case:delete_entry')
     %form.pure-form.pure-form-stacked.form-main{method: 'POST', action: urls[:delete]}
       %input{type: 'hidden', name: '_csrf', value: session[:csrf]}

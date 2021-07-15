@@ -5,6 +5,7 @@ class Kukupa::Controllers::CaseNoteEditController < Kukupa::Controllers::CaseCon
   add_route :post, '/'
   add_route :get, '/file', method: :file
   add_route :post, '/delete', method: :delete
+  add_route :post, '/visibility', method: :visibility
 
   include Kukupa::Helpers::CaseViewHelpers
 
@@ -37,6 +38,7 @@ class Kukupa::Controllers::CaseNoteEditController < Kukupa::Controllers::CaseCon
         note_content: @note.decrypt(:content),
         urls: {
           delete: url("/case/#{@case.id}/note/#{@note.id}/delete"),
+          visibility: url("/case/#{@case.id}/note/#{@note.id}/visibility"),
         }
       })
     end
@@ -119,5 +121,21 @@ class Kukupa::Controllers::CaseNoteEditController < Kukupa::Controllers::CaseCon
 
     flash :success, t(:'case/note/edit/delete/success', note_id: @note.id)
     return redirect url("/case/#{@case.id}/view")
+  end
+  
+  def visibility(cid, nid)
+    return halt 404 unless has_role?('case:change_object_visibility')
+    @case = Kukupa::Models::Case[cid.to_i]
+    return halt 404 unless @case
+
+    @note = Kukupa::Models::CaseNote[nid.to_i]
+    return halt 404 unless @note
+    return halt 404 unless @note.case == @case.id
+    
+    @note.hidden_admin_only = request.params['admin_only']&.strip&.downcase == "on"
+    @note.save
+    
+    flash :success, t(:'case/note/edit/visibility/success')
+    return redirect url("/case/#{@case.id}/note/#{@note.id}")
   end
 end

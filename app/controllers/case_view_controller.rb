@@ -29,6 +29,7 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
       pagination: true,
       page: request.params['p'].to_i,
       include_updates: @renderable_updates,
+      include_admin_hidden: has_role?('case:show_hidden_objects'),
       renderable_opts: {
         spend_can_approve: has_role?('case:spend:can_approve'),
       }

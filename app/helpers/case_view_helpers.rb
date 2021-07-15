@@ -44,6 +44,7 @@ module Kukupa::Helpers::CaseViewHelpers
       pagination: false,
       pagination_items: 25,
       include_updates: false,
+      include_admin_hidden: false,
       renderable_opts: {},
     }.merge(opts)
 
@@ -56,8 +57,10 @@ module Kukupa::Helpers::CaseViewHelpers
     ###
 
     notes = Kukupa::Models::CaseNote
-      .select(:id, :case, :creation)
+      .select(:id, :case, :creation, :hidden_admin_only)
       .where(case: c)
+    notes = notes.where(hidden_admin_only: false) unless opts[:include_admin_hidden]
+    notes = notes
       .reverse(:creation)
       .map { |x| {klass: Kukupa::Models::CaseNote, id: x.id, creation: x.creation} }
 
