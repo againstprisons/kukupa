@@ -355,6 +355,38 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     end
   end
 
+  def create_incoming_mail_task!
+    return unless self.correspondence_type == 'prisoner'
+
+    case_obj = Kukupa::Models::Case[self.case]
+    prison_obj = Kukupa::Models::Prison[case_obj.decrypt(:prison).to_i]
+    return unless prison_obj
+
+    language = Kukupa::Helpers::LanguageHelpers::LanguageData.new
+    assignee = Kukupa.app_config['correspondence-task-prison-users']&.[](prison_obj.id.to_s)&.sample
+    return unless assignee
+
+    task = Kukupa::Models::CaseTask.new({
+      case: self.case,
+      author: nil,
+      assigned_to: assignee,
+      deadline: Chronic.parse(Kukupa.app_config['task-default-deadline']),
+    }).save
+
+    task.encrypt(:content, language.t(:'case/correspondence/misc/incoming_mail_task', {
+      cid: self.id,
+      url: Kukupa.app_config['base-url'] + "/case/#{self.case}/correspondence/#{self.id}/dl/view",
+      prison: prison_obj.decrypt(:name),
+      pid: prison_obj.id,
+      force_language: true,
+    }))
+
+    task.save
+    task.send_creation_email!
+
+    task
+  end
+
   def create_outgoing_print_task!
     return unless self.approved
     if Kukupa.app_config['correspondence-print-only-prisoner']

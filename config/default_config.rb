@@ -173,6 +173,10 @@ module Kukupa
       :type => :uid_list,
       :default => '',
     },
+    "correspondence-task-prison-users" => {
+      :type => :json,
+      :default => '{}',
+    },
   }
 
   APP_CONFIG_DEPRECATED_ENTRIES = {

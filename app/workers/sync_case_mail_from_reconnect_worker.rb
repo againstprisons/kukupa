@@ -136,6 +136,7 @@ class Kukupa::Workers::SyncCaseMailFromReconnectWorker
 
         # send email alert to case assigned advocates (or site admins if no assigned advocate)
         cm.send_incoming_alert_email!
+        cm.create_incoming_mail_task!
       end
 
       # Change all external sent-by-us correspondence to "approved"
