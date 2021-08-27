@@ -538,6 +538,9 @@
 :'case/task/edit/delete/errors/not_author': "You can not delete a task unless you are the task's author or assignee."
 :'case/task/edit/delete/errors/no_confirm': "Refusing to delete this case spend as the confirmation was not correct."
 
+# Cases - correspondence misc
+:'case/correspondence/misc/incoming_mail_task': "<a href=\"<%= e(url) %>\">New correspondence (ID <%= e(cid) %>)</a> has been received from the prison <%= e(prison) %> (ID <code><%= e(pid) %></code>). [automatic task]"
+
 # Cases - correspondence send
 :'case/correspondence/send/title': "Send mail to case: <%= e(name) %>"
 :'case/correspondence/send/email_prompt/section_title': "Enter an email address to send to"
