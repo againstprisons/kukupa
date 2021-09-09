@@ -8,14 +8,18 @@ class Kukupa::Workers::CaseUnassignedNewRequestWorker
     # For each case, check whether it has any assigned advocates.
     # If it doesn't, grab it's ID, so we can look it up in the next step
     logger.info("Getting cases with no advocates...")
-    case_ids = Kukupa::Models::Case.select(:id).all.map(&:id).map do |cid|
-      adv_count = Kukupa::Models::CaseAssignedAdvocate
-        .where(case: cid)
-        .count
+    case_ids = Kukupa::Models::Case
+      .select(:id, :is_open)
+      .where(is_open: true)
+      .all
+      .map do |c|
+        adv_count = Kukupa::Models::CaseAssignedAdvocate
+          .where(case: c.id)
+          .count
 
-      next nil if adv_count.positive?
-      cid
-    end.compact.uniq
+        next nil if adv_count.positive?
+        c.id
+      end.compact.uniq
 
     # For each case that we grabbed IDs for before, check if they have:
     #
