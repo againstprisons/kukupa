@@ -53,8 +53,9 @@ class Kukupa::Workers::CaseUnassignedNewRequestWorker
       timestamps.compact!
       next nil if timestamps.empty?
 
-      # Get latest timestamp, use that
+      # Get latest timestamp, if case has been updated since then, ignore
       request_ts = timestamps.sort.last
+      next nil if case_obj.last_updated > request_ts
 
       {
         case: case_obj,
