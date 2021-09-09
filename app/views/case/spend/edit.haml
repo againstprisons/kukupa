@@ -14,7 +14,7 @@
   %form.pure-form.pure-form-stacked.form-main{method: 'POST', enctype: 'multipart/form-data'}
     %h1= t(:'case/spend/edit/edit/section_title')
 
-    - unless spend_approver.nil? || spend_approver_self || has_role?('case:spend:can_approve')
+    - unless spend_status == 'waiting' || spend_approver_self || has_role?('case:spend:can_approve')
       .message.message-warning
         = t(:'case/spend/edit/edit/errors/is_approved')
 

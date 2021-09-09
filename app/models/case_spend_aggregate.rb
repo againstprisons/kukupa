@@ -7,10 +7,7 @@ class Kukupa::Models::CaseSpendAggregate < Sequel::Model
     # keys are the year and month (like '2020-01') and the values of THAT
     # are the spending for that month.
     years = {}
-    Kukupa::Models::CaseSpend.where(case: c).each do |spend|
-      # Skip unapproved spends in total
-      next if spend.approver.nil?
-
+    Kukupa::Models::CaseSpend.where(case: c, status: 'approved').each do |spend|
       year = spend.creation.strftime('%Y')
       month = spend.creation.strftime('%Y-%m')
 

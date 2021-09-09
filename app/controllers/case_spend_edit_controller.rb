@@ -39,6 +39,7 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
         case_name: @case_name,
         renderables: renderable_post_process(@spend.renderables),
         spend_obj: @spend,
+        spend_status: @spend.status,
         spend_notes: @spend.decrypt(:notes),
         spend_amount: @spend.decrypt(:amount).to_f,
         spend_approver: @spend.approver,
@@ -54,7 +55,7 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
       })
     end
 
-    unless @spend.approver.nil?
+    unless @spend.status == 'waiting'
       unless @spend.approver == @user.id || has_role?('case:spend:can_approve')
         flash :error, t(:'case/spend/edit/edit/errors/is_approved')
         return redirect request.path
@@ -125,6 +126,7 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
     # if > auto-approve threshold, automatically *unapprove* the edit, even if
     # the editor has approve powers
     else
+      @spend.status = 'waiting'
       @spend.approved = nil
       @spend.approver = nil
       @spend.save

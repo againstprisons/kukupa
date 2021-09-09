@@ -132,7 +132,8 @@
 :'case_renderable/spend/content': "Fund spending of"
 :'case_renderable/spend/amount': "<code><%= e(sprintf('$%.02f', amount)) %></code>"
 :'case_renderable/spend/author': "Added by"
-:'case_renderable/spend/approver': "Approved by"
+:'case_renderable/spend/approving_user': "Approved by"
+:'case_renderable/spend/declining_user': "Declined by"
 :'case_renderable/spend/unapproved': "Not yet approved"
 :'case_renderable/spend/has_receipt': "This spend has <a href=\"<%= url %>\">an attached receipt.</a>"
 :'case_renderable/spend/incomplete': "This spend has not been marked as complete."
@@ -470,7 +471,7 @@
 :'case/spend/edit/edit/is_complete': "Has this spend been reimbursed / is the spend complete?"
 :'case/spend/edit/edit/submit': "Save spend"
 :'case/spend/edit/edit/success': "Your case spend was saved."
-:'case/spend/edit/edit/errors/is_approved': "You can not edit an approved spend unless you were the one who approved it."
+:'case/spend/edit/edit/errors/is_approved': "You can not edit a spend that has been approved/declined unless you were the one who made that action."
 :'case/spend/edit/edit/errors/no_content': "No notes were provided for this case spend."
 :'case/spend/edit/reimbursement_details/section_title': "Spend reimbursement details"
 :'case/spend/edit/reimbursement_details/not_already_reimbursement': "This spend is not already marked as a reimbursement. Editing any details in this section will automatically mark this spend as a reimbursement."
@@ -485,7 +486,7 @@
 :'case/spend/edit/delete/confirm': "To delete this case spend, enter \"DELETE\" (in all caps) into the box below, and click \"<%= t(:'case/spend/edit/delete/submit') %>\"."
 :'case/spend/edit/delete/submit': "Delete spend"
 :'case/spend/edit/delete/success': "Deleted case spend <%= e(spend_id) %>."
-:'case/spend/edit/delete/errors/is_approved': "You can not delete an approved spend unless you were the one who approved it."
+:'case/spend/edit/delete/errors/is_approved': "You can not delete a spend that has been approved/declined unless you were the one who made that action."
 :'case/spend/edit/delete/errors/no_confirm': "Refusing to delete this case spend as the confirmation was not correct."
 
 # Cases - spend approve
@@ -499,8 +500,12 @@
 :'case/spend/approve/approve/section_title': "Approve case spend"
 :'case/spend/approve/approve/content': "To approve this case spend, click the \"<%= t(:'case/spend/approve/approve/submit') %>\" button below."
 :'case/spend/approve/approve/submit': "Approve case spend"
-:'case/spend/approve/success': "Successfully approved case spend <%= e(spend_id) %> for <%= t(:'case_renderable/spend/amount', amount: amount) %>."
-:'case/spend/approve/errors/already_approved': "This case spend has already been approved."
+:'case/spend/approve/approve/success': "Successfully approved case spend <%= e(spend_id) %> for <%= t(:'case_renderable/spend/amount', amount: amount) %>."
+:'case/spend/approve/decline/section_title': "Decline case spend"
+:'case/spend/approve/decline/content': "To decline this case spend, click the \"<%= t(:'case/spend/approve/decline/submit') %>\" button below."
+:'case/spend/approve/decline/submit': "Decline case spend"
+:'case/spend/approve/decline/success': "Successfully declined case spend <%= e(spend_id) %>."
+:'case/spend/approve/errors/already_approved': "This case spend has already been approved or declined."
 
 # Cases - spend receipt download/view
 :'case/spend/receipt/title': "Receipt for case spend <%= e(spend_id) %>: <%= e(name) %>"

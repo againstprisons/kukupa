@@ -17,7 +17,7 @@ class Kukupa::Controllers::CaseSpendApproveController < Kukupa::Controllers::Cas
     @spend = Kukupa::Models::CaseSpend[sid.to_i]
     return halt 404 unless @spend
     return halt 404 unless @spend.case == @case.id
-    unless @spend.approver.nil?
+    unless @spend.status == 'waiting'
       flash :warning, t(:'case/spend/approve/errors/already_approved')
       return redirect url("/case/#{@case.id}/spend/#{@spend.id}")
     end
@@ -51,22 +51,31 @@ class Kukupa::Controllers::CaseSpendApproveController < Kukupa::Controllers::Cas
       })
     end
 
-    unless request.params['approve'].to_i.positive?
+    if request.params['approve'].to_i.positive?
+      @spend.approved = Sequel.function(:NOW)
+      @spend.approver = @user.id
+      @spend.status = 'approved'
+      @spend.save
+
+      # send spend-approved email
+      @spend.send_approve_email!
+
+      # update aggregate 
+      Kukupa::Models::CaseSpendAggregate.create_aggregate_for_case(@case)
+    
+      flash :success, t(:'case/spend/approve/approve/success', spend_id: @spend.id, amount: @spend.decrypt(:amount).to_f)
+
+    elsif request.params['decline'].to_i.positive?
+      @spend.approver = @user.id
+      @spend.status = 'declined'
+      @spend.save
+      
+      flash :success, t(:'case/spend/approve/decline/success', spend_id: @spend.id)
+
+    else
       return redirect request.path
     end
 
-    # save details
-    @spend.approved = Sequel.function(:NOW)
-    @spend.approver = @user.id
-    @spend.save
-
-    # send spend-approved email
-    @spend.send_approve_email!
-
-    # update aggregate 
-    Kukupa::Models::CaseSpendAggregate.create_aggregate_for_case(@case)
-
-    flash :success, t(:'case/spend/approve/success', spend_id: @spend.id, amount: @spend.decrypt(:amount).to_f)
     return redirect url("/case/#{@case.id}/view")
   end
 end

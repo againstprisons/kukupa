@@ -37,7 +37,7 @@
 
           %blockquote.blockquote-fancy
             = spend_reimbursement_info
-            
+
       - if spend_receipt
         %li
           %a{href: url("/case/#{case_obj.id}/spend/#{spend_obj.id}/receipt"), target: '_blank'}
@@ -55,3 +55,14 @@
       %i.fa.fa-check= ""
       = t(:'case/spend/approve/approve/submit')
 
+  %form.pure-form.pure-form-stacked.form-main{method: 'POST'}
+    %h1= t(:'case/spend/approve/decline/section_title')
+
+    %input{type: 'hidden', name: '_csrf', value: session[:csrf]}
+    %input{type: 'hidden', name: 'decline', value: '1'}
+
+    %p= t(:'case/spend/approve/decline/content')
+
+    %button.pure-button.button.button-error{type: 'submit'}
+      %i.fa.fa-times= ""
+      = t(:'case/spend/approve/decline/submit')
