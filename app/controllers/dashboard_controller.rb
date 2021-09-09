@@ -59,7 +59,7 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
       end
     end.compact
 
-    if has_role?('case:view_all')
+    if has_role?('case:show_unassigned_requests')
       @unassigned_requests = Kukupa::Models::CaseUnassignedNewRequest.all.map do |unr|
         case_obj = Kukupa::Models::Case[unr.case]
         view_url = Addressable::URI.parse(url("/case/#{case_obj.id}/view"))
