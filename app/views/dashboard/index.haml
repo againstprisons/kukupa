@@ -12,6 +12,23 @@
               %a{href: c[:url]}
                 &= c[:name]
 
+    - unless unassigned_requests.empty?
+      .form-main
+        %h1= t(:'dashboard/unassigned_requests/section_title')
+        %ul
+          - unassigned_requests.each do |c|
+            %li
+              %ul.inline-list
+                %li
+                  %a{href: c[:view_url]}><
+                    %strong><
+                      &= c[:case_name]
+
+                %li
+                  = succeed ': ' do
+                    = t(:'dashboard/unassigned_requests/request_ts')
+                  = t(:'case_renderable/creation', ts: c[:request_ts])
+
     .form-main
       %h1= t(:'dashboard/tasks/section_title')
 
@@ -37,7 +54,7 @@
                     %i.fa.fa-external-link= ""
                     %span.sr-only
                       = t(:'dashboard/tasks/item/view')
-                      
+
                 %li
                   %a.case-view-task-editlink{href: "#{c[:edit_url]}#mark-complete"}
                     %i.fa.fa-check= ""
@@ -86,7 +103,7 @@
     - if has_role?('case:spend:can_approve') && !spends_incomplete.empty?
       .form-main
         %h1= t(:'dashboard/incomplete_spends/section_title')
-      
+
         %ul
           - spends_incomplete.each do |sp|
             %li
@@ -168,5 +185,5 @@
           %a.pure-button.button.ql--link{href: ql[:url]}
             - if ql[:icon]
               %i.fa{class: ql[:icon]}= ""
-            
+
             &= ql[:name]

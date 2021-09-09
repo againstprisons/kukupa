@@ -59,6 +59,21 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
       end
     end.compact
 
+    if has_role?('case:view_all')
+      @unassigned_requests = Kukupa::Models::CaseUnassignedNewRequest.all.map do |unr|
+        case_obj = Kukupa::Models::Case[unr.case]
+        view_url = Addressable::URI.parse(url("/case/#{case_obj.id}/view"))
+
+        {
+          case: case_obj,
+          case_name: case_obj.get_name,
+          case_type: case_obj.type,
+          request_ts: unr.request_ts,
+          view_url: view_url,
+        }
+      end.compact
+    end
+
     if has_role?('case:spend:can_approve')
       @spends = Kukupa::Models::CaseSpend.where(approver: nil).map do |s|
         case_obj = Kukupa::Models::Case[s.case]
@@ -136,6 +151,7 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
       spends: @spends,
       spends_incomplete: @spends_incomplete,
       correspondence: @correspondence,
+      unassigned_requests: @unassigned_requests,
     })
   end
 end
