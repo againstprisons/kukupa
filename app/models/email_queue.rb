@@ -2,7 +2,7 @@ require 'tilt/erb'
 require 'ostruct'
 
 class Kukupa::Models::EmailQueue < Sequel::Model(:email_queue)
-  EMAIL_CHUNK_SIZE = 25
+  EMAIL_CHUNK_SIZE = 1
 
   include Kukupa::Helpers::EmailTemplateHelpers
 
