@@ -287,6 +287,8 @@
 :'dashboard/unapproved_correspondence/item/view': "View case"
 :'dashboard/unapproved_correspondence/item/edit': "Edit correspondence"
 :'dashboard/unapproved_correspondence/item/approve': "Approve"
+:'dashboard/unassigned_requests/section_title': "New requests for unassigned cases"
+:'dashboard/unassigned_requests/request_ts': "Request time"
 :'dashboard/quick_links/section_title': "Quick links"
 
 # Cases - unknown type error

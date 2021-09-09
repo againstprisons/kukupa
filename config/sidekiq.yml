@@ -11,6 +11,10 @@
     cron: '0 0 * * *'
     class: "Kukupa::Workers::CaseTimelineReminderWorker"
 
+  case_unassigned_new_request:
+    cron: '30 */2 * * *'
+    class: "Kukupa::Workers::CaseUnassignedNewRequestWorker"
+
   sync_incoming_email:
     cron: '*/5 * * * *'
     class: "Kukupa::Workers::SyncIncomingEmailWorker"
