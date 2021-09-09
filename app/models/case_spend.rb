@@ -51,12 +51,13 @@ class Kukupa::Models::CaseSpend < Sequel::Model
       edited: edited_ts,
       receipt: receipt_url,
       is_complete: self.is_complete,
+      spend_status: self.status,
       author: [:user, self.author],
       approver: [:user, self.approver],
       actions: actions,
     }
 
-    unless self.approved.nil?
+    if self.status == 'approved'
       approve_actions = [
         {
           url: "##{self.anchor}",

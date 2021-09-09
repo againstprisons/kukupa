@@ -75,7 +75,7 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
     end
 
     if has_role?('case:spend:can_approve')
-      @spends = Kukupa::Models::CaseSpend.where(approver: nil).map do |s|
+      @spends = Kukupa::Models::CaseSpend.where(status: 'waiting').map do |s|
         case_obj = Kukupa::Models::Case[s.case]
         next unless case_obj
 
@@ -95,8 +95,8 @@ class Kukupa::Controllers::DashboardController < Kukupa::Controllers::Applicatio
           approve_url: approve_url,
         }
       end
-      
-      @spends_incomplete = Kukupa::Models::CaseSpend.where(is_complete: false).exclude(approver: nil).map do |s|
+
+      @spends_incomplete = Kukupa::Models::CaseSpend.where(is_complete: false, status: 'approved').map do |s|
         case_obj = Kukupa::Models::Case[s.case]
         next unless case_obj
 

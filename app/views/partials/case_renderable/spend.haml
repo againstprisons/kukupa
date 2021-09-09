@@ -44,11 +44,11 @@
               %i.fa.fa-user-o= ""
               = t(:'thats_you')
 
-      - unless rb[:approver].nil? || rb[:approver][:id].to_i.zero?
+      - if rb[:spend_status] == 'approved'
         - if rb[:approver][:id] != rb[:author][:id]
           %li
             = succeed ': ' do
-              = t(:'case_renderable/spend/approver')
+              = t(:'case_renderable/spend/approving_user')
 
             %strong{title: "User[#{rb[:approver][:id]}]"}
               &= rb[:approver][:name]
@@ -57,6 +57,19 @@
               %span.badge
                 %i.fa.fa-user-o= ""
                 = t(:'thats_you')
+      
+      - if rb[:spend_status] == 'declined'
+        %li
+          = succeed ': ' do
+            = t(:'case_renderable/spend/declining_user')
+
+          %strong{title: "User[#{rb[:approver][:id]}]"}
+            &= rb[:approver][:name]
+
+          - if rb[:approver][:me]
+            %span.badge
+              %i.fa.fa-user-o= ""
+              = t(:'thats_you')
 
       - else
         %li
@@ -69,7 +82,7 @@
     - if rb[:receipt]
       %p= t(:'case_renderable/spend/has_receipt', url: rb[:receipt])
 
-    - unless rb[:approver].nil? || rb[:approver][:id].to_i.zero?
+    - if rb[:spend_status] == 'approved'
       - unless rb[:is_complete]
         .message.message-warning
           = t(:'case_renderable/spend/incomplete')
