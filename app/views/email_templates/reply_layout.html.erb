@@ -3,6 +3,7 @@
 a { color: inherit; text-decoration: underline; }
 a:hover, a:focus { text-decoration: none; border-bottom: 1px solid #000; }
 h1, h2, h3, h4, h5, h6 { padding: 0; margin: 0.5em auto 0 auto; text-align: center; }
+code { font-family: monospace; }
 </style>
 
 <body style="max-width: 52rem; font-family: sans-serif; margin: 0 auto; padding: 1rem;">
@@ -15,6 +16,12 @@ h1, h2, h3, h4, h5, h6 { padding: 0; margin: 0.5em auto 0 auto; text-align: cent
     </div>
 
     <div style="border-top: 2px solid #000; text-align: center; padding: 1rem 0;">
+        <p>
+            Please send any future emails relating to this case
+            to this email address:
+            <code style="font-family: monospace;"><%= email_identifier_address %></code>
+        </p>
+
         <p>
             This email was sent through
             <a href="<%= base_url %>"><%= site_name %></a>

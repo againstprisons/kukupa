@@ -160,6 +160,10 @@ class Kukupa::Models::EmailQueue < Sequel::Model(:email_queue)
       end
     end
 
+    if opts[:from]
+      m.from = opts[:from]
+    end
+
     if opts[:reply_to]
       m.reply_to = opts[:reply_to]
     end

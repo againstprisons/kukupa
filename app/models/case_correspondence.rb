@@ -284,6 +284,8 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     content = '' if content&.empty?
     content_text = ReverseMarkdown.convert(content)
 
+    reply_to = Kukupa.app_config['email-outgoing-reply-to'].gsub('%IDENTIFIER%', case_obj.email_identifier)
+
     eq = Kukupa::Models::EmailQueue.new_from_template(nil, {
       # layout
       layout: {
@@ -297,6 +299,7 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
 
       # template data
       email_identifier: case_obj.email_identifier,
+      email_identifier_address: reply_to,
     })
 
     eq.queue_status = 'queued'
@@ -304,7 +307,8 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     eq.encrypt(:recipients, JSON.generate({mode: 'list', list: target_email_list}))
     eq.encrypt(:message_opts, JSON.generate({
       no_autogen_headers: true,
-      reply_to: Kukupa.app_config['email-outgoing-reply-to'].gsub('%IDENTIFIER%', case_obj.email_identifier),
+      from: "\"#{Kukupa.app_config['org-name']}\" <#{reply_to}>",
+      reply_to: reply_to,
     }))
 
     eq.save
