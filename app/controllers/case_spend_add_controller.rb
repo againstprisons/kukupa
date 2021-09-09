@@ -82,6 +82,7 @@ class Kukupa::Controllers::CaseSpendAddController < Kukupa::Controllers::CaseCon
     if @amount <= Kukupa.app_config['fund-max-auto-approve']
       aggregate = Kukupa::Models::CaseSpendAggregate.get_case_year_total(@case, DateTime.now)
       if aggregate <= Kukupa.app_config['fund-max-spend-per-case-year']
+        @spend.status = 'approved'
         @spend.approver = @user.id
         @spend.save
 

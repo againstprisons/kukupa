@@ -117,6 +117,7 @@ class Kukupa::Controllers::CaseSpendEditController < Kukupa::Controllers::CaseCo
       aggregate += @amount if @spend.approver.nil?
 
       if aggregate <= Kukupa.app_config['fund-max-spend-per-case-year']
+        @spend.status = 'approved'
         @spend.approver = @user.id
         @spend.save
 
