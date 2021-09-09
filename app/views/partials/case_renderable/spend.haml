@@ -58,7 +58,7 @@
                 %i.fa.fa-user-o= ""
                 = t(:'thats_you')
       
-      - if rb[:spend_status] == 'declined'
+      - elsif rb[:spend_status] == 'declined'
         %li
           = succeed ': ' do
             = t(:'case_renderable/spend/declining_user')
