@@ -16,9 +16,9 @@
     "@babel/preset-react": "^7.13.13",
     "babel-loader": "^8.0.6",
     "debounce": "^1.2.1",
-    "terser-webpack-plugin": "^1.4.1",
+    "terser-webpack-plugin": "^5.2.3",
     "vhtml": "^2.2.0",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11"
+    "webpack": "^5.52.0",
+    "webpack-cli": "^4.8.0"
   }
 }

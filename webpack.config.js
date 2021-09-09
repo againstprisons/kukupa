@@ -56,7 +56,6 @@ const config = {
     minimizer: [
       new TerserPlugin({
         parallel: true,
-        sourceMap: true,
       }),
     ],
   },
