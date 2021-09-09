@@ -5,19 +5,26 @@ class Kukupa::Workers::CaseUnassignedNewRequestWorker
     Kukupa.initialize if Kukupa.app.nil?
     Kukupa.app_config_refresh(:force => true)
 
-    # For each case, check whether it has any assigned advocates.
-    # If it doesn't, grab it's ID, so we can look it up in the next step
-    logger.info("Getting cases with no advocates...")
+    # Grab a list of case IDs where:
+    #
+    # - case has no assigned advocates
+    # - case does not have a test PRN
+    logger.info("Gathering cases...")
     case_ids = Kukupa::Models::Case
-      .select(:id, :is_open)
+      .select(:id, :is_open, :prisoner_number)
       .where(is_open: true)
       .all
       .map do |c|
+        # Check advocate count
         adv_count = Kukupa::Models::CaseAssignedAdvocate
           .where(case: c.id)
           .count
-
         next nil if adv_count.positive?
+
+        # Check if this case has a test PRN, ignore if it does
+        prn = c.decrypt(:prisoner_number)&.strip&.downcase
+        next nil if prn&.start_with?('test')
+
         c.id
       end.compact.uniq
 
