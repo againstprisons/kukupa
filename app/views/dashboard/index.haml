@@ -12,7 +12,7 @@
               %a{href: c[:url]}
                 &= c[:name]
 
-    - unless unassigned_requests.empty?
+    - if unassigned_requests && !unassigned_requests.empty?
       .form-main
         %h1= t(:'dashboard/unassigned_requests/section_title')
         %ul
