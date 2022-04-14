@@ -42,6 +42,8 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
     end
 
     # okay, we have a case! let's get the message content.
+    #
+    # first pass - check the html_part then the text_part
     message_html = message.html_part&.body&.to_s
     message_html = nil if message_html&.empty?
     unless message_html
@@ -49,14 +51,69 @@ class Kukupa::Models::CaseCorrespondence < Sequel::Model(:case_correspondence)
       message_text = nil if message_text&.empty?
 
       if message_text
+        # plain text gets treated as markdown here because it's the
+        # easiest way we have to get it into a valid HTML document
         message_html = Kramdown::Document.new(message_text).to_html
-      else
-        message_html = '<p><strong>WARNING:</strong> This incoming email did not contain a readable body.</p>'
       end
     end
 
+    # second pass - combine all multipart segments and see if that works
+    unless message_html
+      message_text = message.parts.map do |part|
+        s = part&.body&.to_s
+        s = nil if s&.strip&.empty?
+        s
+      end.compact.join("\n").strip
+
+      if message_text && !message_text.empty?
+        if message_text.include?("<html") && message_text.include?("</html>")
+          message_html = message_text
+        else
+          message_html = Kramdown::Document.new(message_text).to_html
+        end
+      end
+    end
+
+    # third pass - just use the body as a whole, treating it as text
+    unless message_html
+      message_text = message.body.to_s
+      message_text = message_text.encode(
+        Encoding::UTF_8,
+        invalid: :replace,
+        undef: :replace,
+        replace: "\uFFFD",
+      )
+
+      heuristics = [
+        # XXX: this is a GIANT bloody hack
+        message.body.instance_eval { @part_sort_order }.include?("text/html"),
+
+        # these are the normal ones
+        message_text.include?("<html") && message_text.include?("</html>"),
+        message_text.include?("/* Font Definitions */") && message_text.include?("@font-face"),
+      ]
+
+      # if more than half of the above heuristics pass, it's probably html
+      # so we won't kramdown it
+      probably_html = heuristics.filter { |x| !!x }.count >= (heuristics.count / 2.0)
+
+      if message_text && !message_text.empty?
+        if probably_html
+          message_html = message_text
+        else
+          message_html = Kramdown::Document.new(message_text).to_html
+        end
+      end
+    end
+
+    # if we still don't have a message body, just say "screw it" and
+    # make the user-visible body a warning message
+    unless message_html
+      message_html = '<p><strong>WARNING:</strong> This incoming email did not contain a readable body.</p>'
+    end
+
     # force encode message body to the transport encoding
-    if (ct = /charset=([a-zA-Z0-9_-]+)/.match((message.html_part || message.text_part)&.content_type)&.[](1))
+    if (ct = /charset=([a-zA-Z0-9_-]+)/.match((message.html_part || message.text_part || message.parts.last)&.content_type)&.[](1))
       message_html.force_encoding(ct)
     end
 
