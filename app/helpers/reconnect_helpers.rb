@@ -8,6 +8,7 @@ module Kukupa::Helpers::ReconnectHelpers
       method: :post,
       body: {
         token: Kukupa.app_config['reconnect-api-key'],
+        status: Kukupa.app_config['reconnect-penpal-status'],
       },
     }
 
