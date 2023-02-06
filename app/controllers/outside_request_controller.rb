@@ -60,6 +60,9 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
         @name_last.nil?,
         @prison.nil?,
         @prn.nil?,
+
+        # XXX: force numbers-only PRN in outside requests except for test PRNs
+        (@prn.start_with?('test') ? false : @prn.to_i.to_s != @prn.to_s),
       ]
 
       @extra_metadata.each do |em|
