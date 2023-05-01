@@ -62,7 +62,7 @@ class Kukupa::Controllers::OutsideRequestController < Kukupa::Controllers::Appli
         @prn.nil?,
 
         # XXX: force numbers-only PRN in outside requests except for test PRNs
-        (@prn.start_with?('test') ? false : @prn.to_i.to_s != @prn.to_s),
+        /^(?:test)?\d+$/.match(@prn).nil?,
       ]
 
       @extra_metadata.each do |em|
