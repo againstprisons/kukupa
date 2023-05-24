@@ -393,6 +393,7 @@
 :'case/view/details/section_title': "<%= t(\"case_type/#{casetype}\".to_sym) %> details"
 :'case/view/details/address': "Address"
 :'case/view/details/assigned_advocates': "Assigned advocates"
+:'case/view/details/reconnect_status': "re:connect penpal status"
 :'case/view/global_note/section_title': "Case summary"
 :'case/view/actions/add_note': "Add note"
 :'case/view/actions/add_spend': "Add spend"

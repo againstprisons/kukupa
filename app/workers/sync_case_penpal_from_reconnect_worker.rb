@@ -68,6 +68,7 @@ class Kukupa::Workers::SyncCasePenpalFromReconnectWorker
       @case.encrypt(:pseudonym, data['pseudonym'])
     end
 
+    @case.encrypt(:reconnect_status, data['status'])
     @case.reconnect_last_sync = Sequel.function(:NOW)
     @case.save
     

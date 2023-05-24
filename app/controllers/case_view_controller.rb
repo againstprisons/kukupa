@@ -91,6 +91,16 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
       .map {|u| Kukupa::Models::User[u]}
       .map {|u| [u.id, u.decrypt(:name)]}
 
+    @case_reconnect_status = if @case.reconnect_status.nil?
+      if @case.reconnect_id.nil? 
+        nil
+      else
+        t(:'unknown')
+      end
+    else
+      @case.decrypt(:reconnect_status)
+    end
+
     return haml(:'case/view', :locals => {
       title: @title,
       page_state: @page_state,
@@ -109,6 +119,7 @@ class Kukupa::Controllers::CaseViewController < Kukupa::Controllers::CaseControl
       case_is_new: @case_is_new,
       case_triage_task: @case_triage_task,
       case_assigned_advocates: @case_assigned_advocates,
+      case_reconnect_status: @case_reconnect_status,
       renderables: @renderables,
       renderable_updates: @renderable_updates,
       renderable_updates_toggle: @renderable_updates_toggle,

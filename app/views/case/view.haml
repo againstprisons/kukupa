@@ -78,6 +78,13 @@
             %code
               &= case_address
 
+        - if case_reconnect_status
+          %li
+            = succeed ': ' do
+              = t(:'case/view/details/reconnect_status')
+            %code
+              &= case_reconnect_status
+
     - if case_global_note
       .form-main
         %h1= t(:'case/view/global_note/section_title')
