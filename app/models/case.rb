@@ -122,7 +122,7 @@ class Kukupa::Models::Case < Sequel::Model
     # case notes
     dates << Kukupa::Models::CaseNote
       .select(:id, :case, :creation)
-      .where(case: self.id)
+      .where(case: self.id, hidden_admin_only: false, hidden_collapsed: false)
       .reverse(:creation)
       .first
       &.creation
